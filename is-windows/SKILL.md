@@ -2,7 +2,8 @@
 name: is-windows
 description: Tell the AI that the current operating system is Windows, and provide PowerShell-based file operations and system checks.
 author: FeiNiaoBF
-data-added: 2026-04-08
+version: 1.0.0
+date_added: 2026-04-08
 ---
 
 # Is Windows Skill
