@@ -1,0 +1,6 @@
+interface:
+  display_name: "Network Security Check"
+  short_description: "Safe PassWall and VPN diagnostics"
+  default_prompt: "Use $network-security-check to safely diagnose my PassWall, VPS, DNS, or VPN setup."
+policy:
+  allow_implicit_invocation: true
