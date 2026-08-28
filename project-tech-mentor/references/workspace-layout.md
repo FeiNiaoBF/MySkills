@@ -30,7 +30,7 @@ Create only the folders that the current route needs. Keep the state files at th
 - `ROADMAP.md`: the ordered project ladder. For each project, list the added capability, scope boundary, required evidence, current status, and its transfer check.
 - `STATE.md`: the present project, verified capability, blocking observation, next smallest task, and due review or transfer check. Update it at every stopping point.
 - `RESOURCES.md`: primary sources and high-trust supporting material. Each entry names the source, version or date when relevant, the decision it supports, and a direct link.
-- `TRACK.md`: the domain route created from the track-card template.
+- `TRACK.md`: the domain route created from the [track format](TRACK-FORMAT.md) template.
 - `GLOSSARY.md`: canonical terms the learner has demonstrated they can use; it is not a pre-course dictionary.
 - `NOTES.md`: durable teaching preferences and environmental facts that change the route.
 

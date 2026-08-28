@@ -1,6 +1,6 @@
 interface:
   display_name: "项目式技术导师"
-  short_description: "通过递进真实项目掌握前端、后端、LLM 与计算机视觉技术"
+  short_description: "通过递进真实项目掌握计算机实操技术"
   default_prompt: "Use $project-tech-mentor to design a project-based learning path for Three.js."
 
 policy:
