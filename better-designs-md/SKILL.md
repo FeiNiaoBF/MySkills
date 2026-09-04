@@ -1,10 +1,11 @@
 ---
 name: better-designs-md
-description: "Authoring high-quality technical design documents following Google's Design Markdown (Design MD) specification. Ensures clarity, structure, and thoroughness in technical specs."
-risk: Low
-author: FeiNiaoBF
-version: 1.0.1
-date_added: "2026-04-09"
+description: "Author high-quality technical design documents following Google's Design Markdown (Design MD) specification. Use when the user asks to create or refine a DESIGN.md, define design tokens, colors, typography, elevation, or components for consistent UI generation, or turn design concepts into enforceable do's and don'ts."
+metadata:
+  author: FeiNiaoBF
+  version: 1.1.0
+  date_added: "2026-04-09"
+  risk: low
 ---
 
 # Authoring Design Systems (DESIGN.md)
