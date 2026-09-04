@@ -5,9 +5,10 @@ description: >
   用「消融实验」验证删除安全性。Use when the user says 代码太复杂 / 想重构 / 这里可以简化吗 /
   删除安不安全 / 有没有冗余 / 依赖太多 / 抽象太过 / 帮我精简这段代码，或提到 dead code、
   unused import、重复逻辑、下线功能或 API。
-author: FeiNiaoBF
-version: 2.0.0
 license: MIT
+metadata:
+  author: FeiNiaoBF
+  version: 2.0.1
 ---
 
 # code-subtraction — 代码与项目「做减法」
