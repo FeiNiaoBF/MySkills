@@ -7,6 +7,7 @@
 每个技能一个独立目录，与 SKILL.md 的 frontmatter `name` 同名：
 
 - `SKILL.md` — 必需。frontmatter 含 `name`（目录同名）与 `description`（前 57 字符内说明何时使用该技能）
+- `metadata:` — 非规范字段（`author`、`version`、`date_added` 等）一律放 `metadata` 映射内，不放在 frontmatter 顶层，保持对 Agent Skills 规范的兼容
 - `references/` — 可选。正文过长时放详细参考，用相对链接指向
 - `agents/openai.yaml` — 可选。外部 agent 的界面提示（display_name / short_description / default_prompt）
 
