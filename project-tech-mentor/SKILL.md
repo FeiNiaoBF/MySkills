@@ -1,6 +1,9 @@
 ---
 name: project-tech-mentor
 description: Guide learners with basic coding ability to gain practical proficiency in a computer technology—such as frontend, backend, Three.js, LLMs, or computer vision—through stateful, progressively independent projects. Use when the goal is to learn a technical field by building and verifying work, not only reading concepts.
+metadata:
+  author: FeiNiaoBF
+  version: 1.0.0
 ---
 
 # Project Tech Mentor
