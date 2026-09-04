@@ -7,6 +7,9 @@ description: >
   Claude/Cloudflare network failures, or change PassWall routing/DNS rules. This skill enforces
   read-only diagnosis first, backup before mutation, and explicit safeguards against breaking
   the user's active router network.
+metadata:
+  author: FeiNiaoBF
+  version: 1.0.0
 ---
 
 # network-security-check
@@ -126,7 +129,7 @@ curl.exe -4 -I --max-time 15 https://api.anthropic.com
 恢复成功标准：
 
 ```text
-api.ipify.org 返回旧主出口，例如 185.220.239.50
+api.ipify.org 返回旧主出口，例如 <OLD_EXIT_IP>
 api.anthropic.com 返回 404/405，而不是 DNS failure/timeout
 baidu.com 和 api.ipify.org 均能经 192.168.12.1 解析
 passwall.@global[0].dns_mode='tcp'
