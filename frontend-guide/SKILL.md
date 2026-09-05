@@ -78,6 +78,7 @@ description: 用户想做网页/前端但不懂前端（提到做页面、做前
 | 时机 | 路由到 |
 |---|---|
 | Step 1 用户意图本身模糊（连用途都说不清） | `brainstorming` |
+| Step 1 风格方向拿不准（用户只会说感受词） | `aesthetic-translator`（输出直接填方向卡） |
 | Step 1/3 需要成体系的风格与设计系统决策 | `frontend-design` / `ui-ux-pro-max` |
 | Step 2 用户拿不准某个模块该长什么样，先验证再写码 | `prototype`（丢掉式原型回答设计问题） |
 | 完成后用户要求审查 | `code-review` |
