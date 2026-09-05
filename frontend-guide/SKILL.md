@@ -32,6 +32,8 @@ description: 用户想做网页/前端但不懂前端（提到做页面、做前
 
 完成标准：用户对方向卡说了「对/可以/就这样」。
 
+确认后立即把视觉决定落盘到项目根目录的 `DESIGN.md`（已有则更新）：方向卡里的风格选择 → Overview/Colors/Typography 叙述，颜色/字体/间距抽成 YAML front matter tokens，附 Do's and Don'ts。书写格式走 `better-designs-md` skill。这样后续模块构建与未来会话保持同一套视觉，不靠记忆。
+
 ### Step 2 — 模块地图（module map）
 
 按前端的结构思维，把方向卡的内容清单切成**从上到下的模块序列**（典型：header → hero → 内容区 ×N → footer）。每个模块一行规格，产出一张**模块地图表**给用户确认：

@@ -22,6 +22,7 @@ metadata:
 3. **给选项**：每个相关维度给 2-3 个命名选项，各带一行参照物和一句话后果（「这个会让页面安静但显空」）。用户挑，不解释术语。
 4. **宣告 Design Read**：一行——「读作：为〈受众〉做的〈物件〉，〈风格名〉语言，底色〈语料名/其他〉，〈密/静/稳〉倾向」。给用户反驳的机会。
 5. **输出规格**：四段式 brief——**Context**（谁用、什么设备）/ **Direction**（各维度的具体参数：色值、圆角、阴影、字号、间距、动效毫秒）/ **References** / **Avoid**（反模式清单）。参数要能直接抄进 CSS tokens。
+6. **确认后落盘 DESIGN.md**：用户确认方向/brief 后，把设计决定写成所在项目根目录的 `DESIGN.md`（已有则更新，不另建）。token 进 YAML front matter，风格叙述进正文章节；书写/格式规范走 `better-designs-md` skill。这是持久契约——未来会话改 UI 先读它，避免每次重讲品味。
 
 ## 三旋钮（内部接口，不向用户暴露数字）
 
@@ -46,6 +47,7 @@ metadata:
 | 时机 | 路由到 |
 |---|---|
 | 规格要落地成页面 | `frontend-guide`（本 skill 输出直接填其 Step 1 方向卡） |
+| 方向确认后要落盘成持久设计文档 | `better-designs-md`（Google DESIGN.md 规范书写，token→front matter） |
 | 需要全量风格/色板/字体数据 | `ui-ux-pro-max` |
 | 九维度词汇表 | `references/dimensions.md` |
 | 东亚美学底色完整语料 | `references/east-asian.md` |

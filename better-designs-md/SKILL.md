@@ -158,3 +158,11 @@ The skill is complete when:
 
 ## When to Use
 Use this skill when defining or refining a design system for consistent UI generation. It bridges concepts to enforceable design tokens.
+
+---
+
+## Seamless intake mode（供料直写）
+
+当设计决定**已经存在并经用户确认**时（例如 `aesthetic-translator` 已输出并确认的四段式 brief、`frontend-guide` 已确认的方向卡、或一次已拍板的主题迭代），**跳过逐节访谈**，直接把已确认材料转写成完整 DESIGN.md：confirmed brief 的 Direction 参数 → YAML front matter tokens，其余叙述进对应章节，Avoid 清单 → Do's and Don'ts。生成后让用户过目一遍即可，不再逐节问。
+
+仅在用户还没做决定时走上面的逐节访谈流程。
