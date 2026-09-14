@@ -14,9 +14,10 @@ param(
 
 $ErrorActionPreference = "Stop"
 $RepoRoot = Split-Path -Parent $PSScriptRoot
+# junction 只建在权威根：Pi 同时读 ~/.agents/skills 与 ~/.pi/agent/skills，
+# 两边都链会让同名 skill 被加载两次（启动告警 + doctor duplicate 失败）。
 $Links = @(
-    (Join-Path $env:USERPROFILE ".agents\skills"),
-    (Join-Path $env:USERPROFILE ".pi\agent\skills")
+    (Join-Path $env:USERPROFILE ".agents\skills")
 )
 
 # 发现 skill：仓库根下含 SKILL.md 的一级目录
