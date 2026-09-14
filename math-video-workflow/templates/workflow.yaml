@@ -1,0 +1,38 @@
+schema_version: 1
+episode: "<P1>"
+title: "<episode-title>"
+course:
+  workspace: "<course-workspace>"
+  course_id: "<course-id>"
+  source_version: "<verified-course-version-or-unknown>"
+  unit: "<verified-unit-or-unknown>"
+  lessons: []
+paths:
+  video_project: "<video-project-directory>"
+  source_video: "<source-video>"
+  transcription_json: "<transcription-json>"
+  subtitle_srt: "<subtitle-srt>"
+  final_video: "<final-video>"
+  manim_project: "<course-workspace>/animations/math/episodes/<P1>"
+target:
+  orientation: landscape
+  aspect_ratio: "16:9"
+  burn_subtitles: true
+  effects: none
+  bgm: none
+policy:
+  processing: staged
+  local_first: true
+  api_scope: minimal_text_only
+stages:
+  intake: pending
+  transcription: pending
+  light_review: pending
+  cut: pending
+  final_review: pending
+  deliver: pending
+  animation_candidates: pending
+  manim: not_requested
+artifacts: []
+approvals: []
+open_questions: []
