@@ -26,12 +26,14 @@ metadata:
 
 ## 路径约定
 
-本技能正文不写机器绝对路径；命令使用下列符号，具体值按机器设置（换机器只改这一处）。Windows 终端把 `$AI_ROOT` 写成 `%AI_ROOT%`。
+本技能正文不写机器绝对路径；命令使用下列符号，具体值按机器设置（换机器只改这一处）。
+
+不要用 `TMP`／`TEMP` 作变量名：它们是操作系统自带的临时目录变量（Git Bash 里 `$TMP=/tmp`），会与流水线的中间产物目录冲突。
 
 | 符号 | 含义 |
 |---|---|
 | `$AI_ROOT` | 本地 AI 工具根：流水线脚本、规则库、ASR 模型、venv |
-| `$TMP` | 决策文件与渲染中间产物目录（不进同步目录） |
+| `$VIDEO_TMP` | 决策文件与渲染中间产物目录（不进同步目录） |
 | `$VIDEO_ROOT` | 视频工程根，每集一个 `P{n}/` 子目录 |
 
 | 资产 | 相对位置 |
@@ -41,14 +43,14 @@ metadata:
 | 校验脚本 | `$AI_ROOT/scripts/{verify_srt,audit_v1}.py` |
 | faster-whisper | `$AI_ROOT/models/faster-whisper-{medium,small}` |
 | venv | `$AI_ROOT/venv`（faster-whisper + auto-editor 29.x） |
-| 每视频决策文件 | `$TMP/${STEM}_{base,final,fillers}.json`（保留，重渲全靠它） |
+| 每视频决策文件 | `$VIDEO_TMP/${STEM}_{base,final,fillers}.json`（保留，重渲全靠它） |
 
 ## Procedure
 
 ### 1. 探测源文件
 
 ```bash
-V="<视频路径>"; STEM="<名>"; TMP="$TMP"
+V="<视频路径>"; STEM="<名>"
 ffprobe -v error -show_entries "format=duration:stream=codec_name,width,height" \
         -of default=noprint_wrappers=1 "$V"
 # VFR 检查（手机视频常为 VFR）
@@ -61,7 +63,7 @@ ffprobe -v error -select_streams v -show_entries stream=r_frame_rate,avg_frame_r
 `r_frame_rate != avg_frame_rate` 即 VFR，必须先转 CFR，否则帧号区间会错位：
 
 ```bash
-ffmpeg -y -i "$V" -fps_mode cfr -c:v libx264 -preset fast -crf 18 -c:a copy "$TMP/${STEM}_cfr.mp4"
+ffmpeg -y -i "$V" -fps_mode cfr -c:v libx264 -preset fast -crf 18 -c:a copy "$VIDEO_TMP/${STEM}_cfr.mp4"
 ```
 
 新版 FFmpeg 已移除 `-vsync`，必须用输出级 `-fps_mode cfr`。同步目录（OneDrive）云占位文件会转写失败，先确认文件已落地。
@@ -82,13 +84,13 @@ ffmpeg -y -i "$V" -fps_mode cfr -c:v libx264 -preset fast -crf 18 -c:a copy "$TM
 
 ```bash
 # 语气词区间：只剪孤立的（前后停顿 ≥ 0.25s）
-"$AI_ROOT/venv/Scripts/python.exe" "$AI_ROOT/scripts/fillers_from_json.py" "<视频目录>/$STEM.json" "$TMP/${STEM}_fillers.json"
+"$AI_ROOT/venv/Scripts/python.exe" "$AI_ROOT/scripts/fillers_from_json.py" "<视频目录>/$STEM.json" "$VIDEO_TMP/${STEM}_fillers.json"
 # 静音候选（约 40s/小时素材）
 "$AI_ROOT/venv/Scripts/auto-editor.exe" "$V" --edit "audio:threshold=-35dB" --margin 0.2s \
-    --export v1 -o "$TMP/${STEM}_base.json" --no-open --progress none
+    --export v1 -o "$VIDEO_TMP/${STEM}_base.json" --no-open --progress none
 # 合并（末参 = 源视频帧率）
 "$AI_ROOT/venv/Scripts/python.exe" "$AI_ROOT/scripts/merge_fillers.py" \
-    "$TMP/${STEM}_base.json" "$TMP/${STEM}_fillers.json" "$TMP/${STEM}_final.json" 30
+    "$VIDEO_TMP/${STEM}_base.json" "$VIDEO_TMP/${STEM}_fillers.json" "$VIDEO_TMP/${STEM}_final.json" 30
 ```
 
 静音检测只提出候选删除区间；安全边距保留自然呼吸和句首句尾。孤立语气词可列为候选，嵌在连续语流中的词不自动删除。先输出低成本预览或区间表给用户确认。
@@ -99,7 +101,7 @@ ffmpeg -y -i "$V" -fps_mode cfr -c:v libx264 -preset fast -crf 18 -c:a copy "$TM
 
 ```bash
 "$AI_ROOT/venv/Scripts/python.exe" "$AI_ROOT/scripts/remap_srt.py" \
-    "<视频目录>/$STEM.json" "$TMP/${STEM}_final.json" "<视频目录>/${STEM}_cut.srt"
+    "<视频目录>/$STEM.json" "$VIDEO_TMP/${STEM}_final.json" "<视频目录>/${STEM}_cut.srt"
 ```
 
 以时间戳区间建立原片轴→剪辑轴映射；**字幕和画面方向分界都使用同一映射**。原片时间轴 ≠ 剪辑时间轴：朝向/内容分界点必须用决策文件的 `map_time()` 映射到剪辑轴再切，直接按原片秒数切会切错甚至超出剪辑片末尾。
@@ -114,7 +116,7 @@ ffmpeg -y -i "$V" -fps_mode cfr -c:v libx264 -preset fast -crf 18 -c:a copy "$TM
 
 ```bash
 # 1. 全片朝向扫描（cropdetect 每秒采样 → 有效画幅变化点）
-ffmpeg -hide_banner -i "$V" -vf "fps=1,cropdetect=limit=24:round=2:reset=0" -f null - 2> "$TMP/${STEM}_crop.log"
+ffmpeg -hide_banner -i "$V" -vf "fps=1,cropdetect=limit=24:round=2:reset=0" -f null - 2> "$VIDEO_TMP/${STEM}_crop.log"
 ```
 
 2. 解析日志归并连续段（逐秒取 `crop=w:h` 众数，按 `(w,h,朝向)` 归并）→ 朝向段列表。`crop` 值全程唯一 = 单一朝向；多变 = 混合朝向。
@@ -139,10 +141,10 @@ ffmpeg -hide_banner -i "$V" -vf "fps=1,cropdetect=limit=24:round=2:reset=0" -f n
 
 ```bash
 "$AI_ROOT/venv/Scripts/python.exe" "$AI_ROOT/scripts/v1_to_ffmpeg.py" \
-    "$TMP/${STEM}_final.json" "$TMP/${STEM}_cut.mp4" --rotate --ebu
+    "$VIDEO_TMP/${STEM}_final.json" "$VIDEO_TMP/${STEM}_cut.mp4" --rotate --ebu
 ```
 
-用 `ffmpeg` 直剪（`trim`+`concat` filter，分批，速度线性），**不要**用 auto-editor 渲染。输出先落本地 `$TMP` 再移动进成品目录。响度归一放在音频滤镜链并单独验证（`loudnorm=I=-14:LRA=11:TP=-1.5`）；视频滤镜链只处理画面。长任务保存可恢复清单，清单绑定源指纹、决策哈希、参数和已完成分片。
+用 `ffmpeg` 直剪（`trim`+`concat` filter，分批，速度线性），**不要**用 auto-editor 渲染。输出先落本地 `$VIDEO_TMP` 再移动进成品目录。响度归一放在音频滤镜链并单独验证（`loudnorm=I=-14:LRA=11:TP=-1.5`）；视频滤镜链只处理画面。长任务保存可恢复清单，清单绑定源指纹、决策哈希、参数和已完成分片。
 
 完成条件：命令退出码为 0，输出能从头到尾完整解码。
 
@@ -151,7 +153,7 @@ ffmpeg -hide_banner -i "$V" -vf "fps=1,cropdetect=limit=24:round=2:reset=0" -f n
 ```bash
 # 渲染后校验（必做）
 ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${STEM}_cut.mp4"
-"$AI_ROOT/venv/Scripts/python.exe" "$AI_ROOT/scripts/audit_v1.py" "$TMP/${STEM}_final.json" <实测秒> 30   # GAP/OVERLAP 必须 0，偏差 <0.5s
+"$AI_ROOT/venv/Scripts/python.exe" "$AI_ROOT/scripts/audit_v1.py" "$VIDEO_TMP/${STEM}_final.json" <实测秒> 30   # GAP/OVERLAP 必须 0，偏差 <0.5s
 "$AI_ROOT/venv/Scripts/python.exe" "$AI_ROOT/scripts/verify_srt.py" "<视频目录>/${STEM}_cut.srt" <实测秒>  # 格式/空文本/单调/超时长
 ```
 
@@ -204,7 +206,7 @@ $VIDEO_ROOT/            # 同步目录，顶层放系列 README.md 索引
     成品/
       竖版/  P{n}_cut / P{n}_final / P{n}_v2（各配同名 .srt）
       横版/  P{n}_cut_16x9 / P{n}_final_16x9 / P{n}_v2_16x9（各配同名 .srt）
-$TMP/                   # 决策文件 + 渲染中间产物（不进同步目录）
+$VIDEO_TMP/                   # 决策文件 + 渲染中间产物（不进同步目录）
 ```
 
 转写产物先落原片目录再移进 `转写/`；成品旁的 srt 用字幕母本复制，保证播放器外挂同名自动加载。
@@ -252,7 +254,7 @@ token 预算纪律（先读本节再动 LLM）：本地做确定性工作，LLM 
 15. 后台长渲染进程易被外部 -15 杀（机器睡眠/杀软/OOM），特征：日志卡在 "Creating audio"，输出文件停止增长。长渲染分段跑（每段 < 2min）规避；检查退出码是否为 -15。
 16. 原片时间轴 ≠ 剪辑时间轴：朝向/内容分界点必须用 `map_time()` 映射到剪辑轴再切（曾发生 `-ss` 超出 cut 片末尾的空文件事故）。
 17. `concat`/滤镜 SAR 必须一致：`crop`/`scale` 后 SAR 会带尾数（1215:1216），`concat` 前两侧都 `setsar=1`，否则报 "SAR do not match"。
-18. 字幕烧录（`subtitles`）路径：用绝对路径且转义盘符冒号，文件必须真实存在（曾写错路径连烧 3 次失败）；srt 先复制到本地 `$TMP` 再烧，别直接读同步目录。
+18. 字幕烧录（`subtitles`）路径：用绝对路径且转义盘符冒号，文件必须真实存在（曾写错路径连烧 3 次失败）；srt 先复制到本地 `$VIDEO_TMP` 再烧，别直接读同步目录。
 19. 手机横持拍摄源（HEVC 常带旋转元数据）：ffmpeg 解码自动转成竖帧，内容侧躺；`transpose=1` 顺时针转正；`cropdetect` 在解码后帧上跑。
 
 另有若干通用判断坑：
