@@ -18,6 +18,15 @@
 - 正文中文英文皆可，随技能用途而定
 - 示例配置里的环境具体值一律写占位符（如 `<VPS_IP>`、`<your-key>.pem`），只保留通用流程与真实可跑的命令骨架
 
+## 部署
+
+本仓库是技能的**创作源**；agent 实际加载的是 `~/.agents/skills`（权威根，pi 同时读 `~/.pi/agent/skills` 会导致重复加载，故只用前者）。两条部署路径：
+
+- **纳入恢复清单的技能**（主流）：`pi-agent` 仓库的 `config/skills-manifest.json` 以 pinned ref 引用本仓库，`node scripts/bootstrap.mjs` 克隆该 ref 后拷贝到 `~/.agents/skills`。**改完本仓库并 push 后，需更新 manifest 里的 `ref` 为新的 commit SHA，再跑一次 bootstrap**，否则部署件不更新。新增技能按 `{\"name\": \"...\", \"invocation\": \"auto|manual\"}` 加入该源。
+- **未纳入清单的技能**：用 `scripts/link-skills.ps1` / `link-skills.sh` 建链接（只链到 `~/.agents/skills`）。链接会被 bootstrap 覆盖，故仅用于自用、不入清单的临时技能。
+
+清单是否漏项可用 `pi-agent` 的 `node scripts/doctor.mjs` 自查。
+
 ## 提交
 
 - Conventional Commits，信息用英文：`feat:` / `chore:` / `docs:` / `fix:`
