@@ -96,7 +96,7 @@ Symptom when missing:
 ```text
 router temporary sing-box client: reality verification failed
 AWS service log: REALITY: processed invalid connection
-source IP in AWS log may be old proxy exit, e.g. 185.220.239.50
+source IP in AWS log may be an old proxy exit, e.g. `<OLD_PROXY_EXIT_IP>`
 ```
 
 Minimal validation after adding Direct IP:
@@ -172,7 +172,7 @@ ipconfig /flushdns
 Do not repeat this pattern:
 
 ```sh
-uci set passwall.myshunt.AIGC='LIdDZJG3'
+uci set passwall.myshunt.AIGC='<AWS_NODE_ID>'
 uci set passwall.@global[0].tcp_node='myshunt'
 # plus DNS mode accidentally xray
 ```

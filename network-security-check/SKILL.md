@@ -34,8 +34,8 @@ metadata:
 ```powershell
 curl.exe -4 --max-time 15 https://api.ipify.org
 curl.exe -6 --max-time 15 https://api64.ipify.org
-nslookup baidu.com 192.168.12.1
-nslookup api.ipify.org 192.168.12.1
+nslookup baidu.com <ROUTER_IP>
+nslookup api.ipify.org <ROUTER_IP>
 curl.exe -4 -I --max-time 15 https://api.anthropic.com
 ```
 
@@ -56,7 +56,7 @@ swapon -s
 这些值来自已恢复的稳定状态。除非用户明确同意，不要改变：
 
 ```sh
-passwall.@global[0].tcp_node='1GhclG05'
+passwall.@global[0].tcp_node='<KNOWN_GOOD_TCP_NODE_ID>'
 passwall.@global[0].dns_mode='tcp'
 passwall.@global[0].dns_shunt='chinadns-ng'
 passwall.@global[0].remote_dns='1.1.1.1'
@@ -75,8 +75,8 @@ passwall.AIGC.domain_list='geosite:category-ai-!cn\ngeosite:apple-intelligence\n
 已验证的 AWS 节点：
 
 ```text
-Node remark: AWS-Tokyo-Claude
-PassWall node id: LIdDZJG3
+Node remark: <NODE_REMARK>
+PassWall node id: <AWS_NODE_ID>
 VPS IP: <AWS_VPS_IP>
 Protocol: VLESS Reality TCP 443
 Server name / SNI: www.microsoft.com
@@ -103,7 +103,7 @@ Flow: xtls-rprx-vision
 当用户报告“国内外都断了”时，先恢复，不继续优化：
 
 ```sh
-uci set passwall.@global[0].tcp_node='1GhclG05'
+uci set passwall.@global[0].tcp_node='<KNOWN_GOOD_TCP_NODE_ID>'
 uci set passwall.@global[0].dns_mode='tcp'
 uci set passwall.myshunt.ProxyGame='_default'
 uci set passwall.myshunt.AIGC='_default'
@@ -122,7 +122,7 @@ Windows 侧随后执行：
 ```powershell
 ipconfig /flushdns
 curl.exe -4 --max-time 15 https://api.ipify.org
-nslookup api.ipify.org 192.168.12.1
+nslookup api.ipify.org <ROUTER_IP>
 curl.exe -4 -I --max-time 15 https://api.anthropic.com
 ```
 
@@ -131,7 +131,7 @@ curl.exe -4 -I --max-time 15 https://api.anthropic.com
 ```text
 api.ipify.org 返回旧主出口，例如 <OLD_EXIT_IP>
 api.anthropic.com 返回 404/405，而不是 DNS failure/timeout
-baidu.com 和 api.ipify.org 均能经 192.168.12.1 解析
+baidu.com 和 api.ipify.org 均能经 <ROUTER_IP> 解析
 passwall.@global[0].dns_mode='tcp'
 ```
 

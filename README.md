@@ -20,7 +20,6 @@
 ## 其他 Skills
 
 - `project-tech-mentor`：通过项目学习一门技术
-- `teach-go`：在项目中学习 Go 标准库
 - `frontend-guide`：前端实现指导
 - `network-security-check`：网络安全检查
 - `aesthetic-translator`：把审美意图转换为可执行设计语言
