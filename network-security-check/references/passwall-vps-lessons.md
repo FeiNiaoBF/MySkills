@@ -1,6 +1,6 @@
 # PassWall VPS Lessons
 
-This reference records the safe procedure learned from the AWS Tokyo + PassWall + Claude troubleshooting session.
+This reference contains reusable PassWall, sing-box, VPS, and Claude network diagnostic recipes.
 
 ## Official facts used
 
@@ -85,7 +85,7 @@ Client side:
 
 When a router uses a proxy node, the IP address of that proxy server must be direct. Otherwise the router may connect to the new node through the old active node, causing nested proxying and Reality failures.
 
-For this user's AWS VPS, ensure Direct IP list includes:
+For a self-hosted AWS VPS, ensure the Direct IP list includes:
 
 ```text
 <AWS_VPS_IP>/32
@@ -136,7 +136,7 @@ and no listener on 15353:
 netstat -lntup | grep 15353
 ```
 
-Fix for this user's stable setup:
+Fix after the baseline confirms that the stable TCP DNS setup is required:
 
 ```sh
 uci set passwall.@global[0].dns_mode='tcp'
@@ -167,7 +167,7 @@ netstat -lntup
 ipconfig /flushdns
 ```
 
-## Known bad change from the incident
+## Known bad change pattern
 
 Do not repeat this pattern:
 

@@ -1,35 +1,67 @@
 ---
 name: network-security-check
-description: >
-  Safe network security and VPN operations for OpenWrt/ImmortalWrt routers using PassWall,
-  sing-box, and self-hosted VPS nodes. Use when the user asks to check VPN/IP/DNS/IPv6 leaks,
-  optimize router VPN stability, add or validate AWS/VPS VLESS Reality nodes, troubleshoot
-  Claude/Cloudflare network failures, or change PassWall routing/DNS rules. This skill enforces
-  read-only diagnosis first, backup before mutation, and explicit safeguards against breaking
-  the user's active router network.
+description: PassWall/sing-box diagnosis, safe changes, and rollback.
 metadata:
   author: FeiNiaoBF
-  version: 1.0.0
+  version: 2.0.0
 ---
 
-# network-security-check
+# Network Security Check
 
-你是一位谨慎的网络安全与路由器运维工程师。目标是保护用户当前可用网络，先定位根因，再做最小变更。
+这是一个**网络故障与变更流程 skill**，不是单次命令检查器。它把 PassWall、sing-box、OpenWrt/ImmortalWrt、VPS 和 Windows 客户端问题，从现象推进到可验证结论：
 
-## Hard Rules
+```text
+接收症状 → 建立基线 → 缩小假设 → 最小实验 → 变更审批 → 备份变更 → 回归验证 → 关闭或回滚
+```
 
-1. **先读配置，后改配置。** 修改前必须采集当前值，并在回复中说明将改哪些键。
-2. **禁止猜 UI 路径。** 如果用户界面和预期不一致，改用 SSH 只读查询确认真实 UCI 结构。
-3. **禁止为了单域名分流直接改全局 TCP 节点。** 不要修改 `passwall.@global[0].tcp_node`，除非用户明确要求全局切换并同意短暂断网。
-4. **禁止随意改 DNS 模式。** 不要把 `dns_mode` 从稳定值改成 `xray`。若生成配置里 `trust-dns 127.0.0.1#15353` 但没有监听该端口，会造成国外 DNS 空答/超时。
-5. **禁止把同一路径的写入和删除并行执行。** 顺序执行上传、安装、校验、清理。
-6. **PassWall restart/reload 是高风险动作。** 只有在有回滚命令、用户知道会短暂断网、且只读检查已完成后执行。
-7. **不要泄露或写入敏感材料。** Skill 中不保存 SSH 密码、私钥、订阅 URL token 或完整密钥文件。
-8. **Windows DNS 故障后要清负缓存。** PassWall/DNS 重启后若 `nslookup` 正常但 `curl`/`Resolve-DnsName` 失败，先执行 `ipconfig /flushdns`。
+目标是保护当前可用网络，避免为了修复一个域名而破坏全局流量。
 
-## Baseline First
+## 何时使用
 
-每次操作前先建立基线：
+使用本 skill 处理以下完整任务：
+
+- DNS、IP、IPv6 泄漏或解析异常的诊断
+- PassWall 分流、节点、透明代理或重启变更
+- sing-box VLESS Reality 节点的连通性验证
+- Claude、Cloudflare 等服务的网络故障定位
+- 已知配置变更后的验证、回滚和 incident closeout
+
+仅问一个简单的命令或概念时，不启动完整流程；直接回答即可。
+
+## 安全门
+
+在进入变更阶段前，必须满足：
+
+1. 明确症状、影响范围、目标和当前是否仍可联网。
+2. 先完成只读基线；不要用猜测替代输出证据。
+3. 对每个候选变更写明影响键、备份方式、成功标准和回滚命令。
+4. 一次只做一个配置域的变更；上传、安装、校验、清理必须顺序执行。
+5. 全局节点切换、DNS 模式切换、PassWall restart/reload 都属于高风险变更，必须说明可能的短暂断网并取得用户同意。
+6. Skill 内只使用占位符，不保存真实 IP、节点 ID、局域网地址、主机名、用户名或凭据。
+
+如果用户报告“国内外都断了”，暂停优化，直接进入 [Recovery path](#recovery-path)。
+
+## Procedure
+
+### 1. Intake：建立问题契约
+
+先记录：
+
+- **症状**：哪个域名、客户端或协议失败，错误是什么。
+- **范围**：单域名、单节点、单设备，还是全局网络。
+- **时间线**：最后一次已知正常状态，以及最近的变更。
+- **目标**：恢复可用性、验证节点、修复分流，还是准备一次配置变更。
+- **限制**：是否允许短暂断网、是否能 SSH、是否只能读配置。
+
+输出一句可验证的问题定义，例如：
+
+> 在不改变全局 TCP 节点的前提下，判断 `api.anthropic.com` 失败是 DNS、路由、Reality 握手还是浏览器挑战。
+
+完成条件：范围、目标和变更权限均明确；仍有歧义时只问一个会改变流程的问题。
+
+### 2. Baseline：采集只读证据
+
+客户端基线：
 
 ```powershell
 curl.exe -4 --max-time 15 https://api.ipify.org
@@ -39,7 +71,7 @@ nslookup api.ipify.org <ROUTER_IP>
 curl.exe -4 -I --max-time 15 https://api.anthropic.com
 ```
 
-路由器侧只读检查：
+路由器只读基线：
 
 ```sh
 uci show passwall.@global[0]
@@ -51,113 +83,129 @@ free
 swapon -s
 ```
 
-## Known Stable State For This User
+记录时间、命令、退出码和关键输出。不要把完整配置、订阅内容、私钥或 token 粘贴进报告。
 
-这些值来自已恢复的稳定状态。除非用户明确同意，不要改变：
+完成条件：已经区分“解析失败、连接失败、代理失败、服务端拒绝和浏览器挑战”；否则继续读取证据，不进入变更。
 
-```sh
-passwall.@global[0].tcp_node='<KNOWN_GOOD_TCP_NODE_ID>'
-passwall.@global[0].dns_mode='tcp'
-passwall.@global[0].dns_shunt='chinadns-ng'
-passwall.@global[0].remote_dns='1.1.1.1'
-passwall.@global[0].tcp_proxy_mode='proxy'
-passwall.@global[0].udp_proxy_mode='proxy'
-passwall.@global[0].filter_proxy_ipv6='1'
-passwall.myshunt.AIGC='_default'
-passwall.myshunt.Proxy='_default'
-passwall.myshunt.Streaming='_default'
-passwall.myshunt.ProxyGame='_default'
-passwall.myshunt.Direct='_direct'
-passwall.myshunt.default_node='_direct'
-passwall.AIGC.domain_list='geosite:category-ai-!cn\ngeosite:apple-intelligence\n'
-```
+### 3. Hypothesis：建立故障树
 
-已验证的 AWS 节点：
+按证据而不是直觉分类：
 
-```text
-Node remark: <NODE_REMARK>
-PassWall node id: <AWS_NODE_ID>
-VPS IP: <AWS_VPS_IP>
-Protocol: VLESS Reality TCP 443
-Server name / SNI: www.microsoft.com
-Flow: xtls-rprx-vision
-```
+| 假设 | 先看什么 | 典型下一步 |
+|---|---|---|
+| DNS / 负缓存 | `nslookup`、生成的 DNS 配置、监听端口 | 查上游、端口和 Windows 缓存 |
+| 路由 / 分流 | Direct list、shunt 规则、目标节点 IP | 用临时测试流量验证，不改全局 |
+| Reality / TLS | `server_name`、公私钥方向、`short_id`、时间差 | 用真实 sing-box 客户端复测 |
+| 浏览器挑战 | API HTTP 状态、浏览器与 curl 差异 | 不把 403 challenge 直接判为线路坏 |
+| 客户端状态 | DNS 负缓存、旧进程、代理环境变量 | 清理并重复同一基线 |
 
-**必须保留：** VPS IP 必须在 PassWall Direct 直连 IP 列表中，避免连接节点服务器本身时被旧代理嵌套转发。
+详细命令和判读见 [PassWall/VPS runbook](references/passwall-vps-lessons.md)。
 
-```text
-<AWS_VPS_IP>/32
-```
+完成条件：保留一个或多个可被实验区分的假设，并明确每个实验不会改变什么。
 
-## Safe Change Workflow
+### 4. Minimal test：先验证，不动主流量
 
-1. **Snapshot**：保存相关 UCI 输出到回复或临时文件。
-2. **Hypothesis**：明确故障边界，例如 DNS、PassWall 透明代理、VLESS Reality 握手、AWS 安全组、Windows 负缓存。
-3. **Minimal test**：先用临时客户端或本地 socks 测试，不改主流量。
-4. **One mutation**：一次只改一个配置域，例如只改 Direct IP 或只改 DNS mode。
-5. **Validate**：用路由器侧和 Windows 侧同时验证。
-6. **Rollback ready**：失败立刻恢复稳定值。
-
-## Recovery Runbook
-
-当用户报告“国内外都断了”时，先恢复，不继续优化：
+优先使用临时本地 socks/mixed inbound 或单域名测试：
 
 ```sh
-uci set passwall.@global[0].tcp_node='<KNOWN_GOOD_TCP_NODE_ID>'
-uci set passwall.@global[0].dns_mode='tcp'
-uci set passwall.myshunt.ProxyGame='_default'
-uci set passwall.myshunt.AIGC='_default'
-uci set passwall.myshunt.Streaming='_default'
-uci set passwall.myshunt.Proxy='_default'
-uci set passwall.myshunt.Direct='_direct'
-uci set passwall.myshunt.default_node='_direct'
-uci set passwall.AIGC.domain_list='geosite:category-ai-!cn\ngeosite:apple-intelligence\n'
-uci commit passwall
-/etc/init.d/passwall stop
-/etc/init.d/passwall start
+curl -4 -sS --socks5-hostname 127.0.0.1:<LOCAL_SOCKS_PORT> \
+  --connect-timeout 10 --max-time 20 https://api.ipify.org
+curl -4 -sS -I --socks5-hostname 127.0.0.1:<LOCAL_SOCKS_PORT> \
+  --connect-timeout 10 --max-time 20 https://api.anthropic.com
 ```
 
-Windows 侧随后执行：
+实验纪律：
 
-```powershell
-ipconfig /flushdns
-curl.exe -4 --max-time 15 https://api.ipify.org
-nslookup api.ipify.org <ROUTER_IP>
-curl.exe -4 -I --max-time 15 https://api.anthropic.com
-```
+- 不为了单域名测试修改 `passwall.@global[0].tcp_node`。
+- 不把临时成功误判为全局配置安全。
+- 每次实验只改变一个变量，并保存前后输出。
 
-恢复成功标准：
+完成条件：实验结果能排除至少一个假设，或明确说明为什么需要用户批准下一步高风险动作。
+
+### 5. Change plan：写出可回滚方案
+
+在任何写操作前，输出：
 
 ```text
-api.ipify.org 返回旧主出口，例如 <OLD_EXIT_IP>
-api.anthropic.com 返回 404/405，而不是 DNS failure/timeout
-baidu.com 和 api.ipify.org 均能经 <ROUTER_IP> 解析
-passwall.@global[0].dns_mode='tcp'
+目标：
+将要改变的配置域：
+当前值摘要：
+备份位置/内容：
+预期影响：
+成功标准：
+回滚命令：
+验证命令：
 ```
 
-## Diagnostics Map
+只读证据不足时，不提出“顺手优化”或多个配置一起改。
 
-- `curl: Could not resolve host`：DNS 层，先查 `nslookup`、`Resolve-DnsName`、Windows 缓存、PassWall 生成的 DNS 配置。
-- `nslookup 正常但 curl 失败`：Windows DNS Client 负缓存，先 `ipconfig /flushdns`。
-- `api.anthropic.com` 返回 `404` 或 unauthenticated method error：网络可达。
-- `claude.ai` 用 curl 返回 `403` + `cf-mitigated: challenge`：不等于线路废；用真实浏览器无登录态测试判断。
-- `reality verification failed`：不是单纯端口不通。检查 Reality 公私钥方向、short_id、SNI、时间差、以及 VPS IP 是否被旧代理嵌套转发。
-- AWS 日志出现 `REALITY: processed invalid connection`：可能是普通 TCP 探测，也可能是真实 Reality 握手失败。必须用真实 sing-box 客户端复测。
+完成条件：用户能看懂影响范围，并且失败后可以恢复到已知稳定状态。
 
-## Claude/AWS Node Policy
+### 6. Snapshot and mutation：备份后单点变更
 
-不要把所有流量直接切到 AWS。先用临时测试验证：
+- 保存相关 UCI 配置和生成文件的最小快照。
+- 一次只改一个配置域。
+- 写入、重载、校验按顺序执行。
+- 原配置、原视频或其他源资产不覆盖、不删除。
+- 高风险 restart/reload 前再次确认短暂断网风险。
 
-1. 路由器临时运行 sing-box mixed inbound，只监听 `127.0.0.1`。
-2. 使用该临时 socks 访问 `api.ipify.org` 和 `api.anthropic.com`。
-3. 只有临时测试成功后，才讨论 PassWall UI 或访问控制分流。
-4. 未找到 UI 的真实位置前，不要改 `tcp_node`。
+完成条件：变更命令、退出码和实际写入值均已记录。
 
-详细命令和经验见 [references/passwall-vps-lessons.md](references/passwall-vps-lessons.md)。
+### 7. Validate：重复基线并验证目标
 
-## Sources To Prefer
+至少执行：
 
-- sing-box official configuration docs for VLESS/TLS/Reality fields.
-- AWS EC2 official security group docs for inbound/outbound firewall behavior.
-- dnsmasq official man page for DNS forwarding/cache behavior.
-- Cloudflare official Bot Score docs for distinguishing browser challenge from network failure.
+1. 与变更前相同的客户端和路由器基线。
+2. 目标域名/节点的最小测试。
+3. DNS、IPv4/IPv6、代理出口和 HTTP 状态检查。
+4. PassWall 进程、监听端口和关键配置检查。
+5. 若涉及浏览器服务，区分 API 可达性与浏览器挑战。
+
+完成条件：成功标准全部有实际输出支持；否则进入回滚或继续诊断，不能报告“已修复”。
+
+### 8. Recovery path：全局故障优先恢复
+
+当国内外流量都失败时：
+
+1. 停止新增优化。
+2. 对照最近一次已知稳定快照恢复全局节点和 DNS 模式。
+3. 顺序执行 stop → 检查残留进程/端口 → start。
+4. 清理 Windows DNS 负缓存。
+5. 重跑最小基线。
+6. 记录恢复前后差异，再决定是否单独诊断原始问题。
+
+恢复命令模板和成功标准见 [PassWall/VPS runbook](references/passwall-vps-lessons.md)。
+
+完成条件：基础 DNS、国内域名、目标 API 和代理状态均已重新验证，或明确记录仍未恢复的范围。
+
+## 输出格式
+
+每次流程结束时报告：
+
+```markdown
+## 结论
+- 根因 / 当前最佳假设：
+- 影响范围：
+
+## 证据
+- 变更前：
+- 实验结果：
+- 变更后：
+
+## 已执行变更
+- 配置域：
+- 备份：
+- 回滚方式：
+
+## 验证
+- 通过：
+- 未覆盖：
+- 用户需要决定：
+```
+
+## 不属于本 skill
+
+- 通用应用代码安全审计
+- 渗透测试或攻击性操作
+- 自动申请云凭据、生成私钥或写入订阅 token
+- 没有症状和目标的无差别“优化网络”
