@@ -59,6 +59,7 @@ skill 内部的相对链接必须指向本 skill 目录内的真实文件。可�
 
 - `code-subtraction`：用消融证据识别并删除不必要复杂度
 - `project-tech-mentor`：通过真实项目建立技术能力
+- `project-digestion`：从已有项目切片中恢复机制，并通过预测、修改和迁移建立可复用能力
 
 ### 网络安全
 
