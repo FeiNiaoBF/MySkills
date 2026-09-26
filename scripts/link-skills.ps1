@@ -38,10 +38,15 @@ foreach ($base in $Links) {
         $link = Join-Path $base $skill.Name
 
         if ($Remove) {
-            if ((Test-Path $link) -and (Get-Item $link).LinkType -eq "Junction") {
-                # Junction 用 Remove-Item 只拆链接、不递归删目标内容
-                [System.IO.Directory]::Delete($link, $false)
-                Write-Host "removed  $link"
+            if (Test-Path $link) {
+                $item = Get-Item $link
+                if ($item.LinkType -eq "Junction" -and $item.Target -eq $skill.FullName) {
+                    # 只拆本仓库拥有的链接，不递归删除目标内容。
+                    [System.IO.Directory]::Delete($link, $false)
+                    Write-Host "removed  $link"
+                } else {
+                    Write-Warning "skip     $link is not a junction owned by this repository"
+                }
             }
             continue
         }

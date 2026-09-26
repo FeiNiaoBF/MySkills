@@ -1,106 +1,51 @@
 # MySkills Agent Instructions
 
-## 项目定位
+本仓库是公开、MIT 授权的 Agent Skills 创作源。技能选择、安装与恢复流程见 [README.md](README.md)；这里仅维护贡献规则，不重复技能目录。
 
-本仓库是公开的可复用 Agent Skills 创作源（FeiNiaoBF/MySkills，MIT License）。每个 skill 都必须能被另一台机器安全、清楚、可验证地使用。
+## 工作边界
 
-## Skill 目录规范
+- 先确认任务是修改某个 skill，还是维护仓库文档和工具。只做授权范围内的改动；校验发现其他问题时报告，不顺带修复。
+- Skill 必须能在另一台机器上独立使用：关键步骤、安全边界和验证条件不能依赖聊天记录或作者机器。
+- 源文件可能通过链接被运行时直接使用；普通维护不自动重装技能、修改恢复清单或运行 bootstrap。
+- 临时环境、验证样例和报告放在系统临时目录的 `pi-agent/` 下，不放进仓库。
 
-每个 skill 使用一个与目录同名的一级目录：
+## Skill 格式
 
-```text
-<skill-name>/
-├── SKILL.md                 # 必需
-├── references/              # 可选：较长的按需参考资料
-└── agents/openai.yaml       # 可选：外部 agent 的界面提示
-```
+每个 skill 占一个同名一级目录，必须有 `SKILL.md`；较长的按需参考放 `references/`，可选界面提示放 `agents/openai.yaml`。`docs/`、`scripts/`、`tests/` 为仓库基础设施，隐藏目录不作为 skill。
 
-`SKILL.md` 的 frontmatter 必须包含：
+Frontmatter 使用可解析的 YAML：
 
-- `name`：必须与目录名完全一致
-- `description`：前 57 个字符内要说明何时使用该 skill；先写触发条件，再写能力范围
-- `metadata:`：作者、版本、日期等非规范字段统一放在这里
+- `name` 与目录名完全一致。
+- `description` 先写触发条件，再写能力范围；前 57 个字符应说明何时使用。这是人工语义检查，不是总长度上限。
+- `metadata` 必须为映射；作者、版本、日期等自定义字段统一放在其中。`license` 等标准字段可以保留在顶层。
+- 内部相对链接必须指向本 skill 内的真实文件。跨 skill 用名称路由，不用跨目录相对链接共享实现；共同规则放明确的公共文档。
 
-标准 frontmatter 字段（如 `license`）可以保留在顶层；自定义字段不要散落在顶层。
+## 内容与安全
 
-skill 内部的相对链接必须指向本 skill 目录内的真实文件。可以通过 skill 名称路由到其他 skill，但不要用跨目录相对路径共享实现细节；共享参考应放在明确的公共文档中。
+- 先写可执行步骤及其完成条件，再放按需参考。按分支提供参考入口，避免要求每次通读所有材料。
+- 保持知识单一来源：不重复缓存配置、脚本帮助和可直接查到的结构。保留不能从环境推导出的理由、约束与经验。
+- 按任务需要保留指导；模型已经可靠完成的通用动作，不堆叠成多套重复流程。精简效果用实际用例验证，不把更短直接等同于更好。
+- 示例使用 `<VPS_IP>`、`<ROUTER_IP>`、`<SSH_HOST>`、`<your-key>.pem` 等占位符。公开文件不含真实用户的地址、主机名、用户名、节点 ID、凭据、私钥、订阅 token 或机器专属路径。
+- 网络、路由器、云主机及媒体操作先做只读诊断；变更前说明影响、备份、回滚和验证方法。
+- 报告实际执行的检查及未覆盖部分。链接正确、脚本退出成功、模型评价通过与实际行为有效，是不同层次的证据。
 
-## 内容要求
+## 修改与验证
 
-- 先写可执行步骤，再写按需参考；每个步骤都要有可检查的完成条件。
-- 重要事实、命令和安全边界写在 skill 内；不要依赖聊天上下文。
-- 不重复缓存 `package.json`、脚本帮助或目录结构中容易查到的事实，除非补充了原因、约束或经验教训。
-- 用户已经确认的设计或流程可以直接落盘；仍有实质分叉时只问一个高价值问题。
-- 示例配置必须使用占位符，例如 `<VPS_IP>`、`<ROUTER_IP>`、`<SSH_HOST>`、`<your-key>.pem>`。
-- 不在公开仓库写入真实公网 IP、局域网地址、主机名、用户名、节点 ID、密码、私钥、API key、订阅 token、真实文件路径或其他用户环境专属值。
-- 网络、路由器、云主机和媒体操作优先只读诊断；变更前说明影响、备份方式、回滚命令和验证方法。
-- 不把“看起来成功”当作完成；必须报告实际执行过的验证和未覆盖的部分。
+1. 检查 Git 状态并阅读相关文件；保留用户已有改动。新增或变更技能的对外定位时，同步 README 中对应入口。
+2. 修改维护脚本时，为发现的缺陷补充可复现的回归测试。安装脚本的测试使用隔离目录，不能接触用户真实 skills 目录。
+3. 按 README 准备验证依赖，执行：
 
-## 当前 Skill 分组
+   ```bash
+   python -B scripts/validate_skills.py
+   python -B -m unittest discover -s tests -v
+   git diff --check
+   ```
 
-### 视频与数学视频
+4. 人工检查触发条件、敏感值、相对链接语义与行为验证证据。校验器覆盖全部 skill，但不能证明内容正确或穷尽敏感信息。
+5. 修复本次改动引入的失败并重跑相关检查；已有、越界或环境性失败单独报告，不隐藏或放宽规则来制造通过。
 
-- `math-video-workflow`：按阶段编排视频处理、审校和动画交接
-- `video-smart-cut`：本地转写、剪辑、字幕对齐和成片校验
-- `math-video-review`：数学视频轻审、终审和 Manim 候选
-- `math-manim-insertion`：设计和验证插入式 Manim 场景
-- `manim-video-insertion`：按字幕语义装配画面替换段
-- `manim-recap-video`：制作片尾独立重温动画
+## 提交与发布
 
-两条 Manim 路线不可混用：中途画面替换走 `math-manim-insertion` + `manim-video-insertion`；片尾独立重温走 `manim-recap-video`。
-
-### 设计与前端
-
-- `aesthetic-translator`：把模糊审美感受翻译成可执行设计规格
-- `better-designs-md`：编写和维护 DESIGN.md
-- `frontend-guide`：从方向卡到模块化页面实现
-
-### 工程维护与学习
-
-- `code-subtraction`：用消融证据识别并删除不必要复杂度
-- `project-tech-mentor`：通过真实项目建立技术能力
-- `project-digestion`：从已有项目切片中恢复机制，并通过预测、修改和迁移建立可复用能力
-
-### 网络安全
-
-- `network-security-check`：对 OpenWrt/ImmortalWrt + PassWall + sing-box/VPS 网络进行安全诊断和最小变更。它覆盖 IP/DNS/IPv6 泄漏检查、路由稳定性、VLESS Reality 节点验证、Claude/Cloudflare 网络故障定位和 PassWall 分流；必须先建立基线和只读证据，备份后才能变更，并准备回滚。
-
-该 skill 不保存任何真实节点或用户网络配置；用户环境值只能在当前会话中读取并使用占位符记录。
-
-## 验证
-
-提交前至少执行：
-
-```bash
-python scripts/validate-video-skills.py
-```
-
-同时手工检查：
-
-1. 所有一级 skill 目录都有 `SKILL.md`。
-2. `name` 与目录名一致，frontmatter 可解析。
-3. 本地 Markdown 链接都存在。
-4. 示例没有机器绝对路径和敏感值。
-5. diff 只包含当前逻辑变更，没有缓存、媒体或临时文件。
-
-新增通用校验脚本时，应覆盖全部 skill，而不只覆盖视频 skill。
-
-## 部署
-
-本仓库是创作源；运行时 skill 安装在 `~/.agents/skills`。优先使用：
-
-```bash
-scripts/link-skills.sh <skill-name>
-```
-
-Windows 使用 `scripts/link-skills.ps1`。不要同时链接到 `~/.pi/agent/skills`，避免同名 skill 被重复加载。
-
-纳入恢复清单的 skill 由 `pi-agent/config/skills-manifest.json` 的 pinned commit 管理。仓库 push 后，必须由维护流程更新 manifest 的 commit ref，再运行 bootstrap；未纳入清单的 skill 只通过 link 脚本安装。
-
-## Git 与公开发布
-
-- 提交信息使用 Conventional Commits，英文格式：`feat:`、`fix:`、`docs:`、`chore:`。
-- 一个 skill 或一类逻辑变更使用一个聚焦提交。
-- stage 时只列出明确路径。
-- 不自动 push；push 前必须获得用户确认。
-- 提交前再次检查 `git diff --check` 和敏感值扫描。
+- 一个 skill 或一类逻辑变更使用一个聚焦提交；英文 Conventional Commits：`feat:`、`fix:`、`docs:`、`chore:`。
+- Stage 明确路径；提交前检查完整 diff，排除缓存、媒体、临时文件和敏感值。
+- 本地提交不等于发布。Push 必须获得用户授权；后续恢复清单维护按 README 的部署流程进行。

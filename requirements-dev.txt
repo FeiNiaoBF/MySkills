@@ -1,0 +1,3 @@
+# Repository validation only; installing an individual skill needs neither package.
+PyYAML>=6.0.2,<7
+markdown-it-py>=3,<5

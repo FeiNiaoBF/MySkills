@@ -1,33 +1,120 @@
-# My Skills
+# MySkills
 
-自用 AI Skills，记录可复用、可验证的工作流。
+公开的可复用 Agent Skills 创作源，采用 [MIT License](LICENSE)。这里维护工作流与按需参考资料；课程工程、媒体、缓存和用户环境配置留在各自项目中。
 
-## 视频工作流
+## 选择 Skill
 
-| Skill | 职责 |
-|---|---|
-| `math-video-workflow` | 按阶段编排一集数学视频，管理状态与人工确认 |
-| `video-smart-cut` | 本地转写、智能精简、字幕对齐、画幅处理和成片校验 |
-| `math-video-review` | 两阶段数学审校、口误判断和 Manim 候选清单 |
-| `manim-recap-video` | 将获批候选制作成无旁白、无 BGM 的 Manim 片尾重温段 |
-| `math-manim-insertion` | 为教学视频写插入式 Manim 场景：设计、符号与视觉规范 |
-| `manim-video-insertion` | 按字幕语义建立插入时间表，把已验收场景装配进成片 |
+### 视频与数学视频
 
-推荐入口：先使用 `math-video-workflow`，每次只推进一个阶段。`workflow.yaml` 是单集状态的唯一来源；视频大文件和课程工程留在各自项目目录，不存入本仓库。
+| Skill | 使用场景 |
+| --- | --- |
+| [math-video-workflow](math-video-workflow/SKILL.md) | 编排分集数学视频的剪辑、审校和动画交接；视频任务的推荐入口 |
+| [video-smart-cut](video-smart-cut/SKILL.md) | 本地转写、精简、字幕对齐与成片校验 |
+| [math-video-review](math-video-review/SKILL.md) | 审校数学表述、推导、口误与动画候选 |
+| [math-manim-insertion](math-manim-insertion/SKILL.md) | 设计并验证讲解中途插入的 Manim 场景 |
+| [manim-video-insertion](manim-video-insertion/SKILL.md) | 按字幕语义把已验收场景装配为画面替换段 |
+| [manim-recap-video](manim-recap-video/SKILL.md) | 制作片尾独立、无旁白的数学重温动画 |
 
-两条 Manim 路线勿混用：**讲解中途画面替换**走 `math-manim-insertion` + `manim-video-insertion`（原声连续、总时长不变）；**片尾独立重温段**走 `manim-recap-video`（追加拼接）。
+中途画面替换使用 `math-manim-insertion` + `manim-video-insertion`，保持原声和总时长；片尾独立重温使用 `manim-recap-video`，追加拼接。两条路线不要混用。单集状态由课程项目中的 `workflow.yaml` 维护。
 
-## 其他 Skills
+### 设计与前端
 
-- `project-tech-mentor`：通过项目学习一门技术
-- `frontend-guide`：前端实现指导
-- `network-security-check`：网络安全检查
-- `aesthetic-translator`：把审美意图转换为可执行设计语言
-- `better-designs-md`：改进设计文档
-- `code-subtraction`：以删减为目标审查代码
+| Skill | 使用场景 |
+| --- | --- |
+| [aesthetic-translator](aesthetic-translator/SKILL.md) | 把模糊审美感受转成可执行设计规格 |
+| [better-designs-md](better-designs-md/SKILL.md) | 编写和维护界面设计规范 `DESIGN.md` |
+| [frontend-guide](frontend-guide/SKILL.md) | 从方向卡到模块化页面实现，或按需逐模块陪建 |
 
-## 安装
+### 工程维护与理解
 
-使用 `scripts/link-skills.ps1` 或 `scripts/link-skills.sh` 将需要的 skill 链接到目标 agent 的 skills 目录。执行前先阅读脚本并确认目标路径。
+| Skill | 使用场景 |
+| --- | --- |
+| [code-subtraction](code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
+| [project-tech-mentor](project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
+| [project-digestion](project-digestion/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
+| [make-sense](make-sense/SKILL.md) | 修复当前内容中的概念或推理障碍，回到原任务 |
 
-提交前跑 `python scripts/validate-video-skills.py`：校验视频/Manim 技能的 frontmatter、description 长度、机器绝对路径和相对链接。
+### 网络安全
+
+| Skill | 使用场景 |
+| --- | --- |
+| [network-security-check](network-security-check/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
+
+## 安装与移除
+
+先阅读对应脚本，再从仓库根目录执行。以下示例只安装 `make-sense`；换成需要的 skill 名称即可。省略选择参数会批量链接，请优先按需安装。
+
+**Windows / PowerShell：**
+
+```powershell
+.\scripts\link-skills.ps1 -Only make-sense
+```
+
+**Linux / macOS / WSL：**
+
+```bash
+bash scripts/link-skills.sh make-sense
+```
+
+脚本只向 `~/.agents/skills/<skill-name>` 建立链接：Windows 使用 Junction，其他平台使用符号链接。已有同名实体目录或来自其他来源的链接不会被覆盖。不要再向 `~/.pi/agent/skills` 安装同名副本。
+
+链接直接指向本仓库，因此源文件修改会影响已安装版本；仓库移动前需处理原链接。安装后让使用方重新加载技能或重启会话。宿主是否支持自动选择、命令调用及该目录的发现机制，以其配置为准。
+
+移除指定链接，不删除源 skill：
+
+```powershell
+.\scripts\link-skills.ps1 -Remove -Only make-sense
+```
+
+```bash
+bash scripts/link-skills.sh --remove make-sense
+```
+
+两种脚本只移除指向当前仓库对应 skill 的自有链接，保留手工安装和其他来源。
+
+### 恢复清单与本地链接
+
+本仓库是创作源；本地链接使用当前工作区内容。另一个维护仓库 `pi-agent` 的 `config/skills-manifest.json` 为纳入恢复清单的 skill 固定提交版本。这是两种不同的版本来源，不能把本地安装成功当作恢复清单已更新。
+
+经授权 push 后，由维护流程更新清单 ref 并运行 bootstrap。未纳入清单的 skill 只通过本仓库的链接脚本安装。普通内容修改或校验不需要运行 bootstrap，也不应顺带调整其他已安装技能。
+
+## 维护与验证
+
+贡献规则见 [AGENTS.md](AGENTS.md)。维护工具要求 Python 3.10+；[requirements-dev.txt](requirements-dev.txt) 仅用于仓库校验，安装单个 skill 不需要这些依赖。
+
+推荐把验证环境放在仓库外：
+
+**PowerShell：**
+
+```powershell
+$venv = Join-Path $env:TEMP "pi-agent/myskills-venv"
+python -m venv $venv
+$python = Join-Path $venv "Scripts/python.exe"
+& $python -m pip install -r requirements-dev.txt
+& $python -B scripts/validate_skills.py
+& $python -B -m unittest discover -s tests -v
+```
+
+**Bash：**
+
+```bash
+venv="${TMPDIR:-/tmp}/pi-agent/myskills-venv"
+python3 -m venv "$venv"
+"$venv/bin/python" -m pip install -r requirements-dev.txt
+"$venv/bin/python" -B scripts/validate_skills.py
+"$venv/bin/python" -B -m unittest discover -s tests -v
+```
+
+[校验器](scripts/validate_skills.py) 自动发现所有一级 skill 目录，检查：
+
+- YAML frontmatter 的语法、重复键、必填字段及名称匹配；自定义字段归入 `metadata`。
+- skill 内 Markdown 链接和图片的本地目标是否存在、是否越出本 skill；根文档和 `docs/` 的链接限制在仓库内。
+- skill 文本资源、根文档和共享文档中的机器绝对路径及私钥标记。
+
+`docs/`、`scripts/`、`tests/` 和隐藏目录属于仓库基础设施，不作为 skill。检查不会访问网络或修改文件。外部 URL、片段锚点、HTML 链接和未被 Markdown 引用的路径不在链接校验范围内；敏感值扫描是启发式检查，不能替代人工审查。
+
+`description` 的要求是**前 57 个字符说明触发条件**，不是总长最多 57 字符；触发是否清楚需要人工判断。行为效果同样需要实际用例验证。
+
+旧命令 `python scripts/validate-video-skills.py` 仍可用，但现在调用同一个全仓库校验器，使用相同依赖。校验失败会返回非零状态；新检查暴露的已有 skill 问题应如实报告，不因本次只维护仓库工具而擅自修改技能。
+
+测试只使用仓库外的临时样例，不操作真实安装目录。Windows Junction 测试在缺少 Windows/PowerShell 时会明确跳过。提交前另运行 `git diff --check`，并确认改动没有越出授权范围。
