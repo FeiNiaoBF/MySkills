@@ -4,6 +4,7 @@ description: 为教学视频撰写插入式 Manim 场景：设计、符号与视
 metadata:
   author: FeiNiaoBF
   version: 1.0.0
+disable-model-invocation: true
 ---
 
 # Math Manim Insertion

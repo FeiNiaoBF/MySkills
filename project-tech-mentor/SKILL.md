@@ -4,6 +4,7 @@ description: Guide learners with basic coding ability to gain practical proficie
 metadata:
   author: FeiNiaoBF
   version: 1.0.0
+disable-model-invocation: true
 ---
 
 # Project Tech Mentor

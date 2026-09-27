@@ -6,6 +6,7 @@ metadata:
   version: 1.1.0
   date_added: "2026-04-09"
   risk: low
+disable-model-invocation: true
 ---
 
 # Authoring Design Systems (DESIGN.md)

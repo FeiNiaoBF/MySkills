@@ -4,6 +4,7 @@ description: 本地完成长视频转写、精简、字幕对齐与成片校验�
 metadata:
   author: FeiNiaoBF
   version: 4.0.0
+disable-model-invocation: true
 ---
 
 # Video Smart Cut

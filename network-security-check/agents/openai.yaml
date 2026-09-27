@@ -3,4 +3,4 @@ interface:
   short_description: "Safe PassWall and VPN diagnostics"
   default_prompt: "Use $network-security-check to take my PassWall, VPS, DNS, or VPN issue from baseline through minimal change, validation, and rollback if needed."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

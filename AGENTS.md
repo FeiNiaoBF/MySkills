@@ -18,6 +18,7 @@ Frontmatter 使用可解析的 YAML：
 - `name` 与目录名完全一致。
 - `description` 先写触发条件，再写能力范围；前 57 个字符应说明何时使用。这是人工语义检查，不是总长度上限。
 - `metadata` 必须为映射；作者、版本、日期等自定义字段统一放在其中。`license` 等标准字段可以保留在顶层。
+- `disable-model-invocation` 是受支持的 Claude Code 扩展字段；需要用户明确触发的工作流可在顶层设为 `true`，并在 `agents/openai.yaml` 中同步设置 `policy.allow_implicit_invocation: false`。
 - 内部相对链接必须指向本 skill 内的真实文件。跨 skill 用名称路由，不用跨目录相对链接共享实现；共同规则放明确的公共文档。
 
 ## 内容与安全

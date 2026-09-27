@@ -9,6 +9,7 @@ license: MIT
 metadata:
   author: FeiNiaoBF
   version: 2.0.1
+disable-model-invocation: true
 ---
 
 # code-subtraction — 代码与项目「做减法」

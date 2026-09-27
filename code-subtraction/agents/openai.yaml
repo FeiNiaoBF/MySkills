@@ -3,4 +3,4 @@ interface:
   short_description: "Safely simplify code by removing unnecessary complexity"
   default_prompt: "Use $code-subtraction to find and safely remove unnecessary complexity in my code, with ablation-based verification."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

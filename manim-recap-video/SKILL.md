@@ -4,6 +4,7 @@ description: 将获批的数学概念制作为无旁白 Manim 重温段。
 metadata:
   author: FeiNiaoBF
   version: 3.0.0
+disable-model-invocation: true
 ---
 
 # Manim Recap Video

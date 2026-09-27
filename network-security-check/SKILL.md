@@ -4,6 +4,7 @@ description: PassWall/sing-box diagnosis, safe changes, and rollback.
 metadata:
   author: FeiNiaoBF
   version: 2.0.0
+disable-model-invocation: true
 ---
 
 # Network Security Check

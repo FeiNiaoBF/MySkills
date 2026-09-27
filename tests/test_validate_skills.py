@@ -98,7 +98,9 @@ class RepositoryTests(unittest.TestCase):
 
     def test_standard_optional_frontmatter_fields(self):
         self.write("example/SKILL.md", skill_text().replace(
-            "name: example", "name: example\nlicense: MIT\ncompatibility: Python\nallowed-tools: Read"
+            "name: example",
+            "name: example\nlicense: MIT\ncompatibility: Python\nallowed-tools: Read\n"
+            "disable-model-invocation: true",
         ))
         self.assertEqual(self.errors(), [])
 

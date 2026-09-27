@@ -4,6 +4,7 @@ description: 审校数学视频的转写、口误、推导与动画候选。
 metadata:
   author: FeiNiaoBF
   version: 1.0.0
+disable-model-invocation: true
 ---
 
 # Math Video Review

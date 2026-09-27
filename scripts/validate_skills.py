@@ -17,7 +17,16 @@ except ImportError as exc:
 
 ROOT = Path(__file__).resolve().parents[1]
 INFRASTRUCTURE_DIRS = {"docs", "scripts", "tests"}
-FRONTMATTER_FIELDS = {"name", "description", "metadata", "license", "compatibility", "allowed-tools"}
+FRONTMATTER_FIELDS = {
+    "name",
+    "description",
+    "metadata",
+    "license",
+    "compatibility",
+    "allowed-tools",
+    # Claude Code extension for skills that require explicit user invocation.
+    "disable-model-invocation",
+}
 TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json"}
 MACHINE_PATH = re.compile(
     r"(?<![A-Za-z0-9])(?:[A-Za-z]:[\\/]|/(?:home|Users)/[^/\s<>]+/|/root/)"

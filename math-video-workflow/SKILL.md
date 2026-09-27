@@ -4,6 +4,7 @@ description: 编排分集数学视频的剪辑、审校与动画流程。
 metadata:
   author: FeiNiaoBF
   version: 1.0.0
+disable-model-invocation: true
 ---
 
 # Math Video Workflow

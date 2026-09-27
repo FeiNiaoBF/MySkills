@@ -4,6 +4,7 @@ description: 把已验收的 Manim 场景作为画面替换段装配进成片。
 metadata:
   author: FeiNiaoBF
   version: 1.0.0
+disable-model-invocation: true
 ---
 
 # Manim Video Insertion

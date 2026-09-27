@@ -133,6 +133,8 @@ python3 -m venv "$venv"
 
 `docs/`、`scripts/`、`tests/` 和隐藏目录属于仓库基础设施，不作为 skill。检查不会访问网络或修改文件。外部 URL、片段锚点、HTML 链接和未被 Markdown 引用的路径不在链接校验范围内；敏感值扫描是启发式检查，不能替代人工审查。
 
+Skill 的调用策略按宿主分别声明：需要用户明确触发的工作流在 `SKILL.md` 顶层使用 Claude Code 的 `disable-model-invocation: true`，并在 `agents/openai.yaml` 中使用 `policy.allow_implicit_invocation: false`。普通知识和指导类 Skill 保持默认的隐式调用。两种字段都不属于 Agent Skills 核心格式，其他宿主可能忽略它们。
+
 `description` 的要求是**前 57 个字符说明触发条件**，不是总长最多 57 字符；触发是否清楚需要人工判断。行为效果同样需要实际用例验证。
 
 旧命令 `python scripts/validate-video-skills.py` 仍可用，但现在调用同一个全仓库校验器，使用相同依赖。校验失败会返回非零状态；新检查暴露的已有 skill 问题应如实报告，不因本次只维护仓库工具而擅自修改技能。
