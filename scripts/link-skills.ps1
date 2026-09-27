@@ -1,66 +1,68 @@
-# link-skills.ps1 — 把本仓库的每个 skill 目录以 Junction 链接到 agent skills 目录
-# 用法:
-#   powershell -ExecutionPolicy Bypass -File scripts\link-skills.ps1 -Only frontend-guide          # 链接指定 skill（推荐：做好一个链一个）
-#   powershell -ExecutionPolicy Bypass -File scripts\link-skills.ps1 -Remove -Only frontend-guide   # 移除指定 skill 的链接
-#   powershell -ExecutionPolicy Bypass -File scripts\link-skills.ps1            # 链接全部 skill
+# link-skills.ps1 — mount this repository once under the shared Agent Skills root.
+# Usage:
+#   powershell -ExecutionPolicy Bypass -File scripts\link-skills.ps1
+#   powershell -ExecutionPolicy Bypass -File scripts\link-skills.ps1 -Remove
 #
-# 换机器 clone 后按需跑；Junction 是本机对象，不入 git。
-# 已存在但不是指向本仓库 Junction 的同名目录会被跳过（不覆盖手动部署的版本）。
+# The single collection junction makes edits, additions, and removals visible without relinking.
+# Existing third-party skills in ~/.agents/skills are left untouched.
 
 param(
-    [switch]$Remove,
-    [string[]]$Only
+    [switch]$Remove
 )
 
 $ErrorActionPreference = "Stop"
-$RepoRoot = Split-Path -Parent $PSScriptRoot
-# junction 只建在权威根：Pi 同时读 ~/.agents/skills 与 ~/.pi/agent/skills，
-# 两边都链会让同名 skill 被加载两次（启动告警 + doctor duplicate 失败）。
-$Links = @(
-    (Join-Path $env:USERPROFILE ".agents\skills")
-)
+$RepoRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
+$Base = Join-Path $env:USERPROFILE ".agents\skills"
+$Link = Join-Path $Base "myskills"
 
-# 发现 skill：仓库根下含 SKILL.md 的一级目录
-$skills = Get-ChildItem -Directory $RepoRoot | Where-Object {
-    (Test-Path (Join-Path $_.FullName "SKILL.md")) -and
-    (-not $Only -or $Only -contains $_.Name)
+function Get-NormalizedTarget([System.IO.FileSystemInfo]$Item) {
+    if (-not $Item.Target) { return $null }
+    return [System.IO.Path]::GetFullPath([string]($Item.Target | Select-Object -First 1)).TrimEnd('\')
 }
 
-if (-not $skills) {
-    Write-Warning "未在 $RepoRoot 下找到任何含 SKILL.md 的目录"
-    exit 1
+function Test-OwnedJunction([string]$Path, [string]$Target) {
+    if (-not (Test-Path -LiteralPath $Path)) { return $false }
+    $item = Get-Item -LiteralPath $Path
+    return $item.LinkType -eq "Junction" -and
+        (Get-NormalizedTarget $item) -eq ([System.IO.Path]::GetFullPath($Target).TrimEnd('\'))
 }
 
-foreach ($base in $Links) {
-    if (-not (Test-Path $base)) { New-Item -ItemType Directory -Path $base | Out-Null }
-
-    foreach ($skill in $skills) {
-        $link = Join-Path $base $skill.Name
-
-        if ($Remove) {
-            if (Test-Path $link) {
-                $item = Get-Item $link
-                if ($item.LinkType -eq "Junction" -and $item.Target -eq $skill.FullName) {
-                    # 只拆本仓库拥有的链接，不递归删除目标内容。
-                    [System.IO.Directory]::Delete($link, $false)
-                    Write-Host "removed  $link"
-                } else {
-                    Write-Warning "skip     $link is not a junction owned by this repository"
-                }
-            }
-            continue
-        }
-
-        if (Test-Path $link) {
-            $item = Get-Item $link
-            if ($item.LinkType -eq "Junction" -and $item.Target -eq $skill.FullName) {
-                Write-Host "ok       $link"
-            } else {
-                Write-Warning "skip     $link 已存在且不是指向本仓库的 Junction，请手动处理"
-            }
-        } else {
-            New-Item -ItemType Junction -Path $link -Target $skill.FullName | Out-Null
-            Write-Host "linked   $link -> $($skill.FullName)"
+function Remove-LegacyLinks {
+    Get-ChildItem -Directory $RepoRoot | Where-Object {
+        Test-Path -LiteralPath (Join-Path $_.FullName "SKILL.md")
+    } | ForEach-Object {
+        $legacy = Join-Path $Base $_.Name
+        if (Test-OwnedJunction $legacy $_.FullName) {
+            [System.IO.Directory]::Delete($legacy, $false)
+            Write-Host "removed legacy $legacy"
         }
     }
 }
+
+if (-not (Test-Path -LiteralPath $Base)) {
+    New-Item -ItemType Directory -Path $Base | Out-Null
+}
+
+if ($Remove) {
+    if (Test-OwnedJunction $Link $RepoRoot) {
+        [System.IO.Directory]::Delete($Link, $false)
+        Write-Host "removed  $Link"
+    } elseif (Test-Path -LiteralPath $Link) {
+        Write-Warning "skip     $Link is not a junction owned by this repository"
+    }
+    Remove-LegacyLinks
+    exit 0
+}
+
+if (Test-Path -LiteralPath $Link) {
+    if (-not (Test-OwnedJunction $Link $RepoRoot)) {
+        Write-Error "$Link already exists and is not a junction owned by this repository"
+    }
+    Write-Host "ok       $Link"
+} else {
+    New-Item -ItemType Junction -Path $Link -Target $RepoRoot | Out-Null
+    Write-Host "mounted  $Link -> $RepoRoot"
+}
+
+# Migrate links created by older releases only after the collection mount is valid.
+Remove-LegacyLinks

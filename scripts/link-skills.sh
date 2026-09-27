@@ -1,78 +1,79 @@
 #!/usr/bin/env bash
-# link-skills.sh — 把本仓库的每个 skill 目录以符号链接挂到 agent skills 目录（Linux / macOS / WSL）
-# 用法:
-#   ./scripts/link-skills.sh frontend-guide              # 链接指定 skill（推荐：做好一个链一个）
-#   ./scripts/link-skills.sh --remove frontend-guide     # 移除指定 skill 的链接
-#   ./scripts/link-skills.sh                             # 链接全部 skill
+# link-skills.sh — mount this repository once under the shared Agent Skills root.
+# Usage:
+#   bash scripts/link-skills.sh
+#   bash scripts/link-skills.sh --remove
 #
-# 换机器 clone 后按需跑；符号链接不进 git。
-# 已存在但不是指向本仓库的同名目录会被跳过（不覆盖手动部署的版本）。
-# 链接使用绝对路径，与 Windows 侧的 Junction 行为一致：仓库搬家后重跑本脚本即可修复。
+# The single collection symlink makes edits, additions, and removals visible without relinking.
+# Existing third-party skills in ~/.agents/skills are left untouched.
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd -P)"
+BASE="$HOME/.agents/skills"
+LINK="$BASE/myskills"
 REMOVE=0
-declare -a ONLY=()
-for arg in "$@"; do
-    case "$arg" in
-        --remove|-r) REMOVE=1 ;;
-        -h|--help) sed -n '2,7p' "${BASH_SOURCE[0]}"; exit 0 ;;
-        *) ONLY+=("$arg") ;;
-    esac
-done
 
-# junction 只建在权威根：Pi 同时读 ~/.agents/skills 与 ~/.pi/agent/skills，
-# 两边都链会让同名 skill 被加载两次：启动告警 + doctor duplicate 失败。
-LINK_BASES=(
-    "$HOME/.agents/skills"
-)
+case "${1:-}" in
+    --remove|-r) REMOVE=1 ;;
+    "") ;;
+    -h|--help) sed -n '2,7p' "${BASH_SOURCE[0]}"; exit 0 ;;
+    *) echo "ERROR: unknown argument: $1" >&2; exit 2 ;;
+esac
 
-# 发现 skill：仓库根下含 SKILL.md 的一级目录（给了位置参数则只取同名目录）
-skills=()
-for dir in "$REPO_ROOT"/*/; do
-    name="$(basename "$dir")"
-    [ -f "$dir/SKILL.md" ] || continue
-    if [ ${#ONLY[@]} -gt 0 ]; then
-        keep=0
-        for want in "${ONLY[@]}"; do
-            [ "$want" = "$name" ] && keep=1
-        done
-        [ "$keep" = 1 ] || continue
-    fi
-    skills+=("$(basename "$dir")")
-done
+# MSYS/Git Bash may emulate `ln -s` by copying a directory. Delegate to the
+# Windows implementation so the live mount remains a real Junction.
+case "$(uname -s)" in
+    MINGW*|MSYS*|CYGWIN*)
+        args=()
+        [ "$REMOVE" = 1 ] && args+=("-Remove")
+        powershell.exe -NoProfile -ExecutionPolicy Bypass -File \
+            "$(cygpath -w "$SCRIPT_DIR/link-skills.ps1")" "${args[@]}"
+        exit $?
+        ;;
+esac
 
-if [ ${#skills[@]} -eq 0 ]; then
-    echo "WARN: 未在 $REPO_ROOT 下找到匹配的 skill 目录（需含 SKILL.md）" >&2
-    exit 1
-fi
+owned_link() {
+    [ -L "$1" ] && [ "$(readlink -f "$1")" = "$(readlink -f "$2")" ]
+}
 
-for base in "${LINK_BASES[@]}"; do
-    mkdir -p "$base"
-
-    for name in "${skills[@]}"; do
-        target="$REPO_ROOT/$name"
-        link="$base/$name"
-
-        if [ "$REMOVE" = 1 ]; then
-            if [ -L "$link" ] && [ "$(readlink "$link")" = "$target" ]; then
-                rm "$link"
-                echo "removed  $link"
-            fi
-            continue
-        fi
-
-        if [ -e "$link" ] || [ -L "$link" ]; then
-            if [ -L "$link" ] && [ "$(readlink "$link")" = "$target" ]; then
-                echo "ok       $link"
-            else
-                echo "SKIP     $link 已存在且不是指向本仓库的符号链接，请手动处理" >&2
-            fi
-        else
-            ln -s "$target" "$link"
-            echo "linked   $link -> $target"
+remove_legacy_links() {
+    local dir name legacy
+    for dir in "$REPO_ROOT"/*/; do
+        [ -f "$dir/SKILL.md" ] || continue
+        name="$(basename "$dir")"
+        legacy="$BASE/$name"
+        if owned_link "$legacy" "$dir"; then
+            rm "$legacy"
+            echo "removed legacy $legacy"
         fi
     done
-done
+}
+
+mkdir -p "$BASE"
+
+if [ "$REMOVE" = 1 ]; then
+    if owned_link "$LINK" "$REPO_ROOT"; then
+        rm "$LINK"
+        echo "removed  $LINK"
+    elif [ -e "$LINK" ] || [ -L "$LINK" ]; then
+        echo "WARN: skip $LINK; it is not a symlink owned by this repository" >&2
+    fi
+    remove_legacy_links
+    exit 0
+fi
+
+if [ -e "$LINK" ] || [ -L "$LINK" ]; then
+    if ! owned_link "$LINK" "$REPO_ROOT"; then
+        echo "ERROR: $LINK already exists and is not a symlink owned by this repository" >&2
+        exit 1
+    fi
+    echo "ok       $LINK"
+else
+    ln -s "$REPO_ROOT" "$LINK"
+    echo "mounted  $LINK -> $REPO_ROOT"
+fi
+
+# Migrate links created by older releases only after the collection mount is valid.
+remove_legacy_links

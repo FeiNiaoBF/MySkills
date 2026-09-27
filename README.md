@@ -40,43 +40,63 @@
 | --- | --- |
 | [network-security-check](network-security-check/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
 
-## 安装与移除
+## 安装、同步与更新
 
-先阅读对应脚本，再从仓库根目录执行。以下示例只安装 `make-sense`；换成需要的 skill 名称即可。省略选择参数会批量链接，请优先按需安装。
+### 挂载本仓库
+
+从仓库根目录执行一次：
 
 **Windows / PowerShell：**
 
 ```powershell
-.\scripts\link-skills.ps1 -Only make-sense
+.\scripts\link-skills.ps1
 ```
 
 **Linux / macOS / WSL：**
 
 ```bash
-bash scripts/link-skills.sh make-sense
+bash scripts/link-skills.sh
 ```
 
-脚本只向 `~/.agents/skills/<skill-name>` 建立链接：Windows 使用 Junction，其他平台使用符号链接。已有同名实体目录或来自其他来源的链接不会被覆盖。不要再向 `~/.pi/agent/skills` 安装同名副本。
+脚本建立一个集合链接：`~/.agents/skills/myskills` 指向本仓库根目录。Pi、Codex 等支持 Agent Skills 的宿主会递归发现其中的 `SKILL.md`。之后修改、新增或删除 skill 都直接生效，不需要重新运行脚本；活跃会话仍需 reload 或重启。
 
-链接直接指向本仓库，因此源文件修改会影响已安装版本；仓库移动前需处理原链接。安装后让使用方重新加载技能或重启会话。宿主是否支持自动选择、命令调用及该目录的发现机制，以其配置为准。
+已有第三方 skill 不会被覆盖。脚本会安全迁移旧版本创建的逐项链接，只删除目标确实属于本仓库的链接。不要再把同名副本安装到 `~/.pi/agent/skills`。
 
-移除指定链接，不删除源 skill：
+Hermes 使用共享目录时，在其用户配置中加入一次：
+
+```yaml
+skills:
+  external_dirs:
+    - ~/.agents/skills
+```
+
+移除集合链接但保留源文件：
 
 ```powershell
-.\scripts\link-skills.ps1 -Remove -Only make-sense
+.\scripts\link-skills.ps1 -Remove
 ```
 
 ```bash
-bash scripts/link-skills.sh --remove make-sense
+bash scripts/link-skills.sh --remove
 ```
 
-两种脚本只移除指向当前仓库对应 skill 的自有链接，保留手工安装和其他来源。
+### 管理第三方 skills
 
-### 恢复清单与本地链接
+第三方 skill 继续交给 `skills` CLI 管理，不复制进本仓库：
 
-本仓库是创作源；本地链接使用当前工作区内容。另一个维护仓库 `pi-agent` 的 `config/skills-manifest.json` 为纳入恢复清单的 skill 固定提交版本。这是两种不同的版本来源，不能把本地安装成功当作恢复清单已更新。
+```powershell
+npx skills add <owner/repository> -g
+npx skills update -g -y
+npx skills ls -g
+```
 
-经授权 push 后，由维护流程更新清单 ref 并运行 bootstrap。未纳入清单的 skill 只通过本仓库的链接脚本安装。普通内容修改或校验不需要运行 bootstrap，也不应顺带调整其他已安装技能。
+`npx skills update -g -y` 只更新有上游来源记录的全局 skill；本仓库通过集合链接实时读取，不参与该更新。不要用 `npx skills add . -g` 安装本仓库：本地来源会被复制到 CLI 的 canonical 目录，失去工作区修改即时生效的特性。
+
+### 恢复清单与本地挂载
+
+本仓库是创作源；本地挂载使用当前工作区内容。另一个维护仓库 `pi-agent` 的 `config/skills-manifest.json` 为纳入恢复清单的 skill 固定提交版本。这是两种不同的版本来源，不能把本地挂载成功当作恢复清单已更新。
+
+经授权 push 后，由维护流程更新清单 ref 并运行 bootstrap。普通内容修改或校验不需要运行 bootstrap，也不应顺带调整其他已安装技能。
 
 ## 维护与验证
 
