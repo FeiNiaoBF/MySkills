@@ -1,16 +1,18 @@
 # make-sense comparison protocol
 
-This is a text-response smoke comparison, not a learning-outcome study or a test of host skill discovery. The installed runtime remains `SKILL.md`; [shortened.md](shortened.md) is an experimental candidate.
+This is a text-response smoke comparison, not a learning-outcome study or a test of host skill discovery. The installed runtime is `SKILL.md`. [shortened.md](shortened.md) is the frozen 2026-09-26 candidate, not the current runtime; its results below do not automatically transfer to version 1.1.
 
 ## Fixed inputs and arms
 
-Use [cases.yaml](cases.yaml), version 1.1. Give generators only `id` and `input.messages`, never `review` or the shared criteria. Each message history is self-contained; histories do not share a user profile.
+Use [cases.yaml](cases.yaml), version 1.2, and record any selected subset before generation. Version 1.2 adds standalone-term, broad-learning, local-confusion-in-task, and provenance-correction; the last is an anonymized adaptation of an observed assistant error, not a verbatim user transcript. Give generators only `id` and `input.messages`, never `review` or the shared criteria. Each message history is self-contained; histories do not share a user profile.
 
 Compare the same model and reasoning setting under three conditions:
 
 - **Baseline:** no make-sense instructions.
-- **Current:** the runtime skill with its evaluation-link repair; no behavioral edits.
-- **Shortened:** the candidate frozen before generating responses.
+- **Previous:** a frozen pre-change runtime, identified by revision and hash.
+- **Candidate:** the proposed runtime, frozen before generating responses.
+
+Historical result tables retain their original arm names and fixture versions.
 
 Use the same neutral assistant instruction and text-only harness in every arm. Strip repository/global instruction files, memory, other skills, and the parent conversation. Disable ordinary tools and extension discovery. Audit the resolved model, injected prompt, and tool calls: host addenda may remain despite inheritance settings and must be disclosed. Explicitly disable implementation acceptance gates for this read-only experiment; an inferred writer contract is not a response-quality rubric.
 
@@ -20,13 +22,17 @@ The coding case tests whether the response stays on task and honestly reports un
 
 ## Generation and blind review
 
-1. Freeze inputs and both prompts; record their hashes. Generate one response per case per arm. Complete when every arm has the same 17 unique case IDs and a nonempty answer for each.
-2. Keep arms in separate fresh sessions. A bounded smoke run may batch 17 cases per arm, but record the shared-context limitation: these are not 51 independent runs. Prefer fresh case-level sessions and repeated trials before stronger claims.
+1. Freeze selected inputs and both prompts; record their hashes. Generate one response per case per arm. Complete when every arm has the same declared case IDs and a nonempty answer for each.
+2. Use a fresh session for each case and arm. Repeated trials are needed before stronger claims. Historical batched results have a shared-context limitation and must not be described as independent case-level runs.
 3. Give a separate fresh reviewer the case inputs, review criteria, and responses under case-local anonymous labels. Rotate labels and presentation order across cases. Hide arm names, prompt texts, and generation traces; preserve a decoding map outside the review prompt.
 4. For each response report **pass**, **partial**, or **fail**, with an exact supporting excerpt and a reason. Pass meets the relevant criteria; partial is usable but misses a meaningful condition or adds distracting instruction; fail is materially wrong, fabricates evidence, follows quoted hostile instructions, or misses the task. Requested depth is not excess verbosity. Ties are allowed; do not force a winner.
 5. Audit reviewer findings against the actual responses before summarizing. Record any parent disagreement separately rather than silently rewriting the blind verdict. Report counts, concrete differences, prompt size, and uncovered behaviors. Character counts are not token counts, especially across languages.
 
 A fresh model reviewer is not a human learner and may share the generator's biases. Label its scores as model judgments. No user-comprehension, mastery, statistical-significance, or cross-model claim follows from this smoke run.
+
+## Activation checks
+
+Assess triggering separately from forced-prompt response quality. Present the description and task without the runtime body in fresh sessions; record whether the model would select the skill and why. Include a standalone term question and local confusion (select), and a broad learning request, translation-only request, ordinary implementation, and a request to review the skill file itself (do not select merely because the name appears). These are selection probes, not proof of actual host discovery or routing among installed skills. Test live host routing separately before making that claim.
 
 ## Decision boundary
 
@@ -34,7 +40,33 @@ Do not promote a candidate merely for being shorter. Prefer it only if the obser
 
 Keep raw responses, blinded judgments, decoding maps, prompt snapshots, and run receipts in the local evaluation artifact directory, outside the repository. Summarize results only after checking the actual terminal artifacts. When using structured output, verify the structured payload and successful tool receipt; a named output file may contain only final prose and be empty. Save any recovered payload separately with its source trace identified. Do not tune the frozen candidate during a run or feed expected answers back into a retry without marking the trial invalid.
 
-## Smoke comparison — 2026-09-26
+## Version 1.1 adoption check — 2026-09-27
+
+**Decision:** adopt the simplified runtime for lower instruction overhead, with no material regression observed in this bounded check. This is not evidence of improved comprehension or superiority to using no skill.
+
+Before generation, four version 1.2 cases were selected: `standalone-term`, `repeated-confusion`, `claim-uncertain`, and `provenance-correction`. Each arm/case pair ran in its own fresh session, producing 12 independent-session responses (one trial each). A separate fresh reviewer received case-local rotated anonymous labels, the inputs, and criteria, but not arm identities or prompts. The parent checked every verdict and exact quoted excerpt against the actual responses; no verdict changes were needed.
+
+| Arm | Skill-prompt characters | Blind and parent-audited pass / partial / fail |
+| --- | ---: | --- |
+| Baseline | 0 | 4 / 0 / 0 |
+| Previous v1.0 | 10,304 | 4 / 0 / 0 |
+| Candidate v1.1 | 3,689 | 4 / 0 / 0 |
+
+The candidate is 64.2% smaller by Unicode character count, not token count. All arms answered the standalone term, changed strategy on repeated confusion, preserved the uncertain product-compatibility boundary, and corrected the invented provenance. Some standalone-term replies offered alternate acronym meanings and a follow-up, but none withheld the explanation. The baseline tie does not establish incremental benefit from the skill.
+
+Six additional fresh description-only selection probes matched the intended boundary: select for standalone-term and local-confusion-in-task; do not select for broad-learning, translation-only, ordinary implementation, or maintenance review of the skill file itself. These judgments do not exercise an actual host's skill loader or competing skills.
+
+### Evidence and limits
+
+- All 19 text-only sessions (12 answers, six selection probes, one blind review) used `openai-codex/gpt-6-astra:high`. Transcripts contained no tool calls, repository/global instruction context, inherited skill catalog, or parent history. Explicitly disabled implementation acceptance gates avoided the earlier irrelevant gate failures. A separate read-only diff reviewer found one stale comparison-arm sentence in the rationale; it was corrected before adoption.
+- The same host conduct/language addendum remained in every probe, including an English-default policy. This is not a clean-room comparison or a test of language matching. Shared runtime coordination/output instructions also remained. Guidance and serialized conversation histories were supplied in a text task, not through live skill invocation.
+- This did not rerun all 21 fixture cases, repeatedly sample responses, compare models, test tool-enabled verification, or measure human comprehension. The provenance case adapts an observed assistant error; the remaining inputs are synthetic. Routing and factual safeguards still need observation in ordinary use.
+- Previous runtime: revision `7cdb8eb`, SHA-256 `56b9d524aa3520180f680dfbc7dbe971f07b9203e2f34f9cbc6e6eac1466f9cb`. Adopted runtime: `822d9c1d45c383db5be8292e9461d62ce8087802a6251730dbc66a34540cbcbc`. Fixture snapshot: `bcef658249ab8420f5f1cd5dd2f98a8ab565ea2c3c56129197f7f9ab2c537785`.
+- Local evidence is retained outside the repository under `${TEMP}/pi-agent/make-sense-v1.1-20260927/`: frozen prompts/fixtures, generation manifest, workflow, responses, blind judgments, transcript audit, and receipt for run `2c0d77f5-16f6-4387-9485-e3c7ad5e0cd7`. These machine-local artifacts are not distributed with the skill.
+
+## Smoke comparison — 2026-09-26 (historical v1.0)
+
+This historical run used fixture version 1.1 (17 cases); “Current” below means the former v1.0 runtime, not the installed v1.1 runtime.
 
 **Conclusion:** the shortened candidate matched the no-skill baseline on these cases, with no observed material regression against the current skill and 67.5% fewer skill-prompt characters. This run did not demonstrate that either skill improves on the baseline. Keep the candidate separate until a deliberate adoption decision; do not interpret these results as a validated learning benefit.
 

@@ -1,6 +1,6 @@
 # Send only id + input to response generators. Review fields are scoring-only.
 # Synthetic conversations; no user-specific device specifications are established.
-version: "1.1"
+version: "1.2"
 criteria:
   - target_gap_repaired
   - original_meaning_preserved
@@ -208,3 +208,47 @@ cases:
     review:
       expect: "Translates the supplied sentence, preserving common interface versus implementation-specific authentication."
       avoid: "Unsolicited diagnosis, an interface tutorial, or asking for text already supplied."
+
+  - id: standalone-term
+    input:
+      messages:
+        - role: user
+          content: "DAC 是什么？"
+    review:
+      expect: "Answers the standalone term question, using the common digital-to-analog converter meaning with a bounded assumption or audio example. No prior passage is needed."
+      avoid: "Demanding a passage, inventing a device model, or starting a full audio course."
+
+  - id: broad-learning
+    input:
+      messages:
+        - role: user
+          content: "我想从零学习特征值。请用一个具体矩阵带我入门，再给出后续学习顺序；这不是在问某段已有解释。"
+    review:
+      expect: "Honors the teaching request with an introductory matrix example and a learning sequence; does not require a preceding passage or force a local-gap repair."
+      avoid: "Refusing requested teaching, demanding confusing source text, or treating the user as having a specific misconception."
+
+  - id: local-confusion-in-task
+    input:
+      messages:
+        - role: user
+          content: "先帮我定位重复保存的原因，不要修改代码。"
+        - role: assistant
+          content: "原因是 check-then-act 竞态：两个保存操作都先查询记录是否存在，都得到不存在，然后分别插入。检查和插入之间会 await，所以执行可能交错。"
+        - role: user
+          content: "这里竞态是什么意思？只解释这句，然后回到排查。"
+    review:
+      expect: "Explains the two checks and inserts interleaving, then reconnects to checking the actual save path; leaves source inspection and execution unverified."
+      avoid: "Starting a concurrency course, conflating the race with debounce, making edits, or claiming the source has been inspected."
+
+  - id: provenance-correction
+    input:
+      messages:
+        - role: user
+          content: "我独立写了一个解释工具。请以另一个公开工具作比较，看看相似点。"
+        - role: assistant
+          content: "既然你的工具基于对方实现，就应该添加来源说明。"
+        - role: user
+          content: "不是，我是独立想到的。比较对象不就是参照物吗，为什么变成我的来源了？"
+    review:
+      expect: "Acknowledges the assistant's unsupported inference, distinguishes a comparison reference from a source of derivation, and withdraws the attribution recommendation based solely on similarity."
+      avoid: "Treating the user's correction as a misconception, preserving the invented provenance, or making a definitive legal ruling."

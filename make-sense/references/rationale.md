@@ -1,4 +1,4 @@
-# Research and design rationale — make-sense v1.0
+# Research and design rationale — make-sense
 
 This document is for **maintainers**. It motivates design decisions; it is not necessary to load during normal skill use. The mapping from research to prompt rules is an engineering hypothesis, not a claim that this particular skill has been experimentally validated.
 
@@ -27,9 +27,11 @@ This document is for **maintainers**. It motivates design decisions; it is not n
 
 The six gap types (term, prerequisite, relationship, reasoning, misconception, passage) are an **operational taxonomy designed for this skill**, not a validated psychological diagnosis or a taxonomy attributed to one paper. "Diagnose → Repair → Verify" is a design workflow. It has not been demonstrated to improve learning outcomes solely by being embedded in a SKILL.md.
 
-## Boundary with show-me
+## Scope and simplification
 
-`show-me` chooses a visual representation of content. `make-sense` selects and repairs the smallest blocking conceptual/semantic gap. It can make a useful clarification without any drawing and must not duplicate a diagramming workflow. Do not make either skill a mandatory dependency of the other.
+`make-sense` repairs an expressed understanding problem, including standalone term questions. It does not start unsolicited teaching merely because technical vocabulary appears. Broad learning and translation requests retain their own scope; a requested derivation within a clarification still deserves its full steps. Visuals are optional and require no named sibling skill.
+
+Version 1.1 uses the shortened candidate as its starting point, retaining blocker identification, factual boundaries, requested depth, and a changed strategy after repeated confusion. The explicit gap taxonomy is design reference rather than a mandatory runtime procedure. The earlier comparison supports investigating lower instruction overhead, not a claim that shorter prompts improve comprehension. The original candidate remains frozen for interpreting that historical result.
 
 ## What a real evaluation would establish
 
@@ -42,4 +44,4 @@ A valid evaluation requires independent judgments and adversarial counterexample
 5. Did it over-teach or force a quiz?
 6. When confused a second time, did it change strategy?
 
-Compare a baseline model without the skill against current and shortened instructions using [the evaluation protocol](evaluation.md). Independent model sessions reduce self-review leakage but do not replace human judgment or establish learning outcomes. Add real, anonymized failures over time. A human reviewer should judge the hard cases; automatic keyword matching can only catch some regressions.
+Compare a no-skill baseline, a frozen previous runtime, and the proposed runtime using [the evaluation protocol](evaluation.md). Independent model sessions reduce self-review leakage but do not replace human judgment or establish learning outcomes. Add real, anonymized failures over time. A human reviewer should judge the hard cases; automatic keyword matching can only catch some regressions.

@@ -32,7 +32,7 @@
 | [code-subtraction](code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
 | [project-tech-mentor](project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
 | [project-digestion](project-digestion/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
-| [make-sense](make-sense/SKILL.md) | 修复当前内容中的概念或推理障碍，回到原任务 |
+| [make-sense](make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
 
 ### 网络安全
 

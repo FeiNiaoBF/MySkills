@@ -1,13 +1,13 @@
 # make-sense
 
-A context-aware understanding-repair Agent Skill. It diagnoses the blocking concept or reasoning gap, explains the smallest sufficient bridge, and optionally checks application when warranted. It is independent of `show-me`.
+A context-aware understanding-repair Agent Skill. Use it when a term, passage, or reasoning step does not make sense, or when you want to check an interpretation. It repairs the blocking gap and returns to your task without imposing a lesson or quiz. Standalone term questions qualify; broad topic teaching, translation-only requests, and ordinary implementation retain their own scope.
 
 ## Files
 
 - `SKILL.md` — the installable runtime Skill; this is the only file required by the Agent Skills format.
 - `references/rationale.md` — maintainer-only research/design notes, not loaded in ordinary use.
 - `references/cases.yaml` — self-contained conversation inputs and separate reviewer criteria; not executable tests.
-- `references/shortened.md` — experimental shortened instructions, not the installed runtime skill.
+- `references/shortened.md` — frozen candidate from the 2026-09-26 comparison, retained as historical evidence; not the installed runtime skill.
 - `references/evaluation.md` — comparison protocol, smoke results, and evidence limits.
 
 ## Install
@@ -27,7 +27,7 @@ The metadata description enables contextual selection **when the host supports m
 
 ## Review checklist
 
-Compare baseline, current, and shortened instructions using [the evaluation protocol](references/evaluation.md) and [the fixed cases](references/cases.yaml). Give response generators only each case's `input`; keep `review` and the shared criteria hidden until scoring. Human review should judge meaning preservation, targeting, excess jargon, invented specifics, unnecessary tutorials, and whether repeated confusion results in a genuinely different repair strategy.
+Compare a no-skill baseline, a frozen previous runtime, and the proposed runtime using [the evaluation protocol](references/evaluation.md) and [the fixed cases](references/cases.yaml). Give response generators only each case's `input`; keep `review` and the shared criteria hidden until scoring. Human review should judge meaning preservation, targeting, excess jargon, invented specifics, unnecessary tutorials, and whether repeated confusion results in a genuinely different repair strategy.
 
 ## Scope
 
