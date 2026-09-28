@@ -25,6 +25,12 @@
 | [better-designs-md](better-designs-md/SKILL.md) | 编写和维护界面设计规范 `DESIGN.md` |
 | [frontend-guide](frontend-guide/SKILL.md) | 从方向卡到模块化页面实现，或按需逐模块陪建 |
 
+### 数学学习
+
+| Skill | 使用场景 |
+| --- | --- |
+| [linear-algebra](linear-algebra/SKILL.md) | 基于 Strang / MIT 18.06 体系维护 Obsidian 线性代数知识笔记 |
+
 ### 工程维护与理解
 
 | Skill | 使用场景 |
