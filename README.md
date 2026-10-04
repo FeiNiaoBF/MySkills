@@ -40,6 +40,12 @@
 | [project-digestion](project-digestion/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
 | [make-sense](make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
 
+### 研究与资料策展
+
+| Skill | 使用场景 |
+| --- | --- |
+| [research-curator](research-curator/SKILL.md) | 从 Research Contract 出发筛选资料、去重与溯源，建立 Claim/Evidence Graph，记录 `run.json` 并生成离线 HTML 审计报告 |
+
 ### 网络安全
 
 | Skill | 使用场景 |

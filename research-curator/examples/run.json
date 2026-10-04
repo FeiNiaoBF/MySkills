@@ -1,0 +1,616 @@
+{
+  "version": "1.0",
+  "id": "goal",
+  "metadata": {
+    "created_at": "2026-10-04T16:15:40.668021+00:00",
+    "completed_at": "2026-10-04T16:22:31Z",
+    "status": "finalized",
+    "tools": [
+      "web_search",
+      "urllib.request live HTTP retrieval",
+      "Go researchcurator CLI"
+    ],
+    "search_provenance": "Actual web_search returned two official documents; two live URL aliases and Cytoscape docs intentionally added as labeled test probes. No generated search responses."
+  },
+  "rejected_sources": [
+    {
+      "id": "s3",
+      "reason": "Duplicate of s2: exact canonical URL"
+    },
+    {
+      "id": "s4",
+      "reason": "Duplicate of s2: exact canonical URL"
+    },
+    {
+      "id": "s5",
+      "reason": "Outside contract: graph library documentation; explicit negative screening probe"
+    }
+  ],
+  "contract": {
+    "question": "Agent Skills 的渐进式加载如何工作，如何评估 skill description 的触发质量？",
+    "types": [
+      "official specification",
+      "official authoring guide"
+    ],
+    "excludes": [
+      "营销宣传",
+      "不相关图形库文档",
+      "同一页面的重复 URL"
+    ],
+    "freshness": "本次在线抓取当前官方文档；未声明发布日期则明确未知，不将抓取日期当发布日期。",
+    "preferences": [
+      "原始官方文档",
+      "可定位引文",
+      "将格式约束和运行环境差异分开"
+    ],
+    "quantity": 2,
+    "depth": "简要综合与出处审计；不评价真实学习效果",
+    "questions": [
+      {
+        "id": "q-loading",
+        "text": "渐进式加载的各层何时载入？"
+      },
+      {
+        "id": "q-trigger",
+        "text": "如何测试触发，并避免把选择探针当作实际宿主证据？"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "url": "https://agentskills.io/skill-creation/optimizing-descriptions",
+      "title": "Optimizing skill descriptions",
+      "type": "official documentation",
+      "original": true,
+      "retrieved_at": "2026-10-04T16:15:44.102009+00:00",
+      "content": "The basic approach: run each query through your agent with the skill installed and observe whether the agent invokes it. Make sure the skill is registered and discoverable by your agent — how this works varies by client (e.g., a skills directory, a configuration file, or a CLI flag).\nMost agent clients provide some form of observability — execution logs, tool call histories, or verbose output — that lets you see which skills were consulted during a run. Check your client’s documentation for details. The skill triggered if the agent loaded your skill’s SKILL.md; it didn’t trigger if the agent proceeded without consulting it.\nA query “passes” if:\nshould_trigger is true and the skill was invoked, or\nshould_trigger is false and the skill was not invoked.\n​\nThe most valuable negative test cases are near-misses — queries that share keywords or concepts with your skill but actually need something different. These test whether the description is precise, not just broad.",
+      "content_hash": "7ab5f44f27b41086d1ccd05cfe215ea2e6e03f73a06b94c9b3800701045ce209",
+      "upstream_ids": [],
+      "freshness": "Retrieved live; publication date unavailable",
+      "fit": 1,
+      "evidence": 1,
+      "utility": 1,
+      "fit_reason": "Directly answers a contract question",
+      "evidence_reason": "Official primary document retrieved HTTP 200; retained text excerpt inspected. Publication date unknown.",
+      "utility_reason": "Useful original methodology or specification",
+      "status": "selected",
+      "reason": "Primary official passage directly answers the contract question",
+      "verification": "verified"
+    },
+    {
+      "id": "s2",
+      "url": "https://agentskills.io/specification",
+      "title": "Agent Skills specification",
+      "type": "official documentation",
+      "original": true,
+      "retrieved_at": "2026-10-04T16:15:45.701712+00:00",
+      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (< 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
+      "content_hash": "cb10e6e226f312a81d3b9b4c69219a0652b3a57ca22bb8dfe565b4d540515fa2",
+      "upstream_ids": [],
+      "freshness": "Retrieved live; publication date unavailable",
+      "fit": 1,
+      "evidence": 1,
+      "utility": 1,
+      "fit_reason": "Directly answers a contract question",
+      "evidence_reason": "Official primary document retrieved HTTP 200; retained text excerpt inspected. Publication date unknown.",
+      "utility_reason": "Useful original methodology or specification",
+      "status": "selected",
+      "reason": "Primary official passage directly answers the contract question",
+      "verification": "verified"
+    },
+    {
+      "id": "s3",
+      "url": "https://agentskills.io/specification?utm_source=curator-example",
+      "title": "Specification — tracking URL probe",
+      "type": "official documentation",
+      "original": true,
+      "retrieved_at": "2026-10-04T16:15:46.974425+00:00",
+      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (< 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
+      "content_hash": "cb10e6e226f312a81d3b9b4c69219a0652b3a57ca22bb8dfe565b4d540515fa2",
+      "upstream_ids": [],
+      "freshness": "Retrieved live; publication date unavailable",
+      "fit": 1,
+      "evidence": 1,
+      "utility": 0.1,
+      "fit_reason": "Directly answers a contract question",
+      "evidence_reason": "Official primary document retrieved HTTP 200; retained text excerpt inspected. Publication date unknown.",
+      "utility_reason": "No additional information; duplicate probe",
+      "status": "duplicate",
+      "reason": "Duplicate of s2: exact canonical URL",
+      "duplicate_of": "s2",
+      "verification": "verified"
+    },
+    {
+      "id": "s4",
+      "url": "https://agentskills.io/specification#progressive-disclosure",
+      "title": "Specification — fragment URL probe",
+      "type": "official documentation",
+      "original": true,
+      "retrieved_at": "2026-10-04T16:15:48.173271+00:00",
+      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (< 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
+      "content_hash": "cb10e6e226f312a81d3b9b4c69219a0652b3a57ca22bb8dfe565b4d540515fa2",
+      "upstream_ids": [],
+      "freshness": "Retrieved live; publication date unavailable",
+      "fit": 1,
+      "evidence": 1,
+      "utility": 0.1,
+      "fit_reason": "Directly answers a contract question",
+      "evidence_reason": "Official primary document retrieved HTTP 200; retained text excerpt inspected. Publication date unknown.",
+      "utility_reason": "No additional information; duplicate probe",
+      "status": "duplicate",
+      "reason": "Duplicate of s2: exact canonical URL",
+      "duplicate_of": "s2",
+      "verification": "verified"
+    },
+    {
+      "id": "s5",
+      "url": "https://js.cytoscape.org/",
+      "title": "Cytoscape.js documentation — exclusion probe",
+      "type": "official documentation",
+      "original": true,
+      "retrieved_at": "2026-10-04T16:15:49.980167+00:00",
+      "content": "Cytoscape.js",
+      "content_hash": "836195bd9dc18198f6294e0dcda8da7a0bab996d4104b7ba772d1b38bb0bfc91",
+      "upstream_ids": [],
+      "freshness": "Retrieved live; publication date unavailable",
+      "fit": 0,
+      "evidence": 1,
+      "utility": 0,
+      "fit_reason": "Outside contract: graph-library docs",
+      "evidence_reason": "Official primary document retrieved HTTP 200; retained text excerpt inspected. Publication date unknown.",
+      "utility_reason": "Not useful for the requested research question",
+      "status": "rejected",
+      "reason": "Outside contract: graph library documentation; explicit negative screening probe",
+      "verification": "verified"
+    }
+  ],
+  "claims": [
+    {
+      "id": "c-loading",
+      "text": "Skill 加载分为元信息、按触发加载正文、按需加载资源三层。",
+      "question_ids": [
+        "q-loading"
+      ],
+      "evidence": [
+        {
+          "source_id": "s2",
+          "quote": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (< 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
+          "locator": "https://agentskills.io/specification#progressive-disclosure",
+          "relation": "supports",
+          "verification": "verified"
+        }
+      ]
+    },
+    {
+      "id": "c-trigger",
+      "text": "触发评估应在实际宿主运行查询并检查 SKILL.md 是否被载入，不能只凭模型自报选择。",
+      "question_ids": [
+        "q-trigger"
+      ],
+      "evidence": [
+        {
+          "source_id": "s1",
+          "quote": "The basic approach: run each query through your agent with the skill installed and observe whether the agent invokes it. Make sure the skill is registered and discoverable by your agent — how this works varies by client (e.g., a skills directory, a configuration file, or a CLI flag).\nMost agent clients provide some form of observability — execution logs, tool call histories, or verbose output — that lets you see which skills were consulted during a run. Check your client’s documentation for details. The skill triggered if the agent loaded your skill’s SKILL.md; it didn’t trigger if the agent proceeded without consulting it.\nA query “passes” if:\nshould_trigger is true and the skill was invoked, or\nshould_trigger is false and the skill was not invoked.\n​",
+          "locator": "Testing whether a description triggers",
+          "relation": "supports",
+          "verification": "verified"
+        }
+      ]
+    },
+    {
+      "id": "c-negative",
+      "text": "负例应包含关键词相近但需求不同的 near-misses。",
+      "question_ids": [
+        "q-trigger"
+      ],
+      "evidence": [
+        {
+          "source_id": "s1",
+          "quote": "The most valuable negative test cases are near-misses — queries that share keywords or concepts with your skill but actually need something different. These test whether the description is precise, not just broad.",
+          "locator": "Should-not-trigger queries",
+          "relation": "supports",
+          "verification": "verified"
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    {
+      "id": "k-loading",
+      "text": "让 description 承担发现入口，正文只承载执行指导，细节资源按需读取。这里报告的是官方规范，不保证所有宿主实现完全一致。",
+      "claim_ids": [
+        "c-loading"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "k-trigger",
+      "text": "用实际宿主日志评估触发，并加入相近负例；本次仅整理官方方法，没有运行跨宿主触发实验，也没有证明学习效果。",
+      "claim_ids": [
+        "c-trigger",
+        "c-negative"
+      ],
+      "status": "verified"
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "goal",
+        "type": "Goal",
+        "label": "Agent Skills 的渐进式加载如何工作，如何评估 skill description 的触发质量？"
+      },
+      {
+        "id": "q-loading",
+        "type": "Question",
+        "label": "渐进式加载的各层何时载入？"
+      },
+      {
+        "id": "q-trigger",
+        "type": "Question",
+        "label": "如何测试触发，并避免把选择探针当作实际宿主证据？"
+      },
+      {
+        "id": "s1",
+        "type": "Source",
+        "label": "Optimizing skill descriptions"
+      },
+      {
+        "id": "s2",
+        "type": "Source",
+        "label": "Agent Skills specification"
+      },
+      {
+        "id": "s3",
+        "type": "Source",
+        "label": "Specification — tracking URL probe"
+      },
+      {
+        "id": "s4",
+        "type": "Source",
+        "label": "Specification — fragment URL probe"
+      },
+      {
+        "id": "s5",
+        "type": "Source",
+        "label": "Cytoscape.js documentation — exclusion probe"
+      },
+      {
+        "id": "c-loading",
+        "type": "Claim",
+        "label": "Skill 加载分为元信息、按触发加载正文、按需加载资源三层。"
+      },
+      {
+        "id": "c-trigger",
+        "type": "Claim",
+        "label": "触发评估应在实际宿主运行查询并检查 SKILL.md 是否被载入，不能只凭模型自报选择。"
+      },
+      {
+        "id": "c-negative",
+        "type": "Claim",
+        "label": "负例应包含关键词相近但需求不同的 near-misses。"
+      },
+      {
+        "id": "k-loading",
+        "type": "Conclusion",
+        "label": "让 description 承担发现入口，正文只承载执行指导，细节资源按需读取。这里报告的是官方规范，不保证所有宿主实现完全一致。"
+      },
+      {
+        "id": "k-trigger",
+        "type": "Conclusion",
+        "label": "用实际宿主日志评估触发，并加入相近负例；本次仅整理官方方法，没有运行跨宿主触发实验，也没有证明学习效果。"
+      }
+    ],
+    "edges": [
+      {
+        "from": "s2",
+        "to": "c-loading",
+        "type": "supports"
+      },
+      {
+        "from": "s1",
+        "to": "c-trigger",
+        "type": "supports"
+      },
+      {
+        "from": "s1",
+        "to": "c-negative",
+        "type": "supports"
+      },
+      {
+        "from": "c-loading",
+        "to": "k-loading",
+        "type": "supports"
+      },
+      {
+        "from": "c-trigger",
+        "to": "k-trigger",
+        "type": "supports"
+      },
+      {
+        "from": "c-negative",
+        "to": "k-trigger",
+        "type": "supports"
+      },
+      {
+        "from": "goal",
+        "to": "q-loading",
+        "type": "contains"
+      },
+      {
+        "from": "goal",
+        "to": "q-trigger",
+        "type": "contains"
+      },
+      {
+        "from": "q-loading",
+        "to": "c-loading",
+        "type": "addresses"
+      },
+      {
+        "from": "q-trigger",
+        "to": "c-trigger",
+        "type": "addresses"
+      },
+      {
+        "from": "q-trigger",
+        "to": "c-negative",
+        "type": "addresses"
+      },
+      {
+        "from": "s3",
+        "to": "s2",
+        "type": "duplicates"
+      },
+      {
+        "from": "s4",
+        "to": "s2",
+        "type": "duplicates"
+      }
+    ]
+  },
+  "queries": [
+    {
+      "id": "query1",
+      "question_id": "q-loading",
+      "text": "site:agentskills.io specification progressive disclosure skill description 1024",
+      "at": "2026-10-04T16:15:40.668021+00:00"
+    }
+  ],
+  "events": [
+    {
+      "id": "e-contract",
+      "at": "2026-10-04T16:15:40.668021+00:00",
+      "stage": "Requirement First",
+      "action": "contract created",
+      "detail": "Contract saved before fresh search/fetch. Two official documents requested. Same publisher is not independent corroboration."
+    },
+    {
+      "id": "e-search",
+      "at": "2026-10-04T16:15:44.102009+00:00",
+      "stage": "Discovery",
+      "action": "retrieved",
+      "detail": "Actual search returned two results. Added two live same-page URL variants and one out-of-scope live probe; these were deliberately injected test candidates, not organic search hits.",
+      "before_count": 0,
+      "after_count": 5,
+      "count_scope": "candidates"
+    },
+    {
+      "id": "e-stage0",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "stage": "Normalize",
+      "action": "reviewed",
+      "detail": "Human/agent review of retained exact excerpts and recorded decisions; CLI computations to follow. No semantic auto-dedup claims."
+    },
+    {
+      "id": "e-stage1",
+      "at": "2026-10-04T16:22:31.305380+00:00",
+      "stage": "Deduplicate",
+      "action": "CLI exact dedup verified",
+      "detail": "Canonical URL dedup identified s3/s4 as aliases of s2. Counts cover selected-source candidates only, excluding s5 already rejected.",
+      "before_count": 4,
+      "after_count": 2,
+      "count_scope": "selected_sources"
+    },
+    {
+      "id": "e-stage2",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "stage": "Qualify",
+      "action": "reviewed",
+      "detail": "Two official documents match contract; two aliases removed; Cytoscape official page rejected as off-topic. Publication dates unknown, scores explained per source."
+    },
+    {
+      "id": "e-stage3",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "stage": "Verify",
+      "action": "reviewed",
+      "detail": "Human/agent review of retained exact excerpts and recorded decisions; CLI computations to follow. No semantic auto-dedup claims."
+    },
+    {
+      "id": "e-stage4",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "stage": "Claim Extraction",
+      "action": "reviewed",
+      "detail": "Human/agent review of retained exact excerpts and recorded decisions; CLI computations to follow. No semantic auto-dedup claims."
+    },
+    {
+      "id": "e-stage5",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "stage": "Evidence Graph",
+      "action": "reviewed",
+      "detail": "Human/agent review of retained exact excerpts and recorded decisions; CLI computations to follow. No semantic auto-dedup claims."
+    },
+    {
+      "id": "e-stage6",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "stage": "Coverage Check",
+      "action": "reviewed",
+      "detail": "Human/agent review of retained exact excerpts and recorded decisions; CLI computations to follow. No semantic auto-dedup claims."
+    },
+    {
+      "id": "e-stage7",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "stage": "Rank",
+      "action": "reviewed",
+      "detail": "Human/agent review of retained exact excerpts and recorded decisions; CLI computations to follow. No semantic auto-dedup claims."
+    },
+    {
+      "id": "e-stage8",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "stage": "Synthesis",
+      "action": "reviewed",
+      "detail": "Human/agent review of retained exact excerpts and recorded decisions; CLI computations to follow. No semantic auto-dedup claims."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "d-offtopic",
+      "at": "2026-10-04T16:17:47.246150+00:00",
+      "source_id": "s5",
+      "action": "rejected",
+      "reason": "Outside contract: graph library documentation; explicit negative screening probe"
+    },
+    {
+      "id": "d-s3",
+      "at": "2026-10-04T16:22:31.305380+00:00",
+      "source_id": "s3",
+      "action": "duplicate",
+      "reason": "Duplicate of s2: exact canonical URL"
+    },
+    {
+      "id": "d-s4",
+      "at": "2026-10-04T16:22:31.305380+00:00",
+      "source_id": "s4",
+      "action": "duplicate",
+      "reason": "Duplicate of s2: exact canonical URL"
+    },
+    {
+      "id": "d-s1",
+      "at": "2026-10-04T16:22:31.305380+00:00",
+      "source_id": "s1",
+      "action": "selected",
+      "reason": "Primary official passage directly answers the contract question"
+    },
+    {
+      "id": "d-s2",
+      "at": "2026-10-04T16:22:31.305380+00:00",
+      "source_id": "s2",
+      "action": "selected",
+      "reason": "Primary official passage directly answers the contract question"
+    }
+  ],
+  "stages": [
+    {
+      "name": "Requirement First",
+      "status": "verified",
+      "evidence_ids": [
+        "e-contract"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Discovery",
+      "status": "verified",
+      "evidence_ids": [
+        "e-search"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Normalize",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage0"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Deduplicate",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage1"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Qualify",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage2"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Verify",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage3"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Claim Extraction",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage4"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Evidence Graph",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage5"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Coverage Check",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage6"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Rank",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage7"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    },
+    {
+      "name": "Synthesis",
+      "status": "verified",
+      "evidence_ids": [
+        "e-stage8"
+      ],
+      "reason": "Real retrieval/retained-excerpt review and CLI result recorded; this is workflow execution, not independent truth validation"
+    }
+  ],
+  "coverage": {
+    "status": "verified",
+    "questions": [
+      {
+        "question_id": "q-loading",
+        "claim_ids": [
+          "c-loading"
+        ],
+        "independent_sources": 1,
+        "gaps": []
+      },
+      {
+        "question_id": "q-trigger",
+        "claim_ids": [
+          "c-trigger",
+          "c-negative"
+        ],
+        "independent_sources": 1,
+        "gaps": []
+      }
+    ],
+    "warnings": []
+  }
+}
