@@ -39,6 +39,7 @@
 | [project-tech-mentor](project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
 | [project-digestion](project-digestion/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
 | [make-sense](make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
+| [clarify](clarify/SKILL.md) | 有想法却说不清、表达障碍已影响当前任务时，找出准确说法并继续原任务 |
 
 ### 研究与资料策展
 

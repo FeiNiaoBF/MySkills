@@ -1,0 +1,83 @@
+# Maintainer-only comparison cases; send only input to a response generator.
+# Review fields are expectations, not extra user messages.
+version: "1.0"
+cases:
+  - id: explicit-no-word
+    input:
+      messages:
+        - role: user
+          content: "我脑子里有个功能：改一处数据，引用它的页面都会跟着变，但我不知道怎么描述。帮我写一句需求描述。"
+    review:
+      expect: "Offers a plausible concept such as shared source of truth and a task-usable requirement sentence, distinguishing assumptions from what the user said."
+      avoid: "Inventing a database architecture or running a full requirements interview."
+
+  - id: implicit-rejected-guess
+    input:
+      messages:
+        - role: user
+          content: "这个列表想要不那么乱，有重点。"
+        - role: assistant
+          content: "我会把间距加大、卡片变圆。"
+        - role: user
+          content: "不是视觉上的松散。我说的重点是内容的先后，但我也说不清。"
+    review:
+      expect: "Repairs the expression as information hierarchy or content prioritization, distinguishes them briefly, and avoids repeating spacing advice."
+      avoid: "Treating the user's correction as a request for a full product redesign."
+
+  - id: colloquial-but-actionable
+    input:
+      messages:
+        - role: user
+          content: "把这个登录按钮弄大点，手机上不好点；字号先别动。"
+    review:
+      expect: "Proceeds with enlarging the touch target without invoking a terminology exercise."
+      avoid: "Asking the user to choose between touch target, padding, typography, and accessibility terminology."
+
+  - id: existing-term-explanation
+    input:
+      messages:
+        - role: user
+          content: "代码审查里说的幂等是什么意思？拿重试支付请求举例解释。"
+    review:
+      expect: "Explains the existing term in context; this is make-sense, not clarify."
+      avoid: "Rephrasing the user's already clear request as if they could not express it."
+
+  - id: labels-no-consequential-difference
+    input:
+      messages:
+        - role: user
+          content: "我想让几个人都能同时改这份文档，而且都能看到别人新写的内容。我不知道这叫实时协同还是同步。请帮我写一句介绍文案。"
+    review:
+      expect: "Briefly distinguishes real-time collaboration from synchronization, writes a usable introduction, and does not require the user to pick one label first."
+      avoid: "Demanding terminology agreement or promising a particular transport or conflict-resolution mechanism."
+
+  - id: local-discrimination
+    input:
+      messages:
+        - role: user
+          content: "我要把误删的笔记找回来，但说不清是哪个功能。帮我写这个按钮文案。"
+        - role: assistant
+          content: "你是想撤销刚才的删除，还是从回收站恢复更早删除的笔记？这会决定按钮是‘撤销’还是‘恢复’。"
+        - role: user
+          content: "对，我就是分不清这两个，我还没决定按钮能覆盖哪种情况。"
+    review:
+      expect: "Explains undo versus restore in one sentence each, then asks the minimum question about which deleted notes the button must cover before naming it."
+      avoid: "Choosing a button label despite decision-changing uncertainty or launching a broad interview."
+
+  - id: consequential-handoff
+    input:
+      messages:
+        - role: user
+          content: "我想做个‘大家都能改’的知识库，但不知道是给团队一起写，还是向公众开放编辑。你帮我把产品方向定了吧。"
+    review:
+      expect: "Names team collaboration versus public contribution and explains how audience, permissions, and moderation differ; recommends grilling for the broader product decision."
+      avoid: "Automatically starting grilling or silently deciding the audience."
+
+  - id: uncertain-domain-label
+    input:
+      messages:
+        - role: user
+          content: "我要一种‘睡醒后自动回到刚才工作状态’的感觉，但不知道技术上叫什么。帮我把这个意图写给开发者；我还没说是哪种设备。"
+    review:
+      expect: "Restates the desired experience without asserting a platform-specific feature or implementation, marking the device as unspecified."
+      avoid: "Inventing a standard technical term, choosing an operating system, or treating inferred technology as a confirmed requirement."
