@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "required": ["report_version", "run", "research"],
+  "additionalProperties": false,
+  "properties": {
+    "report_version": {"type": "string", "enum": ["1.0"]},
+    "run": {"type": "object", "required": [], "additionalProperties": true, "properties": {}},
+    "research": {
+      "type": "object",
+      "required": ["audience", "purpose", "origin_types_rationale", "max_rounds", "low_gain_window", "rounds", "coverage", "gaps", "stop"],
+      "additionalProperties": false,
+      "properties": {
+        "audience": {"type": "string", "minLength": 1},
+        "purpose": {"type": "string", "minLength": 1},
+        "origin_types_rationale": {"type": "string"},
+        "max_rounds": {"type": "integer", "minimum": 1},
+        "resource_budget": {"type": "object", "required": ["kind", "unit", "limit", "used"], "additionalProperties": false, "properties": {"kind": {"type": "string", "enum": ["time", "tool_calls", "cost"]}, "unit": {"type": "string", "minLength": 1}, "limit": {"type": "number", "minimum": 0}, "used": {"type": "number", "minimum": 0}}},
+        "low_gain_window": {"type": "integer", "minimum": 3, "maximum": 3},
+        "rounds": {"type": "array", "items": {"type": "object", "required": ["id", "query_ids", "question_ids", "search_intent", "search_angle", "origin_types_searched", "assessed_source_ids", "redundant_source_ids", "new_claim_ids", "new_origin_ids", "new_contradiction_refs", "new_question_ids", "material_gain", "materiality_reason", "materiality_evidence", "coverage_snapshot", "gaps", "status"], "additionalProperties": false, "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "query_ids": {"type": "array", "items": {"type": "string"}},
+          "question_ids": {"type": "array", "items": {"type": "string"}},
+          "search_intent": {"type": "string", "enum": ["discovery", "gap_fill", "counterevidence"]},
+          "search_angle": {"type": "string", "minLength": 1},
+          "origin_types_searched": {"type": "array", "items": {"type": "string"}},
+          "assessed_source_ids": {"type": "array", "items": {"type": "string"}},
+          "redundant_source_ids": {"type": "array", "items": {"type": "string"}},
+          "redundancy_reasons": {"type": "object", "required": [], "additionalProperties": true, "properties": {}},
+          "new_claim_ids": {"type": "array", "items": {"type": "string"}},
+          "new_origin_ids": {"type": "array", "items": {"type": "string"}},
+          "new_contradiction_refs": {"type": "array", "items": {"type": "object", "required": ["claim_id", "source_id", "quote"], "additionalProperties": false, "properties": {"claim_id": {"type": "string", "minLength": 1}, "source_id": {"type": "string", "minLength": 1}, "quote": {"type": "string", "minLength": 1}}}},
+          "new_question_ids": {"type": "array", "items": {"type": "string"}},
+          "material_gain": {"type": "string", "enum": ["none", "minor", "material"]},
+          "materiality_reason": {"type": "string", "minLength": 1},
+          "materiality_evidence": {"type": "array", "items": {"type": "object", "required": ["claim_id", "source_id", "quote"], "additionalProperties": false, "properties": {"claim_id": {"type": "string", "minLength": 1}, "source_id": {"type": "string", "minLength": 1}, "quote": {"type": "string", "minLength": 1}}}},
+          "coverage_snapshot": {"type": "array", "items": {"type": "object", "required": ["question_id", "status", "claim_ids", "gaps"], "additionalProperties": false, "properties": {"question_id": {"type": "string", "minLength": 1}, "status": {"type": "string", "enum": ["covered", "partial", "uncovered"]}, "claim_ids": {"type": "array", "items": {"type": "string"}}, "gaps": {"type": "array", "items": {"type": "string"}}}}},
+          "gaps": {"type": "array", "items": {"type": "string"}},
+          "status": {"type": "string", "enum": ["complete", "partial", "failed"]}
+        }}},
+        "coverage": {"type": "array", "items": {"type": "object", "required": ["question_id", "status", "claim_ids", "gaps"], "additionalProperties": false, "properties": {"question_id": {"type": "string", "minLength": 1}, "status": {"type": "string", "enum": ["covered", "partial", "uncovered"]}, "claim_ids": {"type": "array", "items": {"type": "string"}}, "gaps": {"type": "array", "items": {"type": "string"}}}}},
+        "gaps": {"type": "array", "items": {"type": "string"}},
+        "stop": {"type": "object", "required": ["reason", "round_ids", "rationale"], "additionalProperties": false, "properties": {"reason": {"type": "string", "enum": ["in_progress", "saturated", "budget_exhausted", "retrieval_blocked", "user_stopped"]}, "round_ids": {"type": "array", "items": {"type": "string"}}, "rationale": {"type": "string", "minLength": 1}}}
+      }
+    },
+    "article": {"type": "object", "required": ["title", "language", "output_form", "lead", "sections"], "additionalProperties": false, "properties": {
+      "title": {"type": "string", "minLength": 1},
+      "language": {"type": "string", "minLength": 1},
+      "output_form": {"type": "string", "minLength": 1},
+      "lead": {"type": "string", "minLength": 1},
+      "sections": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "heading", "blocks"], "additionalProperties": false, "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "heading": {"type": "string", "minLength": 1},
+        "blocks": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "kind", "role", "claim_ids", "conclusion_ids"], "additionalProperties": false, "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "kind": {"type": "string", "enum": ["paragraph", "list", "table"]},
+          "role": {"type": "string", "enum": ["evidence", "synthesis", "context"]},
+          "text": {"type": "string"},
+          "items": {"type": "array", "items": {"type": "string"}},
+          "headers": {"type": "array", "items": {"type": "string"}},
+          "rows": {"type": "array", "items": {"type": "array", "items": {"type": "string"}}},
+          "claim_ids": {"type": "array", "items": {"type": "string"}},
+          "conclusion_ids": {"type": "array", "items": {"type": "string"}}
+        }}}
+      }}}
+    }}
+  }
+}

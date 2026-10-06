@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"researchcurator/curator"
+	"researchcurator/publisher"
 	"researchcurator/visualizer"
 )
 
@@ -19,7 +20,7 @@ func main() {
 }
 func execute(args []string, in io.Reader, out, errs io.Writer) error {
 	if len(args) == 0 || args[0] == "--help" || args[0] == "-h" {
-		fmt.Fprintln(out, "researchcurator <validate|import|dedup|rank|finalize|render|record> [-in run.json|-] [-out output|-]\nrecord also requires -kind event|query|decision -record record.json. finalize writes an automatic report: -out run.json defaults to adjacent report.html; stdout requires -report report.html. No network access; research is supplied by retrieval tools.")
+		fmt.Fprintln(out, "researchcurator <validate|validate-report|import|dedup|rank|finalize|render|record|publish> [-in input.json|-] [-out output|-]\nrecord also requires -kind event|query|decision -record record.json. finalize writes the legacy report; -out run.json defaults to adjacent report.html, and stdout requires -report. validate-report checks a phased handoff; publish writes its versioned report to <topic-directory>/index.html. No network access; research is supplied by retrieval tools.")
 		return nil
 	}
 	command := args[0]
@@ -72,6 +73,23 @@ func execute(args []string, in io.Reader, out, errs io.Writer) error {
 	}
 	if len(b) > 32*1024*1024 {
 		return fmt.Errorf("input exceeds 32 MiB")
+	}
+	if command == "validate-report" {
+		if *output != "-" {
+			return fmt.Errorf("validate-report does not accept -out")
+		}
+		report, err := curator.DecodeReport(b)
+		if err != nil {
+			return err
+		}
+		_, err = fmt.Fprintf(out, "valid report envelope %s\n", report.ReportVersion)
+		return err
+	}
+	if command == "publish" {
+		if *output == "-" {
+			return fmt.Errorf("publish requires -out <topic-directory>")
+		}
+		return publisher.Write(b, *output)
 	}
 	r, e := curator.Decode(b)
 	if e != nil {

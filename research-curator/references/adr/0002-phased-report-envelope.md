@@ -1,0 +1,8 @@
+# ADR 0002: Phased research and report envelope
+Status: accepted
+
+Keep the v1 run ledger and its CLI/renderer compatibility. Add a versioned report envelope that embeds exactly one authoritative v1 ledger plus Research round records, coverage snapshots, a stop decision, and an optional typed article. The envelope is the persisted Research-to-Writing handoff: validate it before writing, require a complete article and terminal stop reason before publication, and do not let Writing invent or upgrade evidence.
+
+Use three completed low-gain rounds and an eight-round budget as defaults. Only the former, together with question coverage, varied search angles, counterevidence, and no unresolved material findings, can establish `saturated`. Budget, retrieval, and user stops remain distinct. These are bounded recorded judgments, not proof that retrieval was exhaustive or claims are true.
+
+Publish the report as one self-contained `index.html` in a new topic folder. Reject existing destinations; stage the complete entry point before exposing it through a no-replace hard link; clean only staging and the still-empty destination created by the current attempt. Folder creation itself is not atomic with entry-point publication. On interruption, preserve incomplete folders and retry with a new name; do not implicitly reclaim them. This portable, standard-library boundary needs a hard-link-capable filesystem and a caller-controlled, non-linked parent. Keep the article as the primary reading experience and connect article references to the explicit ledger graph and source passages. Retain the legacy render API, offline asset model, and raw-data inspector. Do not add a search backend, Markdown/HTML execution, second graph, or runtime dependency.

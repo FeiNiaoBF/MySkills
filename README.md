@@ -44,7 +44,7 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [research-curator](research-curator/SKILL.md) | 从 Research Contract 出发筛选资料、去重与溯源，建立 Claim/Evidence Graph，记录 `run.json` 并生成离线 HTML 审计报告 |
+| [research-curator](research-curator/SKILL.md) | 使用宿主检索工具开展有边界的研究，经 Evidence Saturation 与结构化证据包分阶段写作，并交付整合来源可视化的离线报告 |
 
 ### 网络安全
 

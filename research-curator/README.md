@@ -1,26 +1,44 @@
 # Research curator
-A portable research workflow and standard-library Go evidence ledger. It records decisions rather than pretending to conduct semantic research automatically.
+
+A portable research skill and standard-library Go tools for bounded, evidence-backed research. The workflow separates Research, a validated evidence handoff, Writing, and local publication. It does not fetch pages itself; research uses the host agent's available search and fetch tools.
 
 ## Run
-From this directory, use `go test ./...` and `go run ./cmd/researchcurator --help`.
-`validate` checks schema and graph integrity; `import` is a validated ledger round-trip (not a scraper); `dedup` marks exact URL/text duplicates; `rank` orders selected sources first while retaining rejected/duplicate/superseded candidates; `finalize` computes conservative coverage, seals metadata/rejected-source index, and automatically writes an offline HTML report; `render` makes an offline report. All commands accept `-in run.json` (or stdin) and `-out output.json` (or stdout). Render emits HTML. Nothing fetches remote sources or executes source content.
+
+From this directory:
 
 ```bash
-go run ./cmd/researchcurator validate -in run.json
-go run ./cmd/researchcurator dedup -in run.json -out deduped.json
-go run ./cmd/researchcurator rank -in deduped.json -out ranked.json
-go run ./cmd/researchcurator finalize -in ranked.json -out finalized.json
-# Writes finalized.json and report.html in the same directory.
+go test ./...
+go run ./cmd/researchcurator --help
 ```
 
-Finalize accepts `-report custom.html` to override the adjacent `report.html`. Stdout JSON requires an explicit report path: `finalize -in run.json -report report.html > finalized.json`. JSON and HTML must have different paths. HTML is rendered from the exact finalized JSON bytes, not the original input. Each file is atomic independently, not a two-file transaction; a late JSON write failure may leave the report, and the command returns failure. No report is emitted for invalid input.
+Existing v1 ledger commands remain available: `validate`, `import`, `dedup`, `rank`, `finalize`, `render`, and `record`. They validate, organize, or render a supplied `run.json`; they do not search the web or assert that retrieval occurred.
 
-Append explicit records with `record -kind event|query|decision -record record.json -in run.json -out updated.json`; timestamps must be RFC3339. The commands do not manufacture stage-completion records. Missing required data, invalid references and unsupported verification assertions fail with a nonzero exit and no output ledger; an incomplete but structurally valid run is preserved with unverified coverage and gaps.
+The phased workflow uses a versioned report envelope around the unchanged v1 ledger. Validate a Research handoff (article may be absent), then publish the completed article to a new topic folder:
 
-Start with the [workflow](SKILL.md), then consult [DESIGN.md](DESIGN.md) for the run.json contract. A structurally valid run can still be incomplete; coverage warnings and unverified evidence are preserved.
+```bash
+go run ./cmd/researchcurator validate-report -in report.json
+go run ./cmd/researchcurator publish -in report.json -out <topic-folder>
+```
 
-## Real-source example and verification
+`publish` writes one self-contained `<topic-folder>/index.html`. It refuses an existing destination and performs no network access. The folder can be moved and opened directly. The reader's browser needs JavaScript for the graph; the article and source records remain in the same document.
 
-See [the example](examples/README.md), its [run.json](examples/run.json), and [verification limits](examples/VERIFICATION.md). Regenerate its offline report with `finalize`; generated HTML and retrieval caches belong in an output workspace, not the skill repository.
+## Start with the skill
 
-Go is needed to run or build the CLI; it has no external Go module dependencies. Cytoscape.js is vendored with its MIT license and pinned provenance; opening the generated HTML needs neither Go nor a server.
+Read [SKILL.md](SKILL.md) for the workflow. Load the phase-specific references as needed:
+
+- [Research workflow](references/research-workflow.md)
+- [Evidence Saturation](references/evidence-saturation.md)
+- [Evidence package contract](references/evidence-package.md)
+- [Writing](references/writing.md)
+- [Report delivery](references/report-delivery.md)
+- [Manual behavior cases](references/behavior-cases.md)
+
+[DESIGN.md](DESIGN.md) remains the authoritative legacy v1 ledger contract. The versioned envelope and Research/Writing boundary are recorded in [ADR 0002](references/adr/0002-phased-report-envelope.md).
+
+## Examples and verification boundaries
+
+- [examples/report.json](examples/report.json) is a fully synthetic fixture for the report envelope and local publisher. Its source and claim are not research evidence.
+- [examples/run.json](examples/run.json) is the separately documented real-source v1 ledger example; it is not evidence that the new agent workflow or report browser has passed an end-to-end evaluation.
+- See [examples/README.md](examples/README.md) for scope and reproduction commands.
+
+Go is needed to run or build the CLI; it has no external Go module dependencies. The visualizer embeds pinned Cytoscape.js and all report assets. Open the generated report without a server. Browser operation must be verified separately from Go tests and JavaScript syntax checks.

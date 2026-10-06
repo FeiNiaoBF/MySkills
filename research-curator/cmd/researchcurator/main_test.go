@@ -50,6 +50,73 @@ func TestCLIImportFinalizeRankRender(t *testing.T) {
 		t.Fatal("invalid run produced output")
 	}
 }
+func syntheticReport(t *testing.T) []byte {
+	t.Helper()
+	run, err := curator.Decode([]byte(synthetic))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := curator.Finalize(run); err != nil {
+		t.Fatal(err)
+	}
+	coverage := []curator.ReportCoverage{{QuestionID: "q", Status: "uncovered", ClaimIDs: []string{}, Gaps: []string{"synthetic test handoff"}}}
+	report := curator.Report{ReportVersion: "1.0", Run: *run, Research: curator.ResearchRecord{Audience: "test reader", Purpose: "exercise CLI publication", OriginTypesRationale: "synthetic fixture only", MaxRounds: 8, LowGainWindow: 3, Rounds: []curator.ResearchRound{}, Coverage: coverage, Gaps: []string{"synthetic test handoff"}, Stop: curator.ResearchStop{Reason: "user_stopped", RoundIDs: []string{}, Rationale: "synthetic CLI test"}}, Article: &curator.Article{Title: "Synthetic CLI report", Language: "en", OutputForm: "article", Lead: "No research claim is made.", Sections: []curator.ArticleSection{{ID: "sec", Heading: "Test", Blocks: []curator.ArticleBlock{{ID: "block", Kind: "paragraph", Role: "context", Text: "Synthetic fixture.", ClaimIDs: []string{}, ConclusionIDs: []string{}}}}}}}
+	data, err := json.Marshal(report)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return data
+}
+
+func TestCLIValidateReportAcceptsResearchHandoff(t *testing.T) {
+	var report curator.Report
+	if err := json.Unmarshal(syntheticReport(t), &report); err != nil {
+		t.Fatal(err)
+	}
+	report.Article = nil
+	report.Research.Stop = curator.ResearchStop{Reason: "in_progress", RoundIDs: []string{}, Rationale: "research handoff"}
+	data, err := json.Marshal(report)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var out bytes.Buffer
+	if err := execute([]string{"validate-report"}, strings.NewReader(string(data)), &out, &out); err != nil {
+		t.Fatal(err)
+	}
+	if out.String() != "valid report envelope 1.0\n" {
+		t.Fatalf("unexpected validation output: %s", out.String())
+	}
+}
+
+func TestCLIPublishAcceptsReportEnvelope(t *testing.T) {
+	destination := filepath.Join(t.TempDir(), "synthetic-topic")
+	var out bytes.Buffer
+	if err := execute([]string{"publish", "-out", destination}, strings.NewReader(string(syntheticReport(t))), &out, &out); err != nil {
+		t.Fatal(err)
+	}
+	if out.Len() != 0 {
+		t.Fatal("publish wrote an unexpected stdout result")
+	}
+	page, err := os.ReadFile(filepath.Join(destination, "index.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(page), "Synthetic CLI report") {
+		t.Fatal("published report missing article")
+	}
+}
+
+func TestCLIPublishRejectsInvalidEnvelopeWithoutOutput(t *testing.T) {
+	destination := filepath.Join(t.TempDir(), "invalid-topic")
+	var out bytes.Buffer
+	if err := execute([]string{"publish", "-out", destination}, strings.NewReader(`{"report_version":"1.0"}`), &out, &out); err == nil {
+		t.Fatal("accepted invalid report")
+	}
+	if _, err := os.Stat(destination); !os.IsNotExist(err) {
+		t.Fatal("invalid report created output")
+	}
+}
+
 func TestCLIRecordAndFileOutput(t *testing.T) {
 	d := t.TempDir()
 	input := filepath.Join(d, "run.json")

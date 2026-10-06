@@ -1,6 +1,6 @@
 # Research curator: evidence-driven research and readable local delivery
 
-Status: proposed implementation specification; user approved option B and the product direction, not yet this written specification.
+Status: accepted and implemented. Closeout evidence and remaining limits are recorded in [verification](../../../research-curator/examples/VERIFICATION.md).
 
 ## 1. Outcome and agreed scope
 
@@ -163,4 +163,4 @@ Deferred: separate writer skill, custom search adapters, authentication setup, b
 
 Remaining risks: semantic novelty is judgment-dependent; tools/providers may expose a narrow slice of available sources; the v1 ledger has substantial authoring overhead; large evidence packages can overwhelm a graph. The first real-research slice must expose these costs. Do not relax citation or stop-state honesty to hide them. Any need to replace the legacy contract instead of extending around it is a new design decision, not an incidental refactor.
 
-Next gate: review this written specification, particularly the proposed three-round/eight-round defaults and report-envelope compatibility boundary, before producing the implementation plan. No runtime behavior changes are made by this document.
+Implementation and acceptance followed the plan. The three-round/eight-round defaults and v1 compatibility boundary are retained; see the verification record for independent reviews, fresh behavior comparison, real-source delivery, and known repository-wide validation failures.

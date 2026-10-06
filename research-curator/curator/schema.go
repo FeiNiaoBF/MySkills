@@ -130,6 +130,9 @@ func checkSchema(v any, s map[string]any, path string) error {
 		for k, x := range obj {
 			p, ok := props[k]
 			if !ok {
+				if s["additionalProperties"] == true {
+					continue
+				}
 				return fail("unknown property " + k)
 			}
 			if e := checkSchema(x, p.(map[string]any), path+"."+k); e != nil {
