@@ -16,6 +16,7 @@
         "max_rounds": {"type": "integer", "minimum": 1},
         "resource_budget": {"type": "object", "required": ["kind", "unit", "limit", "used"], "additionalProperties": false, "properties": {"kind": {"type": "string", "enum": ["time", "tool_calls", "cost"]}, "unit": {"type": "string", "minLength": 1}, "limit": {"type": "number", "minimum": 0}, "used": {"type": "number", "minimum": 0}}},
         "low_gain_window": {"type": "integer", "minimum": 3, "maximum": 3},
+        "source_roles": {"type": "object", "required": [], "additionalProperties": true, "properties": {}},
         "rounds": {"type": "array", "items": {"type": "object", "required": ["id", "query_ids", "question_ids", "search_intent", "search_angle", "origin_types_searched", "assessed_source_ids", "redundant_source_ids", "new_claim_ids", "new_origin_ids", "new_contradiction_refs", "new_question_ids", "material_gain", "materiality_reason", "materiality_evidence", "coverage_snapshot", "gaps", "status"], "additionalProperties": false, "properties": {
           "id": {"type": "string", "minLength": 1},
           "query_ids": {"type": "array", "items": {"type": "string"}},

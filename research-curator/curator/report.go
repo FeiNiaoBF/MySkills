@@ -21,16 +21,17 @@ type Report struct {
 }
 
 type ResearchRecord struct {
-	Audience             string           `json:"audience"`
-	Purpose              string           `json:"purpose"`
-	OriginTypesRationale string           `json:"origin_types_rationale"`
-	MaxRounds            int              `json:"max_rounds"`
-	ResourceBudget       *ResourceBudget  `json:"resource_budget,omitempty"`
-	LowGainWindow        int              `json:"low_gain_window"`
-	Rounds               []ResearchRound  `json:"rounds"`
-	Coverage             []ReportCoverage `json:"coverage"`
-	Gaps                 []string         `json:"gaps"`
-	Stop                 ResearchStop     `json:"stop"`
+	Audience             string            `json:"audience"`
+	Purpose              string            `json:"purpose"`
+	OriginTypesRationale string            `json:"origin_types_rationale"`
+	MaxRounds            int               `json:"max_rounds"`
+	ResourceBudget       *ResourceBudget   `json:"resource_budget,omitempty"`
+	SourceRoles          map[string]string `json:"source_roles,omitempty"`
+	LowGainWindow        int               `json:"low_gain_window"`
+	Rounds               []ResearchRound   `json:"rounds"`
+	Coverage             []ReportCoverage  `json:"coverage"`
+	Gaps                 []string          `json:"gaps"`
+	Stop                 ResearchStop      `json:"stop"`
 }
 
 // ResourceBudget records a limit declared before retrieval and actual usage.
@@ -190,6 +191,11 @@ func ValidateReport(report *Report) error {
 	}
 	if err := validateResearchReferences(report); err != nil {
 		return err
+	}
+	if r.SourceRoles != nil {
+		if err := validateSourceRoles(report); err != nil {
+			return err
+		}
 	}
 	if report.Article != nil {
 		if err := validateArticle(report); err != nil {
@@ -522,6 +528,15 @@ func validateStop(report *Report) error {
 			return fmt.Errorf("budget stop must cite the final attempted round")
 		}
 	case "retrieval_blocked", "user_stopped":
+		if len(report.Research.Rounds) > 0 {
+			last := report.Research.Rounds[len(report.Research.Rounds)-1]
+			if !contains(stop.RoundIDs, last.ID) {
+				return fmt.Errorf("terminal stop must reference the final research round")
+			}
+			if stop.Reason == "retrieval_blocked" && last.Status == "complete" {
+				return fmt.Errorf("retrieval_blocked stop must reference a partial or failed final round")
+			}
+		}
 	default:
 		return fmt.Errorf("invalid research stop reason %q", stop.Reason)
 	}

@@ -12,26 +12,23 @@ import (
 
 const reportFixture = `{"report_version":"1.0","run":{"version":"1.0","id":"goal","metadata":{"created_at":"2026-01-01T00:00:00Z","status":"finalized","title":"Synthetic research"},"contract":{"question":"Synthetic question"},"sources":[{"id":"s1","title":"Synthetic source","url":"https://example.org/source","content":"Synthetic quoted evidence."}],"claims":[{"id":"c1","text":"A synthetic claim","evidence":[{"source_id":"s1","quote":"Synthetic quoted evidence.","locator":"paragraph 1","relation":"supports","verification":"verified"}]}],"conclusions":[],"queries":[],"events":[],"decisions":[],"rejected_sources":[],"graph":{"nodes":[{"id":"s1","type":"Source","label":"Synthetic source"},{"id":"c1","type":"Claim","label":"A synthetic claim"}],"edges":[{"from":"s1","to":"c1","type":"supports"}]},"coverage":{}},"research":{"audience":"general reader","purpose":"explain the question","max_rounds":8,"low_gain_window":3,"rounds":[],"coverage":[],"gaps":[],"stop":{"reason":"user_stopped","round_ids":[],"rationale":"synthetic fixture"}},"article":{"title":"Synthetic article","language":"en","output_form":"article","lead":"The short answer.","sections":[{"id":"sec1","heading":"Finding","blocks":[{"id":"b1","kind":"paragraph","role":"evidence","text":"The source supports the claim.","claim_ids":["c1"],"conclusion_ids":[]}]}]}}`
 
-func TestRenderReportIncludesArticleAndEvidenceLinks(t *testing.T) {
-	out, err := visualizer.RenderReport([]byte(reportFixture))
+func TestRenderReportIsReaderFirstAndUsesArticleLanguage(t *testing.T) {
+	input := strings.Replace(reportFixture, `"language":"en"`, `"language":"zh-CN"`, 1)
+	out, err := visualizer.RenderReport([]byte(input))
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"article-panel", "Synthetic article", "The short answer.", "dataset.claimId", "Evidence Saturation", "research-data"} {
-		if !bytes.Contains(out, []byte(want)) {
-			t.Errorf("report missing %q", want)
-		}
+	html := string(out)
+	article := strings.Index(html, `id="article-panel"`)
+	sources := strings.Index(html, `id="evidence-register"`)
+	graph := strings.Index(html, `id="evidence-map"`)
+	audit := strings.Index(html, `id="audit-panel"`)
+	if article < 0 || sources <= article || graph <= sources || audit <= graph {
+		t.Fatalf("reader-first sections out of order: article=%d sources=%d graph=%d audit=%d", article, sources, graph, audit)
 	}
-}
-
-func TestReportGraphSelectionBacklinksToArticle(t *testing.T) {
-	out, err := visualizer.RenderReport([]byte(reportFixture))
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, want := range []string{"article-mention", "article-block-", "dataset.claimId", "evidence.source_id", "Source → Claim"} {
-		if !bytes.Contains(out, []byte(want)) {
-			t.Errorf("report missing cross-navigation hook %q", want)
+	for _, want := range []string{"str(article?.language)", "zh-CN", "支持", "Important limits", "data-i18n=\"evidenceMap\""} {
+		if !strings.Contains(html, want) {
+			t.Errorf("localized reader report missing %q", want)
 		}
 	}
 }

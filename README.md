@@ -44,7 +44,7 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [research-curator](research-curator/SKILL.md) | 使用宿主检索工具开展有边界的研究，经 Evidence Saturation 与结构化证据包分阶段写作，并交付整合来源可视化的离线报告 |
+| [research-curator](research-curator/SKILL.md) | 使用真实检索与可追溯证据开展有边界的研究，再写成 Reader First、本地化的离线报告；研究成果默认输出到工作区或用户级目录，不写入 Skill 源码 |
 
 ### 网络安全
 

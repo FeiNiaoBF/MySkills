@@ -1,287 +1,365 @@
 (() => {
 'use strict';
 const payload = JSON.parse(document.getElementById('run-data').textContent);
-const obj = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-const report = document.documentElement.dataset.report === 'true' ? payload : null;
+const reportMode = document.documentElement.dataset.report === 'true';
+const report = reportMode ? payload : null;
 const run = report ? report.run : payload;
-const article = report?.article ?? null;
 const research = report?.research ?? null;
+const article = report?.article ?? null;
 const $ = id => document.getElementById(id);
 const arr = value => Array.isArray(value) ? value : [];
-const text = value => typeof value === 'string' ? value : JSON.stringify(value ?? '');
-const label = item => typeof item === 'string' ? item : text(item?.title ?? item?.text ?? item?.label ?? item?.name ?? item?.id ?? 'Untitled record');
-const pretty = value => JSON.stringify(value, null, 2);
-function el(tag, value, cls) { const node = document.createElement(tag); if(value !== undefined) node.textContent = text(value); if(cls) node.className = cls; return node; }
-function empty(parent) { parent.replaceChildren(); }
-function jsonBlock(parent, value) { parent.append(el('pre', pretty(value))); }
-function links(parent, value) {
- const seen = new Set();
- function walk(v) {
-  if(typeof v === 'string' && /^https?:\/\//i.test(v)) {
-   try { const u = new URL(v); if(!['http:', 'https:'].includes(u.protocol) || seen.has(u.href)) return; seen.add(u.href); const a = el('a',v); a.href=u.href; a.target='_blank'; a.rel='noopener noreferrer'; parent.append(a,el('br')); } catch(_) {}
-  } else if(Array.isArray(v)) v.forEach(walk); else if(obj(v)) Object.values(v).forEach(walk);
+const obj = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+const str = value => typeof value === 'string' ? value : '';
+const zh = /^zh(?:[-_]|$)/i.test(str(article?.language));
+const L = zh ? {
+ reportKicker:'研究报告', important:'重要限制', readArticle:'阅读正文', sourceNotes:'来源与引文', researchDetails:'研究过程与边界',
+ keyLimits:'阅读前请注意', evidenceMap:'证据关系图', evidenceMapIntro:'只显示正文引用的来源、观点和结论。连线表示记录的支持或反驳关系，不代表证据强弱。',
+ mapUnavailable:'关系图暂不可用；下方文字关系仍可查看。', mapEmpty:'正文没有可展示的来源—观点关系。', sourceNotesIntro:'编号对应正文中的引文。展开来源可查看实际检索的段落及其用途。',
+ evidence:'已核实证据', candidate_lead:'未核实线索', context_source:'背景资料', selected:'已采用', rejected:'未采用', selected_unverified:'台账标为已采用，但来源未核实，不能作为证据',
+ sourceType:'资料类型', duplicate:'重复来源', superseded:'已被替代', openSource:'打开原始来源', inspectedPassage:'实际检查的段落', published:'发布于', retrieved:'检索于', upstream:'上游/转引来源', evidenceBalance:'来源集中度提醒',
+ usedFor:'用于支持或讨论的观点', supports:'支持', contradicts:'反驳', unverified:'未核实', failed:'获取失败', verified:'已核对原文',
+ researchBoundary:'研究范围与停止原因', coverage:'问题覆盖情况', remainingGaps:'尚存缺口与限制', processAndSources:'搜索与来源评估',
+ candidateLeads:'未作为证据的线索', contextSources:'背景资料', rounds:'研究轮次', rawData:'完整研究记录',
+ noSources:'没有可追溯的来源记录。', noClaims:'正文没有链接到已记录的观点。', noGaps:'没有记录其他研究缺口。', noItems:'无记录。',
+ stop_in_progress:'研究仍在进行', stop_saturated:'达到本次范围内的证据饱和', stop_budget_exhausted:'研究预算已用尽', stop_retrieval_blocked:'检索受阻', stop_user_stopped:'按用户要求停止',
+ stopNote_saturated:'这表示近期检索的信息增益较低，不代表已经穷尽互联网。',
+ coverage_covered:'已有支持', coverage_partial:'部分覆盖', coverage_uncovered:'尚未覆盖',
+ round:'轮次', intent:'检索意图', angle:'检索角度', gain:'信息增益', complete:'完成', partial:'部分完成', round_failed:'失败',
+ gain_none:'无新增', gain_minor:'少量补充', gain_material:'实质变化', queryTime:'查询记录时间', sourceTime:'来源获取时间',
+ noArticle:'此文件是旧版证据台账，没有附带面向读者的文章。', offlineNote:'本报告为离线单文件，不会自动联网；只有读者主动打开来源链接时才访问外部网站。',
+ sourceNumber:'来源', source:'来源', claim:'观点', conclusion:'结论', complete:'已完成', partial:'部分完成', failed:'失败', relation_supports:'支持', relation_contradicts:'反驳', relation_derives_from:'归纳自',
+ completeReport:'已生成研究报告', reportContents:'目录', processSummary:'范围：', sourcesCount:'个来源', roundsCount:'轮检索',
+ rationale:'停止说明', role_evidence:'证据', role_synthesis:'综合判断', role_context:'背景或限制',
+ citation:'查看来源', relationship:'关系', externalLink:'在新窗口查看来源',
+} : {
+ reportKicker:'Research report', important:'Important limits', readArticle:'Read the article', sourceNotes:'Sources and citations', researchDetails:'Research details',
+ keyLimits:'Important limits to keep in mind', evidenceMap:'Evidence map', evidenceMapIntro:'Only sources, claims, and conclusions cited by the article appear here. Lines show recorded support or contradiction, not strength.',
+ mapUnavailable:'The graph is unavailable; the text relationships below remain accessible.', mapEmpty:'The article has no recorded source-to-claim relationships to show.', sourceNotesIntro:'Numbers match the citations in the article. Expand a source to inspect the retrieved passage and how it was used.',
+ evidence:'Verified evidence', candidate_lead:'Candidate lead', context_source:'Context source', selected:'Selected', rejected:'Not selected', selected_unverified:'Ledger marks selected, but retrieval is unverified; not evidence',
+ sourceType:'Source type', duplicate:'Duplicate source', superseded:'Superseded', openSource:'Open original source', inspectedPassage:'Inspected passage', published:'Published', retrieved:'Retrieved', upstream:'Upstream or cited origin', evidenceBalance:'Evidence concentration check',
+ usedFor:'Claims using this source', supports:'Supports', contradicts:'Contradicts', unverified:'Unverified', failed:'Retrieval failed', verified:'Passage checked',
+ researchBoundary:'Research scope and stopping point', coverage:'Question coverage', remainingGaps:'Remaining gaps and limitations', processAndSources:'Search and source assessment',
+ candidateLeads:'Leads not used as evidence', contextSources:'Context sources', rounds:'Research rounds', rawData:'Complete research record',
+ noSources:'No traceable source records.', noClaims:'The article is not linked to recorded claims.', noGaps:'No additional research gaps were recorded.', noItems:'None recorded.',
+ stop_in_progress:'Research is still in progress', stop_saturated:'Evidence saturation reached for this scope', stop_budget_exhausted:'Research budget exhausted', stop_retrieval_blocked:'Retrieval was blocked', stop_user_stopped:'Stopped at the user’s request',
+ stopNote_saturated:'This means recent searches added little material information; it does not mean the internet has been exhausted.',
+ coverage_covered:'Covered', coverage_partial:'Partly covered', coverage_uncovered:'Not covered',
+ round:'Round', intent:'Search intent', angle:'Search angle', gain:'Information gain', complete:'Complete', partial:'Partial', round_failed:'Failed',
+ gain_none:'None', gain_minor:'Minor', gain_material:'Material change', queryTime:'Query recorded', sourceTime:'Source retrieved',
+ noArticle:'This is a legacy evidence ledger without a reader-facing article.', offlineNote:'This is a self-contained offline report. It makes no automatic network requests; external sites open only when a reader selects a source link.',
+ sourceNumber:'Source', source:'Source', claim:'Claim', conclusion:'Conclusion', relation_supports:'supports', relation_contradicts:'contradicts', relation_derives_from:'informs',
+ completeReport:'Research report', reportContents:'Contents', processSummary:'Scope: ', sourcesCount:'sources', roundsCount:'research rounds',
+ rationale:'Stopping rationale', role_evidence:'Evidence', role_synthesis:'Synthesis', role_context:'Context or limitation',
+ citation:'Open source details', relationship:'Relationship', externalLink:'Open source in a new tab',
+};
+const t = (key, value) => value && L[key + '_' + value] ? L[key + '_' + value] : (L[key] ?? key);
+function el(tag, value, cls) { const node = document.createElement(tag); if (value !== undefined && value !== null) node.textContent = String(value); if (cls) node.className = cls; return node; }
+function setText(id, value) { const node = $(id); if (node) node.textContent = value; }
+function safeURL(value) { try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : ''; } catch (_) { return ''; } }
+function sourceRole(source) {
+ const explicit = research?.source_roles?.[source.id];
+ if (explicit) return explicit;
+ const refs = arr(run.claims).flatMap(claim => arr(claim.evidence).filter(e => e.source_id === source.id));
+ if (source.status === 'selected' && refs.some(e => e.verification === 'verified') && source.verification === 'verified') return 'evidence';
+ if (source.status === 'selected' && source.verification === 'verified' && refs.length === 0) return 'context_source';
+ return 'candidate_lead';
+}
+const sources = arr(run.sources);
+const sourceByID = new Map(sources.map(source => [String(source.id), source]));
+const claims = arr(run.claims);
+const claimByID = new Map(claims.map(claim => [String(claim.id), claim]));
+const conclusions = arr(run.conclusions);
+const conclusionByID = new Map(conclusions.map(item => [String(item.id), item]));
+const articleClaimIDs = new Set();
+const articleConclusionIDs = new Set();
+for (const section of arr(article?.sections)) for (const block of arr(section.blocks)) {
+ for (const id of arr(block.claim_ids)) articleClaimIDs.add(String(id));
+ for (const id of arr(block.conclusion_ids)) articleConclusionIDs.add(String(id));
+}
+for (const id of articleConclusionIDs) for (const claimID of arr(conclusionByID.get(id)?.claim_ids)) articleClaimIDs.add(String(claimID));
+const citedSourceIDs = new Set();
+for (const id of articleClaimIDs) for (const evidence of arr(claimByID.get(id)?.evidence)) citedSourceIDs.add(String(evidence.source_id));
+const citedSources = [...citedSourceIDs].map(id => sourceByID.get(id)).filter(Boolean);
+const sourceNumbers = new Map(citedSources.map((source, index) => [String(source.id), index + 1]));
+
+function applyLocale() {
+ document.documentElement.lang = str(article?.language) || 'en';
+ document.querySelectorAll('[data-i18n]').forEach(node => { node.textContent = t(node.dataset.i18n); });
+ $('toc').setAttribute('aria-label', t('reportContents'));
+ $('graph').setAttribute('aria-label', t('evidenceMap'));
+ $('graph-list').setAttribute('aria-label', t('evidenceMap'));
+}
+function renderTitle() {
+ const title = str(article?.title) || str(run.metadata?.title) || str(run.metadata?.topic) || str(run.contract?.question) || t('completeReport');
+ setText('report-title', title);
+ document.title = title;
+ if (article) {
+  setText('article-lead', article.lead);
+  $('article-panel').hidden = false;
+ } else if (!report) {
+  setText('article-lead', t('noArticle'));
+  $('reader-limits').hidden = false;
+  setText('reader-limit-content', t('noArticle'));
  }
- walk(value);
 }
-const groups = ['sources','claims','conclusions','queries','events','decisions','rejected_sources'];
-const records = new Map();
-for(const group of groups) for(const item of arr(run[group])) if(item?.id != null) {
- const key = String(item.id); const entries=records.get(key)||[]; entries.push({group,item}); records.set(key,entries);
-}
-const rawNodes = arr(run.graph?.nodes ?? run.nodes);
-const rawEdges = arr(run.graph?.edges ?? run.edges).map(edge => ({...edge, source: edge.from ?? edge.source, target: edge.to ?? edge.target}));
-const nodes=[], ids=new Set(), problems=[];
-for(const n of rawNodes) {
- if(!obj(n) || n.id == null || String(n.id)==='' || ids.has(String(n.id))) { problems.push('Skipped a node with missing or duplicate ID.'); continue; }
- const id=String(n.id); ids.add(id); nodes.push({...n,id,type:text(n.type??'unknown').toLowerCase()});
-}
-const edges=[];
-for(const [i,e] of rawEdges.entries()) {
- if(!obj(e) || !ids.has(String(e.source)) || !ids.has(String(e.target))) { problems.push('Skipped an edge with missing endpoints.'); continue; }
- let engineID='__edge_'+i; while(ids.has(engineID)) engineID+='_' ; ids.add(engineID);
- edges.push({...e,source:String(e.source),target:String(e.target),type:text(e.type??'related'),engineID});
-}
-function references(node) {
- const id = String(node?.reference_id ?? node?.id ?? '');
- const all = records.get(id)||[];
- const group = {source:'sources',claim:'claims',conclusion:'conclusions'}[node?.type];
- return group ? all.filter(r=>r.group===group) : all;
-}
-function nodeStatus(node) { return text(node.status ?? references(node)[0]?.item?.status ?? ''); }
-function articleTextForNode(id) {
- const parts=[];
- for(const section of arr(article?.sections)) for(const block of arr(section.blocks)) {
-  if(arr(block.claim_ids).includes(id) || arr(block.conclusion_ids).includes(id)) parts.push(block.text, ...arr(block.items), ...arr(block.rows).flat());
+function evidenceBalanceMessage() {
+ const question = str(run.contract?.question);
+ if (!/(compare|comparison|versus|\bvs\.?\b|对比|比较|差异)/i.test(question)) return '';
+ const verified = citedSources.filter(source => sourceRole(source) === 'evidence');
+ if (!verified.length) return '';
+ const counts = new Map();
+ for (const source of verified) {
+  try { const host = new URL(source.url).hostname.replace(/^www\./i, ''); if (host) counts.set(host, (counts.get(host) || 0) + 1); } catch (_) {}
  }
- return parts.join(' ').toLowerCase();
+ if (!counts.size) return '';
+ const [host, count] = [...counts.entries()].sort((a,b) => b[1] - a[1])[0];
+ if (count / verified.length < .7) return '';
+ return zh
+  ? `已核实引文主要来自 ${host}。这是来源集中提示，不代表存在偏见；正文应说明其他一方或独立来源是否缺席。`
+  : `Most verified citations come from ${host}. This flags source concentration, not bias; the article should say whether the other side or independent sources are missing.`;
 }
-function nodeSearch(node) { return pretty([node,...references(node).map(r=>r.item)]).toLowerCase()+' '+articleTextForNode(node.id); }
-function articleMentions(id) {
- const related=new Set([String(id)]), node=nodes.find(item=>item.id===String(id));
- if(node?.type==='source') for(const claim of arr(run.claims)) if(arr(claim.evidence).some(evidence=>String(evidence.source_id)===String(id))) related.add(String(claim.id));
- if(node?.type==='conclusion') { const conclusion=arr(run.conclusions).find(item=>String(item.id)===String(id)); for(const claimID of arr(conclusion?.claim_ids)) related.add(String(claimID)); }
- const matches=[];
- for(const section of arr(article?.sections)) for(const block of arr(section.blocks)) {
-  if([...arr(block.claim_ids),...arr(block.conclusion_ids)].some(reference=>related.has(String(reference)))) matches.push({section,block});
- }
- return matches;
-}
-function addReadableRecord(parent, group, item) {
- parent.append(el('h3',label(item)));
- if(group === 'sources') {
-  parent.append(el('p',item.type ? 'Source type: '+item.type : 'Source','muted'));
-  if(item.url) links(parent,item.url);
-  if(item.content) { parent.append(el('p','Inspected passage','muted'),el('blockquote',item.content)); }
-  if(item.published_at) parent.append(el('p','Published: '+item.published_at));
-  if(item.retrieved_at) parent.append(el('p','Retrieved: '+item.retrieved_at));
-  if(item.verification) parent.append(el('p','Retrieval check: '+item.verification));
-  if(item.reason) parent.append(el('p','Selection note: '+item.reason));
-  for(const claim of arr(run.claims)) for(const evidence of arr(claim.evidence)) if(evidence.source_id===item.id) {
-   const box=el('section',undefined,'record');
-   box.append(el('h3',label(claim)),el('p',evidence.relation==='contradicts'?'Contradictory evidence':'Supporting evidence'),el('blockquote',evidence.quote));
-   box.append(el('p','Location: '+text(evidence.locator)),el('p','Retrieval check: '+text(evidence.verification)+'. This is a recorded assessment, not guaranteed truth.','muted'));
-   parent.append(box);
-  }
- } else if(group === 'claims') {
-  if(item.text) parent.append(el('p',item.text));
-  for(const evidence of arr(item.evidence)) {
-   const source=arr(run.sources).find(s=>s.id===evidence.source_id);
-   const box=el('section',undefined,'record');
-   box.append(el('p',evidence.relation==='contradicts'?'Contradictory evidence':'Supporting evidence','muted'));
-   box.append(el('p',evidence.quote));
-   if(evidence.locator) box.append(el('p','Location: '+evidence.locator));
-   if(evidence.verification) box.append(el('p','Retrieval check: '+evidence.verification));
-   if(source) { const b=el('button','Open source: '+label(source)); b.type='button'; b.addEventListener('click',()=>focusEvidence(source.id)); box.append(b); }
-   parent.append(box);
-  }
- } else if(group === 'conclusions') {
-  if(item.text) parent.append(el('p',item.text));
-  parent.append(el('p','Assessment: '+text(item.status??'not recorded'),'muted'));
- } else {
-  jsonBlock(parent,item);
- }
- const details=el('details'); details.append(el('summary','Full record')); jsonBlock(details,item); parent.append(details);
-}
-function focusArticleBlock(match) {
- const node=document.getElementById('article-block-'+match.block.id);
- if(node) { node.scrollIntoView({behavior:'instant',block:'center'}); node.focus({preventScroll:true}); }
-}
-function showDetail(value, kind, nodeID) {
- const parent=$('detail-content'); empty(parent); parent.append(el('h3',kind+': '+label(value)));
- if(nodeID) {
-  const n=nodes.find(n=>n.id===nodeID);
-  for(const record of references(n)) addReadableRecord(parent,record.group,record.item);
-  parent.append(el('h3','Recorded relationships'));
-  const related=edges.filter(e=>e.source===nodeID||e.target===nodeID);
-  if(!related.length) parent.append(el('p','No explicit relationships recorded.','muted'));
-  for(const edge of related) { const b=el('button',edge.source+' → '+edge.type+' → '+edge.target); b.type='button'; b.addEventListener('click',()=>showDetail(edge,'Relationship')); parent.append(b); }
-  const mentions=articleMentions(nodeID);
-  if(mentions.length) {
-   parent.append(el('h3','Used in the article'));
-   for(const match of mentions) { const b=el('button',match.section.heading); b.type='button'; b.className='article-mention'; b.addEventListener('click',()=>focusArticleBlock(match)); parent.append(b); }
-  } else if(article) { parent.append(el('p','No article reference for this record.','muted')); }
- } else {
-  jsonBlock(parent,value); links(parent,value);
- }
- $('detail').scrollIntoView({behavior:'instant',block:'nearest'});
-}
-function recordList(parent, items, kind) {
- if(!items.length) { parent.append(el('p','No '+kind+' recorded.','muted')); return; }
- for(const item of items) {
-  const detail=el('details',undefined,'record'); detail.append(el('summary',label(item)));
-  const b=el('button','Inspect '+kind); b.type='button'; b.addEventListener('click',()=>{showDetail(item,kind); $('detail').scrollIntoView({behavior:'instant',block:'start'});});
-  detail.append(b); jsonBlock(detail,item); links(detail,item); parent.append(detail);
+function renderLimitations() {
+ if (!research) return;
+ const stop = t('stop', research.stop.reason);
+ const gaps = arr(research.gaps);
+ const balance = evidenceBalanceMessage();
+ const needsCallout = research.stop.reason !== 'saturated' || gaps.length > 0 || Boolean(balance);
+ $('reader-limits').hidden = !needsCallout;
+ if (!needsCallout) return;
+ const box = $('reader-limit-content'); box.replaceChildren();
+ box.append(el('p', stop));
+ if (research.stop.reason === 'saturated') box.append(el('p', t('stopNote_saturated'), 'muted'));
+ if (balance) box.append(el('p', `${t('evidenceBalance')}: ${balance}`));
+ if (gaps.length) {
+  const list = el('ul', undefined, 'callout-list');
+  for (const gap of gaps.slice(0, 4)) list.append(el('li', gap));
+  if (gaps.length > 4) list.append(el('li', `+${gaps.length - 4}`));
+  box.append(list);
  }
 }
 function renderArticle() {
- if(!article) return;
- $('article-panel').hidden=false;
- $('article-lead').textContent=article.lead;
- document.documentElement.lang=article.language||'en';
- const body=$('article-body'); empty(body);
- for(const section of arr(article.sections)) {
-  const sectionNode=el('section',undefined,'article-section'); sectionNode.append(el('h2',section.heading));
-  for(const block of arr(section.blocks)) {
-   const content=el('div',undefined,'article-block'); content.id='article-block-'+block.id; content.tabIndex=-1; content.dataset.role=block.role;
-   content.append(el('span',block.role,'role'));
-   if(block.kind==='paragraph') content.append(el('p',block.text));
-   else if(block.kind==='list') { const list=el('ul'); for(const item of arr(block.items)) list.append(el('li',item)); content.append(list); }
-   else if(block.kind==='table') {
-    const table=el('table'), head=el('thead'), header=el('tr'), rows=el('tbody');
-    for(const item of arr(block.headers)) header.append(el('th',item)); head.append(header);
-    for(const row of arr(block.rows)) { const tr=el('tr'); for(const cell of arr(row)) tr.append(el('td',cell)); rows.append(tr); }
-    table.append(head,rows); const scroll=el('div',undefined,'scroll'); scroll.append(table); content.append(scroll);
+ if (!article) return;
+ const body = $('article-body'); body.replaceChildren();
+ for (const section of arr(article.sections)) {
+  const sectionNode = el('section', undefined, 'article-section');
+  sectionNode.id = 'section-' + section.id;
+  sectionNode.append(el('h2', section.heading));
+  for (const block of arr(section.blocks)) {
+   const content = el('div', undefined, 'article-block');
+   content.dataset.role = block.role;
+   const role = t('role', block.role);
+   if (role) content.append(el('span', role, 'role'));
+   if (block.kind === 'paragraph') content.append(el('p', block.text));
+   else if (block.kind === 'list') { const list = el('ul'); for (const item of arr(block.items)) list.append(el('li', item)); content.append(list); }
+   else if (block.kind === 'table') {
+    const table = el('table'), head = el('thead'), header = el('tr'), rows = el('tbody');
+    for (const item of arr(block.headers)) header.append(el('th', item)); head.append(header);
+    for (const row of arr(block.rows)) { const tr = el('tr'); for (const cell of arr(row)) tr.append(el('td', cell)); rows.append(tr); }
+    table.append(head, rows); const wrap = el('div', undefined, 'scroll'); wrap.append(table); content.append(wrap);
    }
-   const citationIDs=[...new Set([...arr(block.claim_ids),...arr(block.conclusion_ids)])];
-   if(citationIDs.length) {
-    const citations=el('span',undefined,'citations');
-    for(const id of citationIDs) { const button=el('button',(arr(block.claim_ids).includes(id)?'Claim ':'Conclusion ')+id,'citation'); button.type='button'; button.dataset.claimId=id; button.addEventListener('click',()=>focusEvidence(id)); citations.append(button); }
-    content.append(citations);
+   const cited = new Set();
+   for (const claimID of arr(block.claim_ids)) for (const evidence of arr(claimByID.get(String(claimID))?.evidence)) cited.add(String(evidence.source_id));
+   for (const conclusionID of arr(block.conclusion_ids)) for (const claimID of arr(conclusionByID.get(String(conclusionID))?.claim_ids)) for (const evidence of arr(claimByID.get(String(claimID))?.evidence)) cited.add(String(evidence.source_id));
+   const numbers = [...cited].filter(id => sourceNumbers.has(id));
+   if (numbers.length) {
+    const citeList = el('span', undefined, 'cite-list');
+    for (const id of numbers) {
+     const number = sourceNumbers.get(id), link = el('a', `［${number}］`, 'cite');
+     link.href = `#source-${number}`; link.title = `${t('citation')} ${number}`;
+     link.addEventListener('click', event => { event.preventDefault(); openSource(id); history.replaceState(null, '', link.href); });
+     citeList.append(link);
+    }
+    content.append(citeList);
    }
    sectionNode.append(content);
   }
   body.append(sectionNode);
  }
 }
-const reportTitle = article?.title ?? run.metadata?.title ?? run.metadata?.topic ?? run.contract?.question ?? 'Research report';
-$('report-title').textContent = reportTitle;
-document.title = reportTitle;
-if(report) $('report-subtitle').textContent=article.output_form+'. Research stopped because: '+research.stop.reason.replaceAll('_',' ')+'.';
-$('metadata').textContent=pretty({version:run.version ?? run.schema_version,id:run.id,metadata:run.metadata});
-$('raw').textContent=pretty(payload);
-const contract=run.contract??{},contractView=$('contract');empty(contractView);
-const questions=arr(contract.questions).map(question=>text(question?.text??question)).filter(Boolean);
-const mainQuestion=text(contract.question??questions[0]??'No research question recorded.');
-contractView.append(el('p',mainQuestion,'lead'));
-const subquestions=questions.filter(question=>question!==mainQuestion);
-if(subquestions.length>0){contractView.append(el('h3','Core questions'));const list=el('ul');for(const question of subquestions)list.append(el('li',question));contractView.append(list);}
-for(const [key,title] of [['types','Source types'],['excludes','Excluded'],['freshness','Freshness'],['preferences','Source preferences']]) {
- const value=Array.isArray(contract[key])?contract[key].join('; '):text(contract[key]??'');
- if(value) contractView.append(el('p',title+': '+value,'muted'));
-}
-const contractDetails=el('details');contractDetails.append(el('summary','Full research contract'));jsonBlock(contractDetails,contract);contractView.append(contractDetails);
-for(const group of groups) $('counts').append(el('span',group.replaceAll('_',' ')+': '+arr(run[group]).length,'badge'));
-$('counts').append(el('span','nodes: '+rawNodes.length,'badge'),el('span','relationships: '+rawEdges.length,'badge'));
-$('process').append(el('h3','Pipeline stages'));
-recordList($('process'),arr(run.stages),'stages');
-$('process').append(el('h3','Recorded candidate changes'));
-const countEvents=arr(run.events).filter(e=>Number.isInteger(e.before_count)&&Number.isInteger(e.after_count));
-if(!countEvents.length) $('process').append(el('p','No structured before/after counts recorded.','muted'));
-for(const event of countEvents) $('process').append(el('p',event.stage+' · '+event.count_scope+': '+event.before_count+' → '+event.after_count));
-for(const group of ['queries','events']) { $('process').append(el('h3',group)); recordList($('process'),arr(run[group]),group); }
-recordList($('conclusions'),arr(run.conclusions),'conclusions');
-const selected=arr(run.sources).filter(s=>s?.selected===true || ['selected','accepted','final'].includes(s?.status));
-$('conclusions').append(el('h3','Explicitly selected materials'));
-recordList($('conclusions'),selected,'selected sources');
-for(const group of ['sources','claims']) { $('evidence').append(el('h3',group)); recordList($('evidence'),arr(run[group]),group); }
-for(const group of ['decisions','rejected_sources']) { $('decisions').append(el('h3',group.replaceAll('_',' '))); recordList($('decisions'),arr(run[group]),group); }
-function renderCoverage(coverage) {
- const parent=$('coverage'); empty(parent);
- parent.append(el('p','Verification records an assessment, not guaranteed truth. Original-evidence origin groups do not establish independent publishers or statistical corroboration.','muted'));
- if(coverage == null) { parent.append(el('p','No coverage recorded.','muted')); return; }
- const rows=Array.isArray(coverage)?coverage:obj(coverage)?Object.entries(coverage).map(([dimension,value])=>({dimension,value})):[{value:coverage}];
- const table=el('table'), head=el('thead'), body=el('tbody'), tr=el('tr');
- const keys=[...new Set(rows.flatMap(r=>obj(r)?Object.keys(r):['value']))];
- for(const key of keys) tr.append(el('th',key)); head.append(tr); table.append(head,body);
- for(const row of rows) { const tr=el('tr'); for(const key of keys) { const v=obj(row)?row[key]:row; tr.append(el('td',typeof v==='object'?pretty(v):v??'')); } body.append(tr); }
- const scroll=el('div',undefined,'scroll'); scroll.append(table); parent.append(scroll);
-}
-renderCoverage(research?.coverage ?? run.coverage);
-function renderResearch() {
- if(!research) return;
- $('saturation-panel').hidden=false;
- $('stop-summary').textContent='Research stopped: '+research.stop.reason.replaceAll('_',' ')+'. '+research.stop.rationale;
- const metrics=$('research-data'); empty(metrics);
- metrics.append(el('p','Audience: '+research.audience));
- metrics.append(el('p','Purpose: '+research.purpose));
- if(research.origin_types_rationale) metrics.append(el('p','Source types: '+research.origin_types_rationale,'muted'));
- metrics.append(el('p',research.rounds.length+' rounds; low-gain window '+research.low_gain_window+'; budget '+research.max_rounds,'badge'));
- if(research.resource_budget) { const b=research.resource_budget; metrics.append(el('p','Resource budget: '+b.kind+' — '+b.used+' / '+b.limit+' '+b.unit)); }
- const summary=el('div',undefined,'scroll'), table=el('table'), head=el('thead'), header=el('tr'), body=el('tbody');
- for(const key of ['Round','Search angle','Intent','Coverage','Open gaps','New claims','New origins','New contradictions','New questions','Redundant','Assessed','Redundant ratio','Gain']) header.append(el('th',key));
- head.append(header);
- for(const round of arr(research.rounds)) {
-  const assessed=arr(round.assessed_source_ids).length, redundant=arr(round.redundant_source_ids).length;
-  const ratio=assessed?Math.round(100*redundant/assessed)+'%':'not measured';
-  const snapshot=arr(round.coverage_snapshot), covered=snapshot.filter(item=>item.status==='covered').length;
-  const values=[round.id,round.search_angle,round.search_intent,covered+'/'+snapshot.length,arr(round.gaps).length,arr(round.new_claim_ids).length,arr(round.new_origin_ids).length,arr(round.new_contradiction_refs).length,arr(round.new_question_ids).length,redundant,assessed,ratio,round.material_gain];
-  const tr=el('tr'); for(const value of values) tr.append(el('td',value)); body.append(tr);
- }
- table.append(head,body); summary.append(table); metrics.append(summary);
- const roundDetails=el('div'); recordList(roundDetails,arr(research.rounds),'round details'); metrics.append(roundDetails);
- const gapParent=$('research-gaps'); empty(gapParent);
- if(!arr(research.gaps).length) gapParent.append(el('p','No additional research gaps recorded.','muted'));
- else { const list=el('ul'); for(const gap of research.gaps) list.append(el('li',gap)); gapParent.append(list); }
-}
-renderArticle();
-renderResearch();
-for(const [id,values] of [['type',nodes.map(n=>n.type)],['status',nodes.map(nodeStatus)],['relation',edges.map(e=>e.type)]]) {
- for(const value of [...new Set(values)].filter(Boolean).sort()) { const option=el('option',value); option.value=value; $(id).append(option); }
-}
-let cy;
-try {
- cy=cytoscape({container:$('graph'),elements:[],style:[
-  {selector:'node',style:{'background-color':'#477e79','label':'data(label)','color':'#202c31','font-size':12,'text-wrap':'wrap','text-max-width':130,'text-valign':'bottom','text-margin-y':6,'width':30,'height':30}},
-  {selector:'node[type="claim"]',style:{'background-color':'#d0a444','color':'#202c31','shape':'round-rectangle'}},
-  {selector:'node[type="conclusion"]',style:{'background-color':'#55796d','shape':'diamond'}},
-  {selector:'edge',style:{'width':2,'line-color':'#748580','target-arrow-color':'#748580','target-arrow-shape':'triangle','curve-style':'bezier','label':'data(type)','color':'#202c31','font-size':10,'text-background-color':'#f7f8f5','text-background-opacity':1,'text-background-padding':3}},
-  {selector:'edge[type="contradicts"],edge[type="conflicts"]',style:{'line-color':'#a6402e','target-arrow-color':'#a6402e','line-style':'dashed'}},
-  {selector:':selected',style:{'border-width':3,'border-color':'#263e45','line-color':'#263e45','target-arrow-color':'#263e45'}}
- ],layout:{name:'preset'},wheelSensitivity:0.2});
- cy.on('tap','node',event=>{const n=nodes.find(n=>n.id===event.target.id());showDetail(n,'Node',n.id);});
- cy.on('tap','edge',event=>showDetail(edges.find(e=>e.engineID===event.target.id()),'Relationship'));
-} catch(error) { problems.push('Graph unavailable: '+error.message+'. Article citations and source records remain accessible.'); }
-function focusEvidence(id) {
- const node=nodes.find(n=>n.id===id);
- if(node) {
-  showDetail(node,'Node',node.id);
-  if(cy) {
-   for(const filter of ['search','type','status','relation']) $(filter).value='';
-   update();
-   const selected=cy.getElementById(node.id);
-   let neighborhood=selected.closedNeighborhood();
-   if(node.type==='conclusion') neighborhood=neighborhood.union(neighborhood.nodes('[type="claim"]').closedNeighborhood());
-   cy.elements().unselect(); neighborhood.select(); cy.fit(neighborhood,50);
+function sourceCard(source, number, compact = false) {
+ const role = sourceRole(source), card = el('article', undefined, 'source-card');
+ if (number) card.id = 'source-' + number;
+ const head = el('div');
+ if (number) head.append(el('span', `［${number}］ `, 'badge'));
+ head.append(el('span', source.title || source.url || t('sourceNumber'), 'source-title'));
+ head.append(el('span', t(role), `badge${role === 'candidate_lead' ? ' candidate' : ''}`));
+ card.append(head);
+ const meta = el('p', undefined, 'source-meta');
+ if (source.type) meta.append(document.createTextNode(`${t('sourceType')}: ${source.type} · `));
+ const selection = role === 'candidate_lead' && source.status === 'selected' ? t('selected_unverified') : t(source.status, source.status);
+ meta.append(document.createTextNode(`${t(source.verification, source.verification)} · ${selection}`));
+ card.append(meta);
+ const href = safeURL(str(source.url));
+ if (href) { const a = el('a', t('openSource')); a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; card.append(a); }
+ const details = el('details', undefined, 'source-detail');
+ details.append(el('summary', compact ? t('inspectedPassage') : t('usedFor')));
+ if (source.content) { details.append(el('p', t('inspectedPassage'), 'source-meta')); details.append(el('blockquote', source.content, 'quote')); }
+ if (source.published_at) details.append(el('p', `${t('published')}: ${source.published_at}`, 'source-meta'));
+ if (source.retrieved_at) details.append(el('p', `${t('retrieved')}: ${source.retrieved_at}`, 'source-meta'));
+ const upstream = arr(source.upstream_ids).map(id => sourceByID.get(String(id))).filter(Boolean);
+ if (upstream.length) {
+  details.append(el('p', t('upstream'), 'source-meta'));
+  for (const origin of upstream) {
+   const originLink = el('a', origin.title || origin.url); const originURL = safeURL(str(origin.url));
+   if (originURL) { originLink.href = originURL; originLink.target = '_blank'; originLink.rel = 'noopener noreferrer'; }
+   details.append(originLink, document.createElement('br'));
   }
  }
- $('graph-panel').scrollIntoView({behavior:'instant',block:'start'});
+ const relevantClaims = claims.filter(claim => arr(claim.evidence).some(evidence => evidence.source_id === source.id));
+ for (const claim of relevantClaims) {
+  const block = el('div', undefined, 'record'); block.append(el('strong', claim.text));
+  for (const evidence of arr(claim.evidence).filter(item => item.source_id === source.id)) {
+   block.append(el('p', `${t(evidence.relation, evidence.relation)} · ${t(evidence.verification, evidence.verification)}`, 'source-meta'));
+   block.append(el('blockquote', evidence.quote, 'quote'));
+   if (evidence.locator) block.append(el('p', evidence.locator, 'source-meta'));
+  }
+  details.append(block);
+ }
+ if (!source.content && !relevantClaims.length) details.append(el('p', t('noItems'), 'empty-state'));
+ card.append(details);
+ return card;
 }
-function update() {
- const query=$('search').value.trim().toLowerCase(), type=$('type').value, status=$('status').value, relation=$('relation').value;
- const visible=nodes.filter(n=>(!query||nodeSearch(n).includes(query))&&(!type||n.type===type)&&(!status||nodeStatus(n)===status));
- const visibleIDs=new Set(visible.map(n=>n.id));
- const visibleEdges=edges.filter(e=>visibleIDs.has(e.source)&&visibleIDs.has(e.target)&&(!relation||e.type===relation));
- $('graph-summary').textContent=visible.length+' / '+nodes.length+' valid nodes · '+visibleEdges.length+' / '+edges.length+' valid relationships';
- $('warnings').textContent=problems.length?problems.join(' '):!nodes.length?'No explicit graph nodes recorded. Browse the report records below.':'';
- if(cy) { cy.elements().remove(); cy.add(visible.map(n=>({data:{id:n.id,type:n.type,label:label(n)}})).concat(visibleEdges.map(e=>({data:{id:e.engineID,source:e.source,target:e.target,type:e.type}})))); cy.layout({name:'breadthfirst',directed:true,animate:false,padding:30,spacingFactor:1.25}).run(); }
- empty($('graph-list'));
- for(const n of visible) { const b=el('button',n.type+': '+label(n)); b.type='button'; b.addEventListener('click',()=>{showDetail(n,'Node',n.id);if(cy){cy.elements().unselect();cy.getElementById(n.id).select();}}); $('graph-list').append(b); }
- for(const e of visibleEdges) { const b=el('button',e.source+' → '+e.type+' → '+e.target);b.type='button';b.addEventListener('click',()=>showDetail(e,'Relationship'));$('graph-list').append(b); }
+function renderSources() {
+ const list = $('source-list'); list.replaceChildren();
+ if (!citedSources.length) list.append(el('p', t('noSources'), 'empty-state'));
+ citedSources.forEach((source, index) => list.append(sourceCard(source, index + 1)));
+ for (const role of ['candidate_lead', 'context_source']) {
+  const target = $(role === 'candidate_lead' ? 'candidate-list' : 'context-list');
+  target.replaceChildren();
+  const items = sources.filter(source => sourceRole(source) === role && !citedSourceIDs.has(String(source.id)));
+  if (!items.length) target.append(el('p', t('noItems'), 'empty-state'));
+  for (const source of items) target.append(sourceCard(source, null, true));
+ }
 }
-for(const id of ['search','type','status','relation']) $(id).addEventListener(id==='search'?'input':'change',update);
-$('reset').addEventListener('click',()=>{for(const id of ['search','type','status','relation']) $(id).value='';update();});
-$('fit').addEventListener('click',()=>cy?.fit(undefined,30));
-if(cy && typeof ResizeObserver!=='undefined') new ResizeObserver(()=>cy.resize()).observe($('graph'));
-window.addEventListener('resize',()=>cy?.resize());
-update();
+function renderCoverageAndAudit() {
+ if (!research) return;
+ const reason = t('stop', research.stop.reason);
+ const rationale = str(research.stop.rationale);
+ setText('stop-summary', `${reason}. ${rationale}${research.stop.reason === 'saturated' ? ' ' + t('stopNote_saturated') : ''}`);
+ const coverage = $('coverage-summary'); coverage.replaceChildren();
+ const rows = arr(research.coverage);
+ if (!rows.length) coverage.append(el('p', t('noItems'), 'empty-state'));
+ for (const row of rows) {
+  const question = arr(run.contract?.questions).find(item => item.id === row.question_id)?.text || row.question_id;
+  const section = el('section', undefined, 'record');
+  section.append(el('strong', question), el('span', ' · ' + t('coverage', row.status), 'badge'));
+  if (arr(row.gaps).length) { const list = el('ul', undefined, 'gap-list'); for (const gap of arr(row.gaps)) list.append(el('li', gap)); section.append(list); }
+  coverage.append(section);
+ }
+ const gaps = $('research-gaps'); gaps.replaceChildren();
+ if (!arr(research.gaps).length) gaps.append(el('p', t('noGaps'), 'empty-state'));
+ else { const list = el('ul', undefined, 'gap-list'); for (const gap of arr(research.gaps)) list.append(el('li', gap)); gaps.append(list); }
+ const process = $('process-summary'); process.replaceChildren();
+ process.append(el('p', `${L.processSummary}${research.audience} · ${research.rounds.length} ${L.roundsCount} · ${sources.length} ${L.sourcesCount}`, 'muted'));
+ const roundList = $('round-list'); roundList.replaceChildren();
+ if (!arr(research.rounds).length) roundList.append(el('p', t('noItems'), 'empty-state'));
+ for (const round of arr(research.rounds)) {
+  const details = el('details', undefined, 'record');
+  details.append(el('summary', `${t('round')} ${round.id}: ${round.search_angle} · ${t('gain', round.material_gain)} · ${t(round.status === 'failed' ? 'round_failed' : round.status)}`));
+  const queries = arr(round.query_ids).map(id => arr(run.queries).find(query => query.id === id)).filter(Boolean);
+  for (const query of queries) details.append(el('p', `${query.text} · ${L.queryTime}: ${query.at}`, 'source-meta'));
+  for (const id of arr(round.assessed_source_ids)) {
+   const source = sourceByID.get(String(id));
+   if (source) details.append(el('p', `${source.title || source.url} · ${L.sourceTime}: ${source.retrieved_at}`, 'source-meta'));
+  }
+  if (round.materiality_reason) details.append(el('p', round.materiality_reason));
+  if (arr(round.gaps).length) { const list = el('ul', undefined, 'gap-list'); for (const gap of round.gaps) list.append(el('li', gap)); details.append(list); }
+  roundList.append(details);
+ }
+}
+
+function graphModel() {
+ const nodes = [], edges = [], nodeIDs = new Set(), edgeIDs = new Set();
+ const addNode = (id, type, label, sourceID = '') => {
+  if (!id || nodeIDs.has(id)) return;
+  nodeIDs.add(id); nodes.push({ data: { id, type, label: label || t(type), sourceID } });
+ };
+ for (const source of citedSources) addNode(`source:${source.id}`, 'source', source.title || source.url, String(source.id));
+ for (const id of articleClaimIDs) { const claim = claimByID.get(id); if (claim) addNode(`claim:${id}`, 'claim', claim.text); }
+ for (const id of articleConclusionIDs) { const item = conclusionByID.get(id); if (item) addNode(`conclusion:${id}`, 'conclusion', item.text); }
+ const addEdge = (from, to, type) => {
+  const id = `${from}|${to}|${type}`;
+  if (edgeIDs.has(id) || !nodeIDs.has(from) || !nodeIDs.has(to)) return;
+  edgeIDs.add(id); edges.push({ data: { id: `edge-${edges.length}`, source: from, target: to, type, label: t('relation', type) } });
+ };
+ for (const id of articleClaimIDs) {
+  const claim = claimByID.get(id); if (!claim) continue;
+  for (const evidence of arr(claim.evidence)) addEdge(`source:${evidence.source_id}`, `claim:${id}`, evidence.relation);
+ }
+ for (const conclusionID of articleConclusionIDs) {
+  const conclusion = conclusionByID.get(conclusionID); if (!conclusion) continue;
+  for (const claimID of arr(conclusion.claim_ids)) if (articleClaimIDs.has(String(claimID))) addEdge(`claim:${claimID}`, `conclusion:${conclusionID}`, 'derives_from');
+ }
+ return { nodes, edges };
+}
+function renderGraph() {
+ const model = graphModel();
+ const details = $('evidence-map');
+ if (!report || model.nodes.length === 0) { details.hidden = true; return; }
+ const list = $('graph-list'); list.replaceChildren();
+ const nodeLabel = new Map(model.nodes.map(node => [node.data.id, node.data.label]));
+ for (const edge of model.edges) {
+  const source = nodeLabel.get(edge.data.source), target = nodeLabel.get(edge.data.target);
+  const button = el('button', `${source} — ${edge.data.label} → ${target}`, 'graph-item');
+  button.type = 'button'; button.addEventListener('click', () => {
+   const id = edge.data.source.startsWith('source:') ? edge.data.source : edge.data.target.startsWith('source:') ? edge.data.target : '';
+   const sourceID = model.nodes.find(node => node.data.id === id)?.data.sourceID;
+   if (sourceID) openSource(sourceID);
+  });
+  list.append(button);
+ }
+ for (const node of model.nodes) {
+  const button = el('button', `${t(node.data.type)}: ${node.data.label}`, 'graph-item');
+  button.type = 'button';
+  if (node.data.sourceID) button.addEventListener('click', () => openSource(node.data.sourceID));
+  else button.addEventListener('click', () => {
+   const related = model.edges.find(edge => edge.data.source === node.data.id || edge.data.target === node.data.id);
+   const sourceNode = related && [related.data.source, related.data.target].map(id => model.nodes.find(item => item.data.id === id)).find(item => item?.data.sourceID);
+   if (sourceNode) openSource(sourceNode.data.sourceID);
+  });
+  list.append(button);
+ }
+ let cy;
+ try {
+  cy = cytoscape({ container: $('graph'), elements: model.nodes.concat(model.edges), style: [
+   { selector: 'node', style: { 'background-color': '#347f76', 'label': 'data(label)', 'color': '#1f3032', 'font-size': 12, 'text-wrap': 'wrap', 'text-max-width': 180, 'text-valign': 'bottom', 'text-margin-y': 7, 'width': 34, 'height': 34 } },
+   { selector: 'node[type="claim"]', style: { 'background-color': '#d3a64a', 'shape': 'round-rectangle', 'width': 'label', 'height': 'label', 'padding': 8 } },
+   { selector: 'node[type="conclusion"]', style: { 'background-color': '#77927b', 'shape': 'hexagon', 'width': 'label', 'height': 'label', 'padding': 8 } },
+   { selector: 'edge', style: { 'width': 2, 'line-color': '#7b8a86', 'target-arrow-color': '#7b8a86', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'label': 'data(label)', 'font-size': 10, 'text-background-color': '#fff', 'text-background-opacity': 1, 'text-background-padding': 3 } },
+   { selector: 'edge[type="contradicts"]', style: { 'line-color': '#a6402e', 'target-arrow-color': '#a6402e', 'line-style': 'dashed' } },
+  ], layout: { name: 'breadthfirst', directed: true, padding: 28, spacingFactor: 1.25 }, wheelSensitivity: .2 });
+  cy.on('tap', 'node', event => { const data = event.target.data(); if (data.sourceID) openSource(data.sourceID); });
+ } catch (error) { setText('graph-message', t('mapUnavailable')); }
+ const fit = () => { if (cy) { cy.resize(); cy.layout({ name: 'breadthfirst', directed: true, padding: 28, spacingFactor: 1.25 }).run(); cy.fit(undefined, 28); } };
+ details.addEventListener('toggle', () => { if (details.open) requestAnimationFrame(fit); });
+}
+function openSource(id) {
+ const number = sourceNumbers.get(String(id));
+ const card = number && $(`source-${number}`);
+ if (card) {
+  const disclosure = card.querySelector('details'); if (disclosure) disclosure.open = true;
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  card.setAttribute('tabindex', '-1'); card.focus({ preventScroll: true });
+ }
+}
+function renderLegacyAudit() {
+ if (!report) {
+  const candidate = $('candidate-list'); candidate.replaceChildren();
+  for (const source of sources.filter(item => sourceRole(item) !== 'context_source')) candidate.append(sourceCard(source, null, true));
+  const context = $('context-list'); context.replaceChildren();
+  for (const source of sources.filter(item => sourceRole(item) === 'context_source')) context.append(sourceCard(source, null, true));
+  $('evidence-map').hidden = true;
+ }
+}
+function renderRaw() { $('raw').textContent = JSON.stringify(payload, null, 2); }
+
+applyLocale();
+renderTitle();
+renderLimitations();
+renderArticle();
+renderSources();
+if (research) renderCoverageAndAudit();
+renderLegacyAudit();
+renderGraph();
+renderRaw();
 })();

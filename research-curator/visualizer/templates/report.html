@@ -6,34 +6,74 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Research report</title>
 <style>
-:root{color-scheme:light;--bg:#e9eeeb;--panel:#f7f8f5;--text:#202c31;--muted:#56656a;--line:#b8c4c1;--accent:#006b68;--claim:#936500;--result:#315e50;--conflict:#a6402e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.68 Georgia,"Times New Roman",serif}header,main{padding:22px;max-width:1560px;margin:auto}header{border-bottom:1px solid var(--line)}h1{font:600 clamp(1.9rem,3.4vw,3rem)/1.12 system-ui,sans-serif;letter-spacing:-.035em;max-width:25ch;margin:0}h2,h3,button,input,select,label,.badge,.role,.citation,table{font-family:system-ui,sans-serif}h2{font-size:1.12rem;line-height:1.35;margin:0 0 14px}h3{font-size:1rem;margin:18px 0 8px}p{margin:10px 0}.muted{color:var(--muted)}a{color:#005b70;overflow-wrap:anywhere}button,input,select{font:inherit;color:var(--text);background:#fff;border:1px solid #7e918e;border-radius:3px;padding:8px}button{cursor:pointer}button:hover{background:#e4efeb}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--conflict);outline-offset:3px}.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin:18px 0}label{display:grid;gap:4px}input{min-width:190px}.layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:16px;align-items:start}.layout>div,.layout>article,.layout>section{min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:20px;min-width:0;margin-bottom:16px}.lead{font-size:1.28rem;line-height:1.52;max-width:66ch;color:#263b3d}.article-section{padding-top:16px;margin-top:18px;border-top:1px solid var(--line)}.article-section h2{font:600 1.35rem/1.3 Georgia,"Times New Roman",serif}.article-block{max-width:72ch;margin:13px 0}.article-block[data-role="evidence"]{border-left:2px solid var(--accent);padding-left:14px}.article-block[data-role="synthesis"]{border-left:2px solid var(--claim);padding-left:14px}.article-block[data-role="context"]{color:var(--muted)}.role{font-size:.75rem;color:var(--muted);margin-right:8px}.citations{display:inline-flex;flex-wrap:wrap;gap:5px;margin:4px 0 0 8px}.citation{font-size:.78rem;padding:2px 7px;border-radius:2px;color:#005b70;border-color:#668b88}#graph{height:500px;background:#e3eae7;border:1px solid var(--line);border-radius:2px;overflow:hidden}#graph-list{max-height:220px;overflow:auto;display:flex;flex-wrap:wrap;gap:8px;padding:8px 0}.toolbar label{font-size:.86rem}.record{border-top:1px solid var(--line);padding:10px 0}.record:first-child{border:0}summary{cursor:pointer;padding:6px 0;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.55 ui-monospace,monospace;max-height:420px;overflow:auto;margin:8px 0;background:#eef2ef;padding:10px}blockquote{margin:8px 0;padding:8px 12px;border-left:2px solid var(--accent);background:#eef2ef}.badge{display:inline-block;padding:2px 8px;background:#dfe9e5;border:1px solid #bdcbc6;border-radius:2px;margin:2px 5px 2px 0;font-size:.8rem}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}th{color:#334c4e;font-size:.82rem;font-weight:650}.scroll{overflow:auto}#detail{scroll-margin-top:16px}#detail-content{min-height:90px}#warnings{color:#713421}.saturation-row{display:grid;grid-template-columns:minmax(90px,.5fr) minmax(0,2fr);gap:10px;border-top:1px solid var(--line);padding:10px 0}.saturation-row:first-child{border:0}footer{padding:20px;color:var(--muted);max-width:1680px;margin:auto}
-@media(max-width:900px){.layout{grid-template-columns:1fr}#graph{height:380px}header,main{padding:16px}.panel{padding:14px}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
-@media print{body{background:white;color:black;font-size:11pt}header,main{max-width:none;padding:0}.panel{background:white;border:0;padding:0;break-inside:avoid}.toolbar,#graph,#graph-list,button:not(.citation),#process,#decisions,footer{display:none!important}.citation{display:inline;border:0;background:none;color:#111;padding:0;text-decoration:none}.layout{display:block}.article-block[data-role]{border:0;padding:0}.muted{color:#333}a{color:#111;text-decoration:none}pre{max-height:none}#article-panel{display:block!important}}
+:root{color-scheme:light;--bg:#f7f7f4;--paper:#fff;--ink:#202a2e;--muted:#58666b;--line:#d7ddda;--accent:#11645f;--soft:#eaf2ef;--warn:#854324;--shadow:0 12px 32px #182a2410}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.72 Georgia,"Times New Roman",serif}header,main,footer{width:min(100% - 40px,900px);margin-inline:auto}header{padding:46px 0 22px;border-bottom:1px solid var(--line)}main{padding:24px 0 52px}footer{padding:20px 0 36px;color:var(--muted);font:13px/1.55 system-ui,sans-serif;border-top:1px solid var(--line)}h1,h2,h3,button,summary,nav,.eyebrow,.role,.cite,table{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.12;letter-spacing:-.04em;margin:0 0 18px;max-width:25ch}h2{font-size:1.22rem;line-height:1.35;margin:0 0 14px}h3{font-size:1.02rem;line-height:1.4;margin:14px 0 6px}p{margin:10px 0}a{color:#075d70;overflow-wrap:anywhere}button{color:inherit;cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #c24e39;outline-offset:3px}.lead{font-size:clamp(1.18rem,2.4vw,1.45rem);line-height:1.55;max-width:68ch;margin:0 0 18px;color:#26383b}.eyebrow{font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}.limit-callout{border-left:4px solid #a46d25;background:#fff8e9;padding:12px 16px;margin:22px 0 12px;max-width:75ch}.limit-callout[hidden]{display:none}.toc{display:flex;gap:8px 16px;flex-wrap:wrap;margin-top:18px;font:14px/1.5 system-ui,sans-serif}.toc a{color:var(--muted)}.paper{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:clamp(18px,4vw,34px);box-shadow:var(--shadow);margin:0 0 20px}.article-section{padding-top:16px;margin-top:22px;border-top:1px solid var(--line)}.article-section h2{font:600 1.45rem/1.3 Georgia,"Times New Roman",serif}.article-block{max-width:72ch;margin:16px 0}.article-block[data-role="evidence"]{border-left:2px solid var(--accent);padding-left:14px}.article-block[data-role="synthesis"]{border-left:2px solid #ac822f;padding-left:14px}.article-block[data-role="context"]{color:var(--muted)}.role{font-size:.74rem;color:var(--muted);margin-right:8px}.cite-list{display:inline-flex;gap:4px;margin-left:7px;vertical-align:baseline}.cite{font-size:.76rem;line-height:1.5;padding:1px 6px;border:1px solid #9bb6af;border-radius:4px;background:var(--soft);color:#075d70;text-decoration:none}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}th{font-size:.84rem;color:var(--muted)}.source-list{display:grid;gap:8px}.source-card{border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:12px 14px;scroll-margin-top:14px}.source-title{font:600 1rem/1.45 system-ui,sans-serif}.source-meta{font:13px/1.55 system-ui,sans-serif;color:var(--muted)}.source-detail{margin-top:8px}.source-detail summary,details>summary{cursor:pointer;padding:4px 0;font:600 .95rem/1.45 system-ui,sans-serif}.quote{margin:8px 0;padding:9px 13px;border-left:3px solid var(--accent);background:#f0f5f2;white-space:pre-wrap}.badge{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--soft);font:12px/1.6 system-ui,sans-serif;color:#284a46;margin-right:6px}.candidate{background:#f7eee9;color:#74432e}.muted{color:var(--muted)}.stack{display:grid;gap:12px}.audit{margin:16px 0}.audit>summary{padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:#f0f2ef}.audit[open]>summary{margin-bottom:12px}.audit-body{padding:14px;background:#fff;border:1px solid var(--line);border-radius:6px}.audit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.audit-grid>section{min-width:0}.record{border-top:1px solid var(--line);padding:9px 0}.record:first-child{border:0}.record>summary{overflow-wrap:anywhere}.graph-shell{margin-top:12px}.graph-caption{font:14px/1.55 system-ui,sans-serif;color:var(--muted)}#graph{height:430px;background:#f1f4f2;border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:12px}#graph-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:6px;margin-top:12px}.graph-item{border:1px solid var(--line);border-radius:4px;background:#fff;padding:7px 9px;text-align:left;font-size:13px}.graph-item:hover{background:var(--soft)}#graph-message{color:var(--warn);font:14px/1.5 system-ui,sans-serif}.stop-label{font:600 14px/1.5 system-ui,sans-serif}.gap-list{padding-left:22px}.gap-list li{margin:5px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.5 ui-monospace,monospace;max-height:480px;overflow:auto;background:#f0f2ef;padding:12px;border-radius:4px}.callout-list{margin:0;padding-left:20px}.callout-list li{margin:3px 0}.empty-state{color:var(--muted);font-style:italic}
+@media(max-width:640px){body{font-size:16px}header,main,footer{width:min(100% - 28px,900px)}header{padding-top:28px}.audit-grid{grid-template-columns:1fr}#graph{height:340px}.paper{border-radius:5px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media print{body{background:#fff;font-size:11pt}header,main,footer{width:100%;padding:0}.paper{box-shadow:none;border:0;padding:0}.toc,#graph,.graph-shell,footer{display:none!important}details.audit:not([open])>*:not(summary){display:block!important}.article-block[data-role]{border:0;padding:0}.source-card{break-inside:avoid}a{color:#111;text-decoration:none}}
 </style>
 </head>
 <body>
-<header><h1 id="report-title">Research report</h1><p class="muted" id="report-subtitle">Evidence-backed answer · Traceable sources</p><div id="counts" aria-label="Report counts"></div></header>
+<header>
+  <p class="eyebrow" data-i18n="reportKicker">Research report</p>
+  <h1 id="report-title">Research report</h1>
+  <p class="lead" id="article-lead"></p>
+  <section class="limit-callout" id="reader-limits" hidden aria-labelledby="limits-title">
+    <strong id="limits-title" data-i18n="keyLimits">Important limits</strong>
+    <div id="reader-limit-content"></div>
+  </section>
+  <nav class="toc" id="toc" aria-label="Contents">
+    <a href="#article-panel" data-i18n="readArticle">Read the article</a>
+    <a href="#evidence-register" data-i18n="sourceNotes">Sources and citations</a>
+    <a href="#audit-panel" data-i18n="researchDetails">Research details</a>
+  </nav>
+</header>
 <main>
-<section class="panel" aria-labelledby="contract-title"><h2 id="contract-title">Research question</h2><div id="contract"></div><details><summary>Run metadata</summary><pre id="metadata"></pre></details></section>
-<div class="toolbar"><label>Find evidence<input id="search" type="search" placeholder="Search article, source, or claim"></label><label>Node type<select id="type"><option value="">All types</option></select></label><label>Status<select id="status"><option value="">All statuses</option></select></label><label>Relationship<select id="relation"><option value="">All relationships</option></select></label><button id="reset" type="button">Reset filters</button><button id="fit" type="button">Fit graph</button></div>
-<div class="layout primary-layout">
-<article class="panel" id="article-panel" hidden><p class="lead" id="article-lead"></p><div id="article-body"></div></article>
-<section class="panel" id="graph-panel"><h2>Where the information comes from</h2><p class="muted">Source → Claim → Conclusion. Select a source, claim, or relationship to follow its evidence. Article citations also select graph nodes.</p><p id="graph-summary" role="status" aria-live="polite"></p><p id="warnings" role="status"></p><div id="graph" role="img" aria-label="Research provenance graph; equivalent node and relationship buttons follow"></div><div id="graph-list" aria-label="Graph nodes and relationships"></div></section>
-</div>
-<section class="panel" id="saturation-panel" hidden><h2>Search boundary and Evidence Saturation</h2><p id="stop-summary"></p><div id="research-data"></div><div id="saturation"></div><h3>Remaining limitations</h3><div id="research-gaps"></div></section>
-<div class="layout secondary-layout"><div>
-<section class="panel"><h2>Research process</h2><div id="process"></div></section>
-<section class="panel"><h2>Question coverage</h2><div id="coverage"></div></section>
-</div><div>
-<section class="panel" id="detail"><h2>Selected evidence</h2><div id="detail-content"><p class="muted">Choose a claim, source, or relationship to inspect its evidence and article references.</p></div></section>
-<section class="panel"><h2>Conclusions</h2><div id="conclusions"></div></section>
-<section class="panel"><h2>Sources and claims</h2><div id="evidence"></div></section>
-<section class="panel"><h2>Decisions and excluded sources</h2><div id="decisions"></div></section>
-</div></div>
-<details class="panel"><summary>Complete research data</summary><pre id="raw"></pre></details>
-</main><footer>No network requests are made by this report. Source links open only when selected. Graph layout shows recorded relationships, not evidence strength.</footer>
+  <article class="paper" id="article-panel" hidden>
+    <div id="article-body"></div>
+  </article>
+
+  <section id="evidence-register" aria-labelledby="evidence-title">
+    <h2 id="evidence-title" data-i18n="sourceNotes">Sources and citations</h2>
+    <p class="muted" data-i18n="sourceNotesIntro">Numbers match the citations in the article. Expand a source to inspect the passage and how it was used.</p>
+    <div id="source-list" class="source-list"></div>
+  </section>
+
+  <details class="audit paper" id="evidence-map">
+    <summary data-i18n="evidenceMap">Evidence map</summary>
+    <p class="graph-caption" data-i18n="evidenceMapIntro">Only sources and claims cited by the article appear here. Lines show recorded support or contradiction, not strength.</p>
+    <div class="graph-shell">
+      <div id="graph" role="img" aria-label="Evidence map; an equivalent text list follows"></div>
+      <p id="graph-message" role="status" aria-live="polite"></p>
+      <div id="graph-list" aria-label="Evidence relationships"></div>
+    </div>
+  </details>
+
+  <section class="paper" id="audit-panel">
+    <h2 data-i18n="researchDetails">Research details</h2>
+    <details class="audit" id="research-details">
+      <summary data-i18n="boundaryAndSaturation">Research boundary and stopping point</summary>
+      <div class="audit-body stack">
+        <p id="stop-summary" class="stop-label"></p>
+        <section><h3 data-i18n="coverage">Question coverage</h3><div id="coverage-summary"></div></section>
+        <section><h3 data-i18n="remainingGaps">Remaining gaps and limitations</h3><div id="research-gaps"></div></section>
+      </div>
+    </details>
+    <details class="audit">
+      <summary data-i18n="processAndSources">Search and source assessment</summary>
+      <div class="audit-body">
+        <div id="process-summary"></div>
+        <div class="audit-grid">
+          <section><h3 data-i18n="candidateLeads">Candidate leads not used as evidence</h3><div id="candidate-list" class="stack"></div></section>
+          <section><h3 data-i18n="contextSources">Context sources</h3><div id="context-list" class="stack"></div></section>
+        </div>
+        <details class="audit"><summary data-i18n="rounds">Research rounds</summary><div id="round-list"></div></details>
+      </div>
+    </details>
+    <details class="audit"><summary data-i18n="rawData">Complete research record</summary><pre id="raw"></pre></details>
+  </section>
+</main>
+<footer data-i18n="offlineNote">This report is self-contained. It makes no network requests; source links open only when selected.</footer>
 <script id="run-data" type="application/json">{{RUN_JSON}}</script>
 <script>/* CYTOSCAPE_VENDOR */
 {{CYTOSCAPE}}

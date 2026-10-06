@@ -8,10 +8,10 @@ From the research-curator module root:
 
 ```bash
 go run ./cmd/researchcurator validate-report -in examples/report.json
-go run ./cmd/researchcurator publish -in examples/report.json -out <new-topic-folder>
+go run ./cmd/researchcurator publish -in examples/report.json [-out <new-topic-folder>]
 ```
 
-The publisher creates `<new-topic-folder>/index.html` and refuses an existing destination.
+With `-out`, the publisher writes to that new folder and refuses an existing destination. Without it, the safe workspace/user-level default is selected.
 
 ## Separate real-source v1 ledger
 

@@ -8,6 +8,7 @@ import (
 	"researchcurator/curator"
 	"strings"
 	"testing"
+	"time"
 )
 
 // Synthetic CLI fixture: no retrieval or research is claimed.
@@ -114,6 +115,96 @@ func TestCLIPublishRejectsInvalidEnvelopeWithoutOutput(t *testing.T) {
 	}
 	if _, err := os.Stat(destination); !os.IsNotExist(err) {
 		t.Fatal("invalid report created output")
+	}
+}
+
+func TestCLIRecordRoundClearsStaleStopAndUnsealsLedger(t *testing.T) {
+	d := t.TempDir()
+	input, output, record := filepath.Join(d, "report.json"), filepath.Join(d, "updated.json"), filepath.Join(d, "round.json")
+	var prior curator.Report
+	if err := json.Unmarshal(syntheticReport(t), &prior); err != nil {
+		t.Fatal(err)
+	}
+	prior.Article = nil
+	initial, err := json.Marshal(prior)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(input, initial, 0600); err != nil {
+		t.Fatal(err)
+	}
+	round := curator.ResearchRound{ID: "r1", QueryIDs: []string{}, QuestionIDs: []string{}, SearchIntent: "discovery", SearchAngle: "failed first attempt", OriginTypesSearched: []string{}, AssessedSourceIDs: []string{}, RedundantSourceIDs: []string{}, NewClaimIDs: []string{}, NewOriginIDs: []string{}, NewContradictionRefs: []curator.EvidenceRef{}, NewQuestionIDs: []string{}, MaterialGain: "none", MaterialityReason: "retrieval returned no inspectable material", MaterialityEvidence: []curator.EvidenceRef{}, CoverageSnapshot: []curator.ReportCoverage{}, Gaps: []string{"retrieval unavailable"}, Status: "failed"}
+	data, err := json.Marshal(round)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(record, data, 0600); err != nil {
+		t.Fatal(err)
+	}
+	var out bytes.Buffer
+	if err := execute([]string{"record-round", "-in", input, "-record", record, "-out", output}, strings.NewReader(""), &out, &out); err != nil {
+		t.Fatal(err)
+	}
+	updated, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var report curator.Report
+	if err := json.Unmarshal(updated, &report); err != nil {
+		t.Fatal(err)
+	}
+	if report.Research.Stop.Reason != "in_progress" || len(report.Research.Stop.RoundIDs) != 0 || report.Run.Metadata.Status != "in_progress" || report.Run.Metadata.CompletedAt != "" {
+		t.Fatalf("new round did not invalidate old stop: stop=%+v metadata=%+v", report.Research.Stop, report.Run.Metadata)
+	}
+}
+
+func TestCLIRecordCapturesQueryAndRetrievalTimes(t *testing.T) {
+	d := t.TempDir()
+	input := filepath.Join(d, "run.json")
+	if err := os.WriteFile(input, []byte(synthetic), 0600); err != nil {
+		t.Fatal(err)
+	}
+	for _, item := range []struct{ kind, name, data string }{
+		{"query", "query.json", `{"id":"q1","question_id":"q","text":"synthetic query","at":"2000-01-01T00:00:00Z"}`},
+		{"source", "source.json", `{"id":"s2","url":"https://example.org/lead","title":"Synthetic lead","type":"docs","original":true,"retrieved_at":"2000-01-01T00:00:00Z","content":"Unverified synthetic lead.","upstream_ids":[],"freshness":"any","fit":0.5,"evidence":0,"utility":0.2,"fit_reason":"synthetic","evidence_reason":"not inspected","utility_reason":"synthetic","status":"rejected","reason":"not inspected as evidence","verification":"unverified"}`},
+	} {
+		record := filepath.Join(d, item.name)
+		output := input
+		if err := os.WriteFile(record, []byte(item.data), 0600); err != nil {
+			t.Fatal(err)
+		}
+		started := time.Now().UTC()
+		var out bytes.Buffer
+		if err := execute([]string{"record", "-kind", item.kind, "-record", record, "-in", input, "-out", output}, strings.NewReader(""), &out, &out); err != nil {
+			t.Fatalf("record %s: %v", item.kind, err)
+		}
+		data, err := os.ReadFile(output)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var run curator.Run
+		if err := json.Unmarshal(data, &run); err != nil {
+			t.Fatal(err)
+		}
+		var stamp string
+		if item.kind == "query" {
+			stamp = run.Queries[len(run.Queries)-1].At
+		} else {
+			stamp = run.Sources[len(run.Sources)-1].RetrievedAt
+			foundNode := false
+			for _, node := range run.Graph.Nodes {
+				if node.ID == "s2" && node.Type == "Source" {
+					foundNode = true
+				}
+			}
+			if !foundNode {
+				t.Fatal("recorded source is missing its required graph node")
+			}
+		}
+		at, err := time.Parse(time.RFC3339, stamp)
+		if err != nil || at.Before(started.Add(-time.Second)) || at.After(time.Now().UTC().Add(time.Second)) {
+			t.Fatalf("%s timestamp was not captured at record time: %q (%v)", item.kind, stamp, err)
+		}
 	}
 }
 

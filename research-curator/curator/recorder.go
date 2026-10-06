@@ -34,6 +34,20 @@ func (rec *Recorder) RecordQuery(q Query) error {
 	rec.Run.Queries = trial.Queries
 	return nil
 }
+func (rec *Recorder) RecordSource(source Source) error {
+	if rec.Run == nil {
+		return fmt.Errorf("nil run")
+	}
+	trial := *rec.Run
+	trial.Sources = append(append([]Source{}, rec.Run.Sources...), source)
+	trial.Graph.Nodes = append(append([]Node{}, rec.Run.Graph.Nodes...), Node{ID: source.ID, Type: "Source", Label: source.Title})
+	if e := Validate(&trial); e != nil {
+		return e
+	}
+	rec.Run.Sources = trial.Sources
+	rec.Run.Graph.Nodes = trial.Graph.Nodes
+	return nil
+}
 func (rec *Recorder) RecordDecision(d Decision) error {
 	if rec.Run == nil {
 		return fmt.Errorf("nil run")

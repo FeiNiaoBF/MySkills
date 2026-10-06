@@ -1,6 +1,6 @@
 # Research curator
 
-A portable research skill and standard-library Go tools for bounded, evidence-backed research. The workflow separates Research, a validated evidence handoff, Writing, and local publication. It does not fetch pages itself; research uses the host agent's available search and fetch tools.
+A portable research skill and standard-library Go tools for bounded, evidence-backed research. Research and Writing remain separate: the v1 run ledger is the source of truth for inspected sources, claims, quotations, and provenance; a versioned envelope records rounds, coverage, gaps, source roles, and the current stop. Retrieval uses the host agent's search/fetch tools.
 
 ## Run
 
@@ -11,34 +11,25 @@ go test ./...
 go run ./cmd/researchcurator --help
 ```
 
-Existing v1 ledger commands remain available: `validate`, `import`, `dedup`, `rank`, `finalize`, `render`, and `record`. They validate, organize, or render a supplied `run.json`; they do not search the web or assert that retrieval occurred.
+`record -kind query` timestamps a query when it is recorded; call it immediately before searching. `record -kind source` stamps retrieval when an inspected source is recorded. `record-round` appends a validated round and automatically invalidates the previous stop. These commands record events; they do not search the web.
 
-The phased workflow uses a versioned report envelope around the unchanged v1 ledger. Validate a Research handoff (article may be absent), then publish the completed article to a new topic folder:
+Validate a research handoff and publish a completed report:
 
 ```bash
 go run ./cmd/researchcurator validate-report -in report.json
-go run ./cmd/researchcurator publish -in report.json -out <topic-folder>
+go run ./cmd/researchcurator publish -in report.json [-out <topic-folder>]
 ```
 
-`publish` writes one self-contained `<topic-folder>/index.html`. It refuses an existing destination and performs no network access. The folder can be moved and opened directly. The reader's browser needs JavaScript for the graph; the article and source records remain in the same document.
+If `-out` is omitted, publication uses the current workspace's `research-reports/`, except in the skill source repository, where it uses `~/Research Reports/`. A user-selected existing folder is never replaced. The output is a self-contained `index.html` that opens offline; the article comes first, followed by traceable sources, a collapsed Cytoscape evidence map, and optional research audit details.
 
-## Start with the skill
+## Skill and references
 
-Read [SKILL.md](SKILL.md) for the workflow. Load the phase-specific references as needed:
+Read [SKILL.md](SKILL.md) for the short workflow. The [research guide](references/research-guide.md) covers the Research Contract, real retrieval, Evidence/Claim, provenance, counterevidence, coverage, Evidence Saturation, synthesis, writing, and limitations. [Report delivery](references/report-delivery.md) covers output and inspection. [DESIGN.md](DESIGN.md) documents the legacy v1 ledger; [ADR 0003](references/adr/0003-reader-first-report.md) records the reader-first and current-state decisions.
 
-- [Research workflow](references/research-workflow.md)
-- [Evidence Saturation](references/evidence-saturation.md)
-- [Evidence package contract](references/evidence-package.md)
-- [Writing](references/writing.md)
-- [Report delivery](references/report-delivery.md)
-- [Manual behavior cases](references/behavior-cases.md)
+## Examples and verification
 
-[DESIGN.md](DESIGN.md) remains the authoritative legacy v1 ledger contract. The versioned envelope and Research/Writing boundary are recorded in [ADR 0002](references/adr/0002-phased-report-envelope.md).
+- [examples/report.json](examples/report.json) is a synthetic envelope fixture, not research evidence.
+- [examples/run.json](examples/run.json) is a separate real-source legacy v1 ledger; it is not an end-to-end report acceptance.
+- [examples/VERIFICATION.md](examples/VERIFICATION.md) records the bounded vNext acceptance and its limits.
 
-## Examples and verification boundaries
-
-- [examples/report.json](examples/report.json) is a fully synthetic fixture for the report envelope and local publisher. Its source and claim are not research evidence.
-- [examples/run.json](examples/run.json) is the separately documented real-source v1 ledger example; it is not evidence that the new agent workflow or report browser has passed an end-to-end evaluation.
-- See [examples/README.md](examples/README.md) for scope and reproduction commands.
-
-Go is needed to run or build the CLI; it has no external Go module dependencies. The visualizer embeds pinned Cytoscape.js and all report assets. Open the generated report without a server. Browser operation must be verified separately from Go tests and JavaScript syntax checks.
+Go has no external module dependencies. Cytoscape.js is pinned and embedded; no runtime assets or retrieval backend are downloaded. Open the actual HTML in a browser for behavior checks; unit tests and schema validation do not prove readability, truth, or competent retrieval.

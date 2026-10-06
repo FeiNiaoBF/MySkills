@@ -16,10 +16,10 @@ visualizer.RenderReport(reportJSON []byte) ([]byte, error)
 
 ```bash
 go run ./cmd/researchcurator validate-report -in report.json
-go run ./cmd/researchcurator publish -in report.json -out <new-topic-folder>
+go run ./cmd/researchcurator publish -in report.json [-out <new-topic-folder>]
 ```
 
-The output is a single self-contained HTML document containing article text, evidence records, the explicit graph, local CSS/JavaScript, and vendored Cytoscape.js. The document works from `file://` without a server or runtime requests; the graph needs JavaScript. The article and source details are embedded in the document. External source URLs are opened only after explicit user action.
+The output is a single self-contained HTML document. The article and lead come first, with numbered citations linking to inspected passages. Sources follow the article; a collapsed Cytoscape map shows only article-linked sources, claims, and recorded conclusions. Research boundaries, source roles, process, and raw data remain secondary. UI labels follow `article.language` (Chinese and English; unsupported languages fall back to English). The document works from `file://` without runtime requests; external URLs open only after explicit reader action.
 
 ## Rendering and safety
 
@@ -27,10 +27,12 @@ The output is a single self-contained HTML document containing article text, evi
 - Embedded JSON is HTML-escaped without round-tripping large numeric values through `float64`.
 - The restrictive CSP blocks network access and active external content. Link handling accepts only absolute HTTP(S) URLs and sets `noopener noreferrer`.
 - Unknown run fields remain in the expandable complete-data view. Full schema/domain validation belongs to the caller.
-- The graph displays recorded relationships, not evidence strength. It is accompanied by keyboard-operable node/relationship controls and text-based source details.
+- The map is derived only from article-referenced source/claim/conclusion links; source and claim IDs are internal and are not displayed. No conclusion node is fabricated when the ledger has none. The text relationship list remains available if Cytoscape fails.
+- Source roles are explicit where present: verified evidence, candidate lead, and context source. The report displays exact passages, locators, upstream-source links, and event timestamps.
+- Comparative reports show a qualified concentration reminder when most verified citations share one URL host; this is a prompt to explain source limits, not an accusation of bias or a corroboration score.
 - The report has responsive, print, and reduced-motion styles. Browser operation and screen-reader behavior require separate verification; Go tests and JS syntax checks do not establish them.
 
-Recognized run collections include sources, claims, conclusions, queries, events, decisions, rejected sources, graph nodes/edges, coverage, and pipeline stages. Node/source associations are resolved by explicit IDs, not inferred. The report displays explicit selection status; no evidence weighting or corroboration is invented by layout.
+The article determines which ledger claims and sources appear in citations and the evidence map. Exact source and claim identifiers are used only to navigate the embedded ledger; reader-facing labels use titles, claims, conclusions, and numbered source notes. The graph shows recorded support/contradiction relations, not evidence strength or independent corroboration.
 
 ## Dependency provenance
 

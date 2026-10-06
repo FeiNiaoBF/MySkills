@@ -20,7 +20,7 @@ func main() {
 }
 func execute(args []string, in io.Reader, out, errs io.Writer) error {
 	if len(args) == 0 || args[0] == "--help" || args[0] == "-h" {
-		fmt.Fprintln(out, "researchcurator <validate|validate-report|import|dedup|rank|finalize|render|record|publish> [-in input.json|-] [-out output|-]\nrecord also requires -kind event|query|decision -record record.json. finalize writes the legacy report; -out run.json defaults to adjacent report.html, and stdout requires -report. validate-report checks a phased handoff; publish writes its versioned report to <topic-directory>/index.html. No network access; research is supplied by retrieval tools.")
+		fmt.Fprintln(out, "researchcurator <validate|validate-report|import|dedup|rank|finalize|render|record|record-round|publish> [-in input.json|-] [-out output|-]\nrecord requires -kind event|query|source|decision -record record.json; query/source capture timestamps when recorded. record-round requires -record round.json and resets the previous stop. finalize writes the legacy report. validate-report checks a phased handoff; publish writes to a new folder outside the skill source tree by default. No network access; retrieval uses host tools.")
 		return nil
 	}
 	command := args[0]
@@ -59,20 +59,62 @@ func execute(args []string, in io.Reader, out, errs io.Writer) error {
 		}
 	}
 	var reader io.Reader = in
+	var inputFile *os.File
 	if *input != "-" {
-		file, e := os.Open(*input)
-		if e != nil {
-			return e
+		file, err := os.Open(*input)
+		if err != nil {
+			return err
 		}
-		defer file.Close()
-		reader = file
+		inputFile = file
+		reader = inputFile
 	}
 	b, e := io.ReadAll(io.LimitReader(reader, 32*1024*1024+1))
+	if inputFile != nil {
+		if closeErr := inputFile.Close(); e == nil {
+			e = closeErr
+		}
+	}
 	if e != nil {
 		return e
 	}
 	if len(b) > 32*1024*1024 {
 		return fmt.Errorf("input exceeds 32 MiB")
+	}
+	if command == "record-round" {
+		if *record == "" {
+			return fmt.Errorf("record-round requires -record round.json")
+		}
+		report, err := curator.DecodeReport(b)
+		if err != nil {
+			return err
+		}
+		file, err := os.Open(*record)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		var round curator.ResearchRound
+		d := json.NewDecoder(io.LimitReader(file, 1024*1024))
+		d.DisallowUnknownFields()
+		if err := d.Decode(&round); err != nil {
+			return err
+		}
+		if err := d.Decode(new(any)); err != io.EOF {
+			return fmt.Errorf("trailing round JSON")
+		}
+		if err := curator.RecordResearchRound(report, round); err != nil {
+			return err
+		}
+		data, err := json.MarshalIndent(report, "", "  ")
+		if err != nil {
+			return err
+		}
+		data = append(data, '\n')
+		if *output != "-" {
+			return curator.WriteFileAtomic(*output, data)
+		}
+		_, err = out.Write(data)
+		return err
 	}
 	if command == "validate-report" {
 		if *output != "-" {
@@ -86,10 +128,34 @@ func execute(args []string, in io.Reader, out, errs io.Writer) error {
 		return err
 	}
 	if command == "publish" {
-		if *output == "-" {
-			return fmt.Errorf("publish requires -out <topic-directory>")
+		destination := *output
+		defaultDestination := destination == "-"
+		if defaultDestination {
+			report, err := curator.DecodeReport(b)
+			if err != nil {
+				return err
+			}
+			cwd, err := os.Getwd()
+			if err != nil {
+				return err
+			}
+			home, err := os.UserHomeDir()
+			if err != nil {
+				return err
+			}
+			destination, err = publisher.DefaultDestination(report.Run.Contract.Question, cwd, home)
+			if err != nil {
+				return err
+			}
 		}
-		return publisher.Write(b, *output)
+		if err := publisher.Write(b, destination); err != nil {
+			return err
+		}
+		if defaultDestination {
+			_, err := fmt.Fprintln(out, destination)
+			return err
+		}
+		return nil
 	}
 	r, e := curator.Decode(b)
 	if e != nil {
@@ -143,7 +209,13 @@ func execute(args []string, in io.Reader, out, errs io.Writer) error {
 			if e := d.Decode(&x); e != nil {
 				return e
 			}
-			e = rec.RecordQuery(x)
+			e = rec.RecordQueryAtCapture(x)
+		case "source":
+			var x curator.Source
+			if e := d.Decode(&x); e != nil {
+				return e
+			}
+			e = rec.RecordSourceAtCapture(x)
 		case "decision":
 			var x curator.Decision
 			if e := d.Decode(&x); e != nil {
@@ -151,7 +223,7 @@ func execute(args []string, in io.Reader, out, errs io.Writer) error {
 			}
 			e = rec.RecordDecision(x)
 		default:
-			return fmt.Errorf("record requires -kind event|query|decision")
+			return fmt.Errorf("record requires -kind event|query|source|decision")
 		}
 		if e != nil {
 			return e

@@ -100,6 +100,40 @@ func TestValidatePublicationAcceptsEachTerminalStopReason(t *testing.T) {
 	})
 }
 
+func TestSourceRolesMatchRecordedEvidence(t *testing.T) {
+	report, err := curator.DecodeReport(reportJSON(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	report.Research.SourceRoles = map[string]string{"s1": "candidate_lead"}
+	if err := curator.ValidateReport(report); err == nil {
+		t.Fatal("accepted selected claim evidence as a candidate lead")
+	}
+	report.Research.SourceRoles["s1"] = "evidence"
+	if err := curator.ValidateReport(report); err != nil {
+		t.Fatalf("rejected verified claim evidence: %v", err)
+	}
+}
+
+func TestRecordResearchRoundInvalidatesOldStop(t *testing.T) {
+	report, err := curator.DecodeReport(reportJSON(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	report.Research.Stop = curator.ResearchStop{Reason: "user_stopped", RoundIDs: []string{}, Rationale: "user requested stop"}
+	round := curator.ResearchRound{ID: "r1", QueryIDs: []string{}, QuestionIDs: []string{}, SearchIntent: "discovery", SearchAngle: "blocked first attempt", OriginTypesSearched: []string{}, AssessedSourceIDs: []string{}, RedundantSourceIDs: []string{}, NewClaimIDs: []string{}, NewOriginIDs: []string{}, NewContradictionRefs: []curator.EvidenceRef{}, NewQuestionIDs: []string{}, MaterialGain: "none", MaterialityReason: "retrieval did not return inspectable material", MaterialityEvidence: []curator.EvidenceRef{}, CoverageSnapshot: []curator.ReportCoverage{}, Gaps: []string{"retrieval unavailable"}, Status: "failed"}
+	if err := curator.RecordResearchRound(report, round); err != nil {
+		t.Fatalf("record round: %v", err)
+	}
+	if report.Research.Stop.Reason != "in_progress" || len(report.Research.Stop.RoundIDs) != 0 {
+		t.Fatalf("old stop survived new round: %+v", report.Research.Stop)
+	}
+	report.Research.Stop = curator.ResearchStop{Reason: "retrieval_blocked", RoundIDs: []string{}, Rationale: "stale stop"}
+	if err := curator.ValidateReport(report); err == nil {
+		t.Fatal("accepted terminal stop that ignored the final round")
+	}
+}
+
 func TestValidatePublicationRequiresArticleAndTerminalStop(t *testing.T) {
 	report, err := curator.DecodeReport(reportJSON(t))
 	if err != nil {
