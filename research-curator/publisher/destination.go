@@ -8,22 +8,16 @@ import (
 	"unicode"
 )
 
-// DefaultDestination selects and prepares the safe default report root. A workspace
-// containing this skill's source is never used as the output root.
-func DefaultDestination(question, cwd, home string) (string, error) {
-	if strings.TrimSpace(question) == "" || cwd == "" || home == "" {
-		return "", fmt.Errorf("default output requires a question, workspace, and user home")
+// DefaultDestination selects a safe topic folder under the temp research root.
+func DefaultDestination(topic, tempRoot string) (string, error) {
+	if strings.TrimSpace(topic) == "" || tempRoot == "" {
+		return "", fmt.Errorf("default output requires a topic and temporary directory")
 	}
-	workspace := realPath(cwd)
-	userHome := realPath(home)
-	root := filepath.Join(workspace, "research-reports")
-	if isSkillSource(workspace) {
-		root = filepath.Join(userHome, "Research Reports")
-	}
+	root := filepath.Join(realPath(tempRoot), "research-curator")
 	if err := prepareRoot(root); err != nil {
 		return "", err
 	}
-	base := topicName(question)
+	base := topicName(topic)
 	for suffix := 1; ; suffix++ {
 		name := base
 		if suffix > 1 {
@@ -107,7 +101,7 @@ func topicName(question string) string {
 		} else {
 			space = true
 		}
-		if out.Len() >= 96 {
+		if out.Len() >= 48 {
 			break
 		}
 	}

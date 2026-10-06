@@ -20,7 +20,7 @@ go run ./cmd/researchcurator validate-report -in report.json
 go run ./cmd/researchcurator publish -in report.json [-out <topic-folder>]
 ```
 
-If `-out` is omitted, publication uses the current workspace's `research-reports/`, except in the skill source repository, where it uses `~/Research Reports/`. A user-selected existing folder is never replaced. The output is a self-contained `index.html` that opens offline; the article comes first, followed by traceable sources, a collapsed Cytoscape evidence map, and optional research audit details.
+If `-out` is omitted, publication writes directly to `<system-temp>/research-curator/<topic>/index.html`. The topic is derived from the article title, sanitized, and kept short; name collisions get a `-2`, `-3`, etc. suffix. No run-ID directory is added. A user-selected `-out` path takes priority, and existing destinations are never replaced. The report is self-contained and opens offline.
 
 ## Skill and references
 

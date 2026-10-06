@@ -12,7 +12,7 @@ The first real report placed English research-contract controls and a dense grap
 - Preserve the legacy v1 run. In the report envelope, classify each source as `evidence`, `candidate_lead`, or `context_source`; only inspected, verified source passages linked to claims qualify as evidence. Unverified leads cannot be selected evidence.
 - Add one recording boundary for research rounds: appending a round atomically resets any terminal stop to `in_progress`; publication accepts only one final stop consistent with the final round and coverage. Record query/source times at their respective recording events, never by copying report creation time.
 - Surface evidence asymmetry when comparative claims rely primarily on one publisher or source origin. Treat it as a limitation, not a ranking rule.
-- Resolve output in order: user-specified destination; current workspace `research-reports/` unless that workspace is the skill-source repository; otherwise `~/Research Reports/`. Preserve existing destinations.
+- Resolve output in order: user-specified destination; otherwise `<system-temp>/research-curator/<topic>/index.html`, where `<topic>` is a safe short title/question slug. Add `-2`, `-3`, etc. for collisions; never overwrite and never add a run-ID directory.
 - Keep the skill short and procedural; technical schema and renderer guarantees stay in implementation documentation. Retain the research/evidence/synthesis/writing/offline-delivery core.
 
 ## Consequences

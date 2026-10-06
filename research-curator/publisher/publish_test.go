@@ -23,49 +23,25 @@ func validReportJSON(t *testing.T) []byte {
 	return data
 }
 
-func TestDefaultDestinationAvoidsSkillSourceAndPreservesCollisions(t *testing.T) {
-	base := t.TempDir()
-	workspace := filepath.Join(base, "source")
-	home := filepath.Join(base, "home")
-	module := filepath.Join(workspace, "research-curator")
-	if err := os.MkdirAll(module, 0755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.MkdirAll(home, 0755); err != nil {
-		t.Fatal(err)
-	}
-	for _, path := range []string{filepath.Join(module, "SKILL.md"), filepath.Join(module, "go.mod")} {
-		if err := os.WriteFile(path, []byte("fixture"), 0600); err != nil {
-			t.Fatal(err)
-		}
-	}
-	first, err := publisher.DefaultDestination("A useful Chinese question?", workspace, home)
+func TestDefaultDestinationUsesTempRootAndPreservesCollisions(t *testing.T) {
+	tempRoot := t.TempDir()
+	first, err := publisher.DefaultDestination("GPT-6 Astra vs Claude Fable 5.1: coding experience", tempRoot)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.HasPrefix(first, filepath.Join(home, "Research Reports")) || strings.Contains(first, workspace) {
-		t.Fatalf("skill source workspace selected as output: %s", first)
+	root := filepath.Join(tempRoot, "research-curator")
+	if filepath.Dir(first) != root || strings.Contains(first, "run-id") {
+		t.Fatalf("default report is not directly under the temp research root: %s", first)
 	}
 	if err := os.Mkdir(first, 0755); err != nil {
 		t.Fatal(err)
 	}
-	second, err := publisher.DefaultDestination("A useful Chinese question?", workspace, home)
+	second, err := publisher.DefaultDestination("GPT-6 Astra vs Claude Fable 5.1: coding experience", tempRoot)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if second == first || !strings.HasPrefix(second, first+"-") {
-		t.Fatalf("default collision did not choose a fresh folder: first=%s second=%s", first, second)
-	}
-	ordinary := filepath.Join(base, "ordinary")
-	if err := os.Mkdir(ordinary, 0755); err != nil {
-		t.Fatal(err)
-	}
-	other, err := publisher.DefaultDestination("ordinary project question", ordinary, home)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !strings.HasPrefix(other, filepath.Join(base, "ordinary", "research-reports")) {
-		t.Fatalf("ordinary workspace did not use research-reports: %s", other)
+	if second != first+"-2" {
+		t.Fatalf("default collision did not use the simple -2 suffix: first=%s second=%s", first, second)
 	}
 }
 

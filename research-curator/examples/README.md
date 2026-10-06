@@ -11,7 +11,7 @@ go run ./cmd/researchcurator validate-report -in examples/report.json
 go run ./cmd/researchcurator publish -in examples/report.json [-out <new-topic-folder>]
 ```
 
-With `-out`, the publisher writes to that new folder and refuses an existing destination. Without it, the safe workspace/user-level default is selected.
+With `-out`, the publisher writes to that directory and refuses an existing destination. Without it, the publisher writes directly to `<system-temp>/research-curator/<topic>/index.html`, choosing a simple numeric suffix if needed.
 
 ## Separate real-source v1 ledger
 

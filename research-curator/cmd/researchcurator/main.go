@@ -20,7 +20,7 @@ func main() {
 }
 func execute(args []string, in io.Reader, out, errs io.Writer) error {
 	if len(args) == 0 || args[0] == "--help" || args[0] == "-h" {
-		fmt.Fprintln(out, "researchcurator <validate|validate-report|import|dedup|rank|finalize|render|record|record-round|publish> [-in input.json|-] [-out output|-]\nrecord requires -kind event|query|source|decision -record record.json; query/source capture timestamps when recorded. record-round requires -record round.json and resets the previous stop. finalize writes the legacy report. validate-report checks a phased handoff; publish writes to a new folder outside the skill source tree by default. No network access; retrieval uses host tools.")
+		fmt.Fprintln(out, "researchcurator <validate|validate-report|import|dedup|rank|finalize|render|record|record-round|publish> [-in input.json|-] [-out output|-]\nrecord requires -kind event|query|source|decision -record record.json; query/source capture timestamps when recorded. record-round requires -record round.json and resets the previous stop. finalize writes the legacy report. validate-report checks a phased handoff; default publish path is <system-temp>/research-curator/<topic>/index.html. No network access; retrieval uses host tools.")
 		return nil
 	}
 	command := args[0]
@@ -135,15 +135,11 @@ func execute(args []string, in io.Reader, out, errs io.Writer) error {
 			if err != nil {
 				return err
 			}
-			cwd, err := os.Getwd()
-			if err != nil {
-				return err
+			topic := report.Run.Contract.Question
+			if report.Article != nil && report.Article.Title != "" {
+				topic = report.Article.Title
 			}
-			home, err := os.UserHomeDir()
-			if err != nil {
-				return err
-			}
-			destination, err = publisher.DefaultDestination(report.Run.Contract.Question, cwd, home)
+			destination, err = publisher.DefaultDestination(topic, os.TempDir())
 			if err != nil {
 				return err
 			}

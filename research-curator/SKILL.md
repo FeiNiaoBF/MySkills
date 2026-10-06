@@ -30,11 +30,11 @@ Answer the user's question with actual retrieval, inspected evidence, clear synt
    go run ./cmd/researchcurator publish -in <report.json> [-out <topic-folder>]
    ```
 
-   A user-named folder takes priority. Otherwise publish under the current workspace's `research-reports/`, except when the workspace is this skill's source repository; then use `~/Research Reports/`. The publisher never replaces an existing folder. Open `index.html`; confirm the article reads well, citations lead to the recorded sources, and the report works offline.
+   A user-named folder takes priority. Otherwise publish directly to `%TEMP%/research-curator/<topic>/index.html`; the topic is short and sanitized, with `-2`, `-3`, etc. on collisions. No run-ID layer is added. Existing reports are never replaced. Open `index.html`; confirm the article reads well, citations lead to the recorded sources, and the report works offline.
 
 ## Boundaries
 
 - Use host retrieval tools; if unavailable, report that research is blocked rather than substituting model memory.
 - The UI follows `article.language`; the article is the primary view. Keep the evidence map and research audit after the article and visually secondary.
-- Keep temporary work in a unique directory under the host system's temp `pi-agent/research-curator/`. Never overwrite, merge, or delete user reports or clean another run's files.
+- Keep default reports and any needed intermediate files directly under the host system's temp `research-curator/<topic>/`; do not add a run-ID directory. Never overwrite or delete an existing report.
 - Report what was actually searched, inspected, and verified. Structural validation is not proof of truth or competent retrieval.
