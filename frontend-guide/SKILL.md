@@ -1,6 +1,7 @@
 ---
 name: frontend-guide
 description: 用户请求从零规划并构建页面，或要求逐模块前端陪建时使用。将内容拆成可验证模块；已有页面的局部修改不启动整套流程。
+metadata: {}
 ---
 
 # Frontend Guide — 模块化前端陪建
