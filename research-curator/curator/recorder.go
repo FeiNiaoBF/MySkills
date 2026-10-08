@@ -28,12 +28,31 @@ func (rec *Recorder) RecordQuery(q Query) error {
 	}
 	trial := *rec.Run
 	trial.Queries = append(append([]Query{}, rec.Run.Queries...), q)
+	trial.Graph.Nodes = append(append([]Node{}, rec.Run.Graph.Nodes...), Node{ID: q.ID, Type: "Query", Label: q.Text})
+	trial.Graph.Edges = append(append([]Edge{}, rec.Run.Graph.Edges...), Edge{From: q.QuestionID, To: q.ID, Type: "searched_by"})
+	for _, sid := range q.CandidateSourceIDs {
+		trial.Graph.Edges = append(trial.Graph.Edges, Edge{From: q.ID, To: sid, Type: "candidate"})
+	}
 	if e := Validate(&trial); e != nil {
 		return e
 	}
 	rec.Run.Queries = trial.Queries
+	rec.Run.Graph = trial.Graph
 	return nil
 }
+func (rec *Recorder) RecordAdjudication(a ConflictAdjudication) error {
+	if rec.Run == nil {
+		return fmt.Errorf("nil run")
+	}
+	trial := *rec.Run
+	trial.Adjudications = append(append([]ConflictAdjudication{}, rec.Run.Adjudications...), a)
+	if e := Validate(&trial); e != nil {
+		return e
+	}
+	rec.Run.Adjudications = trial.Adjudications
+	return nil
+}
+
 func (rec *Recorder) RecordDecision(d Decision) error {
 	if rec.Run == nil {
 		return fmt.Errorf("nil run")

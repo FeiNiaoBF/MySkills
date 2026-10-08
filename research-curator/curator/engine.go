@@ -113,7 +113,15 @@ func Score(s Source) float64 { return .5*s.Fit + .3*s.Evidence + .2*s.Utility }
 
 // Analyze checks coverage from recorded quotes and explicit provenance; it never fetches evidence.
 func Analyze(r *Run) Coverage {
-	result := Coverage{Status: "unverified", Questions: []QuestionCoverage{}, Warnings: []string{}}
+	result := Coverage{Status: "unverified", TargetSources: r.Contract.Output.TargetSources, MinIndependentOrigins: r.Contract.Coverage.MinIndependentOrigins, Questions: []QuestionCoverage{}, Warnings: []string{}}
+	selectedIDs := map[string]bool{}
+	for _, s := range r.Sources {
+		if s.Status == "selected" {
+			selectedIDs[s.ID] = true
+		}
+	}
+	result.SelectedSources = len(selectedIDs)
+	result.TargetSourcesMet = result.SelectedSources >= result.TargetSources
 	sources := map[string]Source{}
 	for _, s := range r.Sources {
 		sources[s.ID] = s
@@ -125,7 +133,10 @@ func Analyze(r *Run) Coverage {
 	}
 	for _, edge := range r.Graph.Edges {
 		if edge.Type == "contradicts" && conclusionIDs[edge.To] {
-			warnings["unresolved contradiction for conclusion "+edge.To] = true
+			a := resolvedConflict(r, "conclusion", edge.To)
+			if a == nil || a.Outcome != "supports_conclusion" {
+				warnings["unresolved contradiction for conclusion "+edge.To] = true
+			}
 		}
 	}
 	adjacency := map[string][]string{}
@@ -234,11 +245,21 @@ func Analyze(r *Run) Coverage {
 					allEvidence[s.ID] = true
 				}
 			}
+			if contradicted {
+				adjudication := resolvedClaimAdjudication(r, claim.ID)
+				if adjudication == nil {
+					c.Gaps = append(c.Gaps, "unresolved contradictory evidence for "+claim.ID)
+				}
+				if adjudication != nil && adjudication.Outcome == "rejects_claim" {
+					supported = false
+					c.Gaps = append(c.Gaps, "adjudicated against claim "+claim.ID)
+				}
+				if adjudication != nil && adjudication.Outcome == "supports_claim" && supported {
+					contradicted = false
+				}
+			}
 			if supported {
 				c.ClaimIDs = append(c.ClaimIDs, claim.ID)
-			}
-			if contradicted {
-				c.Gaps = append(c.Gaps, "unresolved contradictory evidence for "+claim.ID)
 			}
 		}
 		c.IndependentSources = countOrigins(evidenceIDs, roots)
@@ -257,9 +278,14 @@ func Analyze(r *Run) Coverage {
 		complete = false
 		warnings["no coverage questions"] = true
 	}
-	if countOrigins(allEvidence, roots) < r.Contract.Quantity {
+	result.IndependentSources = countOrigins(allEvidence, roots)
+	if result.IndependentSources < r.Contract.Coverage.MinIndependentOrigins {
 		complete = false
-		warnings[fmt.Sprintf("quantity unmet: need %d independent evidence groups", r.Contract.Quantity)] = true
+		warnings[fmt.Sprintf("minimum independent origins unmet: need %d independent evidence groups", r.Contract.Coverage.MinIndependentOrigins)] = true
+	}
+	if !result.TargetSourcesMet {
+		complete = false
+		warnings[fmt.Sprintf("target sources unmet: need %d selected sources", r.Contract.Output.TargetSources)] = true
 	}
 	for w := range warnings {
 		result.Warnings = append(result.Warnings, w)
@@ -272,6 +298,19 @@ func Analyze(r *Run) Coverage {
 		result.Status = "verified"
 	}
 	return result
+}
+
+func resolvedConflict(r *Run, targetType, targetID string) *ConflictAdjudication {
+	for i := range r.Adjudications {
+		a := &r.Adjudications[i]
+		if a.TargetType == targetType && a.TargetID == targetID && a.Status == "resolved" {
+			return a
+		}
+	}
+	return nil
+}
+func resolvedClaimAdjudication(r *Run, claimID string) *ConflictAdjudication {
+	return resolvedConflict(r, "claim", claimID)
 }
 
 // Sources sharing any upstream root belong to the same corroboration group.

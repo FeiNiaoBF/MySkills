@@ -19,7 +19,7 @@ func main() {
 }
 func execute(args []string, in io.Reader, out, errs io.Writer) error {
 	if len(args) == 0 || args[0] == "--help" || args[0] == "-h" {
-		fmt.Fprintln(out, "researchcurator <validate|import|dedup|rank|finalize|render|record> [-in run.json|-] [-out output|-]\nrecord also requires -kind event|query|decision -record record.json. finalize writes an automatic report: -out run.json defaults to adjacent report.html; stdout requires -report report.html. No network access; research is supplied by retrieval tools.")
+		fmt.Fprintln(out, "researchcurator <validate|import|dedup|rank|finalize|render|record> [-in run.json|-] [-out output|-]\nrecord also requires -kind event|query|decision|adjudication -record record.json. finalize writes an automatic report: -out run.json defaults to adjacent report.html; stdout requires -report report.html. No network access; research is supplied by retrieval tools.")
 		return nil
 	}
 	command := args[0]
@@ -132,8 +132,14 @@ func execute(args []string, in io.Reader, out, errs io.Writer) error {
 				return e
 			}
 			e = rec.RecordDecision(x)
+		case "adjudication":
+			var x curator.ConflictAdjudication
+			if e := d.Decode(&x); e != nil {
+				return e
+			}
+			e = rec.RecordAdjudication(x)
 		default:
-			return fmt.Errorf("record requires -kind event|query|decision")
+			return fmt.Errorf("record requires -kind event|query|decision|adjudication")
 		}
 		if e != nil {
 			return e

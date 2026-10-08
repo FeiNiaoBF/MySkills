@@ -19,7 +19,7 @@ function links(parent, value) {
  }
  walk(value);
 }
-const groups = ['sources','claims','conclusions','queries','events','decisions','rejected_sources'];
+const groups = ['sources','claims','conclusions','queries','adjudications','events','decisions','rejected_sources'];
 const records = new Map();
 for(const group of groups) for(const item of arr(run[group])) if(item?.id != null) {
  const key = String(item.id); const entries=records.get(key)||[]; entries.push({group,item}); records.set(key,entries);
@@ -27,7 +27,7 @@ for(const group of groups) for(const item of arr(run[group])) if(item?.id != nul
 function references(node) {
  const id = String(node.reference_id ?? node.id ?? '');
  const all = records.get(id)||[];
- const group = {source:'sources',claim:'claims',conclusion:'conclusions'}[node.type];
+ const group = {source:'sources',claim:'claims',conclusion:'conclusions',query:'queries'}[node.type];
  return group ? all.filter(r=>r.group===group) : all;
 }
 function nodeSearch(node) { return pretty([node,...references(node).map(r=>r.item)]).toLowerCase(); }
@@ -80,6 +80,14 @@ const countEvents=arr(run.events).filter(e=>Number.isInteger(e.before_count)&&Nu
 if(!countEvents.length) $('process').append(el('p','No structured before/after counts recorded.','muted'));
 for(const event of countEvents) $('process').append(el('p',event.stage+' · '+event.count_scope+': '+event.before_count+' → '+event.after_count));
 for(const group of ['queries','events']) { $('process').append(el('h3',group)); recordList($('process'),arr(run[group]),group); }
+$('process').append(el('h3','Query → candidate provenance'));
+for(const q of arr(run.queries)) {
+ const block=el('details',undefined,'record'); block.append(el('summary',q.text+' · '+(q.provider||'')+'/'+(q.tool||'')));
+ block.append(el('p','Retrieval reference: '+text(q.retrieval_reference||''),'muted'));
+ for(const id of arr(q.candidate_source_ids)) { const source=arr(run.sources).find(s=>s.id===id); block.append(el('p',id+' → '+text(source?.status||'unknown')+' · '+text(source?.reason||''))); }
+ $('process').append(block);
+}
+recordList($('adjudications'),arr(run.adjudications),'conflict adjudications');
 recordList($('conclusions'),arr(run.conclusions),'conclusions');
 const selected=arr(run.sources).filter(s=>s?.selected===true || ['selected','accepted','final'].includes(s?.status));
 $('conclusions').append(el('h3','Explicitly selected materials'));

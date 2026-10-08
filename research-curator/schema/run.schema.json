@@ -6,7 +6,7 @@
     "version": {
       "type": "string",
       "enum": [
-        "1.0"
+        "2.0"
       ]
     },
     "id": {
@@ -46,10 +46,6 @@
             "minLength": 1
           }
         },
-        "quantity": {
-          "type": "integer",
-          "minimum": 1
-        },
         "depth": {
           "type": "string",
           "minLength": 1
@@ -75,6 +71,32 @@
             "additionalProperties": false
           },
           "minItems": 1
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "target_sources": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "target_sources"
+          ],
+          "additionalProperties": false
+        },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "min_independent_origins": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "min_independent_origins"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [
@@ -83,9 +105,10 @@
         "excludes",
         "freshness",
         "preferences",
-        "quantity",
         "depth",
-        "questions"
+        "questions",
+        "output",
+        "coverage"
       ],
       "additionalProperties": false
     },
@@ -348,7 +371,8 @@
                   "Question",
                   "Claim",
                   "Source",
-                  "Conclusion"
+                  "Conclusion",
+                  "Query"
                 ]
               },
               "label": {
@@ -386,7 +410,9 @@
                   "derives_from",
                   "replaces",
                   "contains",
-                  "addresses"
+                  "addresses",
+                  "searched_by",
+                  "candidate"
                 ]
               }
             },
@@ -425,13 +451,36 @@
           "at": {
             "type": "string",
             "minLength": 1
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "retrieval_reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidate_source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "required": [
           "id",
           "question_id",
           "text",
-          "at"
+          "at",
+          "provider",
+          "tool",
+          "retrieval_reference",
+          "candidate_source_ids"
         ],
         "additionalProperties": false
       }
@@ -639,6 +688,21 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "selected_sources": {
+          "type": "integer"
+        },
+        "target_sources": {
+          "type": "integer"
+        },
+        "target_sources_met": {
+          "type": "boolean"
+        },
+        "independent_sources": {
+          "type": "integer"
+        },
+        "min_independent_origins": {
+          "type": "integer"
         }
       },
       "required": [
@@ -707,6 +771,114 @@
         ],
         "additionalProperties": false
       }
+    },
+    "adjudications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target_type": {
+            "type": "string",
+            "enum": [
+              "claim",
+              "conclusion"
+            ]
+          },
+          "target_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "unresolved"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "locator": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "verification": {
+                  "type": "string",
+                  "enum": [
+                    "verified",
+                    "unverified"
+                  ]
+                }
+              },
+              "required": [
+                "source_id",
+                "quote",
+                "locator",
+                "verification"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "supports_claim",
+              "rejects_claim",
+              "supports_conclusion",
+              "rejects_conclusion",
+              "unresolved"
+            ]
+          },
+          "final_effect": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "target_type",
+          "target_id",
+          "claim_ids",
+          "source_ids",
+          "status",
+          "rationale",
+          "evidence",
+          "outcome",
+          "final_effect"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
@@ -723,7 +895,8 @@
     "stages",
     "coverage",
     "metadata",
-    "rejected_sources"
+    "rejected_sources",
+    "adjudications"
   ],
   "additionalProperties": false
 }
