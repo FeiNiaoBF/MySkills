@@ -31,8 +31,9 @@ Real Chrome over SSH SOCKS can login/reply for 5 minutes: IP is likely usable fo
 Test real browser without changing router:
 
 ```powershell
-ssh -i "$env:USERPROFILE\.ssh\<your-key>.pem" -N -D 127.0.0.1:10808 ubuntu@<AWS_VPS_IP>
-& "C:\Program Files\Google\Chrome\Application\chrome.exe" --user-data-dir="$env:TEMP\chrome-aws-test" --proxy-server="socks5://127.0.0.1:10808" https://claude.ai
+ssh -i "$env:USERPROFILE\.ssh\<your-key>.pem" -N -D 127.0.0.1:10808 ubuntu@<VPS_IP>
+$chrome = (Get-Command chrome.exe -ErrorAction Stop).Source
+& $chrome --user-data-dir="$env:TEMP\chrome-aws-test" --proxy-server="socks5://127.0.0.1:10808" https://claude.ai
 ```
 
 ## Correct sing-box Reality shape
