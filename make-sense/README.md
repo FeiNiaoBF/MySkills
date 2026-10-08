@@ -12,16 +12,15 @@ A context-aware understanding-repair Agent Skill. Use it when a term, passage, o
 
 ## Install
 
-Copy the **whole `make-sense` directory** into your agent's skill directory. The parent directory name must remain `make-sense`.
-
-For a shared Pi/Codex user-level location on a compatible recent installation:
+Install the skill from the MySkills GitHub repository with Vercel's `skills` CLI:
 
 ```sh
-mkdir -p ~/.agents/skills
-cp -R make-sense ~/.agents/skills/
+npx skills add FeiNiaoBF/MySkills --skill make-sense -g -a pi
 ```
 
-For Pi only, a typical alternate destination is `~/.pi/agent/skills/make-sense/`. Pi skill commands use `/skill:make-sense`; user-provided arguments can follow it. Do not assume `/make-sense` is an alias. Reload skills or restart the host if it does not discover newly installed skills; check the host's active skill settings if it is disabled.
+Replace `pi` with another supported agent name as needed. To list all skills in the repository, run `npx skills add FeiNiaoBF/MySkills --list`. To update globally installed skills later, run `npx skills update -g`.
+
+Pi skill commands use `/skill:make-sense`; user-provided arguments can follow it. Do not assume `/make-sense` is an alias. Reload skills or restart the host if it does not discover newly installed skills; check the host's active skill settings if it is disabled.
 
 The metadata description enables contextual selection **when the host supports model-invoked skills**; it does not guarantee automatic invocation on every eligible message.
 

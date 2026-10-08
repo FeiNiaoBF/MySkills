@@ -26,6 +26,12 @@ func validateSemantic(r *Run) error {
 			return e
 		}
 	}
+	if r.Contract.Output.TargetSources < 1 {
+		return fmt.Errorf("contract.output.target_sources must be at least 1")
+	}
+	if r.Contract.Coverage.MinIndependentOrigins < 1 {
+		return fmt.Errorf("contract.coverage.min_independent_origins must be at least 1")
+	}
 	sources := map[string]Source{}
 	claims := map[string]Claim{}
 	for _, s := range r.Sources {
@@ -156,11 +162,18 @@ func validateSemantic(r *Run) error {
 		}
 	}
 	for _, c := range r.Conclusions {
+		if c.Status == "verified" {
+			for _, a := range r.Adjudications {
+				if a.TargetType == "conclusion" && a.TargetID == c.ID && (a.Status != "resolved" || a.Outcome != "supports_conclusion") {
+					return fmt.Errorf("verified conclusion %s has unresolved or adverse adjudication", c.ID)
+				}
+			}
+		}
 		for _, id := range c.ClaimIDs {
 			if e := ref(id, "Claim"); e != nil {
 				return e
 			}
-			if c.Status == "verified" && !verifiedClaim(claims[id], sources) {
+			if c.Status == "verified" && !verifiedClaim(claims[id], sources, r) {
 				return fmt.Errorf("conclusion %s cites unsupported claim %s", c.ID, id)
 			}
 		}
@@ -174,6 +187,163 @@ func validateSemantic(r *Run) error {
 		}
 		if e := date(q.At); e != nil {
 			return e
+		}
+		if strings.TrimSpace(q.Provider) == "" || strings.TrimSpace(q.Tool) == "" || strings.TrimSpace(q.RetrievalReference) == "" {
+			return fmt.Errorf("query %s requires provider, tool and retrieval_reference", q.ID)
+		}
+		seenCandidates := map[string]bool{}
+		for _, sid := range q.CandidateSourceIDs {
+			if e := ref(sid, "Source"); e != nil {
+				return e
+			}
+			if seenCandidates[sid] {
+				return fmt.Errorf("query %s repeats candidate %s", q.ID, sid)
+			}
+			seenCandidates[sid] = true
+		}
+	}
+	adjudicated := map[string]bool{}
+	for _, a := range r.Adjudications {
+		if e := add(a.ID, "Adjudication"); e != nil {
+			return e
+		}
+		if a.TargetType != "claim" && a.TargetType != "conclusion" {
+			return fmt.Errorf("adjudication %s has invalid target_type", a.ID)
+		}
+		if e := ref(a.TargetID, map[string]string{"claim": "Claim", "conclusion": "Conclusion"}[a.TargetType]); e != nil {
+			return e
+		}
+		key := a.TargetType + "\x00" + a.TargetID
+		if adjudicated[key] {
+			return fmt.Errorf("multiple adjudications for conflict %s", a.TargetID)
+		}
+		adjudicated[key] = true
+		if a.Status != "resolved" && a.Status != "unresolved" {
+			return fmt.Errorf("adjudication %s has invalid status", a.ID)
+		}
+		if strings.TrimSpace(a.Rationale) == "" { return fmt.Errorf("adjudication %s requires rationale", a.ID) }
+		if strings.TrimSpace(a.FinalEffect) == "" { return fmt.Errorf("adjudication %s requires final_effect", a.ID) }
+		if a.Status == "resolved" {
+			if len(a.Evidence) == 0 {
+				return fmt.Errorf("resolved adjudication %s requires final_effect and evidence", a.ID)
+			}
+			if (a.TargetType == "claim" && a.Outcome != "supports_claim" && a.Outcome != "rejects_claim") || (a.TargetType == "conclusion" && a.Outcome != "supports_conclusion" && a.Outcome != "rejects_conclusion") {
+				return fmt.Errorf("resolved adjudication %s has invalid outcome", a.ID)
+			}
+		} else if a.Outcome != "unresolved" {
+			return fmt.Errorf("unresolved adjudication %s must have unresolved outcome", a.ID)
+		}
+		seenClaims := map[string]bool{}
+		for _, cid := range a.ClaimIDs {
+			if e := ref(cid, "Claim"); e != nil {
+				return e
+			}
+			if seenClaims[cid] {
+				return fmt.Errorf("adjudication %s repeats claim", a.ID)
+			}
+			seenClaims[cid] = true
+		}
+		seenSources := map[string]bool{}
+		for _, sid := range a.SourceIDs {
+			if e := ref(sid, "Source"); e != nil {
+				return e
+			}
+			if seenSources[sid] {
+				return fmt.Errorf("adjudication %s repeats source", a.ID)
+			}
+			seenSources[sid] = true
+		}
+		if a.TargetType == "claim" && !seenClaims[a.TargetID] {
+			return fmt.Errorf("adjudication %s omits target claim", a.ID)
+		}
+		if len(seenClaims) == 0 || len(seenSources) < 2 {
+			return fmt.Errorf("adjudication %s must identify conflicting claims and sources", a.ID)
+		}
+		targetClaims := map[string]bool{}
+		if a.TargetType == "claim" {
+			targetClaims[a.TargetID] = true
+		} else {
+			for _, conclusion := range r.Conclusions {
+				if conclusion.ID == a.TargetID {
+					for _, cid := range conclusion.ClaimIDs {
+						targetClaims[cid] = true
+					}
+				}
+			}
+		}
+		for cid := range seenClaims {
+			if !targetClaims[cid] {
+				return fmt.Errorf("adjudication %s includes claim outside its target", a.ID)
+			}
+		}
+		if a.TargetType == "conclusion" {
+			linked := false
+			for _, edge := range r.Graph.Edges {
+				if edge.To == a.TargetID && edge.Type == "contradicts" && seenClaims[edge.From] {
+					linked = true
+				}
+			}
+			if !linked {
+				return fmt.Errorf("adjudication %s is not linked to a conclusion contradiction", a.ID)
+			}
+		}
+		linkedSources := map[string]bool{}
+		supported, contradicted := false, false
+		for _, cid := range a.ClaimIDs {
+			claim, ok := claims[cid]
+			if !ok {
+				continue
+			}
+			if a.TargetType == "claim" && cid != a.TargetID {
+				continue
+			}
+			for _, ev := range claim.Evidence {
+				if !seenSources[ev.SourceID] {
+					continue
+				}
+				linkedSources[ev.SourceID] = true
+				if ev.Relation == "supports" {
+					supported = true
+				}
+				if ev.Relation == "contradicts" {
+					contradicted = true
+				}
+			}
+		}
+		if a.TargetType == "conclusion" {
+			for _, c := range r.Conclusions {
+				if c.ID != a.TargetID {
+					continue
+				}
+				for _, cid := range c.ClaimIDs {
+					claim := claims[cid]
+					for _, ev := range claim.Evidence {
+						if seenSources[ev.SourceID] && ev.Relation == "supports" {
+							supported = true
+						}
+						if seenSources[ev.SourceID] && ev.Relation == "contradicts" {
+							contradicted = true
+						}
+					}
+				}
+			}
+		}
+		if len(linkedSources) != len(seenSources) {
+			return fmt.Errorf("adjudication %s lists sources not connected to target claims", a.ID)
+		}
+		if !supported || !contradicted {
+			return fmt.Errorf("adjudication %s does not cover both sides of a recorded conflict", a.ID)
+		}
+		verifiedDependency := false
+		for _, ev := range a.Evidence {
+			s, ok := sources[ev.SourceID]
+			if !ok || !seenSources[ev.SourceID] || ev.Verification != "verified" || s.Verification != "verified" || s.Status != "selected" || ev.Quote == "" || ev.Locator == "" || !strings.Contains(s.Content, ev.Quote) {
+				return fmt.Errorf("adjudication %s has invalid or non-selected evidence dependency", a.ID)
+			}
+			verifiedDependency = true
+		}
+		if a.Status == "resolved" && !verifiedDependency {
+			return fmt.Errorf("resolved adjudication %s lacks verified selected evidence", a.ID)
 		}
 	}
 	for _, ev := range r.Events {
@@ -226,7 +396,7 @@ func validateSemantic(r *Run) error {
 		nodes[n.ID] = n.Type
 	}
 	for id, kind := range ids {
-		if kind == "Query" || kind == "Event" || kind == "Decision" {
+		if kind == "Event" || kind == "Decision" || kind == "Adjudication" {
 			continue
 		}
 		if nodes[id] != kind {
@@ -241,6 +411,10 @@ func validateSemantic(r *Run) error {
 		switch e.Type {
 		case "contains":
 			valid = a == "Goal" && b == "Question"
+		case "searched_by":
+			valid = a == "Question" && b == "Query"
+		case "candidate":
+			valid = a == "Query" && b == "Source"
 		case "addresses":
 			valid = a == "Question" && b == "Claim"
 		case "supports", "contradicts":
@@ -279,7 +453,10 @@ func validateSemantic(r *Run) error {
 					return fmt.Errorf("conclusion support absent from claim_ids")
 				}
 				if e.Type == "contradicts" && conclusion.Status == "verified" {
-					return fmt.Errorf("verified conclusion %s has unresolved contradiction", e.To)
+					a := resolvedConflict(r, "conclusion", e.To)
+					if a == nil || a.Outcome != "supports_conclusion" {
+						return fmt.Errorf("verified conclusion %s has unresolved or adverse adjudication", e.To)
+					}
 				}
 			}
 		}
@@ -308,6 +485,24 @@ func validateSemantic(r *Run) error {
 		}
 		if s.DuplicateOf != "" && !edges[key(s.ID, s.DuplicateOf, "duplicates")] {
 			return fmt.Errorf("missing duplicate edge for %s", s.ID)
+		}
+	}
+	for _, q := range r.Queries {
+		if !edges[key(q.QuestionID, q.ID, "searched_by")] {
+			return fmt.Errorf("missing question query provenance %s", q.ID)
+		}
+		for _, sid := range q.CandidateSourceIDs {
+			if !edges[key(q.ID, sid, "candidate")] {
+				return fmt.Errorf("missing candidate edge %s→%s", q.ID, sid)
+			}
+		}
+		for _, edge := range r.Graph.Edges {
+			if edge.From == q.ID && edge.Type == "candidate" && !contains(q.CandidateSourceIDs, edge.To) {
+				return fmt.Errorf("candidate graph edge absent from query %s", q.ID)
+			}
+			if edge.To == q.ID && edge.Type == "searched_by" && edge.From != q.QuestionID {
+				return fmt.Errorf("query %s has an unrecorded question edge", q.ID)
+			}
 		}
 	}
 	for _, q := range r.Contract.Questions {
@@ -357,6 +552,9 @@ func validateSemantic(r *Run) error {
 		if computed.Status != "verified" {
 			return fmt.Errorf("verified coverage has unmet requirements")
 		}
+		if r.Coverage.SelectedSources != computed.SelectedSources || r.Coverage.TargetSources != computed.TargetSources || r.Coverage.TargetSourcesMet != computed.TargetSourcesMet || r.Coverage.IndependentSources != computed.IndependentSources || r.Coverage.MinIndependentOrigins != computed.MinIndependentOrigins {
+			return fmt.Errorf("verified coverage summary differs from computed requirements")
+		}
 		if len(r.Coverage.Questions) != len(computed.Questions) {
 			return fmt.Errorf("verified coverage missing questions")
 		}
@@ -391,18 +589,25 @@ func contains(a []string, s string) bool {
 	}
 	return false
 }
-func verifiedClaim(c Claim, sources map[string]Source) bool {
+func verifiedClaim(c Claim, sources map[string]Source, r *Run) bool {
 	supported := false
+	contradicted := false
 	for _, ev := range c.Evidence {
 		s := sources[ev.SourceID]
 		if ev.Verification != "verified" || s.Verification != "verified" {
 			continue
 		}
 		if ev.Relation == "contradicts" {
-			return false
+			contradicted = true
 		}
 		if ev.Relation == "supports" && s.Status == "selected" {
 			supported = true
+		}
+	}
+	if contradicted {
+		a := resolvedClaimAdjudication(r, c.ID)
+		if a == nil || a.Outcome != "supports_claim" {
+			return false
 		}
 	}
 	return supported

@@ -2,20 +2,21 @@ package curator
 
 // Run is the versioned JSON ledger. Arrays must be present, even when empty.
 type Run struct {
-	Version         string           `json:"version"`
-	ID              string           `json:"id"`
-	Metadata        Metadata         `json:"metadata"`
-	RejectedSources []RejectedSource `json:"rejected_sources"`
-	Contract        Contract         `json:"contract"`
-	Sources         []Source         `json:"sources"`
-	Claims          []Claim          `json:"claims"`
-	Conclusions     []Conclusion     `json:"conclusions"`
-	Graph           Graph            `json:"graph"`
-	Queries         []Query          `json:"queries"`
-	Events          []Event          `json:"events"`
-	Decisions       []Decision       `json:"decisions"`
-	Stages          []Stage          `json:"stages"`
-	Coverage        Coverage         `json:"coverage"`
+	Version         string                 `json:"version"`
+	ID              string                 `json:"id"`
+	Metadata        Metadata               `json:"metadata"`
+	RejectedSources []RejectedSource       `json:"rejected_sources"`
+	Contract        Contract               `json:"contract"`
+	Sources         []Source               `json:"sources"`
+	Claims          []Claim                `json:"claims"`
+	Conclusions     []Conclusion           `json:"conclusions"`
+	Graph           Graph                  `json:"graph"`
+	Queries         []Query                `json:"queries"`
+	Events          []Event                `json:"events"`
+	Decisions       []Decision             `json:"decisions"`
+	Adjudications   []ConflictAdjudication `json:"adjudications"`
+	Stages          []Stage                `json:"stages"`
+	Coverage        Coverage               `json:"coverage"`
 }
 
 // Metadata describes execution, not evidence truth. completed_at is empty until finalized.
@@ -33,15 +34,23 @@ type RejectedSource struct {
 	Reason string `json:"reason"`
 }
 type Contract struct {
-	Question    string     `json:"question"`
-	Types       []string   `json:"types"`
-	Excludes    []string   `json:"excludes"`
-	Freshness   string     `json:"freshness"`
-	Preferences []string   `json:"preferences"`
-	Quantity    int        `json:"quantity"`
-	Depth       string     `json:"depth"`
-	Questions   []Question `json:"questions"`
+	Question    string              `json:"question"`
+	Types       []string            `json:"types"`
+	Excludes    []string            `json:"excludes"`
+	Freshness   string              `json:"freshness"`
+	Preferences []string            `json:"preferences"`
+	Output      OutputRequirement   `json:"output"`
+	Coverage    CoverageRequirement `json:"coverage"`
+	Depth       string              `json:"depth"`
+	Questions   []Question          `json:"questions"`
 }
+type OutputRequirement struct {
+	TargetSources int `json:"target_sources"`
+}
+type CoverageRequirement struct {
+	MinIndependentOrigins int `json:"min_independent_origins"`
+}
+
 type Question struct {
 	ID   string `json:"id"`
 	Text string `json:"text"`
@@ -103,10 +112,32 @@ type Edge struct {
 	Type string `json:"type"`
 }
 type Query struct {
-	ID         string `json:"id"`
-	QuestionID string `json:"question_id"`
-	Text       string `json:"text"`
-	At         string `json:"at"`
+	ID                 string   `json:"id"`
+	QuestionID         string   `json:"question_id"`
+	Text               string   `json:"text"`
+	At                 string   `json:"at"`
+	Provider           string   `json:"provider"`
+	Tool               string   `json:"tool"`
+	RetrievalReference string   `json:"retrieval_reference"`
+	CandidateSourceIDs []string `json:"candidate_source_ids"`
+}
+type ConflictAdjudication struct {
+	ID          string                 `json:"id"`
+	TargetType  string                 `json:"target_type"`
+	TargetID    string                 `json:"target_id"`
+	ClaimIDs    []string               `json:"claim_ids"`
+	SourceIDs   []string               `json:"source_ids"`
+	Status      string                 `json:"status"`
+	Rationale   string                 `json:"rationale"`
+	Evidence    []AdjudicationEvidence `json:"evidence"`
+	Outcome     string                 `json:"outcome"`
+	FinalEffect string                 `json:"final_effect"`
+}
+type AdjudicationEvidence struct {
+	SourceID     string `json:"source_id"`
+	Quote        string `json:"quote"`
+	Locator      string `json:"locator"`
+	Verification string `json:"verification"`
 }
 type Event struct {
 	ID          string `json:"id"`
@@ -132,9 +163,14 @@ type Stage struct {
 	Reason      string   `json:"reason"`
 }
 type Coverage struct {
-	Status    string             `json:"status"`
-	Questions []QuestionCoverage `json:"questions"`
-	Warnings  []string           `json:"warnings"`
+	Status                string             `json:"status"`
+	SelectedSources       int                `json:"selected_sources"`
+	TargetSources         int                `json:"target_sources"`
+	TargetSourcesMet      bool               `json:"target_sources_met"`
+	IndependentSources    int                `json:"independent_sources"`
+	MinIndependentOrigins int                `json:"min_independent_origins"`
+	Questions             []QuestionCoverage `json:"questions"`
+	Warnings              []string           `json:"warnings"`
 }
 type QuestionCoverage struct {
 	QuestionID         string   `json:"question_id"`

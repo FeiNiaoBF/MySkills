@@ -20,7 +20,7 @@ func main() {
 }
 func execute(args []string, in io.Reader, out, errs io.Writer) error {
 	if len(args) == 0 || args[0] == "--help" || args[0] == "-h" {
-		fmt.Fprintln(out, "researchcurator <validate|validate-report|import|dedup|rank|finalize|render|record|record-round|publish> [-in input.json|-] [-out output|-]\nrecord requires -kind event|query|source|decision -record record.json; query/source capture timestamps when recorded. record-round requires -record round.json and resets the previous stop. finalize writes the legacy report. validate-report checks a phased handoff; default publish path is <system-temp>/research-curator/<topic>/index.html. No network access; retrieval uses host tools.")
+		fmt.Fprintln(out, "researchcurator <validate|validate-report|import|dedup|rank|finalize|render|record|record-round|publish> [-in input.json|-] [-out output|-]\nrecord requires -kind event|query|source|decision|adjudication -record record.json; query/source capture timestamps when recorded. record-round requires -record round.json and resets the previous stop. finalize writes the legacy report. validate-report checks a phased handoff; default publish path is <system-temp>/research-curator/<topic>/index.html. No network access; retrieval uses host tools.")
 		return nil
 	}
 	command := args[0]
@@ -218,8 +218,14 @@ func execute(args []string, in io.Reader, out, errs io.Writer) error {
 				return e
 			}
 			e = rec.RecordDecision(x)
+		case "adjudication":
+			var x curator.ConflictAdjudication
+			if e := d.Decode(&x); e != nil {
+				return e
+			}
+			e = rec.RecordAdjudication(x)
 		default:
-			return fmt.Errorf("record requires -kind event|query|source|decision")
+			return fmt.Errorf("record requires -kind event|query|source|decision|adjudication")
 		}
 		if e != nil {
 			return e

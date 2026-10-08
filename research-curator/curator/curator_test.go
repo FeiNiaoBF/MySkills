@@ -11,10 +11,10 @@ import (
 
 // This fixture is synthetic test data, not a research example or retrieval receipt.
 func fixture() *curator.Run {
-	return &curator.Run{Version: "1.0", ID: "goal", Metadata: curator.Metadata{CreatedAt: "2026-01-01T00:00:00Z", CompletedAt: "", Status: "in_progress", Tools: []string{}, SearchProvenance: "synthetic fixture; no searches"}, RejectedSources: []curator.RejectedSource{}, Contract: curator.Contract{Question: "Synthetic test question", Types: []string{"documentation"}, Excludes: []string{}, Freshness: "any", Preferences: []string{}, Quantity: 1, Depth: "brief", Questions: []curator.Question{{ID: "q1", Text: "Synthetic coverage question"}}}, Sources: []curator.Source{{ID: "s1", URL: "https://example.org/doc", Title: "Synthetic source", Type: "documentation", Original: true, RetrievedAt: "2026-01-01T00:00:00Z", Content: "Synthetic quotation for testing only.", UpstreamIDs: []string{}, Freshness: "test", Fit: 1, Evidence: 1, Utility: 1, FitReason: "synthetic fit", EvidenceReason: "synthetic quote", UtilityReason: "synthetic utility", Status: "selected", Reason: "synthetic fixture", Verification: "verified"}}, Claims: []curator.Claim{{ID: "c1", Text: "Synthetic test claim", QuestionIDs: []string{"q1"}, Evidence: []curator.Evidence{{SourceID: "s1", Quote: "Synthetic quotation", Locator: "test paragraph 1", Relation: "supports", Verification: "verified"}}}}, Conclusions: []curator.Conclusion{}, Graph: curator.Graph{Nodes: []curator.Node{{ID: "goal", Type: "Goal", Label: "Test"}, {ID: "q1", Type: "Question", Label: "Test"}, {ID: "s1", Type: "Source", Label: "Test"}, {ID: "c1", Type: "Claim", Label: "Test"}}, Edges: []curator.Edge{{From: "s1", To: "c1", Type: "supports"}, {From: "goal", To: "q1", Type: "contains"}, {From: "q1", To: "c1", Type: "addresses"}}}, Queries: []curator.Query{}, Events: []curator.Event{}, Decisions: []curator.Decision{}, Stages: []curator.Stage{}, Coverage: curator.Coverage{Status: "unverified", Questions: []curator.QuestionCoverage{}, Warnings: []string{}}}
+	return &curator.Run{Version: "2.0", ID: "goal", Metadata: curator.Metadata{CreatedAt: "2026-01-01T00:00:00Z", CompletedAt: "", Status: "in_progress", Tools: []string{}, SearchProvenance: "synthetic fixture; no searches"}, RejectedSources: []curator.RejectedSource{}, Contract: curator.Contract{Question: "Synthetic test question", Types: []string{"documentation"}, Excludes: []string{}, Freshness: "any", Preferences: []string{}, Output: curator.OutputRequirement{TargetSources: 1}, Coverage: curator.CoverageRequirement{MinIndependentOrigins: 1}, Depth: "brief", Questions: []curator.Question{{ID: "q1", Text: "Synthetic coverage question"}}}, Sources: []curator.Source{{ID: "s1", URL: "https://example.org/doc", Title: "Synthetic source", Type: "documentation", Original: true, RetrievedAt: "2026-01-01T00:00:00Z", Content: "Synthetic quotation for testing only.", UpstreamIDs: []string{}, Freshness: "test", Fit: 1, Evidence: 1, Utility: 1, FitReason: "synthetic fit", EvidenceReason: "synthetic quote", UtilityReason: "synthetic utility", Status: "selected", Reason: "synthetic fixture", Verification: "verified"}}, Claims: []curator.Claim{{ID: "c1", Text: "Synthetic test claim", QuestionIDs: []string{"q1"}, Evidence: []curator.Evidence{{SourceID: "s1", Quote: "Synthetic quotation", Locator: "test paragraph 1", Relation: "supports", Verification: "verified"}}}}, Conclusions: []curator.Conclusion{}, Graph: curator.Graph{Nodes: []curator.Node{{ID: "goal", Type: "Goal", Label: "Test"}, {ID: "q1", Type: "Question", Label: "Test"}, {ID: "s1", Type: "Source", Label: "Test"}, {ID: "c1", Type: "Claim", Label: "Test"}}, Edges: []curator.Edge{{From: "s1", To: "c1", Type: "supports"}, {From: "goal", To: "q1", Type: "contains"}, {From: "q1", To: "c1", Type: "addresses"}}}, Queries: []curator.Query{}, Events: []curator.Event{}, Decisions: []curator.Decision{}, Adjudications: []curator.ConflictAdjudication{}, Stages: []curator.Stage{}, Coverage: curator.Coverage{Status: "unverified", Questions: []curator.QuestionCoverage{}, Warnings: []string{}}}
 }
 func TestDecodeRejectsMissingRequiredData(t *testing.T) {
-	if _, err := curator.Decode([]byte(`{"version":"1.0","id":"empty"}`)); err == nil {
+	if _, err := curator.Decode([]byte(`{"version":"2.0","id":"empty"}`)); err == nil {
 		t.Fatal("missing data accepted")
 	}
 }
@@ -76,7 +76,7 @@ func TestShapeAndGraphRejectMalformedData(t *testing.T) {
 	if _, e := curator.Decode(b); e == nil {
 		t.Fatal("unknown property accepted")
 	}
-	if e := curator.Finalize(&curator.Run{Version: "1.0"}); e == nil {
+	if e := curator.Finalize(&curator.Run{Version: "2.0"}); e == nil {
 		t.Fatal("missing required data finalized")
 	}
 }
@@ -123,7 +123,7 @@ func TestExactDedupAndStableRanking(t *testing.T) {
 }
 func TestSharedOriginalIsNotIndependentCorroboration(t *testing.T) {
 	r := fixture()
-	r.Contract.Quantity = 2
+	r.Contract.Coverage.MinIndependentOrigins = 2
 	s := r.Sources[0]
 	s.ID = "s2"
 	s.URL = "https://example.org/syndicated"
@@ -153,7 +153,7 @@ func TestSharedOriginalIsNotIndependentCorroboration(t *testing.T) {
 
 func TestJSONAmbiguityAndCoverageTampering(t *testing.T) {
 	b, _ := json.Marshal(fixture())
-	for _, bad := range []string{strings.Replace(string(b), `"version":"1.0"`, `"version":"2.0","version":"1.0"`, 1), string(b) + ` {}`, strings.Replace(string(b), `"quantity":1`, `"quantity":1.5`, 1), strings.Replace(string(b), `"fit":1`, `"fit":2`, 1)} {
+	for _, bad := range []string{strings.Replace(string(b), `"version":"2.0"`, `"version":"2.0","version":"2.0"`, 1), string(b) + ` {}`, strings.Replace(string(b), `"target_sources":1`, `"target_sources":1.5`, 1), strings.Replace(string(b), `"fit":1`, `"fit":2`, 1)} {
 		if _, e := curator.Decode([]byte(bad)); e == nil {
 			t.Fatal("ambiguous or invalid JSON accepted")
 		}

@@ -1,9 +1,9 @@
 {
-  "version": "1.0",
+  "version": "2.0",
   "id": "goal",
   "metadata": {
     "created_at": "2026-10-04T16:15:40.668021+00:00",
-    "completed_at": "2026-10-04T16:22:31Z",
+    "completed_at": "2026-10-05T00:50:08Z",
     "status": "finalized",
     "tools": [
       "web_search",
@@ -43,7 +43,12 @@
       "可定位引文",
       "将格式约束和运行环境差异分开"
     ],
-    "quantity": 2,
+    "output": {
+      "target_sources": 2
+    },
+    "coverage": {
+      "min_independent_origins": 1
+    },
     "depth": "简要综合与出处审计；不评价真实学习效果",
     "questions": [
       {
@@ -85,7 +90,7 @@
       "type": "official documentation",
       "original": true,
       "retrieved_at": "2026-10-04T16:15:45.701712+00:00",
-      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (< 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
+      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (\u003c 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
       "content_hash": "cb10e6e226f312a81d3b9b4c69219a0652b3a57ca22bb8dfe565b4d540515fa2",
       "upstream_ids": [],
       "freshness": "Retrieved live; publication date unavailable",
@@ -106,7 +111,7 @@
       "type": "official documentation",
       "original": true,
       "retrieved_at": "2026-10-04T16:15:46.974425+00:00",
-      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (< 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
+      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (\u003c 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
       "content_hash": "cb10e6e226f312a81d3b9b4c69219a0652b3a57ca22bb8dfe565b4d540515fa2",
       "upstream_ids": [],
       "freshness": "Retrieved live; publication date unavailable",
@@ -128,7 +133,7 @@
       "type": "official documentation",
       "original": true,
       "retrieved_at": "2026-10-04T16:15:48.173271+00:00",
-      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (< 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
+      "content": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (\u003c 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
       "content_hash": "cb10e6e226f312a81d3b9b4c69219a0652b3a57ca22bb8dfe565b4d540515fa2",
       "upstream_ids": [],
       "freshness": "Retrieved live; publication date unavailable",
@@ -175,7 +180,7 @@
       "evidence": [
         {
           "source_id": "s2",
-          "quote": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (< 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
+          "quote": "Metadata (~100 tokens): The name and description fields are loaded at startup for all skills\nInstructions (\u003c 5000 tokens recommended): The full SKILL.md body is loaded when the skill is activated\nResources (as needed): Files (e.g. those in scripts/, references/, or assets/) are loaded only when required",
           "locator": "https://agentskills.io/specification#progressive-disclosure",
           "relation": "supports",
           "verification": "verified"
@@ -300,6 +305,11 @@
         "id": "k-trigger",
         "type": "Conclusion",
         "label": "用实际宿主日志评估触发，并加入相近负例；本次仅整理官方方法，没有运行跨宿主触发实验，也没有证明学习效果。"
+      },
+      {
+        "id": "query1",
+        "type": "Query",
+        "label": "site:agentskills.io specification progressive disclosure skill description 1024"
       }
     ],
     "edges": [
@@ -367,6 +377,36 @@
         "from": "s4",
         "to": "s2",
         "type": "duplicates"
+      },
+      {
+        "from": "q-loading",
+        "to": "query1",
+        "type": "searched_by"
+      },
+      {
+        "from": "query1",
+        "to": "s1",
+        "type": "candidate"
+      },
+      {
+        "from": "query1",
+        "to": "s2",
+        "type": "candidate"
+      },
+      {
+        "from": "query1",
+        "to": "s3",
+        "type": "candidate"
+      },
+      {
+        "from": "query1",
+        "to": "s4",
+        "type": "candidate"
+      },
+      {
+        "from": "query1",
+        "to": "s5",
+        "type": "candidate"
       }
     ]
   },
@@ -375,7 +415,17 @@
       "id": "query1",
       "question_id": "q-loading",
       "text": "site:agentskills.io specification progressive disclosure skill description 1024",
-      "at": "2026-10-04T16:15:40.668021+00:00"
+      "at": "2026-10-04T16:15:40.668021+00:00",
+      "provider": "web_search",
+      "tool": "web_search",
+      "retrieval_reference": "web-search-call-2026-10-04-agent-skills",
+      "candidate_source_ids": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ]
     }
   ],
   "events": [
@@ -500,6 +550,7 @@
       "reason": "Primary official passage directly answers the contract question"
     }
   ],
+  "adjudications": [],
   "stages": [
     {
       "name": "Requirement First",
@@ -592,6 +643,11 @@
   ],
   "coverage": {
     "status": "verified",
+    "selected_sources": 2,
+    "target_sources": 2,
+    "target_sources_met": true,
+    "independent_sources": 2,
+    "min_independent_origins": 1,
     "questions": [
       {
         "question_id": "q-loading",
