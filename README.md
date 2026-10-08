@@ -52,63 +52,35 @@
 | --- | --- |
 | [network-security-check](network-security-check/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
 
-## 安装、同步与更新
+## 安装与更新
 
-### 挂载本仓库
-
-从仓库根目录执行一次：
-
-**Windows / PowerShell：**
-
-```powershell
-.\scripts\link-skills.ps1
-```
-
-**Linux / macOS / WSL：**
+本仓库托管在 GitHub，Vercel `skills` CLI 会从仓库根目录发现各 skill 目录中的 `SKILL.md`，不需要额外 manifest。先列出 CLI 识别到的 skills：
 
 ```bash
-bash scripts/link-skills.sh
+npx skills add FeiNiaoBF/MySkills --list
 ```
 
-脚本建立一个集合链接：`~/.agents/skills/myskills` 指向本仓库根目录。Pi、Codex 等支持 Agent Skills 的宿主会递归发现其中的 `SKILL.md`。之后修改、新增或删除 skill 都直接生效，不需要重新运行脚本；活跃会话仍需 reload 或重启。
-
-已有第三方 skill 不会被覆盖。脚本会安全迁移旧版本创建的逐项链接，只删除目标确实属于本仓库的链接。不要再把同名副本安装到 `~/.pi/agent/skills`。
-
-Hermes 使用共享目录时，在其用户配置中加入一次：
-
-```yaml
-skills:
-  external_dirs:
-    - ~/.agents/skills
-```
-
-移除集合链接但保留源文件：
-
-```powershell
-.\scripts\link-skills.ps1 -Remove
-```
+在交互式终端中选择要安装的 skills 和 Agent：
 
 ```bash
-bash scripts/link-skills.sh --remove
+npx skills add FeiNiaoBF/MySkills
 ```
 
-### 管理第三方 skills
+也可以用参数明确指定。例如，将 `linear-algebra` 全局安装到 Pi：
 
-第三方 skill 继续交给 `skills` CLI 管理，不复制进本仓库：
-
-```powershell
-npx skills add <owner/repository> -g
-npx skills update -g -y
-npx skills ls -g
+```bash
+npx skills add FeiNiaoBF/MySkills -g -a pi -s linear-algebra
 ```
 
-`npx skills update -g -y` 只更新有上游来源记录的全局 skill；本仓库通过集合链接实时读取，不参与该更新。不要用 `npx skills add . -g` 安装本仓库：本地来源会被复制到 CLI 的 canonical 目录，失去工作区修改即时生效的特性。
+替换 `linear-algebra` 为所需的 skill 名称；安装多个 skills 时，可在 `-s` 后列出多个名称。`-g` 表示全局安装，`-a` 指定目标 Agent。
 
-### 恢复清单与本地挂载
+更新本机通过 CLI 安装并记录来源的全局 skills：
 
-本仓库是创作源；本地挂载使用当前工作区内容。另一个维护仓库 `pi-agent` 的 `config/skills-manifest.json` 为纳入恢复清单的 skill 固定提交版本。这是两种不同的版本来源，不能把本地挂载成功当作恢复清单已更新。
+```bash
+npx skills update -g
+```
 
-经授权 push 后，由维护流程更新清单 ref 并运行 bootstrap。普通内容修改或校验不需要运行 bootstrap，也不应顺带调整其他已安装技能。
+每台电脑分别记录自己的安装选择。新电脑上重复相同的 `skills add` 命令即可安装同一组 skills。仓库新增的 skill 不会自动加入现有安装；需要时再次运行 `skills add` 并选择它。新版本推送到 GitHub `main` 后，用户运行更新命令即可获取已安装 skills 的更新。
 
 ## 维护与验证
 
