@@ -45,6 +45,7 @@
 | Skill | 使用场景 |
 | --- | --- |
 | [code-subtraction](skills/software-engineering/code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
+| [project-docs](skills/software-engineering/project-docs/SKILL.md) | 根据代码与已确认需求规划、编写、审查和维护项目文档，按读者任务保持最小充分的文档体系 |
 
 ### 研究（research）
 
