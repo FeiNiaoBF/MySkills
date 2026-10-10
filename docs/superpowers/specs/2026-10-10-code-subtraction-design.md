@@ -16,6 +16,22 @@
 
 ## 设计
 
+### 理论与实证依据
+
+重构后的 skill 应给出可追溯、有限定条件的依据；研究不能证明“代码越少越好”，也不能替某个具体项目判定某段代码可删。Playbook 将用简短的“依据与边界”说明支撑关键规则：
+
+- Parnas 将软件的收缩（移除功能子集）作为设计变更问题，指出依赖分散会让移除一种能力牵动多个组件，并讨论用模块边界隔离易变决策。[1] 这支撑检查依赖传播和可移除性，不支撑以减少行数为目标。
+- Linux 内核维护者的 2026 实证研究观察到，去重可能因可读性下降、集成成本或性能顾虑而被拒绝；该研究只覆盖 Linux 内核中的特定补丁和评审情境。[2] 这支持把重复视作调查信号，而不是自动抽象阈值。
+- 2026 年代码裁剪预印本以 11 个程序建立人工 ground truth，报告自动化、测试驱动的裁剪工具可能删除未被测试触发但仍必要的错误处理和并发代码。[3] 该结果针对自动 debloating，不能直接量化人工删除风险；它说明测试通过是证据之一，不能单独证明行为等价。
+
+因此，skill 的理论定位是“有文献与实证依据的决策框架”，不是对安全删除的形式化证明。实施判断仍依赖目标系统的需求、调用关系、兼容性和验证证据。
+
+**来源**
+
+1. D. L. Parnas, “Designing Software for Ease of Extension and Contraction,” *IEEE Transactions on Software Engineering*, 5(2), 1979, pp. 128–138. [DOI](https://doi.org/10.1109/TSE.1979.234169); [原文 PDF](https://users.ece.utexas.edu/~perry/education/SE-Intro/parnas.pdf)。
+2. L. Arcanjo et al., “When Do You Repeat Yourself? Voices from the Trenches of Linux Kernel Maintainers on Code Duplication,” *Proceedings of the 2026 ACM/IEEE International Conference on Technical Debt*, published 2026-07-16. [DOI](https://doi.org/10.1145/3794915.3795783)。
+3. “Revisiting Code Debloating with Ground Truth-based Evaluation,” arXiv:2604.17717, 2026 preprint. [arXiv](https://arxiv.org/abs/2604.17717)。
+
 ### 入口流程
 
 `SKILL.md` 保留核心原则和简短主流程：明确目标与范围、收集证据、判断风险、提出或实施最小删除、按影响验证并报告。说明减法分析可以只产出建议；只有任务授权包含实施时才修改代码。
@@ -39,4 +55,5 @@
 - 验证要求与影响相称，风险较高或证据不足时提供更强验证手段。
 - 高影响删除仍有适用范围明确的弃用、观察和回滚指导。
 - 主入口精简，按需参考集中在 playbook；示例不把经验规则写成普遍定律。
+- 减法原则有简短、可追溯的理论和实证依据，并说明证据适用范围与局限，不声称存在普遍适用的安全删除证明。
 - Frontmatter、内部链接及仓库校验通过；改动仅涉及授权范围。
