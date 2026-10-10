@@ -11,7 +11,7 @@
 
 ## Skill 格式
 
-每个 skill 占一个同名一级目录，必须有 `SKILL.md`；较长的按需参考放 `references/`，可选界面提示放 `agents/openai.yaml`。`docs/`、`scripts/`、`tests/` 为仓库基础设施，隐藏目录不作为 skill。
+每个 Skill 放在 `skills/<category>/<name>/`，`<name>` 与 `SKILL.md` frontmatter 的 `name` 相同。分类名使用小写 kebab-case，并反映主要用户任务；每个 Skill 只归入一个类别。目录分类用于组织源文件，Skill 之间仍按名称路由。新增稳定任务领域时，可建立新类别并同步更新 README 索引。较长的按需参考放在 Skill 目录内的 `references/`，可选界面提示放在 `agents/openai.yaml`。仓库根目录的 `docs/`、`scripts/`、`tests/` 和隐藏目录是基础设施，不是 Skill。
 
 Frontmatter 使用可解析的 YAML：
 

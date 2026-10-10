@@ -4,58 +4,63 @@
 
 ## 选择 Skill
 
-### 视频与数学视频
+### 视频（video）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [math-video-workflow](math-video-workflow/SKILL.md) | 编排分集数学视频的剪辑、审校和动画交接；视频任务的推荐入口 |
-| [video-smart-cut](video-smart-cut/SKILL.md) | 本地转写、精简、字幕对齐与成片校验 |
-| [math-video-review](math-video-review/SKILL.md) | 审校数学表述、推导、口误与动画候选 |
-| [math-manim-insertion](math-manim-insertion/SKILL.md) | 设计并验证讲解中途插入的 Manim 场景 |
-| [manim-video-insertion](manim-video-insertion/SKILL.md) | 按字幕语义把已验收场景装配为画面替换段 |
-| [manim-recap-video](manim-recap-video/SKILL.md) | 制作片尾独立、无旁白的数学重温动画 |
+| [math-video-workflow](skills/video/math-video-workflow/SKILL.md) | 编排分集数学视频的剪辑、审校和动画交接；视频任务的推荐入口 |
+| [video-smart-cut](skills/video/video-smart-cut/SKILL.md) | 本地转写、精简、字幕对齐与成片校验 |
+| [math-video-review](skills/video/math-video-review/SKILL.md) | 审校数学表述、推导、口误与动画候选 |
+| [math-manim-insertion](skills/video/math-manim-insertion/SKILL.md) | 设计并验证讲解中途插入的 Manim 场景 |
+| [manim-video-insertion](skills/video/manim-video-insertion/SKILL.md) | 按字幕语义把已验收场景装配为画面替换段 |
+| [manim-recap-video](skills/video/manim-recap-video/SKILL.md) | 制作片尾独立、无旁白的数学重温动画 |
 
 中途画面替换使用 `math-manim-insertion` + `manim-video-insertion`，保持原声和总时长；片尾独立重温使用 `manim-recap-video`，追加拼接。两条路线不要混用。单集状态由课程项目中的 `workflow.yaml` 维护。
 
-### 设计与前端
+### 设计（design）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [aesthetic-translator](aesthetic-translator/SKILL.md) | 把模糊审美感受转成可执行设计规格 |
-| [better-designs-md](better-designs-md/SKILL.md) | 编写和维护界面设计规范 `DESIGN.md` |
-| [frontend-guide](frontend-guide/SKILL.md) | 从方向卡到模块化页面实现，或按需逐模块陪建 |
+| [aesthetic-translator](skills/design/aesthetic-translator/SKILL.md) | 把模糊审美感受转成可执行设计规格 |
+| [better-designs-md](skills/design/better-designs-md/SKILL.md) | 编写和维护界面设计规范 `DESIGN.md` |
+| [frontend-guide](skills/design/frontend-guide/SKILL.md) | 从方向卡到模块化页面实现，或按需逐模块陪建 |
 
-### 数学学习
-
-| Skill | 使用场景 |
-| --- | --- |
-| [linear-algebra](linear-algebra/SKILL.md) | 基于 Strang / MIT 18.06 体系维护 Obsidian 线性代数知识笔记 |
-
-### 工程维护与理解
+### 学习（learning）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [code-subtraction](code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
-| [project-tech-mentor](project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
-| [project-digestion](project-digestion/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
-| [make-sense](make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
-| [clarify](clarify/SKILL.md) | 有想法却说不清、表达障碍已影响当前任务时，找出准确说法并继续原任务 |
+| [linear-algebra](skills/learning/linear-algebra/SKILL.md) | 基于 Strang / MIT 18.06 体系维护 Obsidian 线性代数知识笔记 |
+| [project-tech-mentor](skills/learning/project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
+| [project-digestion](skills/learning/project-digestion/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
 
-### 研究与资料策展
+### 沟通（communication）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [research-curator](research-curator/SKILL.md) | 使用真实检索与可追溯证据开展有边界的研究，再写成 Reader First、本地化的离线报告；默认输出到系统临时目录 `%TEMP%/research-curator/<topic>/` |
+| [clarify](skills/communication/clarify/SKILL.md) | 有想法却说不清、表达障碍已影响当前任务时，找出准确说法并继续原任务 |
+| [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
 
-### 网络安全
+### 软件工程（software-engineering）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [network-security-check](network-security-check/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
+| [code-subtraction](skills/software-engineering/code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
+
+### 研究（research）
+
+| Skill | 使用场景 |
+| --- | --- |
+| [research-curator](skills/research/research-curator/SKILL.md) | 使用真实检索与可追溯证据开展有边界的研究，再写成 Reader First、本地化的离线报告；默认输出到系统临时目录 `%TEMP%/research-curator/<topic>/` |
+
+### 网络安全（network-security）
+
+| Skill | 使用场景 |
+| --- | --- |
+| [network-security-check](skills/network-security/network-security-check/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
 
 ## 安装与更新
 
-本仓库托管在 GitHub，Vercel `skills` CLI 会从仓库根目录发现各 skill 目录中的 `SKILL.md`，不需要额外 manifest。先列出 CLI 识别到的 skills：
+本仓库托管在 GitHub，Vercel `skills` CLI 会从仓库的 `skills/` 容器中发现分类目录下的 Skill；本仓库将每个 Skill 放在 `skills/<category>/<name>/SKILL.md`。先列出 CLI 识别到的 skills：
 
 ```bash
 npx skills add FeiNiaoBF/MySkills --list
@@ -110,13 +115,13 @@ python3 -m venv "$venv"
 "$venv/bin/python" -B -m unittest discover -s tests -v
 ```
 
-[校验器](scripts/validate_skills.py) 自动发现所有一级 skill 目录，检查：
+[校验器](scripts/validate_skills.py) 自动发现 `skills/<category>/<name>/` 下的 Skill，检查：
 
 - YAML frontmatter 的语法、重复键、必填字段及名称匹配；自定义字段归入 `metadata`。
 - skill 内 Markdown 链接和图片的本地目标是否存在、是否越出本 skill；根文档和 `docs/` 的链接限制在仓库内。
 - skill 文本资源、根文档和共享文档中的机器绝对路径及私钥标记。
 
-`docs/`、`scripts/`、`tests/` 和隐藏目录属于仓库基础设施，不作为 skill。检查不会访问网络或修改文件。外部 URL、片段锚点、HTML 链接和未被 Markdown 引用的路径不在链接校验范围内；敏感值扫描是启发式检查，不能替代人工审查。
+`skills/` 下的分类目录只用于组织；每个 Skill 仍由自己的目录和 `SKILL.md` 定义。`docs/`、`scripts/`、`tests/` 和隐藏目录属于仓库基础设施，不作为 Skill。检查不会访问网络或修改文件。外部 URL、片段锚点、HTML 链接和未被 Markdown 引用的路径不在链接校验范围内；敏感值扫描是启发式检查，不能替代人工审查。
 
 Skill 的调用策略按宿主分别声明：需要用户明确触发的工作流在 `SKILL.md` 顶层使用 Claude Code 的 `disable-model-invocation: true`，并在 `agents/openai.yaml` 中使用 `policy.allow_implicit_invocation: false`。普通知识和指导类 Skill 保持默认的隐式调用。两种字段都不属于 Agent Skills 核心格式，其他宿主可能忽略它们。
 
@@ -124,4 +129,4 @@ Skill 的调用策略按宿主分别声明：需要用户明确触发的工作�
 
 旧命令 `python scripts/validate-video-skills.py` 仍可用，但现在调用同一个全仓库校验器，使用相同依赖。校验失败会返回非零状态；新检查暴露的已有 skill 问题应如实报告，不因本次只维护仓库工具而擅自修改技能。
 
-测试只使用仓库外的临时样例，不操作真实安装目录。Windows Junction 测试在缺少 Windows/PowerShell 时会明确跳过。提交前另运行 `git diff --check`，并确认改动没有越出授权范围。
+测试只使用仓库外的临时样例，不操作真实安装目录。分类目录调整后，可在临时副本上运行 `npx skills add <path> --list` 验证 CLI 是否发现全部 Skill；`--list` 不会安装技能。提交前另运行 `git diff --check`，并确认改动没有越出授权范围。

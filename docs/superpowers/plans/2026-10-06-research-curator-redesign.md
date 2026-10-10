@@ -1,6 +1,6 @@
 # Research Curator Redesign Implementation Plan
 
-Status: implemented and acceptance-checked on 2026-10-06. See [verification evidence](../../../research-curator/examples/VERIFICATION.md). The operator required review and final verification before one integrated local commit; intermediate commit steps below were consolidated. The native review launcher failed, so owner-authorized fresh read-only CLI sessions supplied the independent reviews.
+Status: implemented and acceptance-checked on 2026-10-06. See [verification evidence](../../../skills/research/research-curator/examples/VERIFICATION.md). The operator required review and final verification before one integrated local commit; intermediate commit steps below were consolidated. The native review launcher failed, so owner-authorized fresh read-only CLI sessions supplied the independent reviews.
 
 > **For agentic workers:** REQUIRED SUB-SKILLS: use `tdd` for each behavior slice; use `visual-delivery` (which requires `frontend-design`) for the HTML report; use `documentation-and-adrs` for the new decision record; finish with `code-review`. This plan is not authorization to skip its review gate.
 

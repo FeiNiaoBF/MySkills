@@ -16,7 +16,8 @@ except ImportError as exc:
     ) from exc
 
 ROOT = Path(__file__).resolve().parents[1]
-INFRASTRUCTURE_DIRS = {"docs", "scripts", "tests"}
+SKILLS_DIR = "skills"
+INFRASTRUCTURE_DIRS = {"docs", "scripts", "tests", SKILLS_DIR}
 FRONTMATTER_FIELDS = {
     "name",
     "description",
@@ -91,22 +92,73 @@ def markdown_targets(text: str):
     yield from visit(MARKDOWN.parse("".join(lines)))
 
 
+def discover_skills(root: Path, issues: list[str]) -> list[Path]:
+    skills_root = root / SKILLS_DIR
+    if not skills_root.is_dir():
+        issues.append(f"{SKILLS_DIR}/: missing skill collection directory")
+        return []
+    try:
+        if not skills_root.resolve().is_relative_to(root):
+            issues.append(f"{SKILLS_DIR}/: directory resolves outside repository")
+            return []
+    except (OSError, RuntimeError):
+        issues.append(f"{SKILLS_DIR}/: cannot resolve directory")
+        return []
+
+    skills = []
+    for category in sorted(skills_root.iterdir()):
+        if not category.is_dir() or category.name.startswith("."):
+            continue
+        try:
+            if not category.resolve().is_relative_to(root):
+                issues.append(f"{category.relative_to(root).as_posix()}/: category resolves outside repository")
+                continue
+        except (OSError, RuntimeError):
+            issues.append(f"{category.relative_to(root).as_posix()}/: cannot resolve category")
+            continue
+        category_path = category.relative_to(root).as_posix()
+        if (category / "SKILL.md").is_file():
+            issues.append(f"{category_path}/SKILL.md: expected skills/<category>/<skill>/SKILL.md")
+            continue
+
+        category_skills = 0
+        for skill in sorted(category.iterdir()):
+            if not skill.is_dir() or skill.name.startswith("."):
+                continue
+            skill_path = skill.relative_to(root).as_posix()
+            if (skill / "SKILL.md").is_file():
+                skills.append(skill)
+                category_skills += 1
+            elif any(skill.rglob("SKILL.md")):
+                issues.append(f"{skill_path}/: skill nesting exceeds one category level")
+            else:
+                issues.append(f"{skill_path}/SKILL.md: missing skill entrypoint")
+        if category_skills == 0 and not any(
+            issue.startswith(f"{category_path}/") for issue in issues
+        ):
+            issues.append(f"{category_path}/: category contains no skills")
+
+    for directory in sorted(root.iterdir()):
+        if (
+            directory.is_dir()
+            and not directory.name.startswith(".")
+            and directory.name not in INFRASTRUCTURE_DIRS
+            and (directory / "SKILL.md").is_file()
+        ):
+            issues.append(
+                f"{directory.name}/SKILL.md: skill must be under skills/<category>/<skill>/"
+            )
+    if not skills:
+        issues.append("no skills found")
+    return skills
+
+
 def validate_repository(root: Path) -> tuple[int, list[str]]:
     root = root.resolve()
     if not root.is_dir():
         return 0, ["repository root is not a directory"]
     issues: list[str] = []
-    skills = []
-    # Every visible top-level directory except repository infrastructure is a skill.
-    for directory in sorted(root.iterdir()):
-        if not directory.is_dir() or directory.name.startswith(".") or directory.name in INFRASTRUCTURE_DIRS:
-            continue
-        if not (directory / "SKILL.md").is_file():
-            issues.append(f"{directory.name}/SKILL.md: missing skill entrypoint")
-        else:
-            skills.append(directory)
-    if not skills:
-        issues.append("no skills found")
+    skills = discover_skills(root, issues)
 
     def report(path: Path, message: str, line: int = 1):
         issues.append(f"{path.relative_to(root).as_posix()}:{line}: {message}")

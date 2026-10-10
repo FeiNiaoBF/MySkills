@@ -1,6 +1,6 @@
 # Research curator: evidence-driven research and readable local delivery
 
-Status: accepted and implemented. Closeout evidence and remaining limits are recorded in [verification](../../../research-curator/examples/VERIFICATION.md).
+Status: accepted and implemented. Closeout evidence and remaining limits are recorded in [verification](../../../skills/research/research-curator/examples/VERIFICATION.md).
 
 ## 1. Outcome and agreed scope
 
