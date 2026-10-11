@@ -2,6 +2,10 @@
 
 公开的可复用 Agent Skills 创作源，采用 [MIT License](LICENSE)。这里维护工作流与按需参考资料；课程工程、媒体、缓存和用户环境配置留在各自项目中。
 
+- 找到适合任务的技能：[选择 Skill](#选择-skill)。
+- 在 Agent 中使用：[安装与更新](#安装与更新)。
+- 修改或贡献本仓库：[贡献与验证](CONTRIBUTING.md)；Agent 另见 [工作约定](AGENTS.md)。
+
 ## 选择 Skill
 
 ### 视频（video）
@@ -61,73 +65,54 @@
 
 ## 安装与更新
 
-本仓库托管在 GitHub，Vercel `skills` CLI 会从仓库的 `skills/` 容器中发现分类目录下的 Skill；本仓库将每个 Skill 放在 `skills/<category>/<name>/SKILL.md`。先列出 CLI 识别到的 skills：
+需要可用的 Node.js、npm（含 `npx`）和 Git，以及访问 npm 与 GitHub 的网络。安装由 [Vercel skills CLI](https://github.com/vercel-labs/skills) 完成；各 Skill 的运行依赖以自身说明为准。
+
+先列出本仓库可安装的 Skill，此命令不会安装：
 
 ```bash
 npx skills add FeiNiaoBF/MySkills --list
 ```
 
-在交互式终端中选择要安装的 skills 和 Agent：
+在交互式终端中选择 Skill 和目标 Agent：
 
 ```bash
 npx skills add FeiNiaoBF/MySkills
 ```
 
-也可以用参数明确指定。例如，将 `linear-algebra` 全局安装到 Pi：
+默认安装到当前项目。需要全局使用时加 `-g`；例如，将 `linear-algebra` 安装给 Pi：
 
 ```bash
 npx skills add FeiNiaoBF/MySkills -g -a pi -s linear-algebra
 ```
 
-替换 `linear-algebra` 为所需的 skill 名称；安装多个 skills 时，可在 `-s` 后列出多个名称。`-g` 表示全局安装，`-a` 指定目标 Agent。
+替换 `linear-algebra` 为索引中的名称。`-a` 指定目标 Agent；`-s` 可跟多个 Skill 名称。
 
-更新本机通过 CLI 安装并记录来源的全局 skills：
+更新已安装且有来源记录的 Skill，按安装范围选择：
 
 ```bash
+# 全局安装
 npx skills update -g
+
+# 当前项目安装
+npx skills update -p
 ```
 
-每台电脑分别记录自己的安装选择。新电脑上重复相同的 `skills add` 命令即可安装同一组 skills。仓库新增的 skill 不会自动加入现有安装；需要时再次运行 `skills add` 并选择它。新版本推送到 GitHub `main` 后，用户运行更新命令即可获取已安装 skills 的更新。
+本地 Git checkout 与 CLI 安装的副本分开：`git pull` 更新本仓库源码，不会自动更新已安装副本。源码推送到 GitHub 后，再通过 CLI 更新获取。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。
+
+在新电脑上，重新运行 `skills add` 并选择需要的 Skill 和 Agent。各电脑分别维护安装选择；本仓库不自动同步用户配置或恢复清单。
 
 ## 维护与验证
 
-贡献规则见 [AGENTS.md](AGENTS.md)。维护工具要求 Python 3.10+；[requirements-dev.txt](requirements-dev.txt) 仅用于仓库校验，安装单个 skill 不需要这些依赖。
+贡献规则、验证环境和检查命令统一维护在 [CONTRIBUTING.md](CONTRIBUTING.md)。仓库校验使用 Python 3.10+，不要求 Skill 使用者为安装而准备 Python 环境。
 
-推荐把验证环境放在仓库外：
+## 仓库导航
 
-**PowerShell：**
+| 位置 | 用途 |
+| --- | --- |
+| [skills/](skills/) | 按类别组织可安装 Skill，每个入口为 `skills/<category>/<name>/SKILL.md` |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 目录与格式规则、内容要求、验证及提交流程 |
+| [AGENTS.md](AGENTS.md) | Agent 的任务边界和执行约定 |
+| [docs/](docs/) | 仓库级研究、设计与实施记录；阅读时注意各记录的状态，不能直接视为当前 Skill 行为 |
+| [scripts/](scripts/) · [tests/](tests/) | 仓库维护工具及其回归测试 |
 
-```powershell
-$venv = Join-Path $env:TEMP "pi-agent/myskills-venv"
-python -m venv $venv
-$python = Join-Path $venv "Scripts/python.exe"
-& $python -m pip install -r requirements-dev.txt
-& $python -B scripts/validate_skills.py
-& $python -B -m unittest discover -s tests -v
-```
-
-**Bash：**
-
-```bash
-venv="${TMPDIR:-/tmp}/pi-agent/myskills-venv"
-python3 -m venv "$venv"
-"$venv/bin/python" -m pip install -r requirements-dev.txt
-"$venv/bin/python" -B scripts/validate_skills.py
-"$venv/bin/python" -B -m unittest discover -s tests -v
-```
-
-[校验器](scripts/validate_skills.py) 自动发现 `skills/<category>/<name>/` 下的 Skill，检查：
-
-- YAML frontmatter 的语法、重复键、必填字段及名称匹配；自定义字段归入 `metadata`。
-- skill 内 Markdown 链接和图片的本地目标是否存在、是否越出本 skill；根文档和 `docs/` 的链接限制在仓库内。
-- skill 文本资源、根文档和共享文档中的机器绝对路径及私钥标记。
-
-`skills/` 下的分类目录只用于组织；每个 Skill 仍由自己的目录和 `SKILL.md` 定义。`docs/`、`scripts/`、`tests/` 和隐藏目录属于仓库基础设施，不作为 Skill。检查不会访问网络或修改文件。外部 URL、片段锚点、HTML 链接和未被 Markdown 引用的路径不在链接校验范围内；敏感值扫描是启发式检查，不能替代人工审查。
-
-Skill 的调用策略按宿主分别声明：需要用户明确触发的工作流在 `SKILL.md` 顶层使用 Claude Code 的 `disable-model-invocation: true`，并在 `agents/openai.yaml` 中使用 `policy.allow_implicit_invocation: false`。普通知识和指导类 Skill 保持默认的隐式调用。两种字段都不属于 Agent Skills 核心格式，其他宿主可能忽略它们。
-
-`description` 的要求是**前 57 个字符说明触发条件**，不是总长最多 57 字符；触发是否清楚需要人工判断。行为效果同样需要实际用例验证。
-
-旧命令 `python scripts/validate-video-skills.py` 仍可用，但现在调用同一个全仓库校验器，使用相同依赖。校验失败会返回非零状态；新检查暴露的已有 skill 问题应如实报告，不因本次只维护仓库工具而擅自修改技能。
-
-测试只使用仓库外的临时样例，不操作真实安装目录。分类目录调整后，可在临时副本上运行 `npx skills add <path> --list` 验证 CLI 是否发现全部 Skill；`--list` 不会安装技能。提交前另运行 `git diff --check`，并确认改动没有越出授权范围。
+`docs/`、`scripts/`、`tests/` 和隐藏目录不作为 Skill 安装。具体技能的用法与按需参考从上方索引进入。
