@@ -9,7 +9,7 @@ metadata:
 
 # Aesthetic Translator — 感受 → 规格
 
-定位：品味型翻译层。输入是模糊感受词与参照物，输出是**经用户确认的 Design Read 与设计规格**。不建风格数据（查 `ui-ux-pro-max`），不管页面结构（走 `frontend-guide`）。范围：web 界面为主，含应用型界面（TUI、MD3 类设计系统语境）。
+定位：品味型翻译层。输入是模糊感受词与参照物，输出是**经用户确认的 Design Read 与目标栈可实施的设计规格**。不维护风格数据库；项目已安装 `ui-ux-pro-max` 且确有需要时才查它。不管页面结构（走 `frontend-guide`）。范围：识别项目目标栈后提供 Web、Flutter/Material 3 或 TUI 规格。
 
 ## 统治原则
 
@@ -21,8 +21,8 @@ metadata:
 2. **定位维度**：判断感受词指向哪些维度（九维度见 `references/dimensions.md`）。**不设默认语料**：先给 2–3 个命名方向（各带参照物与一句后果）让用户挑，方向由**物件用途**决定。用户点了参照物或风格词就地采用；`references/east-asian.md` 只是候选之一，不再是默认底色。**同一方向被连续否决（≥2 次）时立即退出该方向**，转向设计系统杠杆 + 市场调研路线（见下）。
 3. **给选项**：每个相关维度给 2-3 个命名选项，各带一行参照物和一句话后果（「这个会让页面安静但显空」）。用户挑，不解释术语。
 4. **宣告 Design Read**：一行——「读作：为〈受众〉做的〈物件〉，〈风格名〉语言，底色〈语料名/其他〉，〈密/静/稳〉倾向」。给用户反驳的机会。
-5. **输出规格**：四段式 brief——**Context**（谁用、什么设备）/ **Direction**（各维度的具体参数：色值、圆角、阴影、字号、间距、动效毫秒）/ **References** / **Avoid**（反模式清单）。参数要能直接抄进 CSS tokens。
-6. **确认后落盘 DESIGN.md**：用户确认方向/brief 后，把设计决定写成所在项目根目录的 `DESIGN.md`（已有则更新，不另建）。token 进 YAML front matter，风格叙述进正文章节；书写/格式规范走 `better-designs-md` skill。这是持久契约——未来会话改 UI 先读它，避免每次重讲品味。
+5. **输出规格**：四段式 brief——**Context**（谁用、在哪种设备或终端使用）/ **Direction**（按目标栈给出可实施规格）/ **References** / **Avoid**（反模式清单）。Web 规格映射到 CSS tokens；Flutter/Material 3 映射到 Theme、ColorScheme、Typography、形状和组件状态；TUI 映射到终端色彩、对比度、字体和边框规则。
+6. **确认后落盘**：用户确认方向/brief 后，沿用所在项目已有的设计文档路径与格式；若项目没有约定，可建议在根目录使用 `DESIGN.md`。只记录确认的设计决定；已有文档则更新，不另建重复文档。token/主题映射按目标栈和项目约定组织；书写/格式规范可路由到 `better-designs-md`。
 
 ## 三旋钮（内部接口，不向用户暴露数字）
 
@@ -42,7 +42,7 @@ metadata:
 
 项目用 MD3 / Fluent / Carbon 等有官方 token 体系的系统时，只输出方向与参数映射，实现走官方体系，不手搓仿制 CSS。**用户是对比判断型而非术语型时**（说不出风格名，只会说「这个对/不对」）：
 
-- 不给语料系抽象风格名，改给**系统自己的杠杆候选**（色种子/变体、形状、字级、动效），并落成**可渲染对比**（一变体一设备框并排，见 frontend-guide）——可渲染候选 > 风格命名。
+- 不给语料系抽象风格名，改给**系统自己的杠杆候选**（色种子/变体、形状、字级、动效），并用目标栈可用的方式渲染对比：Flutter 使用项目现有预览、模拟器或截图流程；Web 仅在 HTML 设备框 preview harness 可用时使用一变体一框并排（见 `frontend-guide`）。可渲染候选 > 风格命名。
 - 先做**市场 + 官方原则调研**再出候选：市面同类产品流派 + 系统/平台原则（Google M3 + Apple HIG 等），原则蒸馏成裁决清单带进后续所有组件决策。
 - 两套原则冲突时（如 Apple Clarity「subtle」 vs M3 Expressive），用 app 级身份规则调和（例：memova = 身份只由黛绿承担，装饰全减）——把这条写进 DESIGN.md 的 Operating Principles。
 
@@ -54,6 +54,6 @@ TUI 方向的约束：等宽字体、框线字符、单色 + 一个高亮、无�
 |---|---|
 | 规格要落地成页面 | `frontend-guide`（本 skill 输出直接填其 Step 1 方向卡） |
 | 方向确认后要落盘成持久设计文档 | `better-designs-md`（Google DESIGN.md 规范书写，token→front matter） |
-| 需要全量风格/色板/字体数据 | `ui-ux-pro-max` |
+| 项目已安装 `ui-ux-pro-max` 且需要全量风格/色板/字体数据 | `ui-ux-pro-max` |
 | 九维度词汇表 | `references/dimensions.md` |
 | 东亚美学语料（候选之一，非默认） | `references/east-asian.md` |
