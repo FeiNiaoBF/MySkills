@@ -41,7 +41,7 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [clarify](skills/communication/clarify/SKILL.md) | 有想法却说不清、表达障碍已影响当前任务时，找出准确说法并继续原任务 |
+| [clarify](skills/communication/clarify/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
 | [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
 
 ### 软件工程（software-engineering）

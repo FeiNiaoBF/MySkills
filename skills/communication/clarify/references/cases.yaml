@@ -1,15 +1,15 @@
-# Maintainer-only comparison cases; send only input to a response generator.
+# Maintainer-only comparison cases for the clarify skill.
 # Review fields are expectations, not extra user messages.
-version: "1.0"
+version: "2.0"
 cases:
-  - id: explicit-no-word
+  - id: explicit-idea-and-rephrase
     input:
       messages:
         - role: user
-          content: "我脑子里有个功能：改一处数据，引用它的页面都会跟着变，但我不知道怎么描述。帮我写一句需求描述。"
+          content: "我知道大概想要什么，但说不清。帮我解释一下我的意思，再写成一句我能直接发给开发者的话。"
     review:
-      expect: "Offers a plausible concept such as shared source of truth and a task-usable requirement sentence, distinguishing assumptions from what the user said."
-      avoid: "Inventing a database architecture or running a full requirements interview."
+      expect: "Briefly explains the inferred intent, then writes a clear first-person request that preserves uncertainty and is ready to reuse. Stops after delivering it."
+      avoid: "Starting implementation, asking a long list of requirements questions, or inventing technical choices."
 
   - id: implicit-rejected-guess
     input:
@@ -21,8 +21,8 @@ cases:
         - role: user
           content: "不是视觉上的松散。我说的重点是内容的先后，但我也说不清。"
     review:
-      expect: "Repairs the expression as information hierarchy or content prioritization, distinguishes them briefly, and avoids repeating spacing advice."
-      avoid: "Treating the user's correction as a request for a full product redesign."
+      expect: "Explains that the user means information order or hierarchy, then offers a clearer first-person wording about prioritizing content."
+      avoid: "Repeating spacing advice, redesigning the list, or turning the exchange into a requirements interview."
 
   - id: colloquial-but-actionable
     input:
@@ -30,7 +30,7 @@ cases:
         - role: user
           content: "把这个登录按钮弄大点，手机上不好点；字号先别动。"
     review:
-      expect: "Proceeds with enlarging the touch target without invoking a terminology exercise."
+      expect: "Does not invoke clarify; the request is already actionable."
       avoid: "Asking the user to choose between touch target, padding, typography, and accessibility terminology."
 
   - id: existing-term-explanation
@@ -40,44 +40,40 @@ cases:
           content: "代码审查里说的幂等是什么意思？拿重试支付请求举例解释。"
     review:
       expect: "Explains the existing term in context; this is make-sense, not clarify."
-      avoid: "Rephrasing the user's already clear request as if they could not express it."
+      avoid: "Rephrasing the user's clear question as if they could not express it."
 
-  - id: labels-no-consequential-difference
+  - id: improve-user-position-without-taking-over
     input:
       messages:
         - role: user
-          content: "我想让几个人都能同时改这份文档，而且都能看到别人新写的内容。我不知道这叫实时协同还是同步。请帮我写一句介绍文案。"
+          content: "做个新的 skill，主要就是按用户要求去 skills.sh、GitHub 这些地方找合适的 skills 放进项目级 skills。"
     review:
-      expect: "Briefly distinguishes real-time collaboration from synchronization, writes a usable introduction, and does not require the user to pick one label first."
-      avoid: "Demanding terminology agreement or promising a particular transport or conflict-resolution mechanism."
+      expect: "Explains the goal as finding existing Skills from relevant sources and placing suitable ones in the current project's Skills directory; drafts a polished first-person request and stops for the user's adoption or correction."
+      avoid: "Choosing search/install policy, target agent, scoring rules, or implementation details without evidence; creating the Skill immediately."
 
-  - id: local-discrimination
+  - id: essential-gap
     input:
       messages:
         - role: user
-          content: "我要把误删的笔记找回来，但说不清是哪个功能。帮我写这个按钮文案。"
-        - role: assistant
-          content: "你是想撤销刚才的删除，还是从回收站恢复更早删除的笔记？这会决定按钮是‘撤销’还是‘恢复’。"
-        - role: user
-          content: "对，我就是分不清这两个，我还没决定按钮能覆盖哪种情况。"
+          content: "我想把误删的笔记找回来，帮我写这个按钮的说明，但我没想好它能找回刚删的，还是也能找回以前删的。"
     review:
-      expect: "Explains undo versus restore in one sentence each, then asks the minimum question about which deleted notes the button must cover before naming it."
-      avoid: "Choosing a button label despite decision-changing uncertainty or launching a broad interview."
+      expect: "Explains that the button's recovery scope is undecided, then drafts wording that preserves this open choice and notes it needs resolution before final button copy."
+      avoid: "Choosing which notes can be recovered, blocking the draft with a question when uncertainty can be stated, or asking a long sequence of product questions."
 
-  - id: consequential-handoff
+  - id: preserve-uncertain-detail
     input:
       messages:
         - role: user
-          content: "我想做个‘大家都能改’的知识库，但不知道是给团队一起写，还是向公众开放编辑。你帮我把产品方向定了吧。"
+          content: "我要一种睡醒后自动回到刚才工作状态的感觉，帮我写给开发者，但我还没想好要在哪种设备上用。"
     review:
-      expect: "Names team collaboration versus public contribution and explains how audience, permissions, and moderation differ; recommends grilling for the broader product decision."
-      avoid: "Automatically starting grilling or silently deciding the audience."
+      expect: "Explains the desired experience and writes a clear request that leaves the device unspecified."
+      avoid: "Choosing an operating system, inventing a technical feature, or delaying the draft with unnecessary questions."
 
-  - id: uncertain-domain-label
+  - id: user-corrects-premature-action
     input:
       messages:
         - role: user
-          content: "我要一种‘睡醒后自动回到刚才工作状态’的感觉，但不知道技术上叫什么。帮我把这个意图写给开发者；我还没说是哪种设备。"
+          content: "你怎么直接做了？我还没说清楚我具体想让它怎么工作。"
     review:
-      expect: "Restates the desired experience without asserting a platform-specific feature or implementation, marking the device as unspecified."
-      avoid: "Inventing a standard technical term, choosing an operating system, or treating inferred technology as a confirmed requirement."
+      expect: "Acknowledges the premature action, explains the known intent and the missing behavior choice, and offers improved wording that preserves that unresolved choice."
+      avoid: "Defending the assumed behavior, continuing implementation, or immediately launching an exhaustive interview."

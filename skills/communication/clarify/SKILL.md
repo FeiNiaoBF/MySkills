@@ -1,26 +1,32 @@
 ---
 name: clarify
-description: Use when a user cannot express an idea well enough to continue the current task, explicitly or through a material communication blockage. Recover usable meaning, offer candidate terms when helpful, and return to the task; not for merely informal wording or explaining an existing term.
+description: 用户知道自己大致想表达什么，却说不清、说不准，或希望把想法整理成更清晰的话术时使用；解释其意思并代拟保留原意的表达。
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
 ---
 
 # clarify
 
-Help the user find language for an intended meaning that is blocking the current task. **Complete when the intent is clear enough to execute that task correctly.** A unique technical term and further polishing are not required.
+帮助用户把尚未表达清楚的意思说清楚，并写成更准确、有力、可直接使用的话术。重点是解释其表达背后的意图，并代拟一段更好的用户立场；不是替用户决定要做什么，也不直接接手原任务。
 
-## When to use
+## 何时使用
 
-Use for an explicit “I know what I mean but cannot describe/name it,” or a clear implicit blockage: the user repeatedly rejects interpretations but cannot replace them, or vague references to a *critical* concept prevent progress. Do not trigger because wording is colloquial or nonprofessional when it already supports the task. A request to understand an existing term, passage, or reasoning step belongs to `make-sense`; translating visual taste into design specifications belongs to `aesthetic-translator`.
+用户明确说自己不知道怎么表达、希望整理想法或优化措辞时使用。若对话中出现关键意思反复误解、用户否定了猜测却难以换种说法，也可使用。
 
-## Repair the expression, then resume
+用户的话虽然口语化，但已经足够完成任务时，不要为了找术语而打断。用户是在询问某个现成术语、段落或推理是什么意思时，转到 `make-sense`；用户是在把视觉感受转成设计方向时，转到 `aesthetic-translator`。
 
-1. In the context of the user's task, identify the smallest gap between their words and what must be understood to proceed. Preserve their stated intent; mark inference as tentative and do not invent requirements or domain facts.
-2. Offer vocabulary only if it helps convey that intent. When several professional concepts plausibly fit—including when the user names alternatives—name **2–4 likely candidates** and explain how each differs in one sentence, grounded in this context, before restating the intent. Do not silently select one label and discard the others. If none fits reliably, use accurate plain language. Do not make the user choose a term unless the difference changes what should be done.
-3. Restate the meaning precisely, retaining any consequential uncertainty. Show the ambiguous wording or your inference briefly when it helps the user learn a distinction or judge a strong inference; otherwise skip the analysis. Avoid a mandatory response template.
-4. If that understanding suffices to execute the original task correctly, end `clarify` and continue the task. Do not routinely ask “Is that right?”, keep optimizing wording, or conduct a requirements interview. If competing meanings change the immediate result, ask the minimum discriminating question needed to proceed.
-5. If the unresolved ambiguity instead calls for a broader choice of goals, requirements, or approaches, explain what differs and why it matters; **recommend** `grilling` for that decision. Stop after the recommendation: do not ask the first interview question, silently start `grilling`, choose a product direction, or recommend one before the relevant decision is made. If they do not enter it, leave the consequential branch explicitly unresolved.
+## 处理方式
 
-Resolve whether the meaning is usable before worrying whether its label is standard. Uncertainty alone is not a reason to question the user; only a difference that affects the next decision is.
+1. 结合当前任务和上下文，辨认用户明确表达的立场、目标、限制和情绪重点。区分原话已有的信息与合理但未确认的推断。
+2. 用简短、自然的语言解释你理解到的意思。若多个概念确实可能表达不同意思，可给出 2–4 个候选并说明差别；没有必要时直接用普通语言，不为术语而术语。
+3. 写出一段优化后的用户话术，默认使用第一人称，保留用户的目标、语气和重要限制。改善结构、具体度和表达力度，但不得替用户增加目标、承诺、事实或偏好。只给最合适的一版；只有语气或含义差别会影响使用时才给多个版本。
+4. 如果某处仍不确定，优先用不替用户作决定的写法保留不确定性。只有缺失的信息会让话术错误代表用户立场时，才问一个最小且具体的问题；不要连续追问或开展完整需求访谈。
+5. 给出解释和话术后停止，让用户采纳、修改或补充。不要自动执行话术中提到的任务；用户明确要求继续时再接手。
 
-Maintainer-only behavior cases: [cases](references/cases.yaml). They are not required reading during normal use.
+## 边界
+
+`clarify` 的结果是更清楚的用户表达，不是任务方案、需求规格或代用户作出的决定。所谓“补充和加强意向”是把上下文中已经可支持的意思组织得更完整、更鲜明；不把猜测写成用户确认过的立场。遇到需要深入权衡的方向选择时，可指出尚未决定的部分；只有用户要求梳理或压力测试该选择时才转到 `grilling`，不要把 `grilling` 当作普通澄清步骤。
+
+## 回复形态
+
+通常先简短说明“我理解你想表达的是……”，再给出“可以这样说：……”的第一人称话术。无需展示分析过程、强制用户确认术语或使用固定模板。若原意已经足够明确且用户没有请求改写，直接完成原任务。
