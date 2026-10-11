@@ -56,7 +56,7 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [research-curator](skills/research/research-curator/SKILL.md) | 使用真实检索与可追溯证据开展有边界的研究，再写成 Reader First、本地化的离线报告；默认输出到系统临时目录 `%TEMP%/research-curator/<topic>/` |
+| [research-curator](skills/research/research-curator/SKILL.md) | 用户明确需要深度、可复查报告时，用真实检索和可追溯证据产出离线 HTML；快速事实查询走宿主检索工具；默认输出到系统临时目录 `%TEMP%/research-curator/<topic>/` |
 
 ### 网络安全（network-security）
 
