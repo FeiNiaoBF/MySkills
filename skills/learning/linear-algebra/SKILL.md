@@ -1,13 +1,12 @@
 ---
 name: linear-algebra
 description: >-
-  基于 Gilbert Strang（MIT 18.06）体系的线性代数笔记 skill。
-  用于在 Obsidian 知识库中新建和更新线性代数知识笔记——写对、写好、边写边自检。
-  核心原则：纯数学、Strang 为依据、自然双链、三层骨架。
-  涉及"线代"、"线性代数"、"Strang"、"向量"、"矩阵"、"特征值"等主题时触发。
+  当用户明确要求新建、更新、补充或检查 Obsidian 线性代数笔记时使用；
+  依据 Gilbert Strang（MIT 18.06）组织、溯源并自检笔记。
+  仅讨论概念、推导、解题或学习过程时不触发。
 metadata:
   origin: local skill migrated from ~/.agents/skills
-  version: "1.0.0"
+  version: "1.1.0"
 compatibility:
   - Obsidian Flavored Markdown ($...$ LaTeX, > [!tip] callout, [[wikilinks]])
   - Gilbert Strang "Introduction to Linear Algebra" 6th ed.
@@ -17,7 +16,7 @@ compatibility:
 
 # Linear Algebra Note Skill
 
-基于 Gilbert Strang（MIT 18.06）体系的线性代数笔记 skill。服务于 Obsidian 知识库「Codex Vitae」的 `03.Library/Notes/02.Mathematics/Math/` 目录。
+基于 Gilbert Strang（MIT 18.06）体系，服务于目标 Obsidian vault 中的线性代数笔记。操作前先确认目标 vault，遵循其 `AGENTS.md` 和元数据规范，并根据现有笔记与索引定位目录；不要假设存在固定的 `Math/` 子目录。
 
 ---
 
@@ -59,7 +58,7 @@ compatibility:
 
 ### 4. 三层骨架
 
-每篇笔记的正文由至多三个自然段落组成。不强制全有，但成熟的笔记应完整：
+每篇笔记按至多三个层次组织，不限制段落或分节数量，也不强行填满每一层。成熟的笔记应尽量包含：
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -109,7 +108,7 @@ compatibility:
 
 ## 前置条件
 
-在执行任何笔记操作前，确认以下规范已读：
+在执行任何笔记操作前，先确认目标 vault；若有多个可能目标且上下文无法判断，先询问用户。读取 vault 根目录的 `AGENTS.md`（若存在）及其指向的规范，并根据现有笔记和索引确定目标目录。下表列出需要核对的规范类别；按目标 vault 的实际结构定位，只读取实际存在或由其指向的规范，不假设固定层级。若关键约束缺失或相互冲突，先向用户确认。
 
 | 规范文件 | 原因 |
 |---------|------|
