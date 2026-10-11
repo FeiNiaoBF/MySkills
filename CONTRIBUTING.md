@@ -2,6 +2,17 @@
 
 本指南维护仓库的目录、格式、内容和验证规则。选择、安装或更新 Skill 见 [README](README.md)；Agent 执行任务时还须遵守 [AGENTS.md](AGENTS.md) 的工作边界。
 
+## 准备工作
+
+贡献时修改本地 Git checkout 中的源文件。首次获取仓库可执行：
+
+```bash
+git clone https://github.com/FeiNiaoBF/MySkills.git
+cd MySkills
+```
+
+已有 checkout 时直接进入其根目录，无需重新克隆。先运行 `git status --short`，确认并保留已有改动；不要把 Agent 的安装目录当作本仓库源码修改。改文档或维护工具时，只处理相关文件；改 Skill 时，再核对其入口、按需参考及 README 索引。
+
 ## 修改放在哪里
 
 每个 Skill 放在 `skills/<category>/<name>/`，其中 `<name>` 与 `SKILL.md` frontmatter 的 `name` 完全一致。
@@ -13,6 +24,18 @@
 - 临时环境、验证样例和报告放在系统临时目录的 `pi-agent/` 下，不提交到仓库。
 
 ## 格式与调用策略
+
+Frontmatter 是 `SKILL.md` 首行开始、由两行 `---` 包围的 YAML 元数据。下面只展示格式，名称和描述应替换为实际任务；结束标记之后还需要 Skill 正文。
+
+```yaml
+---
+name: example-skill
+description: 用户需要整理已确认的操作流程时使用。根据源材料编写步骤、前提与预期结果。
+license: MIT
+metadata:
+  version: 0.1.0
+---
+```
 
 Frontmatter 必须是可解析的 YAML：
 
@@ -43,7 +66,9 @@ Frontmatter 必须是可解析的 YAML：
 
 在仓库根目录执行。维护工具要求 **Python 3.10+**；依赖见 [requirements-dev.txt](requirements-dev.txt)。这些依赖只用于仓库校验，安装 Skill 不需要先准备此环境；运行某个 Skill 的额外依赖以其自身说明为准。
 
-把虚拟环境放在仓库外，无需激活：
+### 首次准备
+
+把虚拟环境放在仓库外，无需激活。已有该环境时可跳过创建；依赖文件变化后，用同一环境重新执行依赖安装命令。
 
 **Windows PowerShell：**
 
@@ -52,6 +77,25 @@ $venv = Join-Path $env:TEMP "pi-agent/myskills-venv"
 python -m venv $venv
 $python = Join-Path $venv "Scripts/python.exe"
 & $python -m pip install -r requirements-dev.txt
+```
+
+**Linux / macOS Bash：**
+
+```bash
+venv="${TMPDIR:-/tmp}/pi-agent/myskills-venv"
+python3 -m venv "$venv"
+"$venv/bin/python" -m pip install -r requirements-dev.txt
+```
+
+### 每次修改后检查
+
+仍在仓库根目录执行。以下命令重新指定环境路径，可在新的终端中使用，不需要再次创建虚拟环境。
+
+**Windows PowerShell：**
+
+```powershell
+$venv = Join-Path $env:TEMP "pi-agent/myskills-venv"
+$python = Join-Path $venv "Scripts/python.exe"
 & $python -B scripts/validate_skills.py
 & $python -B -m unittest discover -s tests -v
 git diff --check
@@ -61,14 +105,16 @@ git diff --check
 
 ```bash
 venv="${TMPDIR:-/tmp}/pi-agent/myskills-venv"
-python3 -m venv "$venv"
-"$venv/bin/python" -m pip install -r requirements-dev.txt
 "$venv/bin/python" -B scripts/validate_skills.py
 "$venv/bin/python" -B -m unittest discover -s tests -v
 git diff --check
 ```
 
 预期结果：校验器输出 `PASS`，单元测试输出 `OK`，`git diff --check` 无错误。命令失败时先确定原因，不继续将本次修改标为验证通过。
+
+- 找不到虚拟环境中的 Python：先完成“首次准备”，并确认路径与当前系统对应。
+- 出现 `Missing validation dependencies`：用上述虚拟环境的 Python 安装 `requirements-dev.txt`，避免装到另一个解释器中。
+- 校验器输出 `FAIL`：按其给出的文件、行号和原因定位。已有或越界问题单独报告，不通过删改无关内容或放宽校验规则来消除失败。
 
 ### 检查覆盖什么
 

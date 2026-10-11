@@ -1,9 +1,9 @@
 # MySkills
 
-公开的可复用 Agent Skills 创作源，采用 [MIT License](LICENSE)。这里维护工作流与按需参考资料；课程工程、媒体、缓存和用户环境配置留在各自项目中。
+公开的可复用 Agent Skills 创作源，采用 [MIT License](LICENSE)。每个 Skill 以 `SKILL.md` 为入口，为支持 Skills 的 Agent 提供特定任务的工作流程和按需参考。课程工程、媒体、缓存和用户环境配置留在各自项目中。
 
 - 找到适合任务的技能：[选择 Skill](#选择-skill)。
-- 在 Agent 中使用：[安装与更新](#安装与更新)。
+- 在 Agent 中使用：[安装与更新](#安装与更新)，安装后[确认并使用](#确认安装并使用)。
 - 修改或贡献本仓库：[贡献与验证](CONTRIBUTING.md)；Agent 另见 [工作约定](AGENTS.md)。
 
 ## 选择 Skill
@@ -65,7 +65,9 @@
 
 ## 安装与更新
 
-需要可用的 Node.js、npm（含 `npx`）和 Git，以及访问 npm 与 GitHub 的网络。安装由 [Vercel skills CLI](https://github.com/vercel-labs/skills) 完成；各 Skill 的运行依赖以自身说明为准。
+需要可用的 Node.js、npm（含 `npx`）和 Git，以及访问 npm 与 GitHub 的网络。安装由 [Vercel skills CLI](https://github.com/vercel-labs/skills) 完成，无需先克隆本仓库。各 Skill 的运行依赖以自身说明为准。
+
+### 选择安装范围
 
 先列出本仓库可安装的 Skill，此命令不会安装：
 
@@ -79,7 +81,7 @@ npx skills add FeiNiaoBF/MySkills --list
 npx skills add FeiNiaoBF/MySkills
 ```
 
-默认安装到当前项目。需要全局使用时加 `-g`；例如，将 `linear-algebra` 安装给 Pi：
+默认安装到当前项目，执行前先进入要使用这些 Skill 的项目目录。需要在多个项目中使用时加 `-g`，安装到用户级范围；例如，将 `linear-algebra` 全局安装给 Pi：
 
 ```bash
 npx skills add FeiNiaoBF/MySkills -g -a pi -s linear-algebra
@@ -87,7 +89,25 @@ npx skills add FeiNiaoBF/MySkills -g -a pi -s linear-algebra
 
 替换 `linear-algebra` 为索引中的名称。`-a` 指定目标 Agent；`-s` 可跟多个 Skill 名称。
 
-更新已安装且有来源记录的 Skill，按安装范围选择：
+### 确认安装并使用
+
+`skills add ... --list` 列出的是仓库提供的 Skill；检查已经安装的 Skill 使用 `skills list`：
+
+```bash
+# 查看当前项目的安装结果，在该项目目录执行
+npx skills list
+
+# 查看全局安装给 Pi 的 Skill，与上面的安装示例对应
+npx skills list -g -a pi
+```
+
+确认列表中出现所选 Skill，并核对范围和目标 Agent。若未出现，先检查安装命令的 `-g`、`-a` 和执行目录是否与查看时一致。
+
+然后在目标 Agent 中按名称请求使用 Skill，并说明任务、材料和范围。例如，安装 `project-docs` 后可以请求：“请使用 project-docs 整理这个仓库的 README，保留已有事实和安装方式。”实际发现和加载方式由宿主决定；列表中已安装不代表当前会话已经加载。
+
+### 更新或在新电脑重装
+
+更新已安装且有来源记录的 Skill，按安装范围选择。以下命令更新所选范围内的 Skill，不限于本仓库：
 
 ```bash
 # 全局安装
@@ -97,13 +117,15 @@ npx skills update -g
 npx skills update -p
 ```
 
-本地 Git checkout 与 CLI 安装的副本分开：`git pull` 更新本仓库源码，不会自动更新已安装副本。源码推送到 GitHub 后，再通过 CLI 更新获取。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。
+本地 Git checkout、GitHub 上的源码和 CLI 安装的副本各有更新步骤：本地修改或 `git pull` 只改变 checkout；维护者推送到 GitHub 后，使用者再通过 CLI 获取已发布的修改。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。
+
+若更新后 Agent 仍使用旧内容，核对它实际读取的 `SKILL.md` 路径和内容；有版本字段时一并比较。确认安装副本正确后，按宿主方式重新加载或开启新会话。不要只凭仓库版本号判断当前会话已使用新版。
 
 在新电脑上，重新运行 `skills add` 并选择需要的 Skill 和 Agent。各电脑分别维护安装选择；本仓库不自动同步用户配置或恢复清单。
 
 ## 维护与验证
 
-贡献规则、验证环境和检查命令统一维护在 [CONTRIBUTING.md](CONTRIBUTING.md)。仓库校验使用 Python 3.10+，不要求 Skill 使用者为安装而准备 Python 环境。
+修改仓库时，从 [CONTRIBUTING.md](CONTRIBUTING.md) 的准备工作开始，再按其中的规则编写、验证和提交。仅安装 Skill 无需准备仓库校验环境；Agent 的任务边界见 [AGENTS.md](AGENTS.md)。
 
 ## 仓库导航
 
