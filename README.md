@@ -50,6 +50,7 @@
 | --- | --- |
 | [code-subtraction](skills/software-engineering/code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
 | [project-docs](skills/software-engineering/project-docs/SKILL.md) | 为新项目逐步建立文档、为已有项目持续整理与维护；支持直接完成或共同打磨，以准确、充分、便于人类阅读和使用为目标 |
+| [skill-discovery-install](skills/software-engineering/skill-discovery-install/SKILL.md) | 根据项目任务搜索 skills.sh、GitHub 等来源，评估现成 Skill 并安装到项目级 Skills |
 
 ### 研究（research）
 
