@@ -199,7 +199,7 @@ validation:
 
 - 建议工作名为 `near-transfer`，尚未创建该 Skill；无需安装、恢复清单或 bootstrap 变更。
 - 将来实现时，核心流程放 `SKILL.md`，较长出题规则和验收案例按需放本 Skill 的 `references/`；届时同步 README 入口。
-- `project-tech-mentor` 负责技术项目学习，`project-digestion` 负责已有项目机制，`make-sense` 负责即时理解障碍。本 Skill 仅检验指定知识点的近迁移，不接管上述流程。
+- `project-tech-mentor` 负责技术项目学习，`project-reverse-engineering` 负责已有项目机制，`make-sense` 负责即时理解障碍。本 Skill 仅检验指定知识点的近迁移，不接管上述流程。
 - 允许做低风险学习练习，不把一次结果当作招聘筛选、资格认证或医疗等高风险工作放行依据。
 
 [前期研究](../research/intentional-learning-in-the-ai-era.md) 是宽范围背景，并非本版执行协议。本次用户澄清将范围收窄：取消必做题组、强制复习调度和泛化学习路线，优先实现可解释的近迁移检查。

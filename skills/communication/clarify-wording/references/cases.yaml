@@ -1,4 +1,4 @@
-# Maintainer-only comparison cases for the clarify skill.
+# Maintainer-only comparison cases for the clarify-wording skill.
 # Review fields are expectations, not extra user messages.
 version: "2.0"
 cases:
@@ -30,7 +30,7 @@ cases:
         - role: user
           content: "把这个登录按钮弄大点，手机上不好点；字号先别动。"
     review:
-      expect: "Does not invoke clarify; the request is already actionable."
+      expect: "Does not invoke clarify-wording; the request is already actionable."
       avoid: "Asking the user to choose between touch target, padding, typography, and accessibility terminology."
 
   - id: existing-term-explanation
@@ -39,7 +39,7 @@ cases:
         - role: user
           content: "代码审查里说的幂等是什么意思？拿重试支付请求举例解释。"
     review:
-      expect: "Explains the existing term in context; this is make-sense, not clarify."
+      expect: "Explains the existing term in context; this is make-sense, not clarify-wording."
       avoid: "Rephrasing the user's clear question as if they could not express it."
 
   - id: improve-user-position-without-taking-over

@@ -1,5 +1,5 @@
 ---
-name: manim-video-insertion
+name: manim-insertion-assembly
 description: 把已验收的 Manim 场景作为画面替换段装配进成片。
 metadata:
   author: FeiNiaoBF
@@ -7,13 +7,13 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Manim Video Insertion
+# Manim Insertion Assembly
 
 把已验收的 Manim 场景作为手写讲解**中间**的视觉替换段：原视频音频连续播放，Manim 只替换画面，不加旁白或 BGM。插入点按字幕语义定位，不凭视频总时长猜测。
 
 ## 与其他 skill 的分工
 
-- 上游：`math-manim-insertion`（场景设计与预览验收）。
+- 上游：`manim-insertion-authoring`（场景设计与预览验收）。
 - 平级不混用：`manim-recap-video` 只做片尾独立重温段（手写在前、动画在后），装配契约是拼接而非替换。
 
 ## Procedure

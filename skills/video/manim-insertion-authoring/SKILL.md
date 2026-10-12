@@ -1,5 +1,5 @@
 ---
-name: math-manim-insertion
+name: manim-insertion-authoring
 description: 为教学视频撰写插入式 Manim 场景：设计、符号与视觉规范。
 metadata:
   author: FeiNiaoBF
@@ -7,7 +7,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Math Manim Insertion
+# Manim Insertion Authoring
 
 把已确认的数学关系写成插入式 Manim 场景：动画插在手写讲解**中间**，做画面替换，让抽象关系当场显形。不做片尾总结，不做装饰动画。
 
@@ -15,7 +15,7 @@ disable-model-invocation: true
 
 - 本 skill：场景设计与实现（数学内容、符号、视觉规范、预览验收）。
 - `math-video-review`：产出 Manim 候选清单。
-- `manim-video-insertion`：把验收后的场景按时间表装配进成片。
+- `manim-insertion-assembly`：把验收后的场景按时间表装配进成片。
 - `manim-recap-video`：仅用于用户明确要求的**片尾独立重温段**（手写在前、动画在后），流程不同，不要混用。
 
 ## Procedure
@@ -26,7 +26,7 @@ disable-model-invocation: true
 4. **每场独立实现。** 几何从数学坐标推导；移动点、割线、增量、投影用 `ValueTracker` + `always_redraw`。P1/P2 分目录，不复制场景而不改数学接口。
 5. **先验影响范围，再出片。** 局部改动只渲染受影响场景，规格 **960×540 / 15fps**。共享几何、配置或装配逻辑改动时扩大回归范围。复用未改代码的有效证据，最后做一次完整交付检查。场景获批后才渲染 **1920×1080 / 30fps**；同范围内的例行修正不重新开审批。
 6. **按观众实际看到的尺寸看证据。** 每个输入抽一帧；当结论关于运动、收敛或转场时，要看一小段序列——静帧不能验证动态过程。在完整预览宽度下确认分辨率、帧率、时长、裁切和可读性。按最新请求的每一项报告完成情况：未改动代码上的测试通过不能证明未满足的需求，用户明确要求过的旧版本要作为独立产物保留。
-7. **交接给装配。** 场景验收后按 `manim-video-insertion` 做插入点选择、音频保持、分阶段装配和终检。场景代码与装配证据分开；绝不覆盖原成品。
+7. **交接给装配。** 场景验收后按 `manim-insertion-assembly` 做插入点选择、音频保持、分阶段装配和终检。场景代码与装配证据分开；绝不覆盖原成品。
 8. **提交时源码与测试同生成媒体分开。** 未跟踪的缓存和临时渲染不进源码提交；不得静默删除。
 
 ## 符号与视觉边界

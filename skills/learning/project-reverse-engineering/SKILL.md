@@ -1,5 +1,5 @@
 ---
-name: project-digestion
+name: project-reverse-engineering
 description: >-
   Use when reverse-engineering an existing project: teach its mechanisms through short, evidence-based
   lessons so the learner can understand, modify, transfer, and direct AI development.
@@ -10,7 +10,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Project digestion
+# Project Reverse Engineering
 
 Turn a real project slice into a capability the learner can reuse.
 

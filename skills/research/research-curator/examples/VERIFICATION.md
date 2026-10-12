@@ -50,7 +50,7 @@ The article correctly answered **no** to both guarantees, retained platform qual
 - `go vet ./...`: passed.
 - `node --check visualizer/templates/app.js` and `node --check visualizer/browser_test.mjs`: passed.
 - Python unittest discovery: **26 passed** in an external validation venv.
-- Skill validator: **two pre-existing failures only**, reproduced identically against a full archive of `d150950`. The affected files are unchanged: `frontend-guide/SKILL.md` lacks mapping metadata; `network-security-check/references/passwall-vps-lessons.md` has a machine-specific path. Neither was modified to make the repository green.
+- Skill validator: **two pre-existing failures only**, reproduced identically against a full archive of `d150950`. The affected files are unchanged: `frontend-guide/SKILL.md` lacks mapping metadata; `router-proxy-diagnostics/references/passwall-vps-lessons.md` has a machine-specific path. Neither was modified to make the repository green.
 - `git diff --check`: passed.
 - Real-source handoff, final validation, and fresh publication: passed.
 - Chrome regression on synthetic and real-source report inputs: passed. The test publishes/moves an adversarial copy, checks citation selection with an active filter, relevant source selection, exact locator details, article backlinks, uncited-node state, inert hostile text, 390px width, print citation visibility, missing-graph fallback, and legacy unknown-field rendering. Network capture starts **before navigation**: zero HTTP(S) requests and zero uncaught page exceptions.

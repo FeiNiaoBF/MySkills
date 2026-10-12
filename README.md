@@ -15,11 +15,11 @@
 | [math-video-workflow](skills/video/math-video-workflow/SKILL.md) | 编排分集数学视频的剪辑、审校和动画交接；视频任务的推荐入口 |
 | [video-smart-cut](skills/video/video-smart-cut/SKILL.md) | 本地转写、精简、字幕对齐与成片校验 |
 | [math-video-review](skills/video/math-video-review/SKILL.md) | 审校数学表述、推导、口误与动画候选 |
-| [math-manim-insertion](skills/video/math-manim-insertion/SKILL.md) | 设计并验证讲解中途插入的 Manim 场景 |
-| [manim-video-insertion](skills/video/manim-video-insertion/SKILL.md) | 按字幕语义把已验收场景装配为画面替换段 |
+| [manim-insertion-authoring](skills/video/manim-insertion-authoring/SKILL.md) | 设计并验证讲解中途插入的 Manim 场景 |
+| [manim-insertion-assembly](skills/video/manim-insertion-assembly/SKILL.md) | 按字幕语义把已验收场景装配为画面替换段 |
 | [manim-recap-video](skills/video/manim-recap-video/SKILL.md) | 制作片尾独立、无旁白的数学重温动画 |
 
-中途画面替换使用 `math-manim-insertion` + `manim-video-insertion`，保持原声和总时长；片尾独立重温使用 `manim-recap-video`，追加拼接。两条路线不要混用。单集状态由课程项目中的 `workflow.yaml` 维护。
+中途画面替换使用 `manim-insertion-authoring` + `manim-insertion-assembly`，保持原声和总时长；片尾独立重温使用 `manim-recap-video`，追加拼接。两条路线不要混用。单集状态由课程项目中的 `workflow.yaml` 维护。
 
 ### 设计（design）
 
@@ -35,13 +35,13 @@
 | --- | --- |
 | [linear-algebra](skills/learning/linear-algebra/SKILL.md) | 基于 Strang / MIT 18.06 体系维护 Obsidian 线性代数知识笔记 |
 | [project-tech-mentor](skills/learning/project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
-| [project-digestion](skills/learning/project-digestion/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
+| [project-reverse-engineering](skills/learning/project-reverse-engineering/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
 
 ### 沟通（communication）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [clarify](skills/communication/clarify/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
+| [clarify-wording](skills/communication/clarify-wording/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
 | [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
 
 ### 软件工程（software-engineering）
@@ -62,7 +62,7 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [network-security-check](skills/network-security/network-security-check/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
+| [router-proxy-diagnostics](skills/network-security/router-proxy-diagnostics/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
 
 ## 安装与更新
 

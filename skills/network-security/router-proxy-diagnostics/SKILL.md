@@ -1,5 +1,5 @@
 ---
-name: network-security-check
+name: router-proxy-diagnostics
 description: PassWall/sing-box diagnosis, safe changes, and rollback.
 metadata:
   author: FeiNiaoBF
@@ -7,7 +7,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Network Security Check
+# Router Proxy Diagnostics
 
 这是一个**网络故障与变更流程 skill**，不是单次命令检查器。它把 PassWall、sing-box、OpenWrt/ImmortalWrt、VPS 和 Windows 客户端问题，从现象推进到可验证结论：
 

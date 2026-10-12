@@ -8,7 +8,7 @@
 
 **Tech Stack:** Agent Skills YAML frontmatter, Markdown, YAML behavior cases, Python repository validator and unittest suite.
 
-**Spec:** [clarify design](../specs/2026-10-06-clarify-skill-design.md)
+**Spec:** [clarify-wording design](../specs/2026-10-06-clarify-skill-design.md)
 
 ## Global Constraints
 
@@ -31,11 +31,11 @@ These are concrete inputs within the spec's existing acceptance categories, not 
 
 ---
 
-### Task 1: Deliver the clarify skill and acceptance cases
+### Task 1: Deliver the clarify-wording skill and acceptance cases
 
 **Files:**
-- Create: `clarify/SKILL.md` — self-contained runtime instruction and conservative trigger description.
-- Create: `clarify/references/cases.yaml` — maintainer-only conversation inputs plus expected/unwanted outcomes.
+- Create: `clarify-wording/SKILL.md` — self-contained runtime instruction and conservative trigger description.
+- Create: `clarify-wording/references/cases.yaml` — maintainer-only conversation inputs plus expected/unwanted outcomes.
 - Modify: `README.md` — single skill selection entry, merging around existing worktree edits.
 
 **Interfaces:**
@@ -44,7 +44,7 @@ These are concrete inputs within the spec's existing acceptance categories, not 
 
 - [ ] **Step 1: Write behavior cases before the runtime instruction.** Use the six existing acceptance categories in the spec: explicit/implicit trigger; no-trigger colloquial and existing-term explanation; stop-and-continue without unique term; local discrimination; broader handoff; epistemic restraint. Include the five Review Focus inputs. Use `make-sense/references/cases.yaml` as a format reference, not a copied corpus.
 - [ ] **Step 2: Check the cases against the pre-change behavior.** Where a response generator is available, run the cases before the new skill is loaded and note failures or ambiguity in a report under `${TEMP}/pi-agent/`. If unavailable, manually review case inputs and expected/avoid clauses, and state that model-baseline evidence is absent; do not claim a red test ran.
-- [ ] **Step 3: Write `clarify/SKILL.md`.** Frontmatter: `name: clarify`, a trigger-first `description` whose first 57 characters identify communication blockage, and mapping-valued `metadata`. In the body: smallest blocked meaning, 2–4 contextual concept candidates when multiple fit, precise restatement without invented certainty, stop-and-resume criterion, minimum consequential question, and recommend-but-do-not-start `grilling`. Distinguish `make-sense` and `aesthetic-translator`; avoid fixed output templates and mandatory reading of cases.
-- [ ] **Step 4: Add one `README.md` row.** Place `clarify` next to `make-sense` under `### 工程维护与理解`, describing its expression-repair trigger. Inspect the current README diff first and retain unrelated edits.
+- [ ] **Step 3: Write `clarify-wording/SKILL.md`.** Frontmatter: `name: clarify-wording`, a trigger-first `description` whose first 57 characters identify communication blockage, and mapping-valued `metadata`. In the body: smallest blocked meaning, 2–4 contextual concept candidates when multiple fit, precise restatement without invented certainty, stop-and-resume criterion, minimum consequential question, and recommend-but-do-not-start `grilling`. Distinguish `make-sense` and `aesthetic-translator`; avoid fixed output templates and mandatory reading of cases.
+- [ ] **Step 4: Add one `README.md` row.** Place `clarify-wording` next to `make-sense` under `### 工程维护与理解`, describing its expression-repair trigger. Inspect the current README diff first and retain unrelated edits.
 - [ ] **Step 5: Validate and repair only introduced failures.** Run `python -B scripts/validate_skills.py`, `python -B -m unittest discover -s tests -v`, and `git diff --check`. Manually review description prefix, link semantics, sensitive values, and boundaries. If model response generation is available, run the same cases with the skill and record concrete comparisons; otherwise label behavior unverified rather than equating format checks with effectiveness. Separate pre-existing validator failures from new failures.
-- [ ] **Step 6: Review and commit.** Inspect the full diff and status; stage only `clarify/SKILL.md`, `clarify/references/cases.yaml`, and `README.md` if the latter can be staged without other changes (otherwise stage only its targeted hunk). Commit a focused English Conventional Commit. Do not push, install, or touch the recovery manifest.
+- [ ] **Step 6: Review and commit.** Inspect the full diff and status; stage only `clarify-wording/SKILL.md`, `clarify-wording/references/cases.yaml`, and `README.md` if the latter can be staged without other changes (otherwise stage only its targeted hunk). Commit a focused English Conventional Commit. Do not push, install, or touch the recovery manifest.

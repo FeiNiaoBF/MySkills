@@ -34,7 +34,7 @@ disable-model-invocation: true
 5. **Final review**：对剪后字幕、画面方向、数学表达和音频做终审。完成条件：所有阻断项已解决或由用户明确接受。
 6. **Deliver**：输出无特效、无 BGM 的最终横版成片和外挂字幕；是否烧录字幕由状态文件指定。完成条件：完整解码、时长、流规格、首中尾抽查均通过。
 7. **Animation candidates**：调用 `math-video-review` 只生成 Manim 候选清单。完成条件：每个候选写明教学目的、所需证据和预计场景；默认停在这里。
-8. **Manim 插入段（可选）**：仅在用户批准场景后走插入路径——先 `math-manim-insertion` 写场景并出低清预览，预览获批后正式渲染，再由 `manim-video-insertion` 按字幕语义建立插入时间表并装配。完成条件：时间表记录 `scene/start/end/duration/reason/source_srt_entries`，低清预览获批，装配后总时长与源音频一致且每个插入点抽帧通过。
+8. **Manim 插入段（可选）**：仅在用户批准场景后走插入路径——先 `manim-insertion-authoring` 写场景并出低清预览，预览获批后正式渲染，再由 `manim-insertion-assembly` 按字幕语义建立插入时间表并装配。完成条件：时间表记录 `scene/start/end/duration/reason/source_srt_entries`，低清预览获批，装配后总时长与源音频一致且每个插入点抽帧通过。
 9. **Manim 片尾重温段（可选，独立于第 8 步）**：仅当用户明确要求片尾独立重温段时调用 `manim-recap-video`。完成条件：低清预览获批后才正式渲染并拼接。
 
 ## 人工门
