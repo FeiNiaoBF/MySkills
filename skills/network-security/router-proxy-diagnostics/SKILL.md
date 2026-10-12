@@ -1,6 +1,6 @@
 ---
 name: router-proxy-diagnostics
-description: PassWall/sing-box diagnosis, safe changes, and rollback.
+description: Use when a PassWall, sing-box, OpenWrt/ImmortalWrt, VPS, or Windows client connection is broken or needs a safe change; diagnose from a read-only baseline, then apply minimal changes with backup, validation, and rollback.
 metadata:
   author: FeiNiaoBF
   version: 2.0.0
