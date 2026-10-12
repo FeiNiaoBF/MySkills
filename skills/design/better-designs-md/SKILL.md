@@ -9,7 +9,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Authoring Design Systems (DESIGN.md)
+# Better Designs MD — 编写 DESIGN.md 设计规范
 
 ## Purpose
 

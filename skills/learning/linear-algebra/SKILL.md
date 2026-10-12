@@ -14,7 +14,7 @@ compatibility:
   - Vault Meta 规范（Library YAML 属性规范、Tag 命名空间规范等）
 ---
 
-# Linear Algebra Note Skill
+# Linear Algebra — Obsidian 线性代数笔记维护
 
 基于 Gilbert Strang（MIT 18.06）体系，服务于目标 Obsidian vault 中的线性代数笔记。操作前先确认目标 vault，遵循其 `AGENTS.md` 和元数据规范，并根据现有笔记与索引定位目录；不要假设存在固定的 `Math/` 子目录。
 
