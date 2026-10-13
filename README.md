@@ -114,11 +114,14 @@ npx skills list -g -a pi
 # 全局安装
 npx skills update -g
 
+# 只更新指定的 Skill，避免牵动同范围内的其他来源
+npx skills update -g better-designs-md
+
 # 当前项目安装
 npx skills update -p
 ```
 
-本地 Git checkout、GitHub 上的源码和 CLI 安装的副本各有更新步骤：本地修改或 `git pull` 只改变 checkout；维护者推送到 GitHub 后，使用者再通过 CLI 获取已发布的修改。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。
+本地 Git checkout、GitHub 上的源码和 CLI 安装的副本各有更新步骤：本地修改或 `git pull` 只改变 checkout；维护者推送到 GitHub 后，使用者再通过 CLI 获取已发布的修改。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。Skill 改名或移动目录后 `update` 也无法跟随：用新名重新 `skills add`，再用 `skills remove` 清理旧名。
 
 若更新后 Agent 仍使用旧内容，核对它实际读取的 `SKILL.md` 路径和内容；有版本字段时一并比较。确认安装副本正确后，按宿主方式重新加载或开启新会话。不要只凭仓库版本号判断当前会话已使用新版。
 
