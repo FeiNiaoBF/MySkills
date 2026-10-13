@@ -1,6 +1,6 @@
 ---
 name: better-designs-md
-description: "Author high-quality technical design documents following Google's Design Markdown (Design MD) specification. Use when the user asks to create or refine a DESIGN.md, define design tokens, colors, typography, elevation, or components for consistent UI generation, or turn design concepts into enforceable do's and don'ts."
+description: "Use when the user asks to create or refine a DESIGN.md, define design tokens, colors, typography, elevation, or components for consistent UI generation, or turn design concepts into enforceable do's and don'ts; author the document to Google's Design Markdown (Design MD) specification."
 metadata:
   author: FeiNiaoBF
   version: 1.1.0
