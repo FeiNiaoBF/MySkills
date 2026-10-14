@@ -44,6 +44,12 @@
 | [clarify-wording](skills/communication/clarify-wording/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
 | [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
 
+### 问题探索（problem-solving）
+
+| Skill | 使用场景 |
+| --- | --- |
+| [problem-exploration](skills/problem-solving/problem-exploration/SKILL.md) | 面对模糊的问题或想法时，先调查相关证据、验证关键假设，再判断下一步是否行动 |
+
 ### 软件工程（software-engineering）
 
 | Skill | 使用场景 |
