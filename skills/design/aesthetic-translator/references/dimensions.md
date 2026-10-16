@@ -1,76 +1,85 @@
-# 九维度词汇表
+# Nine-dimension vocabulary
 
-每个维度：用户的话 → 命名选项（参照物）→ 落地参数。翻译时按需查本表，给用户 2-3 个选项即可，不必穷举。
+Use this reference for the dimensions that matter to the request. Offer two or three coherent directions rather than a menu for every row. User phrases are illustrative cues, not deterministic mappings. Product names are comparison anchors, not verified claims about their current designs; inspect the relevant reference before claiming a match.
 
-## 1. 风格（最大的决定，其余都挂在它下面）
+## 1. Style
 
-| 用户的话 | 选项 | 参照 | 参数要点 |
+Style coordinates the other dimensions. Adapt parameters to the actual platform.
+
+| User cue | Candidate | Reference anchor | Implementation cues |
 |---|---|---|---|
-| 极简、干净、内容为王 | Minimalist | Apple, iA Writer | 大留白、单一强调色、零装饰 |
-| 严格、理性、老钱 | Swiss / International | Vercel | 严网格、超大字号、一个红色点缀 |
-| 响亮、个性、拒绝忽视 | Neo-brutalism | Gumroad | 3px 黑边框、硬偏移阴影、平涂色 |
-| 原始、工程师感 | Raw brutalism | Hacker News | 系统字体、下划线链接、零化妆 |
-| 悬浮、轻盈、现代 | Glassmorphism | iOS, visionOS | backdrop-filter、半透明面板 |
-| 安静、高级、不说出口 | Dark luxury | CRED | 近黑底、香槟金点缀、衬线标题 |
-| 杂志感、叙事 | Editorial | NYT, Stripe Press | 大衬线标题、分栏、引文块 |
-| 圆润、快乐 | Playful | Duolingo | 全圆角、糖果色、胖按钮 |
-| 工程师宣言 | Terminal / TUI | dev tool CLIs | 等宽、深底单色高亮、ASCII/框线 |
-| Google 系应用感 | Material 3 | Android | 走官方 token，不手搓 |
-| 墨与纸、东方 | East-Asian ink | 见 east-asian.md | 纸墨二元、朱砂单情绪色 |
+| Minimal, clean, content first | Minimalist | Apple, iA Writer | Generous spacing, one accent, little decoration |
+| Strict, rational, typographic | Swiss / International | Swiss editorial posters, grid-led product pages | Strong grid, clear type hierarchy, restrained accent |
+| Loud, individual, impossible to ignore | Neo-brutalism | Gumroad | Heavy borders, hard offset shadows, flat color |
+| Raw, utilitarian, engineering-led | Raw brutalism | Hacker News | System fonts, underlined links, minimal styling |
+| Floating, light, spatial | Glassmorphism | Translucent iOS or visionOS surfaces | Translucent panels; protect text contrast and provide an opaque fallback |
+| Quiet, luxurious, understated | Dark luxury | CRED | Near-black surfaces, restrained metallic accents, optional serif headings |
+| Magazine-like, narrative | Editorial | NYT, Stripe Press | Large serif headings, columns, pull quotes |
+| Rounded, cheerful | Playful | Duolingo | Rounded shapes, bright colors, substantial buttons |
+| Technical, command-oriented | Terminal / TUI | Developer CLIs | Monospace rhythm, semantic highlights, character borders |
+| Native Google application | Material 3 | Android Material components | Native tokens and components rather than imitation |
+| Ink, paper, East Asian references | Ink-and-paper | The optional palette linked from SKILL.md | Paper/ink contrast and a restrained accent |
 
-## 2. 色彩情绪（先选情绪，色值跟着来）
+## 2. Color mood
 
-| 用户的话 | 选项 | 参数要点 |
+| User cue | Candidate | Implementation cues |
 |---|---|---|
-| 温柔、治愈 | Pastel | 低饱和 |
-| 自然、踏实 | Earthy | 陶土/沙/橄榄 |
-| 富有、自信 | Jewel tones | 深宝石色 |
-| 成熟、贵 | Muted / dusty | 降饱和、灰调 |
-| 安全的高级 | Greyscale + 一强调色 | 灰阶做全部，一点色说话 |
-| 纸和墨 | Cream & ink | off-white 底 + 墨色字 |
-| 能量、年轻 | Neon on dark | 暗底电光点缀 |
+| Gentle, soothing | Pastel | Low-saturation surfaces; readable foregrounds |
+| Natural, grounded | Earthy | Terracotta, sand, olive |
+| Rich, confident | Jewel tones | Deep gemstone hues |
+| Mature, understated | Muted / dusty | Desaturated colors with gray undertones |
+| Restrained, focused | Grayscale plus one accent | Neutral surfaces; accent for selected emphasis |
+| Paper and ink | Cream and ink | Warm off-white background with dark text |
+| Energetic, young | Neon on dark | Bright accents on dark surfaces; limit glare |
 
-色彩词汇（直接可用）：60-30-10 分配 / 单强调色 / 暖调·冷调 / 永远 off-white 不用纯白 / charcoal 不用纯黑 / 彩色阴影 / 渐变只出现在 hero。
+Useful controls include a 60/30/10 balance, accent allocation, warm/cool bias, colored shadows, and limited gradient placement. These are compositional options, not quotas. Off-white and charcoal suit a softer direction; pure white or black may suit the existing system or contrast needs. Keep semantic states distinguishable from decorative accents.
 
-## 3. 字体性格
+## 3. Typography
 
-| 用户的话 | 选项 | 字体 | 气质 |
+| User cue | Candidate | Example families | Character |
 |---|---|---|---|
-| 中性、不抢戏 | Grotesque sans | Inter, Helvetica | 产品级 |
-| 友好、创业感 | Geometric sans | Poppins, Futura | 圆润乐观 |
-| 现代、技术 | Tech display | Space Grotesk | AI/web3 能量 |
-| 书卷、可信 | Old-style serif | Garamond, Georgia | 几百年的阅读感 |
-| 奢侈、时尚 | Fashion serif | Playfair, Didot | 厚薄对比戏剧感 |
-| 厚重、踏实 | Slab serif | Roboto Slab | 砖头脚 |
-| 精确、代码感 | Monospace | JetBrains Mono | 每个字母等权 |
+| Neutral, unobtrusive | Grotesque sans | Inter, Helvetica | Product-oriented clarity |
+| Friendly, geometric | Geometric sans | Poppins, Futura | Rounded, optimistic |
+| Modern, technical | Technical display | Space Grotesk | Distinctive technical headings |
+| Literary, established | Old-style serif | Garamond, Georgia | Book-like reading |
+| Fashion, luxury | High-contrast serif | Playfair Display, Didot | Dramatic thick/thin contrast |
+| Solid, grounded | Slab serif | Roboto Slab | Strong, block-like serifs |
+| Precise, code-oriented | Monospace | JetBrains Mono | Uniform character advances |
 
-字型词汇：超大标题 / 标题紧字距 / 正文行高宽松 / 全大写标签宽字距 / 衬线标题+无衬线正文 / 一族字体靠字重分层 / 等宽只给数字与代码。
+Controls include heading scale, heading tracking, body line-height, spaced uppercase labels, serif/sans pairing, a single family with weight hierarchy, and monospace for numbers or code. Check language coverage, fallback, and availability before specifying a family; Latin examples do not provide Chinese or Japanese glyph coverage. Terminal applications generally inherit the terminal font.
 
-## 4. 明暗主题（按用户的时刻选，不按心情选）
+## 4. Light and dark themes
 
-阅读重的产品 → light；媒体/金融/开发工具 → dark 可选；长会话工具 → dim soft dark；阅读产品 → warm paper（米白+墨）；可访问性优先 → high contrast。
+Choose for the usage conditions and existing theme support. Light or warm-paper themes can suit sustained reading; dark or dim themes can suit media, technical tools, or low-light contexts. High contrast is a measurable requirement, not a synonym for dark mode. Define legible foregrounds and distinguishable states in each required theme.
 
-## 5. 布局
+## 5. Layout character
 
-单列限宽 720px（阅读）/ 分屏左文右图（落地页）/ 侧栏壳（工具）/ 等宽卡片阵（目录/市场）/ 杂志不等宽栏 / 全幅 hero 一句话 / bento 混合瓷砖（功能陈列）/ 浮动胶囊导航。
+Candidate patterns include a constrained reading column (about 720 CSS px as a Web starting point), split text/image landing pages, sidebar tool shells, equal-width catalog cards, unequal editorial columns, full-width typographic heroes, mixed-size feature tiles, and floating capsule navigation. Choose a character that serves content and tasks. Page inventory and module structure belong to the implementation workflow; do not impose a new structure for a local style adjustment.
 
-## 6. 细节（两个「极简」的差别全在这里）
+## 6. Detail
 
-- 圆角：0px 严肃 / 6-8px 低调现代 / 16px 友好 / 24px+ 玩具感
-- 阴影：无（纯平）/ 大模糊低透明柔影 / 硬偏移无模糊（图形感）/ 多层堆叠（真实纵深）
-- 卡片：描边 hairline / 柔影浮起 / 玻璃 / 渐变描边
-- 按钮：胶囊 / 直角 / ghost 描边 / 3D 可按压（硬底边，点击下移）
-- 收尾：可见焦点环 / hairline 分隔线替代盒子 / 单一图标集 / 暗底内描边高光
+These values are Web examples; map the intent to native tokens or character cells on other platforms.
 
-## 7. 动效（调味料：少则活，多则廉价）
+- **Corners:** square for sharp structure; 6–8 px for restrained rounding; around 16 px for softer shapes; 24 px or more for pronounced rounding. Component size changes the effect.
+- **Shadows:** none for flat surfaces; diffuse low-opacity shadows for soft elevation; hard offset shadows for graphic emphasis; layered shadows for depth.
+- **Cards:** hairline outline, soft elevation, translucent surface, or gradient border where the chosen direction warrants it.
+- **Buttons:** pill, square, outlined, or a hard lower edge with pressed-state movement. Preserve recognizable affordances and state differences.
+- **Finishing:** visible focus, thin separators instead of redundant boxes, one consistent icon family, and restrained inner-edge highlights on dark surfaces.
 
-默认 200ms fade + hover 微升；弹簧物理只给 playful；滚动渐入只给叙事页；拿不准就减。明确写出毫秒数与缓动，不写「流畅」。
+## 7. Motion
 
-## 8. 密度
+Specify duration, easing, trigger, and reduced-motion behavior rather than saying “smooth.” A 200 ms fade is one restrained Web starting point, not a universal default. Small hover translations require a hover-capable device. Springs can support playful feedback; scroll reveals can support narrative pages, but essential content must remain available without animation. Reduce motion when it does not serve the task.
 
-Airy（落地页、高级品牌，费滚动）/ Balanced（多数产品）/ Compact（终端、管理面板，省留白）。与三旋钮的 DENSITY 对应。
+## 8. Density
 
-## 9. 图文与语气
+- **Airy:** useful for brand or editorial emphasis; costs scrolling and reduces visible information.
+- **Balanced:** a starting point for general product interfaces.
+- **Compact:** useful for terminals and information-heavy tools; preserve readability, focus visibility, and target usability.
 
-图像语言选一种并忠诚到底：3D 渲染 / 扁平矢量 / 细线图标 / 实心图标 / 真实抓拍 / 抽象渐变斑 / 颗粒噪点 / 手绘涂鸦 / 无图像纯字体。
-文案语气也是设计：warm（"Oops!"）与 precise（"Request failed. Retry."）是两个产品。
+This dimension corresponds to the internal DENSITY axis in SKILL.md. Trustworthy or calm interfaces can still be compact.
+
+## 9. Imagery and voice
+
+Choose a coherent primary image language: 3D renders, flat vectors, thin-line icons, solid icons, documentary photography, abstract gradients, restrained grain, hand-drawn marks, or typography without imagery. Combine treatments only when their roles are clear. Reference actual available assets and their usage rights rather than inventing access to them.
+
+Copy contributes to the same direction: warm (“Oops!”) and precise (“Request failed. Retry.”) suggest different products. Match the user's audience and language; do not let a playful tone obscure an error or the recovery action.

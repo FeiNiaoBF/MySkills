@@ -1,59 +1,96 @@
 ---
 name: aesthetic-translator
-description: 用户用模糊感受词描述想要的视觉方向（有质感、太素了、高级感、像 Linear 那样）时使用。把感受翻译成命名风格选项和具体设计规格，供前端/界面实现直接使用。
+description: >-
+  This skill helps when users describe a visual mood with vague preferences such
+  as premium, too plain, or like Linear. It turns those cues into named design
+  directions and implementation-ready specifications for the project's platform.
+  It does not handle wording-only requests or restart design discovery for a
+  precise styling change.
 metadata:
   author: FeiNiaoBF
   version: 0.1.0
   date_added: 2026-09-05
 ---
 
-# Aesthetic Translator — 感受 → 规格
+# Aesthetic Translator
 
-定位：品味型翻译层。输入是模糊感受词与参照物，输出是**经用户确认的 Design Read 与目标栈可实施的设计规格**。不维护风格数据库；项目已安装 `ui-ux-pro-max` 且确有需要时才查它。不管页面结构（走 `frontend-guide`）。范围：识别项目目标栈后提供 Web、Flutter/Material 3 或 TUI 规格。
+Translate aesthetic intent into a short Design Read and a concrete design brief. Use the project's actual platform: Web, Flutter/Material 3, or TUI. Reply in the user's language unless they request another language for the deliverable.
 
-## 统治原则
+This skill chooses visual direction; it does not own page structure or the implementation workflow. Preserve existing project decisions and the scope of the user's request.
 
-**翻译 = 给命名选项，不是猜。** 任何维度都不输出裸参数——每个选择都带名字和参照物让用户挑选。两个方向真的分叉且无法从上下文判断时，最多问一个问题，绝不连环追问。
+## Working principles
 
-## 核心循环
+- Treat references as stronger evidence than loose adjectives, while honoring explicit constraints. Extract the relevant traits rather than copying an entire product's appearance.
+- Give meaningful choices, not unexplained parameters. Name the direction, identify a reference or recognizable visual treatment, and explain its practical consequence.
+- Reuse a direction the user has already chosen. Ask at most one focused question when competing interpretations materially change the result; do not ask the user to approve every dimension or token.
+- No aesthetic is the default. The object, audience, content, and platform determine which directions fit.
 
-1. **听**：收集用户的感受词（「高级」「素」「呼吸感」）和提到的参照物（产品名、链接、截图）。参照物权重高于形容词。
-2. **定位维度**：判断感受词指向哪些维度（九维度见 `references/dimensions.md`）。**不设默认语料**：先给 2–3 个命名方向（各带参照物与一句后果）让用户挑，方向由**物件用途**决定。用户点了参照物或风格词就地采用；`references/east-asian.md` 只是候选之一，不再是默认底色。**同一方向被连续否决（≥2 次）时立即退出该方向**，转向设计系统杠杆 + 市场调研路线（见下）。
-3. **给选项**：每个相关维度给 2-3 个命名选项，各带一行参照物和一句话后果（「这个会让页面安静但显空」）。用户挑，不解释术语。
-4. **宣告 Design Read**：一行——「读作：为〈受众〉做的〈物件〉，〈风格名〉语言，底色〈语料名/其他〉，〈密/静/稳〉倾向」。给用户反驳的机会。
-5. **输出规格**：四段式 brief——**Context**（谁用、在哪种设备或终端使用）/ **Direction**（按目标栈给出可实施规格）/ **References** / **Avoid**（反模式清单）。Web 规格映射到 CSS tokens；Flutter/Material 3 映射到 Theme、ColorScheme、Typography、形状和组件状态；TUI 映射到终端色彩、对比度、字体和边框规则。
-6. **确认后落盘**：用户确认方向/brief 后，沿用所在项目已有的设计文档路径与格式；若项目没有约定，可建议在根目录使用 `DESIGN.md`。只记录确认的设计决定；已有文档则更新，不另建重复文档。token/主题映射按目标栈和项目约定组织；书写/格式规范可路由到 `better-designs-md`。
+## Workflow
 
-## 三旋钮（内部接口，不向用户暴露数字）
+1. **Read the context.** Collect the user's mood words, references, audience, object, and constraints from the conversation and existing design documents. Identify the target stack before producing implementation-specific values. Inspect supplied visual material when available; distinguish observed traits from an unverified interpretation of a product name. If a reference cannot be inspected, say so rather than inventing its details.
+2. **Identify the relevant dimensions.** Consult the [nine-dimension vocabulary](references/dimensions.md) only where useful. For an unresolved direction, offer two or three coherent alternatives, each with a name, a reference or concrete visual description, and one consequence. Do not expand all nine dimensions into separate choice menus. If the direction is settled, proceed directly to its specification.
+3. **State the Design Read.** Use one sentence: “For <audience>, this <object> uses <visual language>, with <palette/material treatment> and <density/motion/layout character>.” Present an inferred direction as a proposal, not as user approval. If a material fork remains, resolve it before treating the direction as settled. If the user delegates the choice, recommend and proceed within that authorization.
+4. **Deliver the brief.** Use the four sections below, scaled to the requested change. Explain how each important parameter expresses the intended feeling. Preserve existing tokens where they already fit; label provisional values and unresolved choices.
+5. **Record and continue.** Once the direction is confirmed, update the project's existing design document when documentation is in scope. If no convention exists, suggest `DESIGN.md`; do not create a competing document. Record confirmed decisions only. Continue already authorized implementation through the appropriate workflow without asking for the same approval again. A request for advice alone does not authorize implementing the design.
 
-| 旋钮 | 含义 | 典型区间 |
-|---|---|---|
-| VARIANCE 布局大胆度 | 1 网格严整 ↔ 10 打破网格 | 工具 3-5 / 营销 7-9 |
-| MOTION 动效强度 | 1 无动效 ↔ 10 物理弹性 | 生产力 2-4 / 消费 6-8 |
-| DENSITY 信息密度 | 1 画廊留白 ↔ 10 驾驶舱 | 阅读产品 2-3 / 终端 7-9 |
+### Four-part brief
 
-推断规则：冷静/极简/编辑 → V 低 M 低 D 低；高级消费 → V 中 M 中 D 低；实验性 → V 高 M 高 D 低；信任优先 → 全低。旋钮值必须翻译成具体参数（D 低 → 间距倍增、行高 1.6+；M 低 → 200ms fade、无弹跳），不留在数字形态。
-
-## 反模式（AI 味警报，写进每份 brief 的 Avoid）
-
-紫色渐变 / stock 插画 / 处处阴影 / 超过两种字体 / emoji 当图标 / 居中三等分卡片 / 纯黑纯白（用 off-white 与 charcoal）/ 无意义玻璃拟态。
-
-## 设计系统语境
-
-项目用 MD3 / Fluent / Carbon 等有官方 token 体系的系统时，只输出方向与参数映射，实现走官方体系，不手搓仿制 CSS。**用户是对比判断型而非术语型时**（说不出风格名，只会说「这个对/不对」）：
-
-- 不给语料系抽象风格名，改给**系统自己的杠杆候选**（色种子/变体、形状、字级、动效），并用目标栈可用的方式渲染对比：Flutter 使用项目现有预览、模拟器或截图流程；Web 仅在 HTML 设备框 preview harness 可用时使用一变体一框并排（见 `frontend-guide`）。可渲染候选 > 风格命名。
-- 先做**市场 + 官方原则调研**再出候选：市面同类产品流派 + 系统/平台原则（Google M3 + Apple HIG 等），原则蒸馏成裁决清单带进后续所有组件决策。
-- 两套原则冲突时（如 Apple Clarity「subtle」 vs M3 Expressive），用 app 级身份规则调和（例：memova = 身份只由黛绿承担，装饰全减）——把这条写进 DESIGN.md 的 Operating Principles。
-
-TUI 方向的约束：等宽字体、框线字符、单色 + 一个高亮、无阴影无圆角。
-
-## 联动
-
-| 时机 | 路由到 |
+| Section | Required content |
 |---|---|
-| 规格要落地成页面 | `frontend-guide`（本 skill 输出直接填其 Step 1 方向卡） |
-| 方向确认后要落盘成持久设计文档 | `better-designs-md`（Google DESIGN.md 规范书写，token→front matter） |
-| 项目已安装 `ui-ux-pro-max` 且需要全量风格/色板/字体数据 | `ui-ux-pro-max` |
-| 九维度词汇表 | `references/dimensions.md` |
-| 东亚美学语料（候选之一，非默认） | `references/east-asian.md` |
+| Context | Audience, object, purpose, target devices or terminals, existing constraints |
+| Direction | Design Read and concrete platform-specific choices for the dimensions that matter |
+| References | Supplied or inspected references and the traits being adopted; label illustrative or unverified comparisons |
+| Avoid | A short list of mismatches specific to this direction, with reasons |
+
+Map Direction to the actual platform:
+
+- **Web:** CSS custom properties or existing tokens for colors, type, spacing, shape, elevation, and motion; include applicable responsive behavior and interaction states.
+- **Flutter/Material 3:** existing `ThemeData`, `ColorScheme`, `TextTheme`, shape, component themes, and states; use logical pixels and the project's constraints rather than CSS declarations.
+- **TUI:** semantic color roles, supported palette depth, character-cell spacing, density, focus/selection markers, and border characters. Font rendering belongs to the user's terminal; do not promise app-controlled font families, CSS shadows, or pixel radii. Provide non-color state cues and a fallback for unsupported glyphs.
+
+Keep text readable, preserve visible focus and state distinctions, and respect reduced-motion preferences. Do not equate visual quietness with low text contrast or claim accessibility compliance without checking the actual result.
+
+## Internal calibration
+
+Use these three axes to compare candidate directions, not as a numeric questionnaire for the user. Ranges are starting hypotheses, not platform rules.
+
+| Axis | Scale | Typical starting ranges |
+|---|---|---|
+| VARIANCE | 1: strict grid; 10: deliberately broken grid | Tools 3–5; marketing 7–9 |
+| MOTION | 1: no motion; 10: pronounced physical motion | Productivity 2–4; consumer experiences 6–8 |
+| DENSITY | 1: gallery spacing; 10: compact information display | Reading 2–3; terminals 7–9 |
+
+Calm/minimal directions often favor restrained layout and motion. Luxury may use generous spacing; experimental work may use stronger contrast in layout and motion. Trust does not require low density: a professional tool may need compact, predictable structure. Translate the axes into actual choices, such as reading line-height around 1.6, a specific spacing scale, or a 200 ms fade without bounce. Adjust them to content, platform, and accessibility needs; do not leave the result as three numbers.
+
+## When labels are not helping
+
+If a direction is rejected twice, stop proposing cosmetic variants of it. Identify which traits were rejected and change the underlying approach. Users who judge examples more easily than style names should receive concrete comparisons using the design system's own controls: color roles or seed, shape, typography, density, and motion.
+
+Reuse existing research and project previews. Investigate comparable products and official platform guidance only for unresolved decisions or version-sensitive facts; do not launch market research for a local adjustment. State which evidence supports each candidate. If research or rendering is unavailable, offer clearly labeled textual comparisons and disclose the limitation.
+
+Use existing Flutter previews, emulators, or screenshots for Flutter. Use the project's browser preview for Web; side-by-side device frames are appropriate only when an existing preview harness supports them. Do not introduce a different stack just to show variants. Creating a preview must fit the authorized task scope.
+
+With Material 3, Fluent, Carbon, or another established system, map the direction to its native tokens and components rather than imitating it with unrelated styling. If principles conflict, write a concrete product-level rule, such as “brand identity comes from the accent color; surfaces remain undecorated,” and use it consistently. Persist it only once agreed.
+
+## Avoid generic styling by default
+
+Evaluate purple gradients, stock illustrations, shadows everywhere, excessive font families, emoji icons, repeated centered three-card layouts, and decorative glass effects against the actual brief. Do not paste a universal blacklist into every brief: these treatments, including pure black or white, can be appropriate when the reference, design system, or accessibility requirements support them. The Avoid section should explain what would undermine this particular direction.
+
+## References and routing
+
+Read local references only for the relevant branch:
+
+- [Nine-dimension vocabulary](references/dimensions.md): candidate terminology and concrete parameters for an unresolved visual dimension.
+- [East Asian ink-and-paper palette](references/east-asian.md): an optional direction when the user's references or chosen style support it; never an automatic fallback.
+
+Route by task, without restarting settled decisions:
+
+| Task | Route |
+|---|---|
+| Express the user's request more clearly, with no design decisions requested | `clarify-wording` |
+| Plan or build a whole interface | `frontend-guide`; supply the brief as its direction input |
+| Apply a precise local styling change | Stay in the existing implementation workflow; do not restart discovery |
+| Author a persistent Design Markdown document from a confirmed brief | `better-designs-md` when its invocation requirements are met; reuse confirmed material |
+| Need a broader style, palette, or font catalog | `ui-ux-pro-max` only if already installed and useful; it is optional |
+
+The brief is ready for handoff when it identifies a supported direction, gives usable specifications for the target platform, preserves project constraints, and separates confirmed decisions from proposals. Report missing reference access, rendering, or validation rather than treating an untested brief as an approved implementation.

@@ -1,45 +1,50 @@
-# 东亚美学底色语料
+# East Asian ink-and-paper palette
 
-本 skill 的**默认底色**：用户没有明确指定其他风格方向时，一切翻译从这里起步。用户给了别的参照物或风格词时，本语料退位为可用选项之一。
+This is one optional visual direction, not the skill's default and not a definition of all East Asian design. Use it when the user's references or chosen direction support ink, paper, calligraphic, or related editorial treatments. Otherwise choose a different direction from the task context.
 
-## 核心原理：纸墨二元
+## Core composition: paper and ink
 
-- **亮模式 = 纸色**，**暗模式 = 墨色**，全站只有黑白两极 + **一个情绪色：朱砂**。
-- 朱砂只做点睛：印章、强调数字、当前项标记、错误态。永远不做大面积铺色。
-- 白用 off-white（纸色 `#F7F4EC` 一类），黑用墨色（`#1A1A1A` 一类），禁纯黑纯白。
+- Use paper-like surfaces for a light theme and ink-like surfaces for a dark theme. A restrained vermilion accent can unify emphasis without dominating the page.
+- Apply vermilion sparingly to a seal, key number, or current-item marker. Keep error and selection states distinguishable; do not rely on the shared hue alone to convey their meaning.
+- Warm paper such as `#F7F4EC` and ink such as `#1A1A1A` are palette starting points, not mandatory tokens. Adjust actual foreground/background combinations for readability and the project's theme requirements.
 
-## 常用元素
+## Common elements
 
-| 元素 | 做法 | 约束 |
+| Element | Treatment | Constraint |
 |---|---|---|
-| 印章 / 朱砂环 | CSS 圆环或方形印，朱砂色 | 一个页面最多一处主印 |
-| ensō 墨圆 | 一笔圆 + 缺口 + 留白（SVG 描边圆弧） | 纯黑白图形必须落在固定的浅色圆盘上，否则在暗色模式隐形 |
-| 和纸纹理 | SVG feTurbulence 生成颗粒，低透明度叠加 | 背景层，不抢内容 |
-| 目録（卷轴式目录） | 竖排条目 + 细线分隔 + 编号 | 参考 Mokuroku 形制 |
+| Seal or vermilion ring | A small circular or square mark | Usually one dominant seal per page; do not scatter decorative stamps |
+| Ensō ink circle | An incomplete brush-like circle with surrounding space | Provide a contrasting backing or theme-aware stroke so it remains visible in either theme |
+| Washi-like texture | Low-opacity grain; SVG `feTurbulence` is one Web option | Keep it behind content and verify that it does not reduce legibility or add excessive rendering cost |
+| Mokuroku-inspired contents | Ordered entries, fine separators, and numbering | Borrow the catalog rhythm without making ordinary navigation harder to use |
 
-## 竖排规则
+Select motifs for the actual reference and audience. Ensō, washi, Chinese seal forms, and ink painting come from distinct traditions; do not combine them automatically as interchangeable decoration.
 
-- 竖排 = `writing-mode: vertical-rl`：自上而下成列，从右往左逐列。
-- 竖排中的数字用汉字数字（一、二、三），不用阿拉伯数字。
-- **装饰性竖排可用（标题、引言、题字）；正文和导航禁用竖排**（可读性红线）。
+## Vertical text
 
-## 感受词速查（本语料内的翻译）
+For a Web accent, `writing-mode: vertical-rl` creates top-to-bottom columns that progress right-to-left. Verify orientation and reading order with the actual text and platform.
 
-| 用户的话 | 翻译 |
+Keep ordinary interface body text and navigation horizontal in this palette. Reserve vertical treatment for short titles, quotations, or inscriptions where it remains readable; a project specifically designed for vertical reading needs its own layout decisions.
+
+Chinese numerals such as 一、二、三 may suit decorative numbering. Do not convert dates, quantities, or identifiers mechanically; preserve their meaning and test the chosen numeral treatment.
+
+## Cue translations within this palette
+
+| User cue | Candidate treatment |
 |---|---|
-| 素雅 | 纸底 + 墨字 + 朱砂一点 + 大留白 |
-| 禅 | 极简 + ensō + 呼吸感间距 |
-| 典雅 | 宋体/明朝体衬线标题 + 直角 + hairline 分隔 |
-| 静谧 | 暗墨底 + 低对比层次 + 微动效 |
-| 利落（武士/游戏感） | 深墨底 + 朱砂/橙强调 + 直角硬边 |
+| 素雅 / understated elegance | Paper surface, ink text, a small vermilion accent, generous spacing |
+| 禅 / Zen-inspired | Minimal composition, spacious rhythm, an ensō only when relevant to the reference |
+| 典雅 / classical refinement | Song/Ming-style serif headings, square geometry, thin separators |
+| 静谧 / stillness | Dark ink surfaces, subtle surface layering, restrained motion; retain readable text contrast |
+| 利落 / sharp, game-like | Dark ink, a vermilion or orange accent, crisp edges |
 
-## 技术约束（实现层红线）
+## Implementation notes
 
-- 动画只用 `transform` / `opacity`（合成器属性），避免触发重排的属性。
-- `clip-path` 有重绘风险，大面积动效慎用。
-- `mask-position` 动画有圆心漂移坑，ensō 描边动画用 `stroke-dashoffset` 替代。
-- 图像素材优先公有领域：Met Open Access API（CC0）、Wikimedia imageinfo。
+- For Web motion, prefer `transform` and `opacity` where they express the intended effect; verify performance rather than assuming compositing is guaranteed.
+- Large animated `clip-path` regions may repaint. Measure on target devices before using them as a prominent effect.
+- For a simple ensō draw-on effect, an SVG path with `stroke-dashoffset` is usually easier to control than an animated mask. Verify its geometry and appearance; support a static reduced-motion version.
+- Map these visual traits to native painting, themes, and components on Flutter. For TUI, use spacing, color roles, and supported glyphs; paper textures and brush animations need not transfer.
+- The Met Open Access collection and Wikimedia Commons can be useful asset sources. Verify the individual asset's license and attribution requirements; Wikimedia hosting alone does not establish public-domain status.
 
-## 参考原理（动手前可查）
+## Research leads when needed
 
-东亚书写规范（Wikipedia vertical text）/ Ensō / Sumi-e / Mokuroku / Washi。
+For a chosen motif, consult material about vertical typography, ensō, sumi-e, mokuroku, or washi as relevant. These are research topics, not sources already inspected. Do not require a survey of all of them before producing a brief.
