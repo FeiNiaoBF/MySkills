@@ -1,8 +1,20 @@
-# make-sense comparison protocol
+# make-sense evaluation protocol and records
 
-This is a text-response smoke comparison, not a learning-outcome study or a test of host skill discovery. The installed runtime is `SKILL.md`. [shortened.md](shortened.md) is the frozen 2026-09-26 candidate, not the current runtime; its results below do not automatically transfer to version 1.1.
+This document contains a text-response smoke comparison protocol and version-specific records, not a learning-outcome study or a test of host skill discovery. The current runtime is [SKILL.md](../SKILL.md), version 1.2.0; no independent behavioral evaluation of that version is recorded here. Results for earlier versions do not establish its behavior. [shortened.md](shortened.md) is the frozen 2026-09-26 candidate, retained only to interpret the historical comparison.
 
-## Fixed inputs and arms
+## Contents
+
+- [Evaluation protocol](#evaluation-protocol)
+  - [Fixed inputs and arms](#fixed-inputs-and-arms)
+  - [Generation and blind review](#generation-and-blind-review)
+  - [Activation checks](#activation-checks)
+  - [Decision boundary](#decision-boundary)
+- [Version 1.1 adoption record](#version-11-adoption-record) — 2026-09-27
+- [Version 1.0 historical comparison](#version-10-historical-comparison) — 2026-09-26
+
+## Evaluation protocol
+
+### Fixed inputs and arms
 
 Use [cases.yaml](cases.yaml), version 1.2, and record any selected subset before generation. Version 1.2 adds standalone-term, broad-learning, local-confusion-in-task, and provenance-correction; the last is an anonymized adaptation of an observed assistant error, not a verbatim user transcript. Give generators only `id` and `input.messages`, never `review` or the shared criteria. Each message history is self-contained; histories do not share a user profile.
 
@@ -20,7 +32,7 @@ For all arms, normalize `/skill:make-sense` to a request to explain the supplied
 
 The coding case tests whether the response stays on task and honestly reports unavailable execution. It cannot establish compilation or test execution without a separate tool-enabled run.
 
-## Generation and blind review
+### Generation and blind review
 
 1. Freeze selected inputs and both prompts; record their hashes. Generate one response per case per arm. Complete when every arm has the same declared case IDs and a nonempty answer for each.
 2. Use a fresh session for each case and arm. Repeated trials are needed before stronger claims. Historical batched results have a shared-context limitation and must not be described as independent case-level runs.
@@ -30,19 +42,21 @@ The coding case tests whether the response stays on task and honestly reports un
 
 A fresh model reviewer is not a human learner and may share the generator's biases. Label its scores as model judgments. No user-comprehension, mastery, statistical-significance, or cross-model claim follows from this smoke run.
 
-## Activation checks
+### Activation checks
 
 Assess triggering separately from forced-prompt response quality. Present the description and task without the runtime body in fresh sessions; record whether the model would select the skill and why. Include a standalone term question and local confusion (select), and a broad learning request, translation-only request, ordinary implementation, and a request to review the skill file itself (do not select merely because the name appears). These are selection probes, not proof of actual host discovery or routing among installed skills. Test live host routing separately before making that claim.
 
-## Decision boundary
+### Decision boundary
 
 Do not promote a candidate merely for being shorter. Prefer it only if the observed answers preserve task relevance and factual boundaries without a material regression; otherwise retain the current runtime and identify the discriminating follow-up cases. A tie supports lower prompt overhead as a maintenance preference, not a demonstrated response-quality improvement.
 
 Keep raw responses, blinded judgments, decoding maps, prompt snapshots, and run receipts in the local evaluation artifact directory, outside the repository. Summarize results only after checking the actual terminal artifacts. When using structured output, verify the structured payload and successful tool receipt; a named output file may contain only final prose and be empty. Save any recovered payload separately with its source trace identified. Do not tune the frozen candidate during a run or feed expected answers back into a retry without marking the trial invalid.
 
-## Version 1.1 adoption check — 2026-09-27
+## Version 1.1 adoption record
 
-**Decision:** adopt the simplified runtime for lower instruction overhead, with no material regression observed in this bounded check. This is not evidence of improved comprehension or superiority to using no skill.
+Recorded on 2026-09-27 for runtime v1.1. The fixture version 1.2 mentioned below identifies the case set, not runtime v1.2.0.
+
+**Decision at the time:** adopt the simplified runtime for lower instruction overhead, with no material regression observed in this bounded check. This is not evidence of improved comprehension or superiority to using no skill.
 
 Before generation, four version 1.2 cases were selected: `standalone-term`, `repeated-confusion`, `claim-uncertain`, and `provenance-correction`. Each arm/case pair ran in its own fresh session, producing 12 independent-session responses (one trial each). A separate fresh reviewer received case-local rotated anonymous labels, the inputs, and criteria, but not arm identities or prompts. The parent checked every verdict and exact quoted excerpt against the actual responses; no verdict changes were needed.
 
@@ -64,11 +78,11 @@ Six additional fresh description-only selection probes matched the intended boun
 - Previous runtime: revision `7cdb8eb`, SHA-256 `56b9d524aa3520180f680dfbc7dbe971f07b9203e2f34f9cbc6e6eac1466f9cb`. Adopted runtime: `822d9c1d45c383db5be8292e9461d62ce8087802a6251730dbc66a34540cbcbc`. Fixture snapshot: `bcef658249ab8420f5f1cd5dd2f98a8ab565ea2c3c56129197f7f9ab2c537785`.
 - Local evidence is retained outside the repository under `${TEMP}/pi-agent/make-sense-v1.1-20260927/`: frozen prompts/fixtures, generation manifest, workflow, responses, blind judgments, transcript audit, and receipt for run `2c0d77f5-16f6-4387-9485-e3c7ad5e0cd7`. These machine-local artifacts are not distributed with the skill.
 
-## Smoke comparison — 2026-09-26 (historical v1.0)
+## Version 1.0 historical comparison
 
-This historical run used fixture version 1.1 (17 cases); “Current” below means the former v1.0 runtime, not the installed v1.1 runtime.
+This historical run on 2026-09-26 used fixture version 1.1 (17 cases); “Current” below means the former v1.0 runtime, not the current runtime.
 
-**Conclusion:** the shortened candidate matched the no-skill baseline on these cases, with no observed material regression against the current skill and 67.5% fewer skill-prompt characters. This run did not demonstrate that either skill improves on the baseline. Keep the candidate separate until a deliberate adoption decision; do not interpret these results as a validated learning benefit.
+**Conclusion and recommendation at the time:** the shortened candidate matched the no-skill baseline on these cases, with no observed material regression against the current skill and 67.5% fewer skill-prompt characters. This run did not demonstrate that either skill improves on the baseline. Keep the candidate separate until a deliberate adoption decision; do not interpret these results as a validated learning benefit.
 
 ### Observed results
 
