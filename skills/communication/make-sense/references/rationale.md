@@ -29,7 +29,7 @@ The six gap types (term, prerequisite, relationship, reasoning, misconception, p
 
 ## Scope and simplification
 
-`make-sense` repairs an expressed understanding problem, including standalone term questions. It does not start unsolicited teaching merely because technical vocabulary appears. Broad learning and translation requests retain their own scope; a requested derivation within a clarification still deserves its full steps. Visuals are optional and require no named sibling skill.
+`make-sense` repairs an expressed understanding problem, including standalone term questions. It does not start unsolicited teaching merely because technical vocabulary appears. Broad learning and translation requests retain their own scope; a requested derivation within a clarification still deserves its full steps. The current runtime provides text explanations, including examples, code snippets, or equations where useful; diagrams and other visual explanations are outside its scope. Fact verification and uncertainty disclosure remain part of the guidance.
 
 Version 1.1 uses the shortened candidate as its starting point, retaining blocker identification, factual boundaries, requested depth, and a changed strategy after repeated confusion. The explicit gap taxonomy is design reference rather than a mandatory runtime procedure. The earlier comparison supports investigating lower instruction overhead, not a claim that shorter prompts improve comprehension. The original candidate remains frozen for interpreting that historical result.
 

@@ -42,7 +42,7 @@
 | Skill | 使用场景 |
 | --- | --- |
 | [clarify-wording](skills/communication/clarify-wording/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
-| [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，修复理解障碍并回到原任务 |
+| [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，用精准的文本解释修复理解障碍并回到原任务 |
 
 ### 问题探索（problem-solving）
 
@@ -114,18 +114,19 @@ npx skills list -g -a pi
 
 ### 更新或在新电脑重装
 
-更新已安装且有来源记录的 Skill，按安装范围选择。以下命令更新所选范围内的 Skill，不限于本仓库：
+本仓库所有 Skills 共用以下更新原则：**更新单个 Skill 时，只更新指定 Skill，避免牵动其他 Skills；只有用户明确要求批量或全量更新时，才扩大范围。** 各 Skill 的更新说明引用本节，规则和通用命令集中维护。
+
+更新已安装且有来源记录的 Skill，按实际安装范围选择，并将示例名称替换为目标 Skill：
 
 ```bash
-# 全局安装
-npx skills update -g
+# 只更新全局安装的指定 Skill
+npx skills update -g make-sense
 
-# 只更新指定的 Skill，避免牵动同范围内的其他来源
-npx skills update -g better-designs-md
-
-# 当前项目安装
-npx skills update -p
+# 只更新当前项目安装的指定 Skill
+npx skills update -p make-sense
 ```
+
+仅在明确要求更新整个范围时，使用 `npx skills update -g`（全局）或 `npx skills update -p`（当前项目）；这类更新不限于本仓库。
 
 本地 Git checkout、GitHub 上的源码和 CLI 安装的副本各有更新步骤：本地修改或 `git pull` 只改变 checkout；维护者推送到 GitHub 后，使用者再通过 CLI 获取已发布的修改。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。Skill 改名或移动目录后 `update` 也无法跟随：用新名重新 `skills add`，再用 `skills remove` 清理旧名。
 
