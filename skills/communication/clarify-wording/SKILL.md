@@ -1,32 +1,43 @@
 ---
 name: clarify-wording
-description: 用户知道自己大致想表达什么，却说不清、说不准，或希望把想法整理成更清晰的话术时使用；解释其意思并代拟保留原意的表达。
+description: >-
+  This skill activates when users ask to rephrase an idea or struggle to express
+  intent. It also helps after repeated misunderstandings. It drafts reusable
+  wording and does not handle actionable requests or explain existing terms and
+  materials.
 metadata:
   version: "2.0.0"
 ---
 
-# clarify-wording
+# Clarify Wording
 
-帮助用户把尚未表达清楚的意思整理成准确、自然、可直接使用的话术。用户主动调用本 Skill 时，先给出话术供用户核对；只有用户确认后，才按确认的话术继续处理后续任务。
+This skill turns an unclear or partly expressed intent into clear, natural wording the user can reuse. When activated, it produces a draft for the user's review; the draft is not approval to carry out the task it describes.
 
-## 何时使用
+## Activation and routing
 
-用户明确调用 `clarify-wording`，或明确要求整理想法、优化措辞时使用。若对话中出现关键意思反复误解、用户否定了猜测却难以换种说法，也可使用。主动调用表示用户希望先审核整理后的话术，不表示已经批准话术或要求立刻执行其中的任务。
+Activate when the user:
 
-用户没有主动调用本 Skill，且原话虽然口语化但已经足够完成任务时，不要为了找术语而打断，直接处理原任务。用户是在询问某个现成术语、段落或推理是什么意思时，转到 `make-sense`；用户是在把视觉感受转成设计方向时，转到 `aesthetic-translator`。
+- explicitly invokes `clarify-wording`;
+- asks to clarify an idea, improve wording, or express an intended message more clearly; or
+- has repeatedly corrected misunderstandings and appears unable to restate the intended meaning.
 
-## 处理方式
+An explicit skill invocation always starts with a draft for review, even when the underlying task is already clear. It does not authorize carrying out that task.
 
-1. 结合当前任务和上下文，辨认用户明确表达的立场、目标、限制和情绪重点。区分原话已有的信息与合理但未确认的推断。
-2. 用简短、自然的语言解释你理解到的意思。若多个概念确实可能表达不同意思，可给出 2–4 个候选并说明差别；没有必要时直接用普通语言，不为术语而术语。
-3. 写出一段优化后的用户话术，默认使用第一人称，保留用户的目标、语气和重要限制。改善结构、具体度和表达力度，但不得替用户增加目标、承诺、事实或偏好。将可直接使用的话术单独放在 `txt` 代码块中，代码块内只放话术正文，方便用户复制。
-4. 如果某处仍不确定，优先用不替用户作决定的写法保留不确定性。只有缺失的信息会让话术错误代表用户立场时，才问一个最小且具体的问题；不要连续追问或开展完整需求访谈。
-5. 给出简短的理解说明和 `txt` 话术后暂停，等用户核对。用户提出修改时先按其反馈修订话术；用户确认话术正确并要求继续后，再将确认的话术作为后续任务指令处理。确认前不要执行话术中描述的任务。
+Do not activate when the user's request is already actionable and they have not asked for help with wording. Route questions about the meaning of an existing term, passage, or reasoning to `make-sense`. Route vague visual preferences that need design specifications to `aesthetic-translator`.
 
-## 边界
+## Workflow
 
-`clarify-wording` 的产物是待用户审核的话术，不是任务方案、需求规格或代用户作出的决定。主动调用时，即使任务本身已经清楚，也先把用户的请求整理成 `txt` 话术并等待确认；确认后，只有用户要求继续，才执行确认话术中的任务。未主动调用时，若用户的原话已经足够清楚且没有要求改写，则直接完成原任务。所谓“补充和加强意向”是把上下文中已有依据的意思组织得更完整、更鲜明；不把猜测写成用户确认过的立场。遇到需要深入权衡的方向选择时，可指出尚未决定的部分；只有用户要求梳理或压力测试该选择时才转到 `grilling`，不要把 `grilling` 当作普通澄清步骤。
+1. Infer the user's stated goal, position, constraints, and tone from the request and context. Separate what the user said from any unsupported assumption. If the user says the assistant acted prematurely, acknowledge that mistake without defending it.
+2. Briefly state the understood intent. Offer two to four options only when the possible meanings would lead to materially different wording.
+3. Draft concise, natural wording in the first person by default and in the language the user intends to use. Preserve the user's intent, tone, and important limits. Do not add goals, commitments, facts, or preferences. Make unresolved choices explicit instead of deciding for the user.
+4. Ask one focused question only when missing information would make the draft misrepresent the user's position and the uncertainty cannot be stated in the draft. Do not turn clarification into a requirements interview.
+5. Present the draft in a standalone `txt` code block. Put only the wording in the block. Do not repeat the full draft outside it.
+6. Pause for review. If the user corrects the draft, revise it and wait again. Continue with the approved wording only when the user confirms it and asks to proceed. Do not ask for approval a second time.
 
-## 回复形态
+## Boundaries
 
-通常先简短说明“我理解你想表达的是……”，再提供“可以这样说：”和一个单独的 `txt` 代码块。代码块外不重复整段话术。给出后等待用户核对：若用户确认并要求继续，就按确认的话术完成任务；若用户纠正，则先更新话术，再等确认。不要把主动调用误解为用户已经批准话术或批准执行。
+The output is wording for the user to review, not a specification or a decision on the user's behalf. Strengthen the expression only with meaning supported by the conversation. When the user has not asked for wording help, do not interrupt an actionable request to search for terminology. Use `grilling` only when the user asks to examine or stress-test an unresolved decision; it is not a routine clarification step.
+
+## Reply shape
+
+Use a short understanding statement in the user's language, then introduce the draft with an equivalent of “You could say:”. Keep explanations and questions outside the `txt` block. After presenting the draft, stop and wait for the user's review.
