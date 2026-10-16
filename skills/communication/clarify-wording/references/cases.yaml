@@ -1,5 +1,14 @@
 # Maintainer-only comparison cases for the clarify-wording skill.
 # Review fields are expectations, not extra user messages.
+# Topic index (search case IDs):
+# - Activation: explicit-idea-and-rephrase, explicit-skill-call-review-before-answer,
+#   implicit-rejected-guess, improve-user-position-without-taking-over
+# - Review: user-confirms-wording-and-continues, approval-without-continuation,
+#   user-revises-draft, user-corrects-premature-action
+# - Exclusions: colloquial-but-actionable, existing-term-explanation,
+#   actionable-skill-creation, visual-direction-without-wording-request
+# - Uncertainty: essential-gap, preserve-uncertain-detail
+# - Language and precedence: explicit-visual-wording-in-english
 version: "2.0"
 cases:
   - id: explicit-idea-and-rephrase
@@ -72,7 +81,7 @@ cases:
     input:
       messages:
         - role: user
-          content: "做个新的 skill，主要就是按用户要求去 skills.sh、GitHub 这些地方找合适的 skills 放进项目级 skills。"
+          content: "请用 clarify-wording 整理这段话：做个新的 skill，主要就是按用户要求去 skills.sh、GitHub 这些地方找合适的 skills 放进项目级 skills。"
     review:
       expect: "Explains the goal as finding existing Skills from relevant sources and placing suitable ones in the current project's Skills directory; drafts a polished first-person request in a standalone txt code block and waits for the user's review."
       avoid: "Choosing search/install policy, target agent, scoring rules, or implementation details without evidence; creating the Skill before user confirmation."
@@ -103,3 +112,64 @@ cases:
     review:
       expect: "Acknowledges the premature action, explains the known intent and the missing behavior choice, then offers wording in a standalone txt code block that preserves that unresolved choice. Waits for the user's review before resuming."
       avoid: "Defending the assumed behavior, continuing implementation, or immediately launching an exhaustive interview."
+
+  - id: approval-without-continuation
+    input:
+      messages:
+        - role: user
+          content: "请用 clarify-wording 整理：列出项目里可用的 Skills。"
+        - role: assistant
+          content: |-
+            我理解你想查看项目里的 Skills。可以这样说：
+            ```txt
+            请列出当前项目可用的 Skills，并说明各自的用途。
+            ```
+        - role: user
+          content: "这就是我的意思。"
+    review:
+      expect: "Acknowledges the wording approval without executing or drafting it again."
+      avoid: "Listing Skills, inspecting the project, or treating wording approval as permission to act."
+
+  - id: user-revises-draft
+    input:
+      messages:
+        - role: user
+          content: "请用 clarify-wording 整理：列出项目里可用的 Skills。"
+        - role: assistant
+          content: |-
+            可以这样说：
+            ```txt
+            请列出当前项目可用的 Skills，并说明各自的用途。
+            ```
+        - role: user
+          content: "只看视频相关的，先改话术。"
+    review:
+      expect: "Revises the draft to cover video Skills only, uses a standalone txt block, and waits for review."
+      avoid: "Executing the revised task, keeping the broader scope, or treating a correction as approval."
+
+  - id: actionable-skill-creation
+    input:
+      messages:
+        - role: user
+          content: "做个新的 skill，主要就是按用户要求去 skills.sh、GitHub 这些地方找合适的 skills 放进项目级 skills。"
+    review:
+      expect: "Does not invoke clarify-wording. Handles the Skill creation request under the normal task workflow."
+      avoid: "Forcing a wording-review gate simply because the request is colloquial."
+
+  - id: visual-direction-without-wording-request
+    input:
+      messages:
+        - role: user
+          content: "这个页面太素了，我想要像 Linear 那样有质感，给我几个设计方向。"
+    review:
+      expect: "Routes to aesthetic-translator for design directions rather than starting wording review."
+      avoid: "Rewriting the request in a txt block and waiting for approval instead of addressing the design task."
+
+  - id: explicit-visual-wording-in-english
+    input:
+      messages:
+        - role: user
+          content: "请用 clarify-wording，帮我用英文写给设计师：页面要有质感，像 Linear，但具体怎么做还没定。"
+    review:
+      expect: "Explains the intent in Chinese, drafts English wording in a standalone txt block, preserves undecided design details, and waits for review."
+      avoid: "Routing directly into design execution, drafting in Chinese, or inventing colors, typography, and implementation choices."
