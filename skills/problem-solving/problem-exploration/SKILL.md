@@ -1,19 +1,20 @@
 ---
 name: problem-exploration
 description: >-
-  Use when the user has an unclear problem or idea and needs evidence to choose
-  what to do. Frame the question, investigate relevant evidence, validate key
-  assumptions with bounded checks, and recommend a next step. Skip straightforward
-  factual questions and already-scoped implementation tasks.
+  This skill investigates unclear problems or ideas when evidence is needed to
+  decide what to do. It frames the decision, inspects relevant evidence, tests
+  consequential assumptions with bounded checks, and recommends a next step.
+  It does not turn straightforward factual questions, wording requests, or
+  already-scoped implementation tasks into an exploration workflow.
 license: MIT
 metadata:
   author: FeiNiaoBF
-  version: 0.1.0
+  version: 0.1.1
 ---
 
-# problem-exploration
+# Problem Exploration
 
-Help the user understand an unclear problem and decide what action, if any, is justified. Start from evidence and the decision at hand, not from a presumed solution. Creating a new project is one possible outcome, never the default.
+Help the user understand an unclear problem and decide what action, if any, is justified. Start from evidence and the decision at hand, not from a presumed solution. Creating a new project is one possible outcome, never the default. Reply in the user's language unless they request another language for the deliverable.
 
 ## Working principles
 
@@ -22,19 +23,19 @@ Help the user understand an unclear problem and decide what action, if any, is j
 - **Inspect before asking.** Use available project files, artifacts, and trustworthy sources to resolve questions where possible. Ask only when a missing fact cannot reasonably be established and would change the investigation or recommendation.
 - **Keep the work bounded.** Investigate subproblems that affect the main decision. Briefly note tangential findings; ask before expanding into an independent task.
 - **Validate only when useful.** Prefer the smallest safe, reversible check that can distinguish plausible explanations. A prototype or experiment is evidence, not production-ready work.
-- **Respect the task boundary.** Exploration does not authorize implementation or project setup. Continue into implementation when the user requests it and the request authorizes the needed changes; otherwise provide a recommendation and a next step.
-- **Use specialist workflows when they fit.** A confirmed bug, requested prototype, conceptual explanation, or documentation task may belong to a more focused Skill. Keep this Skill responsible for framing the open question and deciding what evidence or handoff is needed.
+- **Respect the task boundary.** Exploration authorizes relevant inspection and safe, isolated checks, not production changes or project setup. Use authorization already present in the conversation when continuing into implementation; do not ask for the same approval again. A request to explore alone ends with a recommendation.
+- **Use specialist workflows when they fit.** Apply the routing below to the actual task, not merely a keyword. Keep this Skill responsible for the open decision; use only the specialist work needed to resolve it.
 
 ## Adaptive workflow
 
 These are reasoning activities, not mandatory sequential stages. Skip or revisit stages when the available evidence warrants it.
 
 1. **Triage.** Decide whether the request is genuinely unclear. Answer a straightforward question directly. For a clearly scoped task, use its implementation workflow instead of forcing exploration.
-2. **Frame.** Identify the main question, why it matters, the desired outcome, constraints, and the decision that evidence needs to support. Ask one decision-relevant question only when an unresolved ambiguity materially changes the work.
-3. **Investigate.** Read relevant project material and inspect available evidence. Search externally only to resolve a concrete question. Keep findings tied to the main decision.
-4. **Validate if useful.** Run a low-cost, non-destructive check or isolated experiment when its result could change the recommendation. State what it establishes and what remains uncertain.
-5. **Synthesize.** Compare relevant options. Depending on the problem, consider no action, a configuration change, reuse, modifying an existing component, or creating a separate project. Explain evidence, trade-offs, and uncertainty without filling a template for its own sake.
-6. **Recommend or hand off.** Give the best-supported next step and the evidence behind it. Stop at a decision unless implementation is requested and authorized.
+2. **Frame.** Identify the main question, why it matters, the desired outcome, constraints, and the decision that evidence needs to support. Reuse answers already supplied. Ask one decision-relevant question only when an unresolved ambiguity materially changes the work; otherwise state a bounded assumption and proceed.
+3. **Investigate.** Read relevant project material and inspect available evidence. For each consequential hypothesis, identify what observation would support or weaken it and choose the cheapest useful source or check. Search externally only to resolve a concrete question; prefer primary sources for product or API claims. Keep source links, file locations, or observed results attached to consequential findings. Consider conflicting evidence, not only support for the favored explanation. If access fails, state the gap rather than treating a search snippet or recollection as verification.
+4. **Validate if useful.** Before running a check, state the hypothesis, the observation that would change the recommendation, and a practical bound such as one representative input or a fixed sample. Use a low-cost, non-destructive check or isolated experiment. Keep temporary artifacts outside the project unless a project artifact is requested. Report the result, its scope, and what remains uncertain; a successful sample does not establish general feasibility, demand, or production readiness.
+5. **Synthesize.** Compare only options that could resolve the framed question. Depending on the problem, consider no action, a configuration change, reuse, modifying an existing component, or creating a separate project; these are alternatives, not a mandatory checklist. Explain evidence, trade-offs, and uncertainty without filling a template for its own sake.
+6. **Recommend or hand off.** Give the best-supported next step and the evidence behind it, including any unresolved assumption that could reverse the recommendation. When a handoff is useful, carry forward the question, decisive evidence, constraints, and remaining uncertainty. Continue implementation only within existing authorization; otherwise stop at the recommendation.
 
 ## Lightweight scope tracking
 
@@ -49,7 +50,22 @@ Do not create a plan, report, issue, or project automatically. Record findings o
 
 ## Stop conditions
 
-Stop when the question is resolved, the evidence is sufficient to choose a next step, further investigation is unlikely to change the decision, or a critical dependency blocks progress. State uncertainty or the missing dependency plainly. Do not continue merely to exhaust every possible avenue.
+Stop when the question is resolved, the evidence is sufficient to choose a next step, further investigation is unlikely to change the decision, or a critical dependency blocks progress. Distinguish a supported conclusion from an inconclusive check, exhausted investigation budget, or unavailable evidence. In the latter cases, give a conditional recommendation or the smallest missing observation needed to proceed. Do not continue merely to exhaust every possible avenue, or interpret failure to find evidence as proof that an option cannot work.
+
+## Routing
+
+Use a named Skill only when it is available and its invocation conditions are met; otherwise use the appropriate existing workflow without requiring installation.
+
+| Actual task | Route |
+|---|---|
+| Put the user's intended message into clearer words | `clarify-wording`; a wording review does not authorize investigating the drafted task |
+| Explain a term, passage, or reasoning step | `make-sense` |
+| Turn an intended visual effect into a design proposal | `aesthetic-translator` |
+| Investigate reported broken, failing, or slow behavior | A diagnosis workflow such as `diagnosing-bugs`; do not require a confirmed cause before routing |
+| Build an isolated prototype to answer a specific question | `prototype`; retain the hypothesis, limits, and decision it must inform |
+| Write or maintain project documentation | `project-docs`; do not manufacture a documentation task from ordinary exploration |
+
+A broad question can contain a diagnostic or prototype subproblem. Resolve that subproblem, then return to the main decision instead of restarting discovery. Research tools can supply evidence without turning every investigation into a deep research report.
 
 ## Response
 
@@ -61,8 +77,8 @@ Possible outcomes include an explanation, a validated diagnosis, a practical cha
 
 - Turning every idea into a project brief, requirements document, or architecture plan.
 - Asking the user questions that available materials could answer.
-- Searching broadly without a concrete question to resolve.
-- Presenting hypotheses as facts or an experiment as production validation.
+- Searching broadly without a concrete question or a stopping bound.
+- Presenting hypotheses as facts, a missing source as disproof, or an experiment as production validation.
 - Treating a new module or project as the default solution.
 - Expanding into an independent task without agreement.
 - Implementing changes when the request only authorized exploration.
