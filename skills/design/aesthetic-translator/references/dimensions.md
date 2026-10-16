@@ -54,7 +54,7 @@ Choose for the usage conditions and existing theme support. Light or warm-paper 
 
 ## 5. Layout character
 
-Candidate patterns include a constrained reading column (about 720 CSS px as a Web starting point), split text/image landing pages, sidebar tool shells, equal-width catalog cards, unequal editorial columns, full-width typographic heroes, mixed-size feature tiles, and floating capsule navigation. Choose a character that serves content and tasks. Page inventory and module structure belong to the implementation workflow; do not impose a new structure for a local style adjustment.
+Candidate patterns include a constrained reading column (about 720 CSS px as a Web starting point), split text/image landing pages, sidebar tool shells, equal-width catalog cards, unequal editorial columns, full-width typographic heroes, mixed-size feature tiles, and floating capsule navigation. Choose a character that serves content and tasks. Use enough page and module structure to make the design proposal reviewable; production page inventory belongs to the implementation workflow. Do not impose a new structure for a local style adjustment.
 
 ## 6. Detail
 
