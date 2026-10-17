@@ -2,14 +2,14 @@
 name: aesthetic-translator
 description: >-
   This skill helps users describe designs without design terminology. It turns
-  everyday visual preferences, rough ideas, and references into concrete design
-  directions, an inspectable HTML preview, and implementation-ready specifications.
-  Use it for requests such as premium, too plain, or like Linear, and to refine
-  those previews from feedback. It does not handle wording-only requests or
-  restart design discovery for a precise styling change.
+  everyday visual preferences, rough ideas, and references into concrete visual
+  directions, conversational explanations, inspectable HTML previews, and
+  platform-appropriate specifications. It supports requests such as premium,
+  too plain, or like Linear, and refines existing designs from feedback. It does
+  not handle wording-only requests or restart discovery for precise styling edits.
 metadata:
   author: FeiNiaoBF
-  version: 0.2.0
+  version: 0.3.0
   date_added: 2026-09-05
 ---
 
@@ -17,9 +17,20 @@ metadata:
 
 Translate the design a user has in mind into a concrete direction, a visible proposal, and usable specifications. Users need neither professional vocabulary nor a reference image. Reply in the user's language unless they request another language for the deliverable.
 
-The default deliverable is an HTML design preview with a compact inspector: users see the proposed UI, identify its parts, and explain what to change. Include the brief and relevant specifications without crowding the UI. Honor explicit requests for text only, advice without files, or another format; if rendering is unavailable, disclose that limitation.
+## Scope and delivery
 
-This skill owns the design proposal and its review preview. A preview does not authorize production implementation, backend work, deployment, or changes to the product's stack. Preserve existing project decisions and the scope of the user's request.
+Focus on intended feeling, visual language, emphasis, typography, color, density, detail, and motion. Use layout and interaction choices where they support that direction; keep the design usable as well as visually coherent. This skill works independently and does not assign work to other skills.
+
+For project design, provide two corresponding deliverables:
+
+- **Conversation:** explain the direction and why its important choices fit the user's intent. Distinguish requirements, confirmed decisions, and proposals; summarize revisions and remaining choices.
+- **HTML review preview:** show the proposed UI with selectable elements, design reasons, and relevant specifications. Start from the bundled [HTML template](assets/design-preview.html) using the [HTML delivery reference](references/html-preview.md); update the preview and explanation together.
+
+Reuse the user-designated output folder and existing preview. If no destination is established, ask before saving and continue useful discussion meanwhile. Honor requests for discussion only, text only, no files, a later preview, or another format. Do not generate a new HTML artifact for an isolated styling fix when the existing preview or implementation already suffices. Disclose unavailable rendering.
+
+Match the workflow to the requested outcome. For reusable-template maintenance, follow the reference's template-only branch and retain an empty project slot. For project design, fill that slot with the actual proposal. Reuse completed steps when refining accepted work; do not restart discovery after each revision.
+
+A review preview does not change the production stack or prove application behavior. Design approval alone does not expand a design-only request into production implementation, backend work, or deployment. Continue implementation when already authorized, using the project's stack and checks. Preserve established project decisions and task scope.
 
 ## Working principles
 
@@ -33,9 +44,9 @@ This skill owns the design proposal and its review preview. A preview does not a
 1. **Read the context.** Collect the user's mood words, references, audience, object, and constraints from the conversation and existing design documents. Identify the target stack before producing implementation-specific values. Inspect supplied visual material when available; distinguish observed traits from an unverified interpretation of a product name. If a reference cannot be inspected, say so rather than inventing its details.
 2. **Identify the relevant dimensions.** Consult the [nine-dimension vocabulary](references/dimensions.md) only where useful. When alternatives would help resolve a material ambiguity, offer two or three coherent directions, each with a name, a concrete visual description, and one consequence. Otherwise recommend a plausible direction and make it visible. Do not require the user to choose style names or work through all nine dimensions before seeing a proposal.
 3. **State the Design Read.** Use one sentence: “For <audience>, this <object> uses <visual language>, with <palette/material treatment> and <density/motion/layout character>.” Distinguish explicit requirements, confirmed decisions, and proposed choices. A preview can test an unsettled choice; rendering it does not make it approved. If the user delegates the choice, recommend and proceed within that authorization.
-4. **Build the review preview.** Follow the [HTML preview and inspector contract](references/html-preview.md). Show the actual proposed UI as the main content, with a compact inspector for both modules and individual elements. Use realistic task content and keep the represented scope proportional to the request. Embed the four-part brief below and platform-specific specifications as secondary information; a page of prose or reference screenshots alone is not this deliverable.
+4. **Build the review preview.** Follow the [HTML delivery reference](references/html-preview.md) to copy or update the template, fill the design and brief, and associate meaningful regions and elements with their explanations. Use realistic task content and keep the represented scope proportional to the request. A page of prose or reference screenshots alone does not show the proposed design.
 5. **Calibrate from feedback.** Let users refer to familiar element names or selected regions. Translate comments such as “主标题更突出” into changes to the selected element's size, weight, contrast, or spacing as appropriate. Preserve unaffected decisions and stable element names. Update the preview and its specifications together, explain the relevant change briefly, and continue authorized revisions without repeating discovery or approval gates.
-6. **Verify and hand off.** Check the preview using the reference's completion checks and provide its opening link or launch instructions. Once the direction is confirmed, update the project's existing design document when documentation is in scope. If no convention exists, suggest `DESIGN.md`; do not create a competing document. Record confirmed decisions only. Continue already authorized production implementation through the appropriate workflow without asking for the same approval again.
+6. **Verify and hand off.** Apply the reference's completion checks and deliver the opening link or launch instructions, the relevant design explanation, and actual verification limits. Once the direction is confirmed, update the project's existing design document when documentation is in scope. If no convention exists, suggest `DESIGN.md`; do not create a competing document or record unconfirmed proposals as decisions. Continue already authorized implementation without asking for the same approval again.
 
 ### Four-part brief
 
@@ -82,22 +93,14 @@ With Material 3, Fluent, Carbon, or another established system, map the directio
 
 Evaluate purple gradients, stock illustrations, shadows everywhere, excessive font families, emoji icons, repeated centered three-card layouts, and decorative glass effects against the actual brief. Do not paste a universal blacklist into every brief: these treatments, including pure black or white, can be appropriate when the reference, design system, or accessibility requirements support them. The Avoid section should explain what would undermine this particular direction.
 
-## References and routing
+## Reference navigation and boundaries
 
 Read local references only for the relevant branch:
 
-- [HTML preview and inspector contract](references/html-preview.md): read when creating or revising the default visual deliverable; covers element naming, selection, presentation, and completion checks.
+- [HTML delivery reference](references/html-preview.md): read when creating, maintaining, or revising the visual deliverable. Covers the bundled template, filling and element registration, inspection behavior, storage, and completion checks.
 - [Nine-dimension vocabulary](references/dimensions.md): candidate terminology and concrete parameters for an unresolved visual dimension.
 - [East Asian ink-and-paper palette](references/east-asian.md): an optional direction when the user's references or chosen style support it; never an automatic fallback.
 
-Route by task, without restarting settled decisions:
-
-| Task | Route |
-|---|---|
-| Express the user's request more clearly, with no design decisions requested | `clarify-wording` |
-| Plan or build the production interface beyond the review preview | `frontend-guide`; supply the preview and brief as its direction input |
-| Apply a precise local styling change | Stay in the existing implementation workflow; do not restart discovery |
-| Author a persistent Design Markdown document from a confirmed brief | `better-designs-md` when its invocation requirements are met; reuse confirmed material |
-| Need a broader style, palette, or font catalog | `ui-ux-pro-max` only if already installed and useful; it is optional |
+Wording-only requests need no visual-design workflow. Product feature selection, a complete page inventory, and production architecture are not prerequisites for translating a visual preference; resolve only the context needed for the requested design. For a precise local styling change, use the existing implementation or preview and preserve settled decisions. Other skills may complement this work when the user chooses them, without a required order or handoff.
 
 The deliverable is ready for review when users can see the proposed design, identify modules and specific elements, and describe a requested change by name. It must also give usable specifications for the target platform, preserve project constraints, and separate confirmed decisions from proposals. Report missing reference access, rendering, or validation; neither a working preview nor a complete brief establishes user approval or production readiness.

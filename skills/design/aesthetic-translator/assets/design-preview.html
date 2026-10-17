@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>项目名称 · 设计评审</title>
+<style>
+/* Shell tokens do not define the embedded project's design system. */
+:root{--at-stage:#f2f3f5;--at-surface:#fff;--at-ink:#20242b;--at-muted:#626974;--at-rule:#dfe2e7;--at-soft:#f7f8fa;--at-accent:#315dc4;--at-selected:#edf2ff;--at-font:system-ui,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--at-sidebar:22rem;--at-s1:.25rem;--at-s2:.5rem;--at-s3:.75rem;--at-s4:1rem;--at-s6:1.5rem;--at-s8:2rem}
+body{margin:0;background:var(--at-stage)}
+.at-header,.at-direction,.at-stage,.at-notes,.at-jump{box-sizing:border-box;font-family:var(--at-font);color:var(--at-ink)}
+.at-header *,.at-direction *,.at-notes *,.at-placeholder *{box-sizing:border-box}
+.at-header{min-height:3rem;padding:.1875rem 1rem;background:var(--at-surface);border-bottom:1px solid var(--at-rule);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.at-identity{min-width:0;flex:1}.at-name{margin:0;font-size:.8125rem;font-weight:600;line-height:1.6;overflow-wrap:anywhere}
+.at-tools{display:flex;gap:.5rem;flex-shrink:0}.at-button{font:inherit;font-size:.75rem;line-height:1.5;min-height:2.5rem;border:1px solid #c4cbd6;border-radius:.375rem;padding:.375rem .75rem;background:var(--at-surface);color:var(--at-ink);cursor:pointer}.at-button:hover{background:var(--at-soft)}.at-button[aria-pressed="true"]{background:var(--at-selected);color:#244da8;border-color:#aabce7}
+.at-header .at-button{border-color:transparent;background:transparent}.at-header .at-button:hover{background:var(--at-soft)}.at-header .at-button[aria-pressed="true"]{background:var(--at-selected)}
+.at-header :focus-visible,.at-direction :focus-visible,.at-notes :focus-visible,.at-jump:focus-visible{outline:2px solid var(--at-accent);outline-offset:3px}
+.at-direction{padding:1.25rem 1.5rem;background:var(--at-surface);border-bottom:1px solid var(--at-rule)}.at-direction-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.75rem}.at-direction-label{font-size:.6875rem;color:var(--at-muted);line-height:1.5;margin:0}.at-direction-title{font-size:.9375rem;line-height:1.6;font-weight:600;margin:0 0 .375rem;overflow-wrap:anywhere}.at-direction-read{font-size:.8125rem;color:var(--at-muted);line-height:1.75;margin:0;overflow-wrap:anywhere}.at-status{display:flex;align-items:center;gap:.375rem;color:#5c6470;font-size:.6875rem;line-height:1.5;max-width:100%;overflow-wrap:anywhere}.at-status:before{content:"";width:.3125rem;height:.3125rem;border:1px solid #7d8797;border-radius:50%;flex-shrink:0}
+.at-layout{display:grid;grid-template-columns:minmax(0,1fr) var(--at-sidebar);min-height:calc(100svh - 3rem)}.at-layout.at-canvas-only{grid-template-columns:minmax(0,1fr)}
+.at-stage{padding:1.5rem;min-width:0}.at-stage-label{display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin:0 0 1rem;font-size:.75rem;line-height:1.5;color:var(--at-muted)}.at-stage-label span:first-child{color:#4e5662;font-weight:500}.at-stage-label span:last-child{font-size:.6875rem}
+.at-ui{position:relative;min-width:0;min-height:max(28rem,calc(100svh - 9.75rem));background:#fff;border:1px solid #d6dbe3;border-radius:.25rem;box-shadow:0 2px 5px #20242b05;font-family:initial;color:initial}
+.at-placeholder{min-height:inherit;display:grid;place-items:center;box-sizing:border-box;padding:3rem 2rem;font-family:var(--at-font);color:var(--at-ink)}.at-placeholder-inner{width:min(100%,23rem);text-align:left}.at-placeholder-mark{width:2.25rem;height:2.25rem;position:relative;margin-bottom:1.5rem;background:linear-gradient(#9aa6b7,#9aa6b7) left top/9px 1px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) left top/1px 9px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) right top/9px 1px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) right top/1px 9px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) left bottom/9px 1px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) left bottom/1px 9px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) right bottom/9px 1px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) right bottom/1px 9px no-repeat}.at-placeholder-mark:after{content:"+";position:absolute;inset:0;display:grid;place-items:center;color:#8794a6;font-size:1rem;font-weight:300}
+.at-placeholder h1{font-size:1.5rem;line-height:1.5;letter-spacing:-.02em;font-weight:500;margin:0 0 .75rem}.at-placeholder p{font-size:.875rem;line-height:1.85;color:var(--at-muted);margin:0}.at-slot-label{margin:1.5rem 0 0!important;padding-top:.75rem;border-top:1px solid #e9ecf0;font-size:.6875rem!important;color:#68717d!important;display:flex;justify-content:space-between;gap:1rem}.at-slot-label span:last-child{font-family:Consolas,monospace;letter-spacing:.05em}
+.at-stage-foot{margin:.75rem 0 0;font-size:.6875rem;line-height:1.6;color:var(--at-muted)}
+.at-notes{min-width:0;align-self:start;position:sticky;top:0;max-height:100svh;overflow:auto;scrollbar-gutter:stable;background:var(--at-surface);border-left:1px solid var(--at-rule)}
+.at-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;padding:0 1rem;border-bottom:1px solid var(--at-rule);background:#fff}.at-tab{position:relative;font:500 .75rem/1.5 var(--at-font);color:var(--at-muted);padding:1rem 0;border:0;background:transparent;cursor:pointer}.at-tab:hover{color:var(--at-ink)}.at-tab[aria-selected="true"]{color:var(--at-ink)}.at-tab[aria-selected="true"]:after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--at-accent)}
+.at-tabpanel{padding:1.5rem;min-height:30rem}.at-section-head{display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin:0 0 1.5rem}.at-section-head h2{font-size:.75rem;font-weight:500;color:var(--at-muted);line-height:1.5;margin:0}.at-text-button{font:inherit;font-size:.75rem;line-height:1.5;min-height:1.75rem;border:0;background:transparent;padding:.25rem 0;color:var(--at-accent);cursor:pointer}.at-text-button:disabled{color:#8b929d;cursor:default}.at-empty{padding:.25rem 0 1.5rem}.at-empty h3{font-size:1rem;font-weight:500;line-height:1.6;margin:0 0 .75rem}.at-empty p{font-size:.8125rem;line-height:1.85;color:var(--at-muted);margin:0}.at-selection-foot{margin:1.5rem 0;font-size:.6875rem;color:var(--at-muted);line-height:1.7}
+.at-section-label{font-size:.6875rem;color:var(--at-muted);line-height:1.5;margin:0 0 .5rem}.at-card h3{font-size:1.125rem;font-weight:600;line-height:1.6;margin:0 0 .5rem;overflow-wrap:anywhere}.at-card .at-empty h3{font-size:1rem;font-weight:500;margin-bottom:.75rem}.at-breadcrumb{font-size:.6875rem;color:var(--at-muted);line-height:1.8;margin:0 0 1.5rem;overflow-wrap:anywhere}.at-card dl{margin:1.25rem 0 0}.at-card dt{font-size:.6875rem;color:var(--at-muted);line-height:1.5;margin-bottom:.5rem}.at-card dd{font-size:.8125rem;line-height:1.85;margin:0;overflow-wrap:anywhere}.at-card .at-specs{border-top:1px solid var(--at-rule);padding-top:.75rem;margin-top:1.5rem}.at-specs div{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:1rem;padding:.5rem 0}.at-specs dt,.at-specs dd{font-size:.75rem;line-height:1.65;margin:0}.at-specs dd{font-variant-numeric:tabular-nums}.at-card-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.25rem}
+.at-details{border-top:1px solid var(--at-rule);padding:1rem 0}.at-details summary{font-size:.75rem;line-height:1.7;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:1rem;cursor:pointer}.at-details summary::-webkit-details-marker{display:none}.at-details summary:after{content:"+";color:var(--at-muted)}.at-details[open] summary:after{content:"−"}.at-details-body{padding-top:1rem}.at-copy{font-size:.8125rem;line-height:1.85;color:var(--at-muted);margin:0;overflow-wrap:anywhere}.at-tree{display:flex;flex-direction:column;gap:.25rem}.at-tree button{font:inherit;font-size:.8125rem;line-height:1.7;text-align:left;border:1px solid transparent;border-radius:.25rem;background:#fff;padding:.5rem;color:var(--at-ink);cursor:pointer;overflow-wrap:anywhere}.at-tree button[aria-pressed="true"]{background:var(--at-selected);border-color:#c6d4f1}.at-tree button:hover{background:var(--at-soft)}
+.at-field{padding:1.25rem 0;border-bottom:1px solid #edf0f3}.at-field:first-child{padding-top:0}.at-field:last-child{border-bottom:0}.at-field h2{font-size:.8125rem;font-weight:600;line-height:1.6;margin:0 0 .5rem}.at-footer-note{font-size:.6875rem;line-height:1.85;color:var(--at-muted);padding-top:1.25rem;margin:0}
+.at-outline{position:fixed;pointer-events:none;border:1.5px solid var(--at-accent);box-sizing:border-box;z-index:10000;border-radius:2px}.at-jump{position:fixed;bottom:1rem;left:1rem;right:1rem;z-index:10001;border:1px solid #aabce7;background:#edf2ff;color:#244da8;box-shadow:0 4px 16px #20376514;border-radius:.375rem;padding:.875rem 1rem;font-size:.8125rem;cursor:pointer}
+.at-header [hidden],.at-notes [hidden],.at-outline[hidden],.at-jump[hidden],.at-layout>[hidden]{display:none!important}
+@media(min-width:56.001rem){.at-notes{min-height:calc(100svh - 3rem)}}
+@media(max-width:68.75rem){:root{--at-sidebar:20rem}.at-stage{padding:1.25rem}.at-tabpanel,.at-direction{padding:1.25rem}}
+@media(max-width:56rem){.at-header{padding:.1875rem .75rem;flex-wrap:wrap;gap:.25rem .75rem}.at-identity{flex:1 1 5rem}.at-tools{flex-wrap:wrap;max-width:100%}.at-layout{grid-template-columns:minmax(0,1fr)}.at-stage{padding:1rem}.at-ui{min-height:26rem}.at-placeholder{padding:2rem 1.5rem}.at-placeholder h1{font-size:1.25rem}.at-placeholder p{font-size:.8125rem}.at-notes{position:static;max-height:none;border-left:0;border-top:1px solid var(--at-rule);overflow:visible}.at-direction{padding:1.25rem 1.5rem}.at-tabpanel{padding:1.5rem;min-height:18rem;padding-bottom:4rem}.at-selection-foot{margin-top:1.25rem}.at-stage-foot{font-size:.625rem}.at-stage-label{align-items:flex-start}.at-stage-label span:last-child{max-width:55%;text-align:right}}
+@media(pointer:coarse){.at-header .at-button{min-height:2.75rem}}
+@media(prefers-reduced-motion:reduce){.at-outline,.at-jump{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<!-- TEMPLATE AUTHORING
+     See ../references/html-preview.md for the filling, registry, and review contract.
+     Copy this asset into the agreed output folder; preserve an existing project preview when revising.
+     Fill data-at-field locations in a project copy. They are authoring markers, not product targets.
+     Replace each prompt with actual content and update <title>. Keep prompts in this reusable source.
+     Localize visible text, accessible labels, document language, and runtime-generated messages.
+     PROJECT_NAME stays in the toolbar; direction, status, and Design Read stay above the notes tabs.
+     On narrow screens the notes follow the canvas. Hiding notes also hides the direction summary.
+     Replace the whole .at-placeholder for PROJECT_UI; scope product styles separately.
+     The review shell narrows the canvas: verify the product's own responsive layout separately.
+     Do not use shell tokens to decide the project's type, color, layout, components, or platform.
+-->
+<header class="at-header">
+<div class="at-identity"><p class="at-name" data-at-field="PROJECT_NAME">项目名称</p></div>
+<div class="at-tools"><button class="at-button" id="at-mode" aria-pressed="true" hidden>标注模式</button><button class="at-button" id="at-panel" aria-expanded="true" aria-controls="at-notes">收起说明</button></div>
+</header>
+<main class="at-layout" id="at-layout">
+<section class="at-stage" aria-label="项目 UI 预览">
+<div class="at-stage-label"><span>项目界面</span><span id="at-hint">尚无可检查的元素</span></div>
+<div class="at-ui" id="at-ui" data-at-field="PROJECT_UI">
+<div class="at-placeholder"><div class="at-placeholder-inner"><div class="at-placeholder-mark" aria-hidden="true"></div><h1>把设计放在这里</h1><p>呈现当前方向的项目界面。<br>内容、布局与视觉语言，由项目决定。</p><p class="at-slot-label"><span>项目 UI 占位</span><span aria-hidden="true">DESIGN CANVAS</span></p></div></div>
+</div>
+<p class="at-stage-foot">填入设计后，可选择元素查看理由与规格。</p>
+</section>
+<aside class="at-notes" id="at-notes" aria-label="设计说明">
+<section class="at-direction" aria-labelledby="at-direction">
+<div class="at-direction-head"><p class="at-direction-label">当前方向</p><span class="at-status" data-at-field="DECISION_STATUS">状态待填写</span></div>
+<h2 class="at-direction-title" id="at-direction" data-at-field="DIRECTION_NAME">设计方向待填写</h2><p class="at-direction-read" data-at-field="DESIGN_READ">说明希望带来的感受，以及支撑这种感受的关键视觉选择。</p>
+</section>
+<div class="at-tabs" role="tablist" aria-label="设计说明类别">
+<button class="at-tab" role="tab" id="at-tab-element" aria-controls="at-pane-element" aria-selected="true" tabindex="0">元素说明</button>
+<button class="at-tab" role="tab" id="at-tab-brief" aria-controls="at-pane-brief" aria-selected="false" tabindex="-1">设计简报</button>
+<button class="at-tab" role="tab" id="at-tab-spec" aria-controls="at-pane-spec" aria-selected="false" tabindex="-1">规格记录</button>
+</div>
+<section class="at-tabpanel" role="tabpanel" id="at-pane-element" aria-labelledby="at-tab-element" tabindex="0">
+<div class="at-section-head"><h2>当前元素</h2><button class="at-text-button" id="at-clear" disabled>清除选择</button></div>
+<div id="at-selection" class="at-card" tabindex="-1"><div class="at-empty"><h3>还没有可检查的元素</h3><p>填入项目界面并关联说明后，选择元素，即可查看它的用途、设计理由与相关规格。</p></div></div>
+<p class="at-selection-foot" id="at-selection-help">元素说明会与对应的界面位置关联。</p>
+<details class="at-details" id="at-objects-section"><summary>设计对象</summary><div class="at-details-body"><div class="at-tree" id="at-tree"></div><p class="at-copy" id="at-tree-empty">这里将列出实际界面中可以讨论的区域与元素。</p></div></details>
+</section>
+<section class="at-tabpanel" role="tabpanel" id="at-pane-brief" aria-labelledby="at-tab-brief" tabindex="0" hidden>
+<div class="at-field"><h2>背景与约束</h2><p class="at-copy" data-at-field="CONTEXT">填写受众、用途、目标平台与已有约束。</p></div>
+<div class="at-field"><h2>方向细节</h2><p class="at-copy" data-at-field="DIRECTION_DETAILS">补充当前方向的排版、色彩、密度与动效选择，解释它们如何支撑预期感受。</p></div>
+<div class="at-field"><h2>参考与依据</h2><p class="at-copy" data-at-field="REFERENCES">记录实际查看过的参考，以及采用的具体特征。</p></div>
+<div class="at-field"><h2>避免事项</h2><p class="at-copy" data-at-field="AVOID">说明哪些处理会偏离当前方向，以及原因。</p></div>
+</section>
+<section class="at-tabpanel" role="tabpanel" id="at-pane-spec" aria-labelledby="at-tab-spec" tabindex="0" hidden>
+<div class="at-field"><h2>共用规格</h2><p class="at-copy" data-at-field="PLATFORM_SPECS">按目标平台填写共用规格。仅与某个元素有关的参数，放入该元素的说明。</p></div>
+<div class="at-field"><h2>假设与检查记录</h2><p class="at-copy" data-at-field="VALIDATION_NOTES">区分已确认、提议与待验证内容，记录实际检查及其限制。</p></div>
+<p class="at-footer-note">参数服务于设计意图。可以先说希望改变的感受，再讨论具体调整。</p>
+</section>
+</aside>
+</main>
+<div id="at-outline" class="at-outline" hidden aria-hidden="true"></div>
+<button id="at-jump" class="at-jump" hidden>查看选中元素的说明 ↓</button>
+<!-- Registry: keep [] in this empty template. Register only real UI targets using data-at-id.
+     Each record: {id, name, parent?, role, reason, specs?: [{label, value} OR {label, css}]}.
+     IDs match unique elements inside #at-ui; parent references another record without cycles.
+     Use familiar names. Reload after editing the registry or target set.
+     Serialize valid JSON and escape < as \u003c so content cannot close this script element.
+     Authored value: label proposed/approximate values honestly. css: read a rendered CSS property.
+     Only CSS-based designs have CSS measurements; use platform-appropriate authored values otherwise.
+     Metadata is rendered as text, never as HTML. Review images/native previews are not native validation.
+-->
+<script type="application/json" id="at-registry">[]</script>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),ui=$('at-ui'),notes=$('at-notes'),card=$('at-selection'),outline=$('at-outline'),jump=$('at-jump');
+const records=JSON.parse($('at-registry').textContent),registry=new Map(records.map(item=>[item.id,item]));
+const target=id=>[...ui.querySelectorAll('[data-at-id]')].find(el=>el.dataset.atId===id);
+const valid=id=>registry.has(id)&&!!target(id);
+let pinned=null,hovered=null,inspect=true,shown=true;
+const make=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el;};
+const tabs=[...document.querySelectorAll('.at-tab')];
+function activateTab(key){for(const tab of tabs){const active=tab.id==='at-tab-'+key;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;$(tab.getAttribute('aria-controls')).hidden=!active;}position();}
+for(const [index,tab] of tabs.entries()){
+ tab.addEventListener('click',()=>activateTab(tab.id.slice(7)));
+ tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();activateTab(tabs[next].id.slice(7));tabs[next].focus();});
+}
+function ancestors(id){const list=[],seen=new Set([id]);let parent=registry.get(id)?.parent;while(parent&&registry.has(parent)&&!seen.has(parent)){seen.add(parent);list.unshift(registry.get(parent));parent=registry.get(parent).parent;}return list;}
+function active(){return hovered||pinned;}
+function showPanel(value){shown=value;notes.hidden=!value;$('at-layout').classList.toggle('at-canvas-only',!value);$('at-panel').textContent=value?'收起说明':'显示说明';$('at-panel').setAttribute('aria-expanded',String(value));if(!value){pinned=null;hovered=null;inspect=false;}syncMode();render();requestAnimationFrame(position);}
+function select(id){pinned=valid(id)?id:null;hovered=null;if(pinned)activateTab('element');render();}
+function field(label,value){const dl=make('dl');dl.append(make('dt',label),make('dd',value));return dl;}
+function render(){
+const id=active(),entry=registry.get(id),el=id&&target(id);card.replaceChildren();
+$('at-clear').disabled=!pinned&&!hovered;
+$('at-tree').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.id===pinned)));
+if(!entry||!el){const empty=make('div',undefined,'at-empty');empty.append(make('h3',hasTargets?'选择一个元素':'还没有可检查的元素'),make('p',hasTargets?'在标注模式中选择界面元素，或展开下方“设计对象”定位。':'填入项目界面并关联说明后，选择元素，即可查看它的用途、设计理由与相关规格。'));card.append(empty);position();return;}
+card.append(make('p',hovered?'悬停预览':'已选择','at-section-label'),make('h3',entry.name));
+const trail=[...ancestors(id).map(item=>item.name),entry.name];card.append(make('p',trail.join(' / '),'at-breadcrumb'),field('用途',entry.role||'待填写'),field('设计理由',entry.reason||'待填写'));
+if(entry.specs?.length){const dl=make('dl',undefined,'at-specs');for(const spec of entry.specs){const row=make('div'),value=spec.css?getComputedStyle(el).getPropertyValue(spec.css):spec.value;row.append(make('dt',spec.label+(spec.css?' · 实测':'')),make('dd',value||'待填写'));dl.append(row);}card.append(dl);}
+const actions=make('div',undefined,'at-card-actions');
+if(valid(entry.parent)){const button=make('button','↑ '+registry.get(entry.parent).name,'at-text-button');button.onclick=()=>select(entry.parent);actions.append(button);}
+const back=make('button','定位到界面','at-text-button');back.onclick=()=>{el.scrollIntoView({block:'center'});position();};actions.append(back);card.append(actions);position();
+}
+function position(){
+const el=active()&&target(active());outline.hidden=true;jump.hidden=true;
+if(!inspect||!shown||!el||!el.getClientRects().length)return;
+const r=el.getBoundingClientRect();let left=Math.max(0,r.left),top=Math.max(0,r.top),right=Math.min(innerWidth,r.right),bottom=Math.min(innerHeight,r.bottom);
+for(let parent=el.parentElement;parent&&parent!==document.body;parent=parent.parentElement){const style=getComputedStyle(parent),rect=parent.getBoundingClientRect();if(/auto|scroll|hidden|clip/.test(style.overflowX)){left=Math.max(left,rect.left);right=Math.min(right,rect.right);}if(/auto|scroll|hidden|clip/.test(style.overflowY)){top=Math.max(top,rect.top);bottom=Math.min(bottom,rect.bottom);}}
+if(right>left&&bottom>top){outline.hidden=false;Object.assign(outline.style,{left:left+'px',top:top+'px',width:right-left+'px',height:bottom-top+'px'});}
+const narrow=matchMedia('(max-width:56rem)').matches;jump.hidden=!(pinned&&narrow&&card.getBoundingClientRect().top>=innerHeight);
+}
+for(const entry of records){if(!valid(entry.id))continue;const button=make('button',entry.name);button.dataset.id=entry.id;button.style.paddingLeft=(.5+Math.min(ancestors(entry.id).length,4)*.75)+'rem';button.onclick=()=>{inspect=true;syncMode();select(entry.id);target(entry.id).scrollIntoView({block:'center'});position();};$('at-tree').append(button);}
+const hasTargets=$('at-tree').children.length>0;$('at-tree-empty').hidden=hasTargets;$('at-mode').hidden=!hasTargets;
+function syncMode(){$('at-mode').setAttribute('aria-pressed',String(inspect));$('at-mode').textContent=inspect?'标注模式':'体验模式';$('at-hint').textContent=hasTargets?(inspect?'悬停查看 · 点击固定':'可以体验界面交互'):'尚无可检查的元素';$('at-selection-help').textContent=hasTargets?'悬停预览 · 点击固定 · Esc 清除':'元素说明会与对应的界面位置关联。';document.querySelector('.at-stage-foot').textContent=hasTargets?'选择具体元素，或直接描述希望改变的感受。':'填入设计后，可选择元素查看理由与规格。';}
+$('at-mode').onclick=()=>{inspect=!inspect;pinned=null;hovered=null;if(inspect&&!shown)showPanel(true);syncMode();render();};
+$('at-panel').onclick=()=>showPanel(!shown);$('at-clear').onclick=()=>select(null);
+function hit(event){const el=event.target.closest('[data-at-id]');return el&&ui.contains(el)&&valid(el.dataset.atId)?el.dataset.atId:null;}
+ui.addEventListener('pointerover',event=>{if(!inspect||!shown||event.pointerType==='touch')return;const id=hit(event);if(hovered!==id){hovered=id;render();}});
+ui.addEventListener('pointerleave',()=>{hovered=null;render();});
+ui.addEventListener('pointerdown',event=>{if(inspect&&shown)event.preventDefault();},true);
+ui.addEventListener('click',event=>{if(!inspect||!shown)return;event.preventDefault();event.stopImmediatePropagation();select(hit(event));},true);
+ui.addEventListener('keydown',event=>{if(inspect&&shown&&['Enter',' ','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key)){event.preventDefault();event.stopImmediatePropagation();select(hit(event));}},true);
+document.addEventListener('keydown',event=>{if(event.key==='Escape')select(null);});
+jump.onclick=()=>{activateTab('element');card.scrollIntoView({block:'center'});card.focus({preventScroll:true});position();};
+window.addEventListener('resize',()=>{render();});document.addEventListener('scroll',position,true);new ResizeObserver(position).observe(ui);syncMode();render();
+})();
+</script>
+</body>
+</html>

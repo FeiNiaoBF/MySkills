@@ -1,6 +1,6 @@
 # Nine-dimension vocabulary
 
-Use this reference for the dimensions that matter to the request. Offer two or three coherent directions rather than a menu for every row. User phrases are illustrative cues, not deterministic mappings. Product names are comparison anchors, not verified claims about their current designs; inspect the relevant reference before claiming a match.
+Use this reference for the dimensions that matter to the request. When alternatives would resolve a material ambiguity, offer two or three coherent directions rather than a menu for every row; reuse an accepted direction. User phrases are illustrative cues, not deterministic mappings. Product names are comparison anchors, not verified claims about their current designs; inspect the relevant reference before claiming a match.
 
 ## 1. Style
 

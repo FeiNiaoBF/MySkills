@@ -1,61 +1,94 @@
-# HTML preview and inspector
+# HTML delivery reference
 
-Read this when creating or revising the skill's default visual deliverable. The preview makes the proposed design visible and gives the user a shared vocabulary for requesting changes. This is a delivery contract, not a fixed visual template.
+Read this when creating, maintaining, or revising the visual deliverable. The bundled [HTML template](../assets/design-preview.html) defines the review shell and its behavior. It is an empty reusable template, not a sample application or a product design system.
 
-## Presentation
+## Delivery structure
 
-- Make the proposed UI the main content. On wide screens, place a compact inspector on the right and give the UI most of the available width. Keep outer controls minimal; do not put a large explanatory hero above the preview.
-- Render the design for the user's actual task. Do not substitute a reference gallery, a generic sample application, or an essay about the design. Show only the pages, states, or variants needed to assess the current proposal.
-- Keep the inspector visually quiet and distinct from the proposed product. Its typography, colors, and panels must not impose a style on the UI being reviewed.
-- Show a concise module hierarchy; reveal relevant child elements on selection or expansion. Display one selected item's explanation at a time instead of spreading labels and leader lines across the whole UI.
-- Keep the brief, overall tokens, assumptions, and validation notes in a secondary or collapsible area. Provide an obvious way to clear highlighting and view the unobstructed design.
-- On narrow screens, move the inspector below the preview or into an accessible drawer. Keep selection and its explanation reachable without horizontal page overflow. Do not shrink the proposed UI until its text is unreadable.
+- **Compact toolbar:** show the project name and review actions. Do not put an explanatory hero or a full-width direction brief above the UI.
+- **Main canvas:** make the project's actual UI the dominant content. The shell does not prescribe its features, layout, typography, colors, components, or platform.
+- **Direction summary:** keep the direction name, decision status, and Design Read above the notes tabs so they remain available while switching explanations.
+- **Element tab:** show one selected item's name, location, role, design reason, and relevant specifications. A collapsible object list provides another selection route.
+- **Brief tab:** hold the four-part brief defined in SKILL.md. Keep overall design reasoning here rather than repeating it in every element.
+- **Specifications tab:** hold shared platform specifications, assumptions, and actual validation limits. Keep item-specific values with their elements.
+- **Narrow screens:** place notes after the canvas. Selection offers a jump to the explanation when it is below the viewport; the explanation provides a return to the UI. Collapsing notes also hides the direction summary and switches to experience mode.
 
-## Names and selection targets
+The template's neutral surround, restrained separators, spacing, and `--at-*` tokens belong to the review shell. Its dimensions and colors are adjustable defaults, not rules for the project. Keep product and shell styles scoped separately; this is a shared document, not an iframe or Shadow DOM isolation boundary. The sidebar reduces canvas width: check product layout within that space, especially viewport breakpoints, full-width units, fixed overlays, and scrolling. Disclose differences from the target application.
 
-Name parts in the user's language using familiar terms. Technical identifiers can be secondary; the user should not need DOM, CSS, or framework vocabulary to request a change.
+## Copy and fill
 
-| Level | Example user-facing names | Purpose |
-|---|---|---|
-| Module | 页头、首屏、作品区、底部导航 | Discuss a whole region's composition or spacing |
-| Element | 主标题、副标题、说明文字、封面图片、主要按钮 | Identify the specific item to change |
-| Repeated item | 作品区 / 第一张卡片 / 封面图片 | Disambiguate similar items by context |
+For a new preview, copy the asset into the agreed output folder; preserve and update an existing preview when continuing work. Do not edit the bundled source during an ordinary project task. The shell is self-contained HTML/CSS/JavaScript and needs no build step; embedded project content may have its own assets or dependencies. Keep required assets beside the entry file with portable relative links and provide opening instructions.
 
-Use names that match the actual design; do not invent a subtitle or button merely to fill this list. Give meaningful visible elements their own targets, including important text, images, and controls. Do not expose every layout wrapper, decorative fragment, or DOM node.
+`data-at-field` attributes identify authoring locations, not selectable product elements or a template engine. Fill them as follows:
 
-Maintain stable internal IDs, user-facing names, and parent relationships across revisions. If a part is added, removed, or deliberately renamed, update its entry and explanation. Keep selection metadata in one registry or equivalent source so the rendered targets, inspector, and descriptions cannot drift apart.
+| Field | Project content |
+|---|---|
+| `PROJECT_NAME` | Project name in the toolbar; also update the document title |
+| `PROJECT_UI` | Replace the entire `.at-placeholder` inside `#at-ui` with the actual UI proposal |
+| `DIRECTION_NAME` | A concise, recognizable name for the current visual direction |
+| `DECISION_STATUS` | Status supported by actual feedback, such as proposed or confirmed; identify mixed status in the notes |
+| `DESIGN_READ` | The main workflow's one-sentence interpretation of the visual intent |
+| `CONTEXT` | Audience, purpose, target platform/devices, and existing constraints |
+| `DIRECTION_DETAILS` | Relevant visual choices and how they express the direction |
+| `REFERENCES` | Inspected sources and adopted traits; label illustrative or unverified comparisons |
+| `AVOID` | Treatments that would undermine this direction, with reasons |
+| `PLATFORM_SPECS` | Shared tokens or platform-native specifications useful for implementation |
+| `VALIDATION_NOTES` | Assumptions, unresolved choices, actual checks, and remaining limits |
 
-## Inspector contents
+Replace filling prompts with real explanations. Fields may contain paragraphs, lists, links, or tables as appropriate; replace the containing `p` when adding block content. Localize visible text, accessible labels, document language, and runtime-generated messages. Remove irrelevant guidance and placeholder-only styles from project copies. Preserve IDs and relationships used by the shell runtime.
 
-For the current selection, show:
+**Template-only maintenance:** retain field markers, useful filling instructions, the empty UI slot, and an empty registry. Do not invent a reader, dashboard, or other product to make the template look complete. Synthetic interaction examples belong only in isolated validation fixtures.
 
-- **Name and location:** a familiar name and, where necessary, its module or breadcrumb.
-- **Role:** one short explanation of what this part does for the user.
-- **Design reason:** why its treatment supports the intended effect, rather than a generic aesthetic compliment.
-- **Relevant specifications:** only values useful for this item, such as title size/weight/line-height, text-to-title gap, image ratio/crop, or button emphasis and state. Put additional detail behind an expansion control.
+**Project-design delivery:** show the actual project with representative content and meaningful element explanations. An empty template does not satisfy this request. Label simulated states, disconnected actions, and non-Web approximations. Reuse an existing native or project preview when it better preserves fidelity; adapt the review surface as needed without changing the production stack.
 
-Read actual rendered values or shared tokens where practical. Mark proposed values and approximations accurately, including non-Web units. Do not label an estimated measurement as an inspected result. Keep the brief and inspector consistent with the rendered design.
+## Associate elements with explanations
 
-For example, a selected “首屏 / 主标题” can explain the page's main message, how its size and weight establish emphasis, and the current typography values. This lets the user say “主标题再突出一点” without knowing the token names.
+Use familiar names in the user's language. Give meaningful regions and important text, images, and controls their own targets; do not expose every wrapper or decorative fragment. Repeated items need contextual names, such as “作品区 / 第一张卡片 / 封面图片.” Do not add UI elements merely to fill an example hierarchy.
 
-## Interaction
+In a template copy:
 
-- Hover previews the meaningful element under the pointer; clicking pins the selection. On touch devices, tapping selects. Selecting a nested element must not be overridden by its parent; keep the parent accessible through the inspector hierarchy or breadcrumb.
-- Selecting an inspector entry highlights the matching region and brings it into the preview's visible area. Highlight with a thin outline or subtle overlay that does not change layout, hide content, or permanently recolor the proposed design.
-- A small temporary label may identify the active target. Avoid persistent labels over every element, crossing connector lines, or overlays that capture the pointer and make selection flicker.
-- Keep a pinned selection when the pointer leaves a transient hover preview. Support clearing it with Escape and a visible control. Maintain focus visibility and provide keyboard access through the inspector; hover must not be the only route to information.
-- If inspection would trigger a product action, use an explicit inspection mode that selects without submitting, navigating, or mutating data. Preserve the represented control's semantics; do not wrap interactive controls in other interactive controls. Provide a preview mode when real product interactions need review.
+1. Add a unique `data-at-id` to each review target inside `#at-ui`.
+2. Fill the JSON array in `#at-registry`. Each record has `id`, `name`, `role`, `reason`, optional `parent`, and optional `specs`.
+3. Match each `id` to exactly one rendered target. A `parent` names another record; keep relationships acyclic. Preserve IDs and familiar names across revisions, updating removed or renamed items together with the UI.
+4. Reload after changing the registry or target set: the bundled runtime builds its map and object list at initialization. Do not assume it automatically discovers new dynamic states or targets.
 
-## Feedback and revision
+Registry entries are the single source for element names, explanations, and parent relationships. The following illustrates the schema only; it does not require a title in every project:
 
-Resolve feedback against the selected element or its familiar name and module. If multiple targets remain plausible and choosing incorrectly would change the result, ask one focused question. Otherwise make the smallest coherent revision and preserve unrelated decisions.
+```json
+[
+  {
+    "id": "main-title",
+    "name": "主标题",
+    "role": "说明页面的主要内容",
+    "reason": "较强的字重建立第一阅读重点，与次要说明形成层级",
+    "specs": [
+      { "label": "字号", "css": "font-size" },
+      { "label": "字重", "css": "font-weight" },
+      { "label": "强调方式", "value": "提议：通过字重而非额外装饰建立重点" }
+    ]
+  }
+]
+```
 
-Translate the requested effect into concrete design adjustments, then update the UI and its explanations/specifications together. For “副标题离主标题近一点,” adjust their gap; do not silently redesign the whole hero. Keep unconfirmed treatments marked as proposals. Users can continue to respond in ordinary language; a specification questionnaire is not required.
+Each specification uses either `css` for a rendered CSS property or `value` for authored text. The inspector labels CSS readings as measurements; they describe the current HTML target, not necessarily a native application. Label proposed or approximate authored values accurately and use native units for non-Web targets. Prefer shared tokens or rendered values over duplicated numeric claims. Inspect only values relevant to the item, such as typography, gap, crop, ratio, or emphasis; put shared specifications in the specifications tab.
+
+Serialize registry content as valid JSON. Escape `<` as `\u003c` in generated JSON so embedded `</script>` text cannot terminate the script element. The runtime renders registry strings as text, not HTML. For screenshots or native captures, associate named regions with the image and use authored platform specifications; measuring the HTML wrapper does not measure the native UI.
+
+## Review behavior and feedback
+
+- Hover temporarily previews a target; leaving restores the pinned selection. Clicking or tapping pins the innermost registered target and opens its element explanation. Hover does not switch away from a brief being read.
+- The object list and parent action provide keyboard-accessible alternatives to pointer selection. Selection outlines do not change layout or intercept the pointer. Escape and the clear control remove the selection.
+- Tabs support Left/Right and Home/End, with one tab in the Tab sequence. Keep visible focus and meaningful control semantics when adapting the shell.
+- Inspection mode intercepts clicks and common activation keys to select elements; experience mode lets the represented UI respond. Hiding notes clears selection and enters experience mode; re-enabling inspection reveals notes. Keep any live product actions confined to authorized preview behavior: this event handling is not a security boundary and cannot suppress arbitrary scripts or every custom event handler.
+- The empty template has no fabricated selection and hides the mode control until real registered targets exist. Project copies should register their meaningful content before delivery.
+
+Resolve feedback using the selected item or its familiar name and surrounding context. Ask a focused question only when ambiguity materially changes the result. Update the affected design, explanation, and specifications together; for “副标题离主标题近一点,” adjust the relevant gap without silently redesigning the whole page. Preserve unrelated decisions and keep unconfirmed choices visibly provisional.
 
 ## Completion checks
 
-- Open the artifact in an available browser. Inspect a wide layout and a narrow layout relevant to the target. Check UI prominence, text readability, inspector overflow, and whether highlights obscure the selected content.
-- Exercise a module and a nested element, two similarly named repeated elements when present, selection from the inspector, hover restoration, clearing, and keyboard/touch alternatives. Confirm that inspection does not accidentally activate product actions.
-- For a sample revision, check that the selected target, displayed name, explanation, and affected specifications still refer to the same rendered element. Check relevant responsive and interaction states rather than claiming all states are implemented.
-- Use available browser automation for concrete interaction risks; inspect rendered screenshots for composition. Report which checks ran and any unavailable rendering or native validation. Source review alone is not visual verification.
-- Deliver the actual artifact link or runnable preview instructions, with a short explanation of how to select and refer to an element. Prefer a self-contained HTML file for standalone review; reuse an existing project preview when that better preserves fidelity. Keep temporary artifacts outside the repository unless the user requests a persistent project deliverable. Do not claim user acceptance before receiving it.
+Inspect the artifact in an available browser and check the scope actually delivered:
+
+- **Shell and composition:** wide and narrow layouts, long names, text enlargement, readable contrast/focus, UI prominence, reachable notes, and no unintended horizontal overflow. Check screenshots as well as code; the compact toolbar must still accommodate its labels and controls.
+- **Filled project:** remove filling prompts and empty slots; verify every registered target and parent, unique IDs, and agreement between UI, names, reasons, and specifications. Check relevant responsive and represented interaction states, including a sample revision's affected values.
+- **Selection when present:** a module and nested element, repeated items where applicable, object-list and parent selection, hover restoration, clearing, keyboard access, and touch alternatives. Verify pinning opens the element tab without hover disrupting another tab; test notes collapse, mode switching, and narrow-screen jump/return. Confirm the represented product action does not fire during inspection for the controls actually used.
+- **Reusable template:** preserve its authoring fields and intentional empty state. Exercise shell controls directly; validate inspection with in-memory or temporary fixtures without leaving sample targets in the asset. Do not describe those checks as testing a real application.
+- **Delivery:** provide the entry link or launch instructions, a brief explanation of how to select and discuss elements, and what was actually checked. Distinguish browser simulation from real device checks and HTML approximation from native validation. Report unavailable checks; neither code review nor successful automation establishes visual approval or production readiness.
