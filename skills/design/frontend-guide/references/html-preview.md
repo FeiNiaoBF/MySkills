@@ -14,28 +14,29 @@ The template uses a neutral gray surround, a white design surface, and a numbere
 
 ## Fill the template
 
-The `{{...}}` labels are literal replacement markers, not a template engine. Copy the file to the agreed output folder and edit it; no build step or JavaScript dependency is required for the shell.
+The `{{...}}` labels are literal replacement markers, not a template engine. For a new draft, copy the file to the agreed output folder and edit that copy; preserve and update an existing draft when continuing work. Do not edit the bundled asset for an ordinary project delivery. The shell requires no build step or JavaScript dependency; the embedded UI may need its own assets or scripts.
 
 - `PROJECT_NAME`: replace both the document title and visible header name.
-- `PROJECT_UI`: replace the entire placeholder block with the project's page design, including its own layout and any agreed interactions. Remove the placeholder-only styling as appropriate.
+- `PROJECT_UI`: replace the entire `.template-placeholder` element inside `.template-ui-slot` with the project's page design, including its own layout and any agreed interactions. Remove the placeholder-only styling as appropriate.
 - `PAGE_PURPOSE`: describe the audience, task, and scope of the page.
 - `REGION_NAME` and `REGION_EXPLANATION`: name a meaningful page region and explain its contents, purpose, and arrangement. Repeat this section in a useful reading or task order; a region need not equal a code component.
 - `FLOWS_AND_STATES`: describe relevant actions and feedback, identifying simulated or unfinished behavior.
 - `LAYOUT_AND_ADAPTATION`: explain the relationships between regions and how they adapt to relevant sizes.
 - `DECISIONS_AND_OPEN_QUESTIONS`: distinguish confirmed choices, current proposals, and remaining decisions using actual conversation/project evidence.
 
-Replace the filling instructions with project-specific explanations, remove irrelevant sections, and localize visible text and the document language to the user's language. For finished explanations, put prose in ordinary paragraphs and remove the corresponding marker spans; `.template-token` styles identify authoring placeholders, not project content. Keep shell styling scoped so it does not unintentionally restyle the embedded product UI.
+Replace the filling instructions with project-specific explanations, remove irrelevant sections, and localize visible text, accessible labels, and the document language to the user's language. Put finished explanations in ordinary paragraphs and remove their `.template-token` spans; replace `REGION_NAME` in its heading. These markers identify authoring slots, not containers for the finished content.
+
+Keep product and shell styles scoped separately. The product UI sits inside `.template-ui-slot`, whose available width differs from the browser viewport while the notes are beside it. Check product layout within that space; viewport-wide sizing, fixed overlays, and viewport breakpoints may otherwise overlap the notes or misrepresent adaptation. Adjust the draft's containment as needed and disclose remaining differences from the target application.
 
 **Template-only request:** retain replaceable labels and guidance showing what belongs in each slot. Do not fill them with an invented reader, dashboard, or other sample product. A reusable template is complete when its structure and filling expectations are clear; its empty UI slot is intentional.
 
 **Project-design request:** deliver the actual project's UI and corresponding explanations. Empty slots and authoring instructions do not satisfy this request. Use representative content and enough interaction to review the agreed flows; disclose mocks and unfinished states.
 
-## Storage, feedback, and checks
+## Storage and checks
 
-Save in the user-designated folder with a clear entry file and opening instructions. Keep required assets alongside it using portable relative links. Update the existing draft and matching conversational explanation when feedback changes the design.
+Save in the user-designated folder with a clear entry file and opening instructions. Keep required assets alongside it using portable relative links.
 
-Interpret everyday region names, quoted text, and positional descriptions together with the requested change. Clarify the target only when ambiguous; feedback does not require an object-selection system.
+Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, and neither column causes horizontal overflow or hides content. Confirm the shell adds no review controls or selection-driven behavior.
 
-Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, and neither column causes horizontal overflow or hides content. For project designs, also check the implemented product interactions, keyboard/touch access, and relevant states. For template-only delivery, check the replacement markers and shell instead of claiming application interactions were tested. Report unavailable checks explicitly.
-
-The HTML supports design review; it does not itself prove production functionality, native-platform fidelity, or user acceptance.
+- **Project design:** remove unresolved template markers and filling guidance, and ensure the explanations match the displayed UI and demonstrated states. Apply the main workflow's interaction and accessibility checks to what the draft actually implements.
+- **Reusable template:** preserve meaningful replacement markers, confirm that headings and guidance identify each slot, and check the empty shell's layout. Do not claim application interactions were tested.
