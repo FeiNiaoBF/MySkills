@@ -1,35 +1,41 @@
 # HTML Preview Requirements
 
-Read this when preparing or updating the page's HTML design draft. These are delivery requirements, not a prescribed preview framework or bundled implementation.
+Read this when preparing or updating the HTML design draft. Start with the bundled [HTML template](../assets/design-draft.html), which defines a replaceable delivery shell rather than a sample application.
 
-## Page and storage
+## Delivery structure
 
-- Save the draft in the user-designated folder, with a clear entry file and opening instructions. Keep any required local assets alongside it and use portable relative links.
-- Make the actual page the main canvas. Keep review controls compact; show selected-object details beside the page on wide screens and without obscuring the target on narrow screens.
-- Reuse the established visual direction. Use representative content and enough interaction to discuss the agreed flows; identify mocked behavior and unfinished states.
-- Keep the HTML and conversational explanation aligned with the same current decisions. Update the existing draft rather than leaving several unexplained competing versions.
+- **Header:** show only a simple name such as `{{PROJECT_NAME}}-frontend-guide`. Do not turn it into a toolbar of review modes, viewport switches, or metadata.
+- **Main area:** make the actual project's UI the dominant content. The shell does not prescribe the product's navigation, modules, visual style, or feature set.
+- **Explanations:** place directly readable explanations on the right, ordered by the page's structure or task flow. On narrow screens, move them below the design without obscuring it. They do not depend on clicking or hovering over the UI.
+- Explain page purpose, meaningful regions and their arrangement, relevant flows/states, layout adaptation, and unresolved choices as needed. Repeat or remove explanation sections to fit the project; not every page needs every heading.
+- Keep product controls usable directly. Do not add module/element selection, an object tree, copied object IDs, inspection modes, or a selection-driven inspector to the delivery shell.
 
-## Locate the intended object
+The template's colors, widths, spacing, and breakpoints are adjustable starting points. Reuse the project's established visual direction for its UI; the neutral shell is not the product design system.
 
-- Give reviewable modules and internal elements everyday names, stable unique IDs, and parent relationships. Include meaningful titles, descriptions, images, controls, and repeated items; do not stop at module-level selection.
-- Distinguish repeated elements by context, such as “Bookshelf / Second book / Title.” Preserve an object's ID across ordinary moves and wording changes; do not silently reuse a removed object's ID for something else.
-- Let the user select a child precisely and move to its containing module. Highlight only the current target clearly, without covering the interface with permanent labels.
-- Show the target's name, parent context, purpose, relevant behavior/state, and unresolved choices. Mark a decision as confirmed only when supported by user feedback or an explicit prior decision.
-- Provide a copyable name/path and ID that the user can quote in the conversation. Copying should have a selectable-text fallback if clipboard access is unavailable.
+## Fill the template
 
-For example, selecting “Contents panel [B02]” lets the user say: “Move B02 to the left of the reading text, collapsed by default; keep the text width.” Selecting a book title lets the user change that element without implicitly redesigning every book card.
+The `{{...}}` labels are literal replacement markers, not a template engine. Copy the file to the agreed output folder and edit it; no build step or JavaScript dependency is required for the shell.
 
-## Keep inspection simple
+- `PROJECT_NAME`: replace both the document title and visible header name.
+- `PROJECT_UI`: replace the entire placeholder block with the project's page design, including its own layout and any agreed interactions. Remove the placeholder-only styling as appropriate.
+- `PAGE_PURPOSE`: describe the audience, task, and scope of the page.
+- `REGION_NAME` and `REGION_EXPLANATION`: name a meaningful page region and explain its contents, purpose, and arrangement. Repeat this section in a useful reading or task order; a region need not equal a code component.
+- `FLOWS_AND_STATES`: describe relevant actions and feedback, identifying simulated or unfinished behavior.
+- `LAYOUT_AND_ADAPTATION`: explain the relationships between regions and how they adapt to relevant sizes.
+- `DECISIONS_AND_OPEN_QUESTIONS`: distinguish confirmed choices, current proposals, and remaining decisions using actual conversation/project evidence.
 
-- Separate normal preview interaction from inspection. In preview mode, the implemented page controls work; in inspection mode, selecting a button must not trigger its product action.
-- Support pointer, keyboard, and touch selection; do not depend on hover alone. Make the current selection and focus visible, and provide a clear way to clear selection, including Escape where a keyboard is available.
-- Start with locating, selecting, and referring to objects. Do not add drag-and-drop layout editing, a style editor, or a persistent comment system unless requested and justified.
-- Keep viewport/device controls relevant to the target page. Do not require a particular device-frame harness, fixed sidebar width, or custom attribute protocol.
+Replace the filling instructions with project-specific explanations, remove irrelevant sections, and localize visible text and the document language to the user's language. Keep shell styling scoped so it does not unintentionally restyle the embedded product UI.
 
-## Feedback and checks
+**Template-only request:** retain replaceable labels and guidance showing what belongs in each slot. Do not fill them with an invented reader, dashboard, or other sample product. A reusable template is complete when its structure and filling expectations are clear; its empty UI slot is intentional.
 
-Interpret location references together with the requested change. Clarify whether a change concerns one item, its module, or all repeated items only when the intent is ambiguous. Apply the smallest coherent change and update the preview and explanation together.
+**Project-design request:** deliver the actual project's UI and corresponding explanations. Empty slots and authoring instructions do not satisfy this request. Use representative content and enough interaction to review the agreed flows; disclose mocks and unfinished states.
 
-Before presenting the draft, inspect its rendered layout at relevant sizes and try child/parent selection, repeated-item identification, reference copying, keyboard/touch access, selection clearing, and switching between preview and inspection. Confirm that inspection does not fire product actions. Fix issues and repeat affected checks; disclose any check the available tools cannot perform.
+## Storage, feedback, and checks
 
-The draft helps review content, structure, and behavior. It does not itself prove production functionality, native-platform fidelity, or user acceptance.
+Save in the user-designated folder with a clear entry file and opening instructions. Keep required assets alongside it using portable relative links. Update the existing draft and matching conversational explanation when feedback changes the design.
+
+Interpret everyday region names, quoted text, and positional descriptions together with the requested change. Clarify the target only when ambiguous; feedback does not require an object-selection system.
+
+Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, and neither column causes horizontal overflow or hides content. For project designs, also check the implemented product interactions, keyboard/touch access, and relevant states. For template-only delivery, check the replacement markers and shell instead of claiming application interactions were tested. Report unavailable checks explicitly.
+
+The HTML supports design review; it does not itself prove production functionality, native-platform fidelity, or user acceptance.

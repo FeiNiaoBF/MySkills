@@ -4,11 +4,11 @@ description: >-
   This skill helps users plan and build interfaces from an initial idea or through
   explicit module-by-module guidance. It explains basic and optional areas when
   UI requirements are unclear, turns selected content into a page structure,
-  and pairs conversational explanations with inspectable HTML design drafts
-  before implementation in the project's stack. Local UI edits do not restart
-  the full workflow.
+  and pairs conversational explanations with HTML design drafts and sequential
+  page explanations before implementation in the project's stack. Local UI edits
+  do not restart the full workflow.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Frontend Guide
@@ -22,7 +22,7 @@ Focus on content, module responsibilities, layout relationships, interaction flo
 Provide two corresponding deliverables as the page takes shape:
 
 - **Conversation:** explain the page's contents and their purposes, distinguish confirmed decisions from proposals, and summarize changes and remaining choices.
-- **HTML design draft:** save the specific page's initial design in the user-designated folder and keep it aligned with the discussion. The draft lets the user locate modules and their internal elements and describe changes precisely. Read [HTML preview requirements](references/html-preview.md) when preparing or updating it.
+- **HTML design draft:** save the specific page's initial design in the user-designated folder and keep it aligned with the discussion. Use a simple project-name header, the actual project UI as the main content, and sequential explanations beside it. Read [HTML preview requirements](references/html-preview.md) and use the bundled [HTML template](assets/design-draft.html) when preparing or updating the draft.
 
 Reuse an already designated output folder. If none is established, ask for the destination before saving; continue useful discussion meanwhile. A request for discussion only, text only, no files, or a later preview takes precedence. Do not create an HTML draft for an isolated UI fix merely because this skill exists.
 
@@ -62,7 +62,7 @@ For multiple pages, state each page's responsibility and start with the user's p
 
 Give concrete, revisable layout defaults with target-platform units and behavior: width constraints, proportions, and adaptation to relevant windows or devices. Do not fix every dimension before seeing the page. Apply the project's visual direction; ask about unresolved choices only when they materially affect the design.
 
-Create or update the HTML design draft and its matching conversational explanation within the authorized scope. Present real page content and structure so the user can point to specific parts, rather than a generic design report. Keep proposals visibly distinct from user-confirmed choices.
+Create or update the HTML design draft and its matching conversational explanation within the authorized scope. For a project design, replace the template's placeholders with the actual UI and corresponding explanations; keep proposals visibly distinct from user-confirmed choices. For a reusable-template request, retain meaningful placeholders and filling guidance instead of inventing a sample application. The template describes the delivery structure, not the product's features or layout.
 
 **Checkpoint:** in guided delivery, obtain feedback and confirmation of the module map before implementation. In ordinary delivery, proceed from the agreed scope without introducing a new approval gate for every draft.
 
@@ -72,7 +72,7 @@ Implement the essential modules first, using the project's native components, to
 
 In guided delivery, show each completed module in page context, explain relevant choices, and wait for feedback before the next module. In ordinary delivery, continue through the agreed scope and present the complete page.
 
-Interpret feedback using the selected module or element and its surrounding context. Ask only when the intended target or change remains ambiguous. If feedback changes the content scope or structure, revise the module map before continuing implementation. Keep the HTML draft and conversational explanation consistent with accepted changes; disclose any difference between the draft and the actual application.
+Interpret feedback using everyday page/region names, quoted text, and surrounding context. Ask only when the intended target or change remains ambiguous. If feedback changes the content scope or structure, revise the module map before continuing implementation. Keep the HTML draft and conversational explanation consistent with accepted changes; disclose any difference between the draft and the actual application.
 
 Record durable design decisions at direction changes or delivery milestones in existing project design documentation; use `DESIGN.md` if a new document is needed. Do not require a full design document for a one-off draft or log every spacing adjustment.
 
@@ -84,7 +84,7 @@ Check what applies to the agreed scope, fix issues introduced by this work, and 
 - **Interaction:** the agreed user flows and relevant loading, empty, error, and success states. Identify simulated data, disconnected actions, and missing persistence.
 - **Accessibility:** meaningful labels and image alternatives/semantics appropriate to the platform, keyboard navigation and visible focus where applicable, sufficient contrast, and usable touch/click targets.
 - **Consistency:** typography, spacing, and components follow project decisions. Check whether differences are intentional instead of treating every variation as a defect.
-- **Draft feedback controls:** when delivering HTML, verify the locating and selection behavior described in its reference.
+- **HTML delivery:** verify the simple header, dominant UI area, and directly readable explanations described in the reference. Project controls work directly; the delivery shell does not add object selection or an inspector. For a template-only delivery, check placeholders and layout without claiming product behavior has been implemented.
 
 Deliver a clear link or path and opening/run instructions, a few useful actions to try, and a concise account of what was implemented, checked, and still limited. Report unavailable checks explicitly. A browser-checked HTML draft does not establish native-app behavior, and code inspection alone does not establish visual or interaction quality.
 

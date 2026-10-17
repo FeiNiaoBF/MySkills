@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{PROJECT_NAME}}-frontend-guide</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #30363d;
+      background: #f2f3f5;
+      font-synthesis: none;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .template-header {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      background: #fff;
+      border-bottom: 1px solid #dde1e6;
+      font-size: 13px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+    .template-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      min-height: calc(100vh - 48px);
+      align-items: stretch;
+    }
+    .template-canvas { min-width: 0; padding: 24px; }
+    .template-ui-slot {
+      min-height: max(620px, calc(100vh - 96px));
+      background: #fff;
+      border: 1px solid #dce1e6;
+      border-radius: 4px;
+    }
+    .template-placeholder {
+      min-height: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      text-align: center;
+      background: #fcfcfd;
+      outline: 1px dashed #c9cfd7;
+      outline-offset: -16px;
+    }
+    .template-placeholder h1 {
+      margin: 0 0 14px;
+      color: #3d4651;
+      font-size: clamp(20px, 2vw, 27px);
+      font-weight: 500;
+      letter-spacing: -.02em;
+    }
+    .template-placeholder p {
+      max-width: 28em;
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.9;
+      color: #646e7a;
+    }
+    .template-placeholder p + p { margin-top: 8px; }
+    .template-token {
+      display: block;
+      font-family: Consolas, "SFMono-Regular", monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #586575;
+      overflow-wrap: anywhere;
+    }
+    .template-placeholder .template-token { margin-bottom: 22px; }
+    .template-notes {
+      min-width: 0;
+      padding: 28px 24px 32px;
+      border-left: 1px solid #dde1e6;
+      background: #fff;
+    }
+    .template-notes > h2 { margin: 0 0 24px; font-size: 15px; font-weight: 600; }
+    .template-note { margin: 0 0 22px; padding-bottom: 22px; border-bottom: 1px solid #e6e9ed; }
+    .template-note:last-child { margin: 0; padding-bottom: 0; border: 0; }
+    .template-note h3 { margin: 0 0 10px; font-size: 13px; font-weight: 600; line-height: 1.7; }
+    .template-note p { margin: 8px 0 0; font-size: 13px; line-height: 1.9; color: #646e7a; }
+    @media (max-width: 1100px) {
+      .template-layout { grid-template-columns: minmax(0, 1fr) 280px; }
+      .template-canvas { padding: 18px; }
+      .template-notes { padding: 26px 20px; }
+    }
+    @media (max-width: 760px) {
+      .template-header { padding-inline: 18px; }
+      .template-layout { display: block; }
+      .template-canvas { padding: 14px 10px; }
+      .template-ui-slot { min-height: 480px; }
+      .template-placeholder { padding: 40px 24px; }
+      .template-notes { border-left: 0; border-top: 1px solid #dde1e6; padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Replace all tokens and localize labels/lang for the actual delivery. -->
+  <header class="template-header">{{PROJECT_NAME}}-frontend-guide</header>
+  <main class="template-layout">
+    <section class="template-canvas" aria-label="项目 UI 设计">
+      <div class="template-ui-slot">
+        <!-- PROJECT_UI: replace this entire placeholder with the project's design.
+             The empty slot does not prescribe the product's layout or features. -->
+        <div class="template-placeholder">
+          <span class="template-token">{{PROJECT_UI}}</span>
+          <h1>项目 UI 设计展示位置</h1>
+          <p>在这里放入当前项目的页面设计。</p>
+          <p>具体内容、布局与交互由项目需求决定。</p>
+        </div>
+      </div>
+    </section>
+    <aside class="template-notes" aria-labelledby="template-notes-title">
+      <h2 id="template-notes-title">页面说明</h2>
+      <section class="template-note">
+        <h3>页面用途</h3>
+        <span class="template-token">{{PAGE_PURPOSE}}</span>
+        <p>填写这页服务谁、帮助用户完成什么，以及本次设计包含的范围。</p>
+      </section>
+      <!-- Repeat this section for meaningful regions in the actual page's reading
+           or task order. A region is not necessarily a code component. -->
+      <section class="template-note">
+        <h3>{{REGION_NAME}}</h3>
+        <span class="template-token">{{REGION_EXPLANATION}}</span>
+        <p>填写区域名称、主要内容、作用和安排理由。按实际页面顺序增减说明区域。</p>
+      </section>
+      <section class="template-note">
+        <h3>操作与状态</h3>
+        <span class="template-token">{{FLOWS_AND_STATES}}</span>
+        <p>说明主要操作如何衔接，以及相关状态如何反馈；注明演示或尚未实现的行为。</p>
+      </section>
+      <section class="template-note">
+        <h3>布局与适配</h3>
+        <span class="template-token">{{LAYOUT_AND_ADAPTATION}}</span>
+        <p>说明区域之间的位置关系，以及空间变窄时如何调整。</p>
+      </section>
+      <section class="template-note">
+        <h3>确认情况</h3>
+        <span class="template-token">{{DECISIONS_AND_OPEN_QUESTIONS}}</span>
+        <p>区分已确认的安排、当前提议和仍需决定的事项，只保留与本页有关的内容。</p>
+      </section>
+    </aside>
+  </main>
+</body>
+</html>
