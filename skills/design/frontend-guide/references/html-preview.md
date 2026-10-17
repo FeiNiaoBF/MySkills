@@ -10,7 +10,7 @@ Read this when preparing or updating the HTML design draft. Start with the bundl
 - Explain page purpose, meaningful regions and their arrangement, relevant flows/states, layout adaptation, and unresolved choices as needed. Repeat or remove explanation sections to fit the project; not every page needs every heading.
 - Keep product controls usable directly. Do not add module/element selection, an object tree, copied object IDs, inspection modes, or a selection-driven inspector to the delivery shell.
 
-The template's colors, widths, spacing, and breakpoints are adjustable starting points. Reuse the project's established visual direction for its UI; the neutral shell is not the product design system.
+The template uses a neutral gray surround, a white design surface, and a numbered explanation column. Its typography and spacing distinguish headings, readable guidance, and secondary replacement markers. The `--fg-*` CSS properties control shell colors, fonts, and proportions; section numbers follow document order automatically. These are adjustable starting points. Reuse the project's established visual direction for its UI; the shell is not the product design system.
 
 ## Fill the template
 
@@ -24,7 +24,7 @@ The `{{...}}` labels are literal replacement markers, not a template engine. Cop
 - `LAYOUT_AND_ADAPTATION`: explain the relationships between regions and how they adapt to relevant sizes.
 - `DECISIONS_AND_OPEN_QUESTIONS`: distinguish confirmed choices, current proposals, and remaining decisions using actual conversation/project evidence.
 
-Replace the filling instructions with project-specific explanations, remove irrelevant sections, and localize visible text and the document language to the user's language. Keep shell styling scoped so it does not unintentionally restyle the embedded product UI.
+Replace the filling instructions with project-specific explanations, remove irrelevant sections, and localize visible text and the document language to the user's language. For finished explanations, put prose in ordinary paragraphs and remove the corresponding marker spans; `.template-token` styles identify authoring placeholders, not project content. Keep shell styling scoped so it does not unintentionally restyle the embedded product UI.
 
 **Template-only request:** retain replaceable labels and guidance showing what belongs in each slot. Do not fill them with an invented reader, dashboard, or other sample product. A reusable template is complete when its structure and filling expectations are clear; its empty UI slot is intentional.
 

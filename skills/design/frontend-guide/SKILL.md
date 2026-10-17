@@ -8,7 +8,7 @@ description: >-
   page explanations before implementation in the project's stack. Local UI edits
   do not restart the full workflow.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Frontend Guide
