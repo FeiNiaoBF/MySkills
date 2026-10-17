@@ -5,7 +5,7 @@ description: >-
   Turn a complex explanation into a clear, self-contained HTML page with a deliberate learning path,
   accurate examples, and visuals that clarify relationships.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 disable-model-invocation: true
 ---
 
@@ -64,6 +64,20 @@ Do not create a reference file until a real task introduces a substantial branch
 
 ## Build the HTML page
 
+Before building, read and copy the bundled [HTML template](assets/explainer.html). Treat it as the visual, responsive, and accessibility baseline; do not edit the source asset for an individual task.
+
+The `{{...}}` strings are literal authoring markers, not a template-engine contract. Replace every marker in the copied file, including document language, page title, visible labels, link targets, and accessible names. Search the finished file for unresolved `{{...}}` markers before delivery.
+
+The template is not a required content outline. Match it to the explanation path chosen above:
+
+- Repeat, reorder, or delete chapters so each remaining section has a distinct explanatory job.
+- Remove optional process, detail-list, example, caveat, scope, or source modules when they do not help answer the question.
+- Use the process figure only for an ordered sequence or causal chain. Adjust its items and `--process-columns` together, and retain a visible complete text equivalent. Replace it with a semantic table, relationship diagram, timeline, or other appropriate form when the subject requires one.
+- Keep IDs unique after adding or removing sections. Update heading references, accessible labels, chapter numbering, and reading-time text to agree with the final content.
+- Preserve the centralized design tokens, readable class names, wide desktop canvas, bounded prose width, narrow-screen reflow, keyboard focus, reduced-motion behavior, and print cleanup unless the task supplies a stronger requirement.
+
+Additional delivery requirements:
+
 - Deliver one complete `.html` file. Keep CSS and any necessary JavaScript inside that file so it works when opened locally without a build step or network access.
 - Use semantic headings and a clear reading order. Make the page responsive, keyboard accessible, and readable with high contrast and reduced motion support.
 - Use diagrams, callouts, examples, and tables to support the explanation. Keep all essential meaning available in text; do not rely on color, animation, hover, or interaction alone.
@@ -88,6 +102,9 @@ Check that:
 - Examples, diagrams, and prose agree with one another and do not introduce unsupported claims.
 - Facts, illustrations, assumptions, recommendations, conditions, caveats, and evidence limits remain distinguishable.
 - Removing decorative or repeated content would not expose a missing reasoning step.
+- The page follows the appropriate explanation path rather than the template's initial section order.
+- The page contains no unresolved `{{...}}` authoring markers, filling instructions, or content copied from an unrelated example.
+- Each remaining template module helps explain a real relationship or necessary qualification; unused modules are removed.
 - The page opens as a local file and remains usable on a narrow screen and with keyboard navigation.
 
 Report the file path and briefly describe the explanation's structure. Do not also paste the full page into chat unless the user asks.

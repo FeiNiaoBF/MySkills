@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="{{DOCUMENT_LANGUAGE}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>{{PAGE_TITLE}} · {{DOCUMENT_MARK}}</title>
+
+  <!--
+    VISUAL EXPLAINER TEMPLATE
+
+    This is a reusable source asset, not a finished explanation and not a
+    template-engine file. Every double-brace field is a literal authoring marker.
+
+    AUTHORING CONTRACT
+    1. Copy this file to the requested output location; do not edit the asset.
+    2. Replace every marker, including lang, title, labels and ARIA text.
+    3. Choose, repeat, reorder or delete sections to fit the explanation path.
+    4. Remove optional modules that do not clarify a real relationship.
+    5. Remove authoring comments and never ship unresolved markers or invented facts.
+    6. Keep essential meaning in visible text and make the result work offline.
+  -->
+  <style>
+    /* ================================================================
+       1. DESIGN TOKENS
+       Change the visual system here before editing individual components.
+       ================================================================ */
+    :root {
+      color-scheme: light;
+
+      --paper: #fbfaf6;
+      --paper-raised: #ffffff;
+      --ink: #191b1f;
+      --ink-soft: #555c65;
+      --line: #d8d6ce;
+      --accent: #2559d6;
+      --accent-soft: #e7edff;
+      --caution: #913f24;
+      --caution-soft: #f7e9e2;
+      --code-bg: #20252e;
+      --code-ink: #edf2ff;
+      --focus: #6d28d9;
+
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+        "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+      --font-serif: "Iowan Old Style", "Noto Serif CJK SC", "Noto Serif SC",
+        "Source Han Serif SC", "Source Han Serif CN", "Songti SC", STSong,
+        SimSun, "Times New Roman", serif;
+      --font-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono",
+        monospace;
+
+      --reading-width: 40rem;
+      --content-width: 68rem;
+      --space-1: 0.375rem;
+      --space-2: 0.75rem;
+      --space-3: 1.25rem;
+      --space-4: 2rem;
+      --space-5: 3.25rem;
+      --space-6: 5.25rem;
+    }
+
+    /* ================================================================
+       2. BASE
+       ================================================================ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-break: strict;
+      line-height: 1.75;
+      text-align: start;
+      word-break: normal;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.18em;
+    }
+
+    a:hover {
+      text-decoration-thickness: 2px;
+    }
+
+    a:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 4px;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 10px;
+      left: 10px;
+      padding: 9px 13px;
+      border: 2px solid currentColor;
+      background: var(--paper-raised);
+      color: var(--ink);
+      transform: translateY(-180%);
+    }
+
+    .skip-link:focus,
+    .skip-link:focus-visible {
+      transform: translateY(0);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ================================================================
+       3. PAGE HEADER
+       ================================================================ */
+    .explainer-page {
+      min-height: 100vh;
+      background: var(--paper);
+    }
+
+    .explainer-header {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      min-height: 58px;
+      padding: 12px clamp(22px, 6vw, 72px);
+      border-bottom: 1px solid var(--line);
+      background: rgb(251 250 246 / 94%);
+      backdrop-filter: blur(10px);
+    }
+
+    .document-mark {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin: 0;
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .document-mark::before {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .reading-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      width: 72px;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .progress-value {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+      transition: width 160ms ease-out;
+    }
+
+    /* ================================================================
+       4. OPENING AND CORE ANSWER
+       ================================================================ */
+    .explainer-opening {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: var(--space-6) clamp(22px, 5vw, 48px) var(--space-5);
+    }
+
+    .opening-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 150px) minmax(0, var(--reading-width));
+      gap: clamp(28px, 6vw, 76px);
+      align-items: start;
+    }
+
+    .opening-kicker {
+      margin: 8px 0 0;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .opening-kicker span {
+      display: block;
+      margin-top: 5px;
+      color: var(--ink-soft);
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .explainer-title {
+      max-width: 38rem;
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      text-wrap: balance;
+    }
+
+    .explainer-deck {
+      max-width: 36rem;
+      margin: var(--space-3) 0 0;
+      color: var(--ink-soft);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.75;
+    }
+
+    .answer-strip {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: var(--space-3);
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: var(--space-4) clamp(22px, 5vw, 48px);
+      border-top: 3px solid var(--accent);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper-raised);
+    }
+
+    .answer-label {
+      margin: 4px 0 0;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      overflow-wrap: anywhere;
+    }
+
+    .answer-label span {
+      display: block;
+      margin-top: 4px;
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .answer-copy p {
+      max-width: var(--reading-width);
+      margin: 0;
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 650;
+      letter-spacing: -0.01em;
+      line-height: 1.55;
+    }
+
+    /* ================================================================
+       5. CHAPTERS
+       ================================================================ */
+    .explainer-body {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: var(--space-6) clamp(22px, 5vw, 48px) calc(var(--space-6) + var(--space-4));
+    }
+
+    .chapter {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: var(--space-3);
+    }
+
+    .chapter + .chapter {
+      margin-top: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--line);
+    }
+
+    .chapter-index {
+      margin: 4px 0 0;
+      color: var(--ink-soft);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.08em;
+      overflow-wrap: anywhere;
+    }
+
+    .chapter-title {
+      max-width: var(--reading-width);
+      margin: 0 0 var(--space-3);
+      font-family: var(--font-serif);
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+    }
+
+    .chapter-intro {
+      max-width: 38rem;
+      margin: 0 0 var(--space-4);
+      color: var(--ink-soft);
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    /* ================================================================
+       6. PROCESS FIGURE
+       The ordered list remains understandable without visual styling.
+       ================================================================ */
+    .process-map {
+      margin: var(--space-4) 0;
+      padding: var(--space-4) 0 var(--space-3);
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .process-line {
+      display: grid;
+      grid-template-columns: repeat(var(--process-columns, 3), minmax(0, 1fr));
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .process-step {
+      position: relative;
+      min-width: 0;
+      padding-right: 12px;
+    }
+
+    .process-step:not(:last-child)::after {
+      position: absolute;
+      top: 8px;
+      right: 5px;
+      width: calc(100% - 22px);
+      height: 1px;
+      background: var(--line);
+      content: "";
+      transform: translateX(50%);
+    }
+
+    .process-step:not(:last-child)::before {
+      position: absolute;
+      z-index: 2;
+      top: -7px;
+      right: -1px;
+      color: var(--accent);
+      content: "›";
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .process-dot {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 16px;
+      height: 16px;
+      margin-bottom: 14px;
+      border: 4px solid var(--paper);
+      outline: 1px solid var(--accent);
+      background: var(--accent);
+    }
+
+    .process-name {
+      display: block;
+      font-size: 15px;
+      font-weight: 750;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .process-note {
+      display: block;
+      margin-top: 4px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .process-caption {
+      margin: var(--space-3) 0 0;
+      padding-top: var(--space-3);
+      border-top: 1px dashed var(--line);
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* ================================================================
+       7. STEP LIST
+       ================================================================ */
+    .step-list-heading {
+      max-width: var(--reading-width);
+      margin: var(--space-4) 0 0;
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .step-list {
+      max-width: var(--reading-width);
+      margin: var(--space-2) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step-item {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 18px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step-marker {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .step-item h4 {
+      margin: 0 0 5px;
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .step-item p {
+      margin: 0;
+      color: var(--ink-soft);
+      line-height: 1.72;
+    }
+
+    /* ================================================================
+       8. EXAMPLE AND CAVEAT
+       ================================================================ */
+    .example-block {
+      margin-top: var(--space-4);
+      padding: var(--space-4);
+      background: var(--code-bg);
+      color: var(--code-ink);
+    }
+
+    .example-label {
+      margin: 0 0 var(--space-3);
+      color: #adc0ff;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .example-content {
+      margin: 0;
+      color: var(--code-ink);
+      font-family: var(--font-mono);
+      font-size: clamp(15px, 2vw, 18px);
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .example-content code {
+      font: inherit;
+    }
+
+    .example-caption {
+      max-width: 34rem;
+      margin: var(--space-3) 0 0;
+      color: #c5ccdc;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .limit-note {
+      display: grid;
+      grid-template-columns: 4px minmax(0, 1fr);
+      gap: var(--space-3);
+      max-width: var(--reading-width);
+      margin-top: var(--space-4);
+      padding: var(--space-3) 0;
+    }
+
+    .limit-rule {
+      background: var(--caution);
+    }
+
+    .limit-note h3 {
+      margin: 0 0 6px;
+      color: var(--caution);
+      font-size: 18px;
+    }
+
+    .limit-note p,
+    .source-note {
+      margin: 0;
+      color: var(--ink-soft);
+    }
+
+    .source-note {
+      max-width: var(--reading-width);
+      margin-top: var(--space-4);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* ================================================================
+       9. SOURCES
+       Keep source titles human-readable; URLs may wrap on narrow screens.
+       ================================================================ */
+    .references {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 0 clamp(22px, 5vw, 48px) var(--space-6);
+    }
+
+    .references-inner {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: var(--space-3);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--ink);
+    }
+
+    .references-label {
+      margin: 3px 0 0;
+      color: var(--ink-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+
+    .references h2 {
+      margin: 0 0 var(--space-2);
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .references ol {
+      max-width: var(--reading-width);
+      margin: 0;
+      padding-left: 1.4em;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .references li + li {
+      margin-top: 6px;
+    }
+
+    .references a {
+      overflow-wrap: anywhere;
+    }
+
+    /* ================================================================
+       10. RESPONSIVE AND PRINT
+       ================================================================ */
+    @media (max-width: 660px) {
+      .explainer-header {
+        position: static;
+        padding: 14px 18px;
+      }
+
+      .reading-progress {
+        display: none;
+      }
+
+      .explainer-opening {
+        padding: 54px 22px 40px;
+      }
+
+      .opening-grid,
+      .answer-strip,
+      .chapter,
+      .references-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .opening-grid {
+        gap: 18px;
+      }
+
+      .opening-kicker span,
+      .answer-label span {
+        display: inline;
+        margin: 0 0 0 8px;
+      }
+
+      .answer-strip {
+        gap: 12px;
+        margin: 0;
+      }
+
+      .explainer-body {
+        padding: 64px 22px 76px;
+      }
+
+      .chapter {
+        gap: 8px;
+      }
+
+      .chapter + .chapter {
+        margin-top: 60px;
+        padding-top: 60px;
+      }
+
+      .process-line {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .process-step {
+        display: grid;
+        grid-template-columns: 18px 92px minmax(0, 1fr);
+        gap: 12px;
+        padding: 0;
+      }
+
+      .process-step:not(:last-child)::after {
+        top: 16px;
+        right: auto;
+        bottom: -18px;
+        left: 8px;
+        width: 1px;
+        height: 34px;
+        transform: none;
+      }
+
+      .process-step:not(:last-child)::before {
+        display: none;
+      }
+
+      .process-dot {
+        margin: 2px 0 0;
+      }
+
+      .process-note {
+        margin: 0;
+      }
+
+      .example-block {
+        margin-right: -22px;
+        margin-left: -22px;
+        padding: 28px 22px;
+      }
+
+      .references {
+        padding-right: 22px;
+        padding-left: 22px;
+      }
+
+      .references-inner {
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      body {
+        font-size: 16px;
+      }
+
+      .explainer-title {
+        font-size: 34px;
+      }
+
+      .process-step {
+        grid-template-columns: 18px 78px minmax(0, 1fr);
+        gap: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .progress-value {
+        transition: none;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 18mm;
+      }
+
+      body {
+        background: white;
+      }
+
+      .skip-link,
+      .reading-progress {
+        display: none !important;
+      }
+
+      .explainer-header {
+        position: static;
+        padding-right: 0;
+        padding-left: 0;
+        background: white;
+        backdrop-filter: none;
+      }
+
+      .explainer-opening,
+      .answer-strip,
+      .explainer-body,
+      .references {
+        max-width: none;
+        padding-right: 0;
+        padding-left: 0;
+      }
+
+      .chapter,
+      .example-block,
+      .limit-note,
+      .references-inner {
+        break-inside: avoid;
+      }
+
+      a {
+        color: inherit;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#explainer-content">{{SKIP_LINK_LABEL}}</a>
+
+  <article class="explainer-page">
+    <!-- TEMPLATE SLOT: document identity -->
+    <header class="explainer-header">
+      <p class="document-mark">{{DOCUMENT_MARK}}</p>
+      <div
+        class="reading-progress"
+        id="readingProgress"
+        role="progressbar"
+        aria-label="{{READING_PROGRESS_ARIA_LABEL}}"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+        aria-valuetext="0% {{READING_PROGRESS_SUFFIX}}"
+        data-value-suffix="{{READING_PROGRESS_SUFFIX}}"
+      >
+        <span>{{READING_PROGRESS_LABEL}}</span>
+        <span class="progress-track" aria-hidden="true">
+          <span class="progress-value" id="readingProgressValue"></span>
+        </span>
+        <span id="readingProgressText">0%</span>
+      </div>
+    </header>
+
+    <!-- TEMPLATE SLOT: question, category, reading time and framing -->
+    <section class="explainer-opening" aria-labelledby="page-title">
+      <div class="opening-grid">
+        <p class="opening-kicker">
+          {{EXPLANATION_TYPE}}
+          <span>{{READING_TIME}}</span>
+        </p>
+        <div>
+          <h1 class="explainer-title" id="page-title">{{PAGE_TITLE}}</h1>
+          <p class="explainer-deck">{{FRAMING_SENTENCE}}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEMPLATE SLOT: shortest complete answer -->
+    <section class="answer-strip" aria-labelledby="answer-heading">
+      <p class="answer-label" id="answer-heading">
+        {{CORE_ANSWER_LABEL}}
+        <span>{{CORE_ANSWER_HINT}}</span>
+      </p>
+      <div class="answer-copy">
+        <p>{{CORE_ANSWER}}</p>
+      </div>
+    </section>
+
+    <main class="explainer-body" id="explainer-content">
+      <!--
+        TEMPLATE SLOT: first explanatory section.
+        This section order is not fixed. Repeat, remove or reorder chapters to
+        follow the chosen explanation path, and keep every id unique.
+      -->
+      <section class="chapter" aria-labelledby="chapter-overview">
+        <p class="chapter-index">{{CHAPTER_1_INDEX}}</p>
+        <div>
+          <h2 class="chapter-title" id="chapter-overview">{{CHAPTER_1_TITLE}}</h2>
+          <p class="chapter-intro">{{CHAPTER_1_INTRO}}</p>
+
+          <!--
+            OPTIONAL MODULE: ordered sequence or causal chain.
+            Delete this figure when order is not part of the explanation. For
+            another relationship, replace it with appropriate semantic markup.
+            Repeat or remove list items and set --process-columns to their count.
+            Keep the visible figcaption as a complete text equivalent.
+          -->
+          <figure
+            class="process-map"
+            aria-describedby="relationship-description"
+            style="--process-columns: 3"
+          >
+            <ol class="process-line" aria-label="{{RELATIONSHIP_ARIA_LABEL}}">
+              <li class="process-step">
+                <span class="process-dot" aria-hidden="true"></span>
+                <span class="process-name">{{RELATIONSHIP_1_NAME}}</span>
+                <span class="process-note">{{RELATIONSHIP_1_NOTE}}</span>
+              </li>
+              <li class="process-step">
+                <span class="process-dot" aria-hidden="true"></span>
+                <span class="process-name">{{RELATIONSHIP_2_NAME}}</span>
+                <span class="process-note">{{RELATIONSHIP_2_NOTE}}</span>
+              </li>
+              <li class="process-step">
+                <span class="process-dot" aria-hidden="true"></span>
+                <span class="process-name">{{RELATIONSHIP_3_NAME}}</span>
+                <span class="process-note">{{RELATIONSHIP_3_NOTE}}</span>
+              </li>
+            </ol>
+            <figcaption class="process-caption" id="relationship-description">
+              {{RELATIONSHIP_TEXT_EQUIVALENT}}
+            </figcaption>
+          </figure>
+
+          <!--
+            OPTIONAL MODULE: expanded steps or key points.
+            Repeat or remove items to match what the reader actually needs.
+          -->
+          <h3 class="step-list-heading">{{DETAIL_LIST_HEADING}}</h3>
+          <ol class="step-list" aria-label="{{DETAIL_LIST_ARIA_LABEL}}">
+            <li class="step-item">
+              <span class="step-marker">1</span>
+              <div>
+                <h4>{{DETAIL_1_TITLE}}</h4>
+                <p>{{DETAIL_1_EXPLANATION}}</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-marker">2</span>
+              <div>
+                <h4>{{DETAIL_2_TITLE}}</h4>
+                <p>{{DETAIL_2_EXPLANATION}}</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-marker">3</span>
+              <div>
+                <h4>{{DETAIL_3_TITLE}}</h4>
+                <p>{{DETAIL_3_EXPLANATION}}</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- OPTIONAL MODULE: concrete example; delete when it adds no explanatory value -->
+      <section class="chapter" aria-labelledby="chapter-example">
+        <p class="chapter-index">{{CHAPTER_2_INDEX}}</p>
+        <div>
+          <h2 class="chapter-title" id="chapter-example">{{EXAMPLE_SECTION_TITLE}}</h2>
+          <p class="chapter-intro">{{EXAMPLE_SECTION_INTRO}}</p>
+
+          <div class="example-block" aria-labelledby="example-label">
+            <p class="example-label" id="example-label">{{EXAMPLE_LABEL}}</p>
+            <pre class="example-content"><code>{{EXAMPLE_CONTENT}}</code></pre>
+            <p class="example-caption">{{EXAMPLE_EXPLANATION}}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- OPTIONAL MODULE: limits, uncertainty or scope; retain when material -->
+      <section class="chapter" aria-labelledby="chapter-limits">
+        <p class="chapter-index">{{CHAPTER_3_INDEX}}</p>
+        <div>
+          <h2 class="chapter-title" id="chapter-limits">{{LIMITS_SECTION_TITLE}}</h2>
+          <p class="chapter-intro">{{LIMITS_SECTION_INTRO}}</p>
+
+          <aside class="limit-note" aria-labelledby="caveat-title">
+            <span class="limit-rule" aria-hidden="true"></span>
+            <div>
+              <h3 id="caveat-title">{{CAVEAT_TITLE}}</h3>
+              <p>{{CAVEAT_EXPLANATION}}</p>
+            </div>
+          </aside>
+
+          <p class="source-note">{{SCOPE_NOTE}}</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- OPTIONAL MODULE: sources; delete when the explanation has no sourced claims -->
+    <footer class="references" aria-labelledby="references-heading">
+      <div class="references-inner">
+        <p class="references-label">{{SOURCES_LABEL}}</p>
+        <div>
+          <h2 id="references-heading">{{SOURCES_HEADING}}</h2>
+          <ol>
+            <li><a href="{{SOURCE_1_URL}}">{{SOURCE_1_TITLE}}</a></li>
+            <li><a href="{{SOURCE_2_URL}}">{{SOURCE_2_TITLE}}</a></li>
+          </ol>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+  <script>
+    /* ================================================================
+       READING PROGRESS
+       Presentation only: this script does not create or alter content.
+       ================================================================ */
+    const explainerPage = document.querySelector(".explainer-page");
+    const progress = document.querySelector("#readingProgress");
+    const progressValue = document.querySelector("#readingProgressValue");
+    const progressText = document.querySelector("#readingProgressText");
+    const progressSuffix = progress.dataset.valueSuffix;
+    let progressFrame = null;
+
+    function updateReadingProgress() {
+      progressFrame = null;
+      const pageRect = explainerPage.getBoundingClientRect();
+      const scrollableDistance = explainerPage.offsetHeight - window.innerHeight;
+      const percentage = scrollableDistance <= 0
+        ? 100
+        : Math.round(
+            (Math.min(Math.max(-pageRect.top, 0), scrollableDistance) / scrollableDistance) * 100
+          );
+
+      progressValue.style.width = `${percentage}%`;
+      progressText.textContent = `${percentage}%`;
+      progress.setAttribute("aria-valuenow", String(percentage));
+      progress.setAttribute("aria-valuetext", `${percentage}% ${progressSuffix}`);
+    }
+
+    function scheduleProgressUpdate() {
+      if (progressFrame !== null) return;
+      progressFrame = requestAnimationFrame(updateReadingProgress);
+    }
+
+    window.addEventListener("scroll", scheduleProgressUpdate, { passive: true });
+    window.addEventListener("resize", scheduleProgressUpdate);
+    window.addEventListener("pageshow", updateReadingProgress);
+    updateReadingProgress();
+  </script>
+</body>
+</html>
