@@ -1,93 +1,91 @@
 ---
 name: frontend-guide
-description: 用户需要从零规划或构建界面，或明确要求逐模块陪建时使用。按项目已有技术栈拆成可验证模块；局部 UI 修改不启动整套流程。
-metadata: {}
+description: >-
+  This skill helps users plan and build interfaces from an initial idea or through
+  explicit module-by-module guidance. It explains basic and optional areas when
+  UI requirements are unclear, turns selected content into a page structure,
+  and pairs conversational explanations with inspectable HTML design drafts
+  before implementation in the project's stack. Local UI edits do not restart
+  the full workflow.
+metadata:
+  version: "0.1.0"
 ---
 
-# Frontend Guide — 模块化前端陪建
+# Frontend Guide
 
-面向**不懂前端**的用户：用户负责目标与重要设计决定，agent 负责实现。把页面拆成职责清楚的模块，但模块化施工不等于逐模块审批。
+Help users unfamiliar with frontend development decide what their interface needs, then turn the agreed scope into a working interface. The user owns goals and consequential choices; the agent organizes and implements the work. Communicate in the user's language using everyday names for interface parts.
 
-默认交付已约定的页面并完成相关验证。仅当用户明确要求逐模块陪建时，使用下文的陪建检查点；该模式下用户反馈是练习的一部分。
+## Scope and delivery
 
-## 硬约束
+Focus on content, module responsibilities, layout relationships, interaction flows, states, and implementation. Reuse established visual direction and design-system decisions; a separate visual-style exploration is not a prerequisite. This skill works independently and does not assign work to other skills.
 
-- **沿用技术栈**：已有项目使用现有框架、组件和工具链。一次性原型也沿用用户选定的目标栈；只有用户明确接受 Web 原型时，才默认单文件 HTML + CSS + JS。技术栈变更属于单独决定。
-- **结构模块化**：采用项目现有组件边界和 design tokens。Flutter 使用 widget 边界、项目已有的 `ThemeData` / `ColorScheme` 与 Material widgets；Web 使用语义 HTML 元素和 CSS custom properties。不要把一种栈的组件或样式术语套用到另一种栈。
-- **连续交付**：已确定的模块连续实现与检查；仅在实质设计分叉、范围变化或明确陪建检查点等待用户。
-- 教学按需：陪建或用户提问时解释 1-2 个相关概念；普通页面交付不固定附教学段落。
-- **变体对比**：优先沿用项目已有的预览方式。仅当项目使用 HTML 设备框预览时，采用一变体一框并排显示；`data-kind="phone"` / `"web"` 只属于提供该接口的本地 preview harness，不是通用协议。
-- **沿用目标设计系统（如 MD3）**：使用目标栈的原生组件语汇。Flutter/Material 3 项目沿用其 Theme、ColorScheme 和 widgets；Web 项目沿用其组件与 CSS tokens。组件语义不清或版本有关时才查官方资料，复用项目已有的选择与调研。
+Provide two corresponding deliverables as the page takes shape:
 
-## 流程
+- **Conversation:** explain the page's contents and their purposes, distinguish confirmed decisions from proposals, and summarize changes and remaining choices.
+- **HTML design draft:** save the specific page's initial design in the user-designated folder and keep it aligned with the discussion. The draft lets the user locate modules and their internal elements and describe changes precisely. Read [HTML preview requirements](references/html-preview.md) when preparing or updating it.
 
-### Step 1 — 确认大方向（direction gate）
+Reuse an already designated output folder. If none is established, ask for the destination before saving; continue useful discussion meanwhile. A request for discussion only, text only, no files, or a later preview takes precedence. Do not create an HTML draft for an isolated UI fix merely because this skill exists.
 
-先从用户请求和现有设计约定提取以下信息。已明确的内容直接复用；新页面可用一张简短**方向卡**列出目标与假设：
+An HTML draft is a review surface, not a change of production stack. For non-Web targets it is an approximation, not proof of native behavior. Once implementing the agreed interface, also deliver the actual project changes and its preview or run instructions. A design-only request stops at the design deliverables.
 
-| 项 | 要问清的 |
-|---|---|
-| 页面范围 | 单页还是多页？多页时先列页面清单（每页一句话职责），模块地图从用户最急的那一页开始 |
-| 页面用途 | 这是什么页面？给谁看？看完希望对方做什么？ |
-| 内容清单 | 页面上必须出现哪些内容（文字/图片/按钮/列表…）？让用户用大白话列 |
-| 风格方向 | 想要什么感觉？（用户往往说不出术语——给 2-3 个带具体描述的选项让其挑选，而不是问「你喜欢什么风格」） |
-| 硬约束 | 需要适配手机吗？有没有必须用的图片/品牌色？ |
+## Working rules
 
-先复用项目的设计 brief 和既有研究。仅对未决问题或版本敏感事实补查同类产品、目标平台的官方原则，再给可渲染候选；局部微调不重启研究。
+- Preserve the existing framework, components, toolchain, and design tokens. If no target stack is established, resolve that choice before production implementation; the HTML draft does not settle it.
+- Use platform-native concepts: semantic HTML and CSS tokens on Web; widget constraints, `ThemeData`, and `ColorScheme` in Flutter. Reuse existing research; consult official documentation when component behavior or version-sensitive facts remain uncertain.
+- **Ordinary delivery:** carry authorized work through implementation and checks without module-by-module approval. Pause only for consequential unresolved choices or scope changes.
+- **Guided delivery:** only when explicitly requested, use the module-map and module-preview checkpoints below. Explain one or two relevant concepts when useful; do not attach a lesson to every ordinary delivery.
+- Fix the smallest coherent scope that resolves feedback or a defect. A shared component or layout constraint may need adjustment; preserve unrelated confirmed work and check affected uses.
 
-仅当存在会改变方向的未知项时，问一个关键问题；已确认的方向无需再次放行。完成标准：范围与目标足以实现，重要分叉已解决，可逆的细节使用合理默认。
+## Workflow
 
-持久项目在方向确定或交付里程碑记录设计决定，沿用项目现有设计文档；需要新文档时使用 `DESIGN.md`。一次性原型不强制建完整设计文档。
+### 1. Help the user choose content when needed
 
-### Step 2 — 模块地图（module map）
+Read the request and existing project/design material first. Reuse known audience, purpose, platform, page scope, required content, and constraints.
 
-把内容清单切成**从上到下的模块序列**（典型：header → hero → 内容区 ×N → footer）。新页面可用简短模块表表达结构；既有结构直接沿用，陪建模式才把模块地图作为用户检查点：
+If the user supplies only a product type or cannot name the UI they need, do not jump to layout, visual styling, or HTML generation:
 
-| # | 模块 | 职责（一句话） | 包含元素 | 尺寸规格 | 优先级 |
-|---|---|---|---|---|---|
-| 1 | header | 品牌与导航 | logo 文字、3 个导航链接 | 宽 100%，高 ~64px，吸顶 | P0 |
+1. Explain a small set of likely basic areas in everyday language, including the problem each solves. Relate necessity to the user's use case; a common feature is not automatically required.
+2. Offer relevant optional areas and the situations where they help. State assumptions, and ask a focused question if missing context materially changes the options.
+3. Let the user select, remove, or add content. Resolve the content scope before designing it. If the user explicitly delegates these choices, state the chosen scope and assumptions and proceed.
 
-尺寸规格要给具体数值，并注明目标栈使用的单位与约束：Web 可写宽度策略（100% / 限宽 1200px 居中 / 固定侧栏 260px）、高度或高宽比、断点与折叠行为；Flutter 可写约束宽度、logical px 尺寸、比例，以及目标窗口/设备上的折叠行为。数值先给合理默认，用户看了实际效果后再调——**规格是可修订的合同，不是一次到位的图纸**。
+For example, for an ebook reader, opening a book and displaying its text may be basic. A bookshelf helps manage many books but may be unnecessary for opening a single file. Notes help close reading; synchronization helps cross-device use. Present these as choices with reasons, not a fixed reader feature list.
 
-顺序策略：P0 模块（没有页面就不成立的）先进；让用户看到地图时能指着说「这个不要、这个放最后」。
+If the requested content and functions are already clear, skip this selection step. Do not restart discovery for a local change or turn a missing page parameter into a product requirements interview.
 
-完成标准：模块职责与优先级符合已约定范围；陪建模式下用户已确认地图。
+**Ready to continue:** the content scope is selected or explicitly delegated, and consequential unknowns are resolved. Reversible details can use stated defaults.
 
-### Step 3 — 按模块实现
+### 2. Organize the page and prepare its design draft
 
-按地图逐块实现，但普通交付模式不在模块之间停下：
+Map the selected content into the actual interface structure: page regions, navigation, main content, side panels, overlays, and relevant states. A vertically stacked landing page is one possible structure, not the universal model. A feature does not necessarily require its own visible region, page, or code component.
 
-1. 使用项目的 tokens 与组件边界实现布局和交互。
-2. 使用目标栈可用的预览方式检查视觉和交互：Web 使用浏览器；Flutter 使用项目现有的运行、模拟器或截图流程。修复本次修改引入的问题。
-3. 陪建模式：展示模块预览、解释相关选择，等待用户反馈后继续；普通模式连续完成约定范围。
+For multiple pages, state each page's responsibility and start with the user's priority. Use a compact module map when helpful: everyday name, purpose, included elements, important interactions/states, layout constraints, and implementation priority. Reuse existing component boundaries where appropriate.
 
-在方向确定或交付里程碑更新必要的设计文档；普通组件实现和局部调值不逐项记账。
+Give concrete, revisable layout defaults with target-platform units and behavior: width constraints, proportions, and adaptation to relevant windows or devices. Do not fix every dimension before seeing the page. Apply the project's visual direction; ask about unresolved choices only when they materially affect the design.
 
-用户对某处不满意时**只修那一处**（重排局部、调一个数值），不重做整个模块——重做会丢掉已确认的工作，还引入新问题。
+Create or update the HTML design draft and its matching conversational explanation within the authorized scope. Present real page content and structure so the user can point to specific parts, rather than a generic design report. Keep proposals visibly distinct from user-confirmed choices.
 
-用户反馈要求改地图本身（加/删/换模块顺序）时，回到 Step 2 更新地图再继续——改在代码前便宜，改在代码后贵。
+**Checkpoint:** in guided delivery, obtain feedback and confirmation of the module map before implementation. In ordinary delivery, proceed from the agreed scope without introducing a new approval gate for every draft.
 
-完成标准：约定模块已实现，相关检查已执行；无法执行的检查明确记录。陪建模式另需完成约定的用户检查点。
+### 3. Implement and refine modules
 
-### Step 4 — 整页完善（polish pass）
+Implement the essential modules first, using the project's native components, tokens, and established preview workflow. Check each meaningful change in a browser for Web, or through the project's app, emulator, or device workflow for native targets. Repair regressions introduced by the change.
 
-所有模块就位后，做一轮全局整理，逐项过：
+In guided delivery, show each completed module in page context, explain relevant choices, and wait for feedback before the next module. In ordinary delivery, continue through the agreed scope and present the complete page.
 
-- **响应式**：按目标平台检查手机及相关窗口尺寸。Web 使用浏览器缩窗或设备模拟；Flutter 使用项目现有的目标设备预览方式，检查各模块的折叠与布局行为。
-- **节奏一致**：模块间距、标题层级、留白是否统一（应该都来自 tokens，不一致 = 有魔法数漏网）。
-- **可访问性底线**：图片有 alt、文字对比度够、可点元素够大。
-- **空态与极端内容**：标题特别长、列表特别空时页面不散架。
+Interpret feedback using the selected module or element and its surrounding context. Ask only when the intended target or change remains ambiguous. If feedback changes the content scope or structure, revise the module map before continuing implementation. Keep the HTML draft and conversational explanation consistent with accepted changes; disclose any difference between the draft and the actual application.
 
-完成标准：对本次范围适用的检查已执行，本次引入的问题已修复，交付预览或运行方式并报告验证缺口。用户可在整页验收时反馈；未取得用户反馈不等于已获用户验收，也不阻止 agent 完成已授权实现与检查。
+Record durable design decisions at direction changes or delivery milestones in existing project design documentation; use `DESIGN.md` if a new document is needed. Do not require a full design document for a one-off draft or log every spacing adjustment.
 
-## Skill 联动（只路由，不重复）
+### 4. Check the whole page and deliver
 
-| 时机 | 路由到 |
-|---|---|
-| 用户明确要求进一步梳理产品需求，而非只缺一个页面参数 | 建议使用 Matt 的 `/skill:grill-with-docs`；不要为局部未知重启产品流程 |
-| Step 1 风格方向拿不准（用户只会说感受词） | `aesthetic-translator`（输出直接填方向卡） |
-| Step 1/3 需要成体系的风格与设计系统决策 | 在当前环境已安装且适用时，路由到 `frontend-design` / `ui-ux-pro-max`；否则沿用项目 DESIGN.md 与现有设计系统 |
-| Step 2 用户拿不准某个模块该长什么样，先验证再写码 | `prototype`（丢掉式原型回答设计问题） |
-| 完成后用户要求审查 | `code-review` |
+Check what applies to the agreed scope, fix issues introduced by this work, and repeat affected checks:
 
-本 skill 只负责模块化陪建流程本身；被路由的 skill 输出结果后**回到本流程继续**。
+- **Layout:** relevant viewport/device sizes, overflow, long titles, empty content, and module relationships. Inspect the rendered result; do not infer appearance solely from code.
+- **Interaction:** the agreed user flows and relevant loading, empty, error, and success states. Identify simulated data, disconnected actions, and missing persistence.
+- **Accessibility:** meaningful labels and image alternatives/semantics appropriate to the platform, keyboard navigation and visible focus where applicable, sufficient contrast, and usable touch/click targets.
+- **Consistency:** typography, spacing, and components follow project decisions. Check whether differences are intentional instead of treating every variation as a defect.
+- **Draft feedback controls:** when delivering HTML, verify the locating and selection behavior described in its reference.
+
+Deliver a clear link or path and opening/run instructions, a few useful actions to try, and a concise account of what was implemented, checked, and still limited. Report unavailable checks explicitly. A browser-checked HTML draft does not establish native-app behavior, and code inspection alone does not establish visual or interaction quality.
+
+Implementation completion means the agreed scope and relevant checks are complete with gaps disclosed. User acceptance requires actual user feedback; do not invent acceptance or stop authorized ordinary delivery merely because feedback has not arrived.

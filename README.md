@@ -27,7 +27,7 @@
 | --- | --- |
 | [aesthetic-translator](skills/design/aesthetic-translator/SKILL.md) | 把日常设计描述转成可检查元素的 HTML 预览与可执行规格 |
 | [better-designs-md](skills/design/better-designs-md/SKILL.md) | 编写和维护界面设计规范 `DESIGN.md` |
-| [frontend-guide](skills/design/frontend-guide/SKILL.md) | 从方向卡到模块化页面实现，或按需逐模块陪建 |
+| [frontend-guide](skills/design/frontend-guide/SKILL.md) | 先选清界面内容，以对话说明和可定位元素的 HTML 初稿确认结构，再沿项目技术栈实现；支持逐模块陪建 |
 
 ### 学习（learning）
 
