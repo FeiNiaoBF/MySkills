@@ -29,19 +29,16 @@ controls         | prediction / checkpoint
 The first screen must answer: what am I learning, where am I, what evidence changed, and what do I do
 next?
 
-## Template contracts
+## Pattern contracts
 
 ### trace-board
 
-Use for source-to-runtime tracing. Show synchronized source lines, current event, call stack, partial
-state, and one prediction checkpoint. Stepping must update at least the source highlight and runtime
-state. Record predicted, observed, and explained separately.
+Use for source-to-runtime tracing. Show synchronized source lines, current event, call stack, partial state, and one meaningful learner checkpoint. Stepping must update at least the source highlight and runtime state. When a prediction is attempted, record predicted, observed, and explained separately.
 
 ### state-lens
 
 Use for legal states, transitions, ownership, and invariants. Show the current state, legal events,
-transition labels, state-specific values, and the invariant that determines the next action. Let the
-learner predict an event before firing it; show the event log and allow one-step backtracking.
+transition labels, state-specific values, and the invariant that determines the next action. Once the learner has enough context, let them predict an event before firing it; show the event log and allow one-step backtracking.
 
 ## Data rules
 
@@ -58,4 +55,4 @@ requirement. Use semantic HTML and inline SVG for spatial diagrams. Build dynami
 `createElement` and `textContent`; keep imported project data out of raw HTML insertion. Use responsive
 layout and test the longest realistic symbol or state name before shipping.
 
-Add a new template only when the learner's cognitive job is different from tracing or state reasoning.
+Create a reusable template only after a second lesson needs the same interaction; these patterns do not require a dedicated template or a visual artifact for every lesson.

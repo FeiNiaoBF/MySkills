@@ -5,7 +5,7 @@ description: >-
   lessons so the learner can understand, modify, transfer, and direct AI development.
 metadata:
   author: FeiNiaoBF
-  version: "0.1.0"
+  version: "0.2.0"
   date: "2026-09-21"
 disable-model-invocation: true
 ---
@@ -27,25 +27,21 @@ A later level does not erase an earlier gap. Record the highest level actually e
 
 Every lesson:
 
-- fits within 25 minutes;
-- solves one cognitive problem;
+- has a scope that fits the learner's available time and one cognitive problem;
 - uses one real project slice;
-- asks for one prediction before revealing the relevant evidence;
-- includes one bounded hands-on action unless fatigue is explicit;
-- produces observable evidence and a checkpoint;
+- asks for a prediction when the learner has enough context for one to be meaningful;
+- includes a bounded hands-on action when the learner can safely attempt one;
+- records observable evidence and a checkpoint appropriate to the chosen target;
 - recommends, rather than silently starts, the next lesson.
 
-Keep the original project read-only. Use an independent worktree or scratch copy for learner changes.
-Do not execute arbitrary project code or install dependencies merely to make a visual; ask for explicit
-authorization when execution or network access is needed.
+Inspect the project without modifying it when the task is to understand or review. For an authorized exercise, use an isolated worktree or scratch copy unless the user has requested an in-place change; preserve existing work and follow project rules. Execute code or install dependencies only when the current request authorizes it and the environment is appropriate; an already authorized action does not need a second confirmation.
 
 ## Run the loop
 
 ### 1. Contract and calibrate
 
 Identify the source: local path, GitHub repository, commit/PR, handoff, or `DIGEST.md`. Ask what the
-learner wants to be able to recognize, change, or direct next time. Sample the minimum prerequisite
-with one prediction question. Do not begin with a complete architecture lecture.
+learner wants to be able to recognize, change, or direct next time. Sample a prerequisite with a prediction question only when the learner has enough context to answer; otherwise show a small source slice first. Do not begin with a complete architecture lecture.
 
 Choose one target capability and one concrete slice:
 
@@ -66,10 +62,10 @@ tests, traces, diffs, or rendered evidence. Mark inferred edges and missing runt
 
 For one mechanism at a time:
 
-1. ask what happens next: call, value, state, side effect, or owner;
-2. let the learner commit an answer before revealing the next event;
+1. offer just enough context for the learner to predict a call, value, state, side effect, or owner;
+2. when a prediction is useful, let the learner commit an answer before revealing the next event;
 3. inspect the smallest relevant source or runtime evidence;
-4. compare prediction with observation and name the model error;
+4. compare the learner's expectation, if any, with observation and identify the mistaken assumption;
 5. ask the learner to restate the corrected mechanism.
 
 Use a trace table, call graph, state diagram, or a focused HTML artifact only when it makes the
@@ -103,29 +99,15 @@ surface instead of guess.
 
 ### 6. Checkpoint and next lesson
 
-Record separately:
+Record the relevant items, leaving out steps that were not attempted:
 
-- what the learner located;
-- the corrected mental model;
-- one failed prediction and its cause;
-- the modification or transfer evidence;
-- the current capability level;
+- what the learner located and can now explain;
+- the corrected mental model and any informative failed prediction;
+- modification or transfer evidence, with its verification boundary;
+- the current capability level actually demonstrated;
 - the next revisit trigger or recommended lesson.
 
-Use this compact checkpoint shape:
-
-```json
-{
-  "slice": "path/to/file#symbol",
-  "target": "traced",
-  "prediction": { "prompt": "...", "answer": "...", "observed": "..." },
-  "model": "one sentence describing the mechanism",
-  "evidence": ["file:line", "test:name"],
-  "action": { "kind": "modified", "result": "..." },
-  "transfer": { "variation": "...", "prediction": "...", "result": "..." },
-  "next": "..."
-}
-```
+Use the workspace's existing learning record or a brief conversation checkpoint. Do not create a JSON record for each lesson unless another tool consumes it.
 
 A correct answer after explanation is not evidence of transfer. Prefer a changed case, a small code
 change, a test, or a precise AI task brief.
@@ -144,10 +126,7 @@ large navigable graph → specialized graph view
 3D/spatial phenomenon → Canvas / WebGL only when necessary
 ```
 
-For HTML, follow `references/visual-system.md`. The first templates are `trace-board` for
-source-to-runtime tracing and `state-lens` for legal states, transitions, and invariants. Do not
-invent a new template for a small variation; add data to the closest existing template. Add a template
-only when the learner's cognitive job is genuinely different.
+For HTML, follow `references/visual-system.md`. Its `trace-board` and `state-lens` are design patterns for source-to-runtime tracing and state reasoning, not supplied templates or runnable components. Build only the interaction this lesson needs; reuse an existing local implementation when one is available.
 
 ## Completion test
 
