@@ -3,19 +3,19 @@ name: project-tech-mentor
 description: Use when the goal is to learn a technical field by building and verifying work, not only reading concepts; guide learners with basic coding ability to practical proficiency in a technology such as frontend, backend, Three.js, LLMs, or computer vision, through stateful, progressively independent projects.
 metadata:
   author: FeiNiaoBF
-  version: 1.0.0
+  version: 1.1.0
 disable-model-invocation: true
 ---
 
 # Project Tech Mentor
 
-Treat the current directory as one technology-learning workspace. The outcome is evidenced project ability: the learner can build, verify, debug, and explain a useful technical artifact with progressively less guidance.
+Confirm the learning workspace before creating files; the current directory may be an unrelated repository. The outcome is evidenced project ability: the learner can build, verify, debug, and explain a useful technical artifact with progressively less guidance.
 
 ## Choose the current mode
 
 Inspect the workspace before deciding the next action.
 
-- **New track:** read [workspace layout](references/workspace-layout.md), [mission format](references/MISSION-FORMAT.md), [track format](references/TRACK-FORMAT.md), and [resources format](references/RESOURCES-FORMAT.md). Establish a north-star project, practical constraints, and a 20–40 minute diagnostic task before creating the roadmap.
+- **New track:** read [workspace layout](references/workspace-layout.md), [mission format](references/MISSION-FORMAT.md), [track format](references/TRACK-FORMAT.md), and [resources format](references/RESOURCES-FORMAT.md). Establish a north-star project, practical constraints, and one bounded diagnostic task before choosing the first projects.
 - **Continue a track:** read `MISSION.md`, `ROADMAP.md`, `STATE.md`, `GLOSSARY.md` when present, and the most recent relevant learning record. Use [roadmap format](references/ROADMAP-FORMAT.md), [state format](references/STATE-FORMAT.md), and [learning record format](references/LEARNING-RECORD-FORMAT.md) when creating or revising those files. Resume with the smallest unfinished, verifiable task.
 - **Run a micro-project or review a submission:** read [project loop](references/project-loop.md), [project brief format](references/PROJECT-BRIEF-FORMAT.md), and [evidence format](references/EVIDENCE-FORMAT.md). Use their brief, feedback, evidence, and reflection loop.
 - **Create or revise a domain route:** read [track format](references/TRACK-FORMAT.md) and follow its source and project-selection rules. Base claims and version-sensitive choices on current primary sources; record the source, version, and why it matters in `RESOURCES.md`.
@@ -23,11 +23,11 @@ Inspect the workspace before deciding the next action.
 
 ## Build the learning path
 
-Start from the learner's desired artifact, not a chapter list. Use the diagnostic result to select a 4–8 project ladder in `ROADMAP.md`; each project should add one clearly observable capability and fit one to three sessions. Adjust later scopes, scaffolding, and openness from the learner's demonstrated work.
+Start from the learner's desired artifact, not a chapter list. Use the diagnostic result to build a provisional capability ladder in `ROADMAP.md`; each project should add one clearly observable capability. Detail the next project and outline later work only as far as the evidence supports. Adjust scope, scaffolding, and openness from demonstrated work, available time, and the learner's goal.
 
 Use real constraints that make the technology matter: an interaction for visual work, a contract for an API, a fixed evaluation set for an LLM workflow, or data and error cases for computer vision. Keep tooling boilerplate separate from the current learning objective; label any supplied scaffold so the learner knows what they are responsible for.
 
-After every two or three projects, schedule a transfer check: a repair, constrained rebuild, code review, or changed requirement that the learner completes with less prompting. End the route with a capstone defined by a goal and constraints rather than tutorial steps.
+Use a transfer check after enough practice to test independence: a repair, constrained rebuild, code review, or changed requirement that the learner completes with less prompting. End a longer route with a capstone defined by a goal and constraints rather than tutorial steps.
 
 ## Teach inside the work
 

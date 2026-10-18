@@ -1,6 +1,6 @@
 # Learning Workspace Layout
 
-Create only the folders that the current route needs. Keep the state files at the workspace root so a later session can determine the next action without relying on chat history.
+The layout below is an example, not a creation checklist. Create only the files and folders needed by the current route, and confirm the workspace boundary before writing. Keep the resume point easy to find so a later session can continue without relying on chat history.
 
 ```text
 <technology>-learning/
@@ -38,8 +38,8 @@ Create only the folders that the current route needs. Keep the state files at th
 
 1. Confirm the learning goal and the workspace boundary.
 2. Capture the mission and constraints before choosing a stack or project list.
-3. Propose one diagnostic task that produces runnable or inspectable evidence in 20–40 minutes.
-4. Use the result to write the track and a small first roadmap. Do not prewrite later projects more precisely than the evidence supports.
+3. Propose one bounded diagnostic task that produces runnable or inspectable evidence within the learner's available time.
+4. Use the result to map relevant domain capabilities in `TRACK.md` and plan the next project in `ROADMAP.md`. Keep later projects provisional; do not prewrite their details beyond the evidence.
 5. Create the first project brief and state entry.
 
 ## Continuation sequence

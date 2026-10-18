@@ -1,6 +1,6 @@
 # TRACK.md Format
 
-`TRACK.md` describes one technology route. It is the bridge between the common project workflow and domain-specific capabilities.
+`TRACK.md` describes the domain-specific capabilities, verification, and likely misconceptions for one technology. The ordered project ladder and its status live in `ROADMAP.md`; refer to it rather than maintaining a second copy here.
 
 ## Template
 
@@ -18,11 +18,6 @@
 | --- | --- | --- | --- |
 | {capability} | {proof} | {known skill} | {direct link} |
 
-## Project ladder
-| Order | Project | Capability added | Constraint | Evidence | Transfer check |
-| --- | --- | --- | --- | --- | --- |
-| 1 | {name} | {one capability} | {scope boundary} | {proof} | {variant} |
-
 ## Domain verification
 {Commands, visual checks, metrics, or evaluation protocol for this technology.}
 
@@ -34,8 +29,7 @@
 
 ## Rules
 
-- Use a tested default ladder, then adapt scenario and constraints to the learner's mission.
-- Preserve capability order unless diagnostic evidence gives a concrete reason to change it.
+- Derive the capability map from the learner's goal, current ability, and the domain's actual dependencies. Keep the ordered projects in `ROADMAP.md`; do not prewrite projects that the evidence cannot support.
 - Record source URLs and versions for APIs, models, datasets, standards, security, and evaluation choices.
 - Keep domain-specific verification here; keep the help ladder and state contract in the shared references.
 
@@ -45,4 +39,4 @@ Use official documentation, original papers, standards, or authoritative maintai
 
 ## Project selection rules
 
-Start with a tested default ladder, then adjust its scenario and constraints to the learner's north-star artifact. Preserve the capability order unless diagnostic evidence gives a concrete reason to change it. A route should normally contain four to eight projects; a project earns its place only when its evidence differs from the prior project's evidence.
+Use the diagnostic and the learner's desired artifact to select a first project. Add later projects when they introduce a distinct capability or useful transfer constraint; adjust their order when new evidence changes prerequisites or difficulty. A later project earns its place only when its expected evidence differs from prior work.

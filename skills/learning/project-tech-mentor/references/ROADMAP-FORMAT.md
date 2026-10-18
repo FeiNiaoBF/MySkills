@@ -25,7 +25,7 @@
 
 ## Rules
 
-- Start with four to eight projects and refine the later entries as evidence accumulates.
+- Start with the projects justified by the goal and diagnostic evidence. Detail the next project; keep later entries provisional and revise them as the learner demonstrates new capabilities.
 - Each project earns its place by adding one observable capability or a meaningful transfer constraint.
 - Keep one source of difficulty changing at a time: scope, ambiguity, interacting concepts, or scaffold removal.
 - Mark a project complete only after its evidence and learner explanation are recorded.
