@@ -1,169 +1,56 @@
 ---
 name: better-designs-md
-description: "Use when the user asks to create or refine a DESIGN.md, define design tokens, colors, typography, elevation, or components for consistent UI generation, or turn design concepts into enforceable do's and don'ts; author the document to Google's Design Markdown (Design MD) specification."
+description: >-
+  This skill authors DESIGN.md on explicit user request. It creates, reviews,
+  and updates design-system documents from existing project evidence or proposed
+  directions, combining design rationale, tokens, component guidance, and
+  contextual do's and don'ts using Google's Design Markdown format. It does not
+  turn ordinary styling edits or token questions into a documentation workflow.
 metadata:
   author: FeiNiaoBF
-  version: 1.1.0
+  version: 1.2.0
   date_added: "2026-04-09"
   risk: low
 disable-model-invocation: true
 ---
 
-# Better Designs MD — 编写 DESIGN.md 设计规范
+# Better Designs MD
 
-## Purpose
+Create and maintain a useful design-system document: explain the intended look and feel, give applicable values and rules, and preserve the reasoning needed to apply them consistently. Write the document and conversation in the user's language unless the project specifies otherwise; preserve schema keys and token identifiers.
 
-To transform design concepts into **standardized, professional DESIGN.md documents** using the [DESIGN.md format](https://stitch.withgoogle.com/docs/design-md/format).
+## Scope and invocation
 
-This skill ensures that every DESIGN.md:
-- Has a clear overview of the design's look and feel.
-- Defines colors, typography, elevation, and components.
-- Includes do's and don'ts for consistency.
-- Follows a consistent, readable Markdown structure.
+Use this workflow when the user explicitly requests this skill or asks to author, review, or update a `DESIGN.md` or equivalent design-system document. A passing mention of a color, token, or component does not require a document. The host-specific manual invocation settings are intentional; hosts may enforce them differently.
 
----
+This skill owns design documentation. It can turn an approved direction, inspected UI, existing tokens, or a supplied design guide into a document without requiring another skill first. Other skills may complement it when the user chooses them, with no required order or handoff. A documentation task alone does not authorize UI implementation, external design-tool changes, or publication.
 
-## Operating Mode
+## Workflow
 
-You act as a **Design System Lead and Senior Designer**.
+1. **Locate the source of truth.** Read relevant project guidance and find the existing design document, tokens, and component conventions. Reuse the established file and naming scheme; do not create a competing `DESIGN.md`. For a new document, use the project's documented location or the user's designated path. Ask only if the destination remains materially ambiguous. For review-only requests, report findings without rewriting; honor requests for a draft in conversation or no files.
+2. **Separate evidence from decisions.** Identify which choices are user requirements, confirmed decisions, implementation observations, or proposals. Read supplied references where available and record useful source links or project paths. A screenshot can support a visual interpretation, but does not establish exact fonts, spacing, states, or accessible behavior. If code and documentation disagree, describe the conflict; do not silently promote the current implementation or overwrite an approved rule.
+3. **Choose the shortest useful drafting path.** With sufficient material, draft the whole document or update the affected sections directly. Do not repeat a section-by-section interview for settled decisions. With missing context, ask one focused question when the answer materially changes the design rules; continue independent work and label remaining proposals or unknowns. If the user delegates design choices, propose a coherent direction within that scope. Use section-by-section checkpoints only when requested or needed to resolve a consequential dependency.
+4. **Write the design rationale and tokens.** Read the [format and authoring reference](references/design-md-format.md) before creating or structurally revising the document. Explain audience, intended feeling, hierarchy, and the reasons behind important rules. Include only relevant sections, components, variants, and states. Reuse established token names and units; do not invent a palette, type scale, theme, or component inventory to fill a checklist. Keep proposed values visibly provisional and unresolved values out of machine-readable token definitions.
+5. **Maintain consistency across revisions.** Update affected prose, token definitions, references, and examples together. Keep exact values in one authoritative place and refer to them elsewhere. If production tokens remain authoritative, identify them and reconcile the document against them; do not imply that a copied value is automatically synchronized. Preserve unrelated choices and custom sections. Mark unresolved conflicts and migration needs instead of silently renaming tokens or normalizing the entire file.
+6. **Verify and deliver.** Apply the completion checks below. Provide the document link or requested draft, summarize changed rules and unresolved decisions, and state what was checked. A reviewable draft can be delivered before approval; do not label it accepted or stable without evidence. Continue implementation when already authorized, using the project's stack and checks, rather than asking for the same permission again.
 
-- You focus on **visual consistency, "Why" before "How", and completeness**.
-- You prevent inconsistent designs by enforcing structured tokens and guidelines.
-- You strictly adhere to the DESIGN.md schema.
+## Authoring principles
 
----
+- **Intent before a catalog.** Describe concrete visual relationships and how they serve the audience. A list of adjectives or token values alone cannot explain when a rule applies. Attribute inspected reference traits; distinguish them from a proposed interpretation.
+- **Proportional coverage.** Explain color roles and pairings, typography hierarchy, layout and spacing, depth, shapes, and relevant component states where the project needs them. Flat designs can define hierarchy through borders or tonal layers. Do not require extra palettes, shadows, rounded corners, or multiple themes.
+- **Rules with context.** Make do's and don'ts specific to this design, with a reason or a useful comparison. Avoid universal style bans and arbitrary quotas. Preserve intentional exceptions and state where they apply.
+- **Accessibility as requirements and evidence.** Record relevant contrast pairings, focus visibility, keyboard behavior, labels, error states, and reduced-motion behavior. Distinguish desired standards from measured checks; a color list or written guardrail does not prove WCAG conformance. Record the tested state/theme and any remaining checks.
+- **Platform fidelity.** Preserve native units and design-system terminology in the prose. If the target's values do not fit the selected schema or consumer, document the mapping or limitation rather than silently converting them into Web values.
 
-## The Process
+## Completion checks
 
-### 0️⃣ YAML Header
+- **Scope and status:** the file or review covers the requested design decisions, reuses existing conventions, and distinguishes confirmed rules, observations, proposals, and gaps. No guessed author, reviewer, approval, or validation status appears as fact.
+- **Format:** follow the selected format/consumer version using the reference; check YAML syntax, duplicate keys across blocks, section order, and unique headings. Preserve intentional extensions and note consumer-specific limitations. If parsing or consumer tooling is unavailable, state which checks were manual.
+- **Tokens:** references resolve without cycles, types and units fit their roles, and quoted colors/references parse as intended. Prose and examples agree with definitions. Check relevant themes and variants without claiming unrepresented states exist.
+- **Usability:** a reader can tell what to apply, why, and when an exception is allowed. Component guidance connects appearance to relevant states and behavior. Accessibility claims cite actual checks rather than aspirations.
+- **Delivery:** link the artifact or provide the requested review/draft, with unresolved choices and verification limits. Document validation is not visual approval, production implementation, or a full accessibility audit.
 
-Before the design sections, collect standard DESIGN.md metadata and generate a YAML header at the top of the document. Ask the user:
-- What is the document title?
-- What is the status? (Draft, Stable)
-- Who is the author?
-- Any reviewers or approvers?
+## Reference navigation
 
-**Output:** Generate a standard YAML frontmatter block with title, status, author, and other metadata, then proceed to the design sections.
+- [Format and authoring reference](references/design-md-format.md): supported YAML placement, schema boundaries, section coverage, sources, and validation details. Read for authoring or format changes; a narrow content correction need not reopen every format decision.
 
-### 1️⃣ Overview
-
-Describe the holistic look and feel of the design. Ask the user:
-- What is the personality (e.g., playful or professional)?
-- Key visual characteristics (e.g., dense or spacious, accessibility-first)?
-
-**Output:** Generate the "Overview" section.
-
----
-
-### 2️⃣ Colors
-
-Define the primary, secondary, tertiary, and neutral palettes. Ask the user:
-- What are the base colors and their roles?
-- Any specific hex values or themes?
-- Does the palette meet WCAG contrast requirements for text and UI elements?
-
-**Output:** Generate the "Colors" section with roles, hex values, and accessibility guidance.
-
----
-
-### 3️⃣ Typography
-
-Specify font families and their roles in the hierarchy. Ask the user:
-- What fonts for headlines, body, labels?
-- Weights, sizes, and relationships?
-
-**Output:** Generate the "Typography" section.
-
----
-
-### 4️⃣ Elevation
-
-How depth and hierarchy are conveyed. Ask the user:
-- Use shadows or flat design?
-- Shadow properties if applicable?
-
-**Output:** Generate the "Elevation" section.
-
----
-
-### 5️⃣ Components
-
-Style guidance for key components. Ask the user:
-- Variants for buttons, inputs, cards, etc.?
-- Specific styling details?
-
-**Output:** Generate the "Components" section.
-
----
-
-### 6️⃣ Do's and Don'ts
-
-Practical guidelines and pitfalls. Ask the user:
-- What rules to follow?
-- Common mistakes to avoid?
-- What are the clear "Do" examples and corresponding "Don't" anti-patterns?
-
-**Output:** Generate the "Do's and Don'ts" section using explicit comparison format, such as side-by-side examples or warning symbols, so correct and incorrect behavior are easy to scan.
-
----
-
-### 7️⃣ Accessibility Considerations
-
-Ensure the design system includes explicit accessibility guardrails. Ask the user:
-- Are contrast, text size, and component states aligned with WCAG standards?
-- Are there any keyboard or screen-reader considerations for core components?
-
-**Output:** Generate an "Accessibility Considerations" section that calls out WCAG compliance and accessibility requirements.
-
----
-
-## After the Design
-
-### 📄 Documentation
-
-Once the design is validated:
-- Write the final DESIGN.md to a durable, shared format.
-- Include all sections and ensure it matches the format.
-
-Persist the document according to the project's standard workflow.
-
-### 🛠️ Implementation Handoff (Optional)
-
-Only after documentation is complete, ask:
-
-> "Ready to apply this design system?"
-
-If yes:
-- Integrate with design tools (e.g., Figma, Stitch).
-- Proceed with UI generation.
-
----
-
-## Key Principles (Non-Negotiable)
-
-- **One Step at a Time**: Do not generate the whole document at once. Build it section by section with user feedback.
-- **Consistency**: Ensure the design system promotes uniformity across screens.
-- **Clarity over Complexity**: Use simple language; avoid jargon unless defined.
-- **Visuals**: Suggest examples or references for colors and components.
-
----
-
-## Exit Criteria
-
-The skill is complete when:
-- A full DESIGN.md document is generated.
-- All mandatory sections are filled.
-- The user has confirmed the guidelines.
-
----
-
-## When to Use
-Use this skill when defining or refining a design system for consistent UI generation. It bridges concepts to enforceable design tokens.
-
----
-
-## Seamless intake mode（供料直写）
-
-当设计决定**已经存在并经用户确认**时（例如 `aesthetic-translator` 已输出并确认的四段式 brief、`frontend-guide` 已确认的方向卡、或一次已拍板的主题迭代），**跳过逐节访谈**，直接把已确认材料转写成完整 DESIGN.md：confirmed brief 的 Direction 参数 → YAML front matter tokens，其余叙述进对应章节，Avoid 清单 → Do's and Don'ts。生成后让用户过目一遍即可，不再逐节问。
-
-仅在用户还没做决定时走上面的逐节访谈流程。
+The local reference records the upstream alpha specification checked on its stated date. When a task requires a newer version or a particular importer, verify that target's requirements before claiming compatibility. If source access is unavailable, work from the recorded baseline and disclose the limitation.
