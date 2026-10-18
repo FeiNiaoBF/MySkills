@@ -1,6 +1,8 @@
-# DESIGN.md format and authoring reference
+# Google DESIGN.md format reference
 
-Use this reference for authoring or structural changes. It summarizes Google's upstream **alpha** format, checked on **2026-10-18**, rather than defining a new schema. Existing project conventions and a specified consumer/version determine compatibility requirements; preserve deliberate deviations and report them instead of silently migrating a document.
+Use this reference only when the user requests Google's DESIGN.md format or a target tool requires it. Ordinary project design documentation follows the scope and format choices in the [skill workflow](../SKILL.md#choose-document-scope-and-format); a file named `DESIGN.md` does not by itself select this schema.
+
+This reference summarizes Google's upstream **alpha** format, checked on **2026-10-18**, rather than defining a new schema. Within that scope, existing project conventions and a specified consumer/version determine compatibility requirements; preserve deliberate deviations and report them instead of silently migrating a document.
 
 ## Sources and authority
 
