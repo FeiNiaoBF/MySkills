@@ -3,208 +3,319 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{PROJECT_NAME}}-frontend-guide</title>
+  <title>{{PROJECT_NAME}} · 页面设计说明</title>
   <style>
+    /* 交付外壳：中性围边 + 画布 + 编号说明栏。
+       外壳只负责阅读排版，不承担项目视觉；项目 UI 自带样式放进 .template-ui-slot。
+
+       这五条是外壳的视觉规则，改动前请先确认仍然成立：
+       1. 层级靠字号台阶：20 / 16 / 15 / 13 / 11px，等宽只用于编号与机器符号。
+       2. 分层靠两级明度加一根描边，不用阴影、圆角、渐变、发光。
+       3. 线条只有两种用途：分隔阅读小节、框住画布。没有装饰线。
+       4. 强调色只留给焦点环，正文与标记一律用墨色与线条。
+       5. 顶栏只呈现一条身份信息；两个文本节点共同组成名称行，不加入控件、读数或审查元数据。 */
     :root {
-      color-scheme: light;
-      --fg-stage: #f3f4f5;
-      --fg-surface: #ffffff;
-      --fg-ink: #24292f;
-      --fg-muted: #606a74;
-      --fg-rule: #dfe3e7;
-      --fg-soft-rule: #e9ecef;
-      --fg-token-surface: #f2f4f6;
-      --fg-font: system-ui, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-      --fg-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      --fg-notes-width: 22rem;
-      --fg-canvas-inset: 2rem;
-      --fg-header-height: 3.5rem;
+      /* 外壳固定为中性浅色，不声明根级 color-scheme，避免改变项目 UI 的原生控件或颜色。 */
+      --fg-stage: oklch(96.2% 0.003 250);
+      --fg-surface: oklch(100% 0 0);
+      --fg-ink: oklch(21% 0.008 255);
+      --fg-muted: oklch(46% 0.010 255);
+      --fg-rule: oklch(89.5% 0.004 255);
+      --fg-rule-soft: oklch(94.5% 0.003 255);
+      /* 唯一强调色：蓝墨。只用于焦点环，不参与任何字色。
+         实测文字对比：正文/面板 17.7 : 1，次级/面板 7.1 : 1，
+         次级/围边 6.4 : 1。描边与分隔线是发丝线，不承担文字对比。 */
+      --fg-accent: oklch(46% 0.12 252);
+
+      /* 字阶：五级，全部用 rem，跟随用户字号。 */
+      --fg-text-title: 1.25rem;
+      --fg-text-heading: 1rem;
+      --fg-text-body: .9375rem;
+      --fg-text-meta: .8125rem;
+      --fg-text-num: .6875rem;
+
+      --fg-font: system-ui, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      --fg-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+
+      /* 说明栏 21rem：正文 15px 时约 19 字一行，中文说明正好读得顺。
+         68rem 处画布内容区约 712px；再窄改为上下堆叠，让画布单占一行。 */
+      --fg-notes-width: 21rem;
+      --fg-inset: 1.25rem;
+      --fg-header-height: 3.25rem;
+      /* 编号栏：编号占 1.0625rem，正文从 1.5rem 起。 */
+      --fg-gutter: 1.0625rem;
+      --fg-gap: .4375rem;
     }
+
     body { margin: 0; background: var(--fg-stage); }
-    /* Scope type and sizing to the delivery shell; the project UI owns its styles. */
-    .template-header, .template-layout, .template-layout > *, .template-ui-slot,
-    .template-placeholder, .template-placeholder *, .template-notes * { box-sizing: border-box; }
+
+    /* 尺寸与排版只作用于外壳自身的元素；预留位内部的项目样式不受影响。 */
+    .template-header, .template-header *,
+    .template-canvas, .template-ui-slot,
+    .template-placeholder, .template-placeholder *,
+    .template-notes, .template-notes * { box-sizing: border-box; }
+
     .template-header, .template-placeholder, .template-notes {
       font-family: var(--fg-font);
       color: var(--fg-ink);
       font-synthesis: none;
       line-height: 1.5;
     }
+
+    /* 顶栏：项目名与文件类型共同组成一条简单身份信息。
+       两个 <p> 仅用于分别控制字重与颜色；不加入按钮、读数或其他元数据。
+       不吸顶：画布高度已按一屏算好，吸顶只能在名字换行时与说明栏错位。 */
     .template-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      align-content: center;
+      gap: .125rem .25rem;
       min-height: var(--fg-header-height);
-      padding: 1rem var(--fg-canvas-inset);
-      border-bottom: 1px solid var(--fg-rule);
+      padding: .5rem var(--fg-inset);
       background: var(--fg-surface);
-      font-size: .875rem;
+      border-bottom: 1px solid var(--fg-rule);
+    }
+    .template-header p { margin: 0; }
+    /* 中文不做负字距：字面已经紧凑，收负值只会让方块字互相贴住。 */
+    .template-header-name {
+      min-width: 0;
+      font-size: var(--fg-text-body);
       font-weight: 600;
+      line-height: 1.4;
       overflow-wrap: anywhere;
     }
-    .template-name-suffix { color: var(--fg-muted); font-weight: 400; }
+    .template-header-kind {
+      font-size: var(--fg-text-meta);
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--fg-muted);
+    }
+
     .template-layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr) var(--fg-notes-width);
-      min-height: calc(100svh - var(--fg-header-height));
-      align-items: stretch;
+      background: var(--fg-surface);
     }
-    .template-canvas { min-width: 0; padding: var(--fg-canvas-inset); }
+
+    .template-canvas {
+      min-width: 0;
+      padding: var(--fg-inset);
+      background: var(--fg-stage);
+    }
+
+    /* 画布即容器：容器查询让项目 UI 按画布宽度自适应。
+       container-type 提供查询与定位上下文，但不裁剪绘制范围；固定层、100vw 与超宽内容
+       仍须结合项目设计实际检查，不能假定它们不会越过画布。 */
     .template-ui-slot {
-      min-height: max(34rem, calc(100svh - var(--fg-header-height) - 2 * var(--fg-canvas-inset)));
+      container-name: canvas;
+      container-type: inline-size;
+      min-height: max(24rem, calc(100svh - var(--fg-header-height) - 2 * var(--fg-inset)));
       background: var(--fg-surface);
       border: 1px solid var(--fg-rule);
-      border-radius: .5rem;
-      box-shadow: 0 2px 4px #20283003, 0 12px 32px -20px #20283026;
     }
+
+    /* 空白画布：一行标题、一句约束、一个标记，不预设任何产品。 */
     .template-placeholder {
-      position: relative;
-      min-height: inherit;
       display: grid;
       place-items: center;
-      padding: 3rem 2rem;
+      min-height: inherit;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      text-align: center;
     }
-    .template-placeholder::before, .template-placeholder::after {
-      content: "";
-      position: absolute;
-      width: 1.5rem;
-      height: 1.5rem;
-      border: solid #c6cdd4;
-      pointer-events: none;
+    .template-placeholder-content { max-width: 22rem; }
+    .template-placeholder-title {
+      margin: 0 0 .375rem;
+      font-size: var(--fg-text-body);
+      font-weight: 600;
+      line-height: 1.5;
+      text-wrap: balance;
     }
-    .template-placeholder::before { top: 1.5rem; left: 1.5rem; border-width: 1px 0 0 1px; }
-    .template-placeholder::after { bottom: 1.5rem; right: 1.5rem; border-width: 0 1px 1px 0; }
-    .template-placeholder-content { width: 100%; max-width: 26rem; text-align: center; }
-    .template-placeholder h1 {
-      margin: 0 0 1rem;
-      font-size: clamp(1.375rem, 1rem + 1vw, 1.75rem);
-      font-weight: 500;
-      line-height: 1.4;
-      letter-spacing: -.025em;
-    }
-    .template-placeholder p {
+    .template-placeholder-text {
       margin: 0;
-      font-size: .875rem;
-      line-height: 1.85;
+      font-size: var(--fg-text-meta);
+      line-height: 1.7;
       color: var(--fg-muted);
+      text-wrap: pretty;
     }
+
+    /* 标记：只用等宽字体与花括号表明这是待替换的插槽，不加边框、不铺底色。 */
     .template-token {
       display: inline-block;
       max-width: 100%;
-      padding: .25rem .5rem;
-      border-radius: .25rem;
-      background: var(--fg-token-surface);
       font-family: var(--fg-mono);
-      font-size: .71875rem;
+      font-size: var(--fg-text-meta);
       font-weight: 400;
       line-height: 1.6;
       color: var(--fg-muted);
       overflow-wrap: anywhere;
     }
-    .template-placeholder .template-token { margin-top: 1.5rem; }
+    .template-placeholder .template-token { margin-top: 1rem; }
+
+    /* 说明栏：跟住阅读位置。画布比说明长时整栏留在视野内；
+       说明本身长过一屏时正常随页滚动——不给它内部滚动条，否则内容等于被藏起来。 */
     .template-notes {
+      align-self: start;
+      position: sticky;
+      top: 0;
       min-width: 0;
-      padding: 2rem 1.75rem;
+      padding: 1.5rem 1.25rem 2rem;
       border-left: 1px solid var(--fg-rule);
       background: var(--fg-surface);
-      counter-reset: template-note;
     }
-    .template-notes > h2 {
-      margin: 0 0 1.5rem;
-      font-size: 1.125rem;
-      font-weight: 600;
-      line-height: 1.5;
-      letter-spacing: -.02em;
-    }
-    .template-note {
-      position: relative;
+    .template-notes-head { padding-bottom: 1rem; }
+    .template-notes-head h2 {
       margin: 0;
-      padding: 1.5rem 0 1.5rem 2rem;
-      border-top: 1px solid var(--fg-soft-rule);
+      font-size: var(--fg-text-title);
+      font-weight: 620;
+      line-height: 1.35;
+      text-wrap: balance;
+    }
+    .template-notes-sub {
+      margin: .375rem 0 0;
+      font-size: var(--fg-text-meta);
+      line-height: 1.65;
+      color: var(--fg-muted);
+      text-wrap: pretty;
+    }
+
+    /* 编号栏：编号挂在左侧留白里，与标题首行对齐，标题换行也不跑位。 */
+    .template-notes-list { counter-reset: template-note; }
+
+    .template-note {
+      display: grid;
+      grid-template-columns: var(--fg-gutter) minmax(0, 1fr);
+      column-gap: var(--fg-gap);
+      row-gap: .5rem;
+      align-items: baseline;
+      padding-block: 1rem;
+      border-top: 1px solid var(--fg-rule-soft);
       counter-increment: template-note;
     }
+    .template-note > * { grid-column: 2; margin: 0; }
     .template-note::before {
       content: counter(template-note, decimal-leading-zero);
-      position: absolute;
-      top: 1.6875rem;
-      left: 0;
-      color: var(--fg-muted);
-      font: .6875rem/1.5 var(--fg-mono);
+      grid-area: 1 / 1 / 2 / 2;
+      font-family: var(--fg-mono);
+      font-size: var(--fg-text-num);
+      line-height: 1.6;
       font-variant-numeric: tabular-nums;
+      color: var(--fg-muted);
     }
-    .template-note:first-of-type { border-color: var(--fg-rule); }
-    .template-note:last-child { padding-bottom: 0; }
     .template-note h3 {
-      margin: 0 0 .5rem;
-      font-size: .875rem;
+      font-size: var(--fg-text-heading);
       font-weight: 600;
-      line-height: 1.7;
+      line-height: 1.5;
       overflow-wrap: anywhere;
+      text-wrap: balance;
     }
-    .template-note p { margin: 0; font-size: .875rem; line-height: 1.85; color: var(--fg-muted); }
-    .template-note .template-token { margin-top: .75rem; }
-    @media (max-width: 68.75rem) {
-      :root { --fg-notes-width: 20rem; --fg-canvas-inset: 1.5rem; }
-      .template-notes { padding-inline: 1.5rem; }
+    .template-note p {
+      font-size: var(--fg-text-body);
+      line-height: 1.78;
+      color: var(--fg-muted);
+      text-wrap: pretty;
     }
-    @media (max-width: 56rem) {
-      .template-layout { display: block; }
-      .template-canvas { padding: 1.5rem 1rem; }
-      .template-ui-slot { min-height: 28rem; }
-      .template-placeholder { padding: 3rem 1.5rem; }
-      .template-placeholder::before { top: 1rem; left: 1rem; }
-      .template-placeholder::after { bottom: 1rem; right: 1rem; }
-      .template-notes { border-left: 0; border-top: 1px solid var(--fg-rule); padding: 2rem 1.5rem; }
+    /* 网格子元素会被块化，标记需要显式贴合内容宽度。 */
+    .template-note > .template-token { justify-self: start; }
+
+    /* 说明里若加入链接，保留可读的焦点环。 */
+    .template-notes a { color: inherit; text-underline-offset: .2em; }
+    .template-notes a:hover { color: var(--fg-ink); }
+    .template-notes a:focus-visible { outline: 2px solid var(--fg-accent); outline-offset: 2px; }
+
+    @media (max-width: 68rem) {
+      :root { --fg-inset: 1rem; }
+      .template-layout { grid-template-columns: minmax(0, 1fr); }
+      .template-ui-slot { min-height: 26rem; }
+      .template-notes {
+        position: static;
+        border-left: 0;
+        border-top: 1px solid var(--fg-rule);
+        padding: 1.25rem 1rem 2rem;
+      }
+    }
+
+    @media (max-width: 26rem) {
+      :root { --fg-inset: .75rem; }
+      .template-notes { padding: 1.125rem .875rem 1.75rem; }
+      .template-placeholder { padding: 1.5rem 1.125rem; }
     }
   </style>
 </head>
 <body>
-  <!-- For project delivery, fill a copy using the skill's HTML preview requirements.
-       Replace markers and localize text, accessible labels, and lang.
-       For a reusable-template task, retain the markers and filling guidance. -->
-  <header class="template-header">{{PROJECT_NAME}}<span class="template-name-suffix">-frontend-guide</span></header>
+  <!-- 使用说明
+       项目交付：复制本文件到约定目录，替换 {{...}} 标记与提示文字，删除用不到的小节，
+       说明改成正式段落并去掉 .template-token，界面语言、可访问名称与 lang 改为用户语言。
+       区域小节按页面的阅读或操作顺序重复，一个区域不等于一个代码组件。
+       模板交付：保留标记与提示文字，不要填入虚构的产品内容；空白画布是有意保留的。
+       画布是容器而非视口：项目 UI 请优先以 .template-ui-slot 为容器查询上下文
+       （@container canvas (max-width: ...)），不要用视口断点推断布局。
+       容器查询只提供布局依据，不会裁剪绘制范围；固定层、100vw 与超宽内容仍需实际检查。
+       外壳不提供审查控件、读数或脚本，项目交互完全由放入画布的 UI 自己负责。 -->
+  <header class="template-header">
+    <p class="template-header-name">{{PROJECT_NAME}}</p>
+    <p class="template-header-kind">· 页面设计说明</p>
+  </header>
+
   <main class="template-layout">
+    <!-- 画布：项目的页面设计直接从这里开始，上方不放读数条、刻度尺或工具栏。 -->
     <section class="template-canvas" aria-label="项目 UI 设计">
       <div class="template-ui-slot">
-        <!-- PROJECT_UI: replace this entire placeholder with the project's design.
-             The empty slot does not prescribe the product's layout or features. -->
+        <!-- PROJECT_UI：用项目页面设计替换整个 .template-placeholder。
+             只放入页面内容，不放入项目的整份 <html>；页级选择器请限定在 .template-ui-slot 内，
+             避免外壳的排版与颜色被覆盖。
+             若项目 UI 需要固定明暗，就给它自己这一层声明 color-scheme。 -->
         <div class="template-placeholder">
           <div class="template-placeholder-content">
-            <h1>项目 UI 设计</h1>
-            <p>在这里放入当前项目的页面设计。<br>具体内容、布局与交互由项目需求决定。</p>
+            <p class="template-placeholder-title">空白画布</p>
+            <p class="template-placeholder-text">放入项目页面设计，内容与交互由项目决定。</p>
             <span class="template-token">{{PROJECT_UI}}</span>
           </div>
         </div>
       </div>
     </section>
-    <!-- For project delivery, replace guidance with prose and REGION_NAME with a
-         heading; remove token spans. Repeat or remove sections to fit the page. -->
+
+    <!-- 说明栏：把提示文字换成正式段落，REGION_NAME 换成真实区域名称并删掉 token 标记。
+         本节顺序按页面顺序排列，可按项目增减，不要求每页都写满。 -->
     <aside class="template-notes" aria-labelledby="template-notes-title">
-      <h2 id="template-notes-title">页面说明</h2>
-      <section class="template-note">
-        <h3>页面用途</h3>
-        <p>填写这页服务谁、帮助用户完成什么，以及本次设计包含的范围。</p>
-        <span class="template-token">{{PAGE_PURPOSE}}</span>
-      </section>
-      <!-- Repeat this section for meaningful regions in the actual page's reading
-           or task order. A region is not necessarily a code component. -->
-      <section class="template-note">
-        <h3>{{REGION_NAME}}</h3>
-        <p>填写区域名称、主要内容、作用和安排理由。按实际页面顺序增减说明区域。</p>
-        <span class="template-token">{{REGION_EXPLANATION}}</span>
-      </section>
-      <section class="template-note">
-        <h3>操作与状态</h3>
-        <p>说明主要操作如何衔接，以及相关状态如何反馈；注明演示或尚未实现的行为。</p>
-        <span class="template-token">{{FLOWS_AND_STATES}}</span>
-      </section>
-      <section class="template-note">
-        <h3>布局与适配</h3>
-        <p>说明区域之间的位置关系，以及空间变窄时如何调整。</p>
-        <span class="template-token">{{LAYOUT_AND_ADAPTATION}}</span>
-      </section>
-      <section class="template-note">
-        <h3>确认情况</h3>
-        <p>区分已确认的安排、当前提议和仍需决定的事项，只保留与本页有关的内容。</p>
-        <span class="template-token">{{DECISIONS_AND_OPEN_QUESTIONS}}</span>
-      </section>
+      <div class="template-notes-head">
+        <h2 id="template-notes-title">页面说明</h2>
+        <p class="template-notes-sub">条目按页面顺序排列，可按项目增减</p>
+      </div>
+
+      <div class="template-notes-list">
+        <section class="template-note">
+          <h3>页面目标</h3>
+          <p>服务谁、解决什么、做到哪一步。</p>
+          <span class="template-token">{{PAGE_PURPOSE}}</span>
+        </section>
+
+        <!-- 按页面顺序重复本节：一个区域一个说明，不必与代码组件一一对应。 -->
+        <section class="template-note">
+          <h3>{{REGION_NAME}}</h3>
+          <p>放什么，为何在这里，与谁相邻。</p>
+          <span class="template-token">{{REGION_EXPLANATION}}</span>
+        </section>
+
+        <section class="template-note">
+          <h3>操作与状态</h3>
+          <p>操作如何衔接，反馈与演示态。</p>
+          <span class="template-token">{{FLOWS_AND_STATES}}</span>
+        </section>
+
+        <section class="template-note">
+          <h3>布局适配</h3>
+          <p>变窄先丢什么，再挪到哪里。</p>
+          <span class="template-token">{{LAYOUT_AND_ADAPTATION}}</span>
+        </section>
+
+        <section class="template-note">
+          <h3>确认事项</h3>
+          <p>已确认、待定与风险分开写。</p>
+          <span class="template-token">{{DECISIONS_AND_OPEN_QUESTIONS}}</span>
+        </section>
+      </div>
+
     </aside>
   </main>
 </body>

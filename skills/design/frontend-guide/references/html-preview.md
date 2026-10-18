@@ -4,7 +4,7 @@ Read this when preparing or updating the HTML design draft. Start with the bundl
 
 ## Delivery structure
 
-- **Header:** show only a simple name such as `{{PROJECT_NAME}}-frontend-guide`. Do not turn it into a toolbar of review modes, viewport switches, or metadata.
+- **Header:** show only one simple identity line such as `{{PROJECT_NAME}}-frontend-guide`. The name and a short type descriptor may use separate elements when they still read as that single line. Do not turn the header into a toolbar of review modes, viewport switches, or metadata.
 - **Main area:** make the actual project's UI the dominant content. The shell does not prescribe the product's navigation, modules, visual style, or feature set.
 - **Explanations:** place directly readable explanations on the right, ordered by the page's structure or task flow. On narrow screens, move them below the design without obscuring it. They do not depend on clicking or hovering over the UI.
 - Explain page purpose, meaningful regions and their arrangement, relevant flows/states, layout adaptation, and unresolved choices as needed. Repeat or remove explanation sections to fit the project; not every page needs every heading.
