@@ -5,158 +5,1180 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>项目名称 · 设计评审</title>
 <style>
-/* Shell tokens do not define the embedded project's design system. */
-:root{--at-stage:#f2f3f5;--at-surface:#fff;--at-ink:#20242b;--at-muted:#626974;--at-rule:#dfe2e7;--at-soft:#f7f8fa;--at-accent:#315dc4;--at-selected:#edf2ff;--at-font:system-ui,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--at-sidebar:22rem;--at-s1:.25rem;--at-s2:.5rem;--at-s3:.75rem;--at-s4:1rem;--at-s6:1.5rem;--at-s8:2rem}
-body{margin:0;background:var(--at-stage)}
-.at-header,.at-direction,.at-stage,.at-notes,.at-jump{box-sizing:border-box;font-family:var(--at-font);color:var(--at-ink)}
-.at-header *,.at-direction *,.at-notes *,.at-placeholder *{box-sizing:border-box}
-.at-header{min-height:3rem;padding:.1875rem 1rem;background:var(--at-surface);border-bottom:1px solid var(--at-rule);display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.at-identity{min-width:0;flex:1}.at-name{margin:0;font-size:.8125rem;font-weight:600;line-height:1.6;overflow-wrap:anywhere}
-.at-tools{display:flex;gap:.5rem;flex-shrink:0}.at-button{font:inherit;font-size:.75rem;line-height:1.5;min-height:2.5rem;border:1px solid #c4cbd6;border-radius:.375rem;padding:.375rem .75rem;background:var(--at-surface);color:var(--at-ink);cursor:pointer}.at-button:hover{background:var(--at-soft)}.at-button[aria-pressed="true"]{background:var(--at-selected);color:#244da8;border-color:#aabce7}
-.at-header .at-button{border-color:transparent;background:transparent}.at-header .at-button:hover{background:var(--at-soft)}.at-header .at-button[aria-pressed="true"]{background:var(--at-selected)}
-.at-header :focus-visible,.at-direction :focus-visible,.at-notes :focus-visible,.at-jump:focus-visible{outline:2px solid var(--at-accent);outline-offset:3px}
-.at-direction{padding:1.25rem 1.5rem;background:var(--at-surface);border-bottom:1px solid var(--at-rule)}.at-direction-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.75rem}.at-direction-label{font-size:.6875rem;color:var(--at-muted);line-height:1.5;margin:0}.at-direction-title{font-size:.9375rem;line-height:1.6;font-weight:600;margin:0 0 .375rem;overflow-wrap:anywhere}.at-direction-read{font-size:.8125rem;color:var(--at-muted);line-height:1.75;margin:0;overflow-wrap:anywhere}.at-status{display:flex;align-items:center;gap:.375rem;color:#5c6470;font-size:.6875rem;line-height:1.5;max-width:100%;overflow-wrap:anywhere}.at-status:before{content:"";width:.3125rem;height:.3125rem;border:1px solid #7d8797;border-radius:50%;flex-shrink:0}
-.at-layout{display:grid;grid-template-columns:minmax(0,1fr) var(--at-sidebar);min-height:calc(100svh - 3rem)}.at-layout.at-canvas-only{grid-template-columns:minmax(0,1fr)}
-.at-stage{padding:1.5rem;min-width:0}.at-stage-label{display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin:0 0 1rem;font-size:.75rem;line-height:1.5;color:var(--at-muted)}.at-stage-label span:first-child{color:#4e5662;font-weight:500}.at-stage-label span:last-child{font-size:.6875rem}
-.at-ui{position:relative;min-width:0;min-height:max(28rem,calc(100svh - 9.75rem));background:#fff;border:1px solid #d6dbe3;border-radius:.25rem;box-shadow:0 2px 5px #20242b05;font-family:initial;color:initial}
-.at-placeholder{min-height:inherit;display:grid;place-items:center;box-sizing:border-box;padding:3rem 2rem;font-family:var(--at-font);color:var(--at-ink)}.at-placeholder-inner{width:min(100%,23rem);text-align:left}.at-placeholder-mark{width:2.25rem;height:2.25rem;position:relative;margin-bottom:1.5rem;background:linear-gradient(#9aa6b7,#9aa6b7) left top/9px 1px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) left top/1px 9px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) right top/9px 1px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) right top/1px 9px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) left bottom/9px 1px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) left bottom/1px 9px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) right bottom/9px 1px no-repeat,linear-gradient(#9aa6b7,#9aa6b7) right bottom/1px 9px no-repeat}.at-placeholder-mark:after{content:"+";position:absolute;inset:0;display:grid;place-items:center;color:#8794a6;font-size:1rem;font-weight:300}
-.at-placeholder h1{font-size:1.5rem;line-height:1.5;letter-spacing:-.02em;font-weight:500;margin:0 0 .75rem}.at-placeholder p{font-size:.875rem;line-height:1.85;color:var(--at-muted);margin:0}.at-slot-label{margin:1.5rem 0 0!important;padding-top:.75rem;border-top:1px solid #e9ecf0;font-size:.6875rem!important;color:#68717d!important;display:flex;justify-content:space-between;gap:1rem}.at-slot-label span:last-child{font-family:Consolas,monospace;letter-spacing:.05em}
-.at-stage-foot{margin:.75rem 0 0;font-size:.6875rem;line-height:1.6;color:var(--at-muted)}
-.at-notes{min-width:0;align-self:start;position:sticky;top:0;max-height:100svh;overflow:auto;scrollbar-gutter:stable;background:var(--at-surface);border-left:1px solid var(--at-rule)}
-.at-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;padding:0 1rem;border-bottom:1px solid var(--at-rule);background:#fff}.at-tab{position:relative;font:500 .75rem/1.5 var(--at-font);color:var(--at-muted);padding:1rem 0;border:0;background:transparent;cursor:pointer}.at-tab:hover{color:var(--at-ink)}.at-tab[aria-selected="true"]{color:var(--at-ink)}.at-tab[aria-selected="true"]:after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--at-accent)}
-.at-tabpanel{padding:1.5rem;min-height:30rem}.at-section-head{display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin:0 0 1.5rem}.at-section-head h2{font-size:.75rem;font-weight:500;color:var(--at-muted);line-height:1.5;margin:0}.at-text-button{font:inherit;font-size:.75rem;line-height:1.5;min-height:1.75rem;border:0;background:transparent;padding:.25rem 0;color:var(--at-accent);cursor:pointer}.at-text-button:disabled{color:#8b929d;cursor:default}.at-empty{padding:.25rem 0 1.5rem}.at-empty h3{font-size:1rem;font-weight:500;line-height:1.6;margin:0 0 .75rem}.at-empty p{font-size:.8125rem;line-height:1.85;color:var(--at-muted);margin:0}.at-selection-foot{margin:1.5rem 0;font-size:.6875rem;color:var(--at-muted);line-height:1.7}
-.at-section-label{font-size:.6875rem;color:var(--at-muted);line-height:1.5;margin:0 0 .5rem}.at-card h3{font-size:1.125rem;font-weight:600;line-height:1.6;margin:0 0 .5rem;overflow-wrap:anywhere}.at-card .at-empty h3{font-size:1rem;font-weight:500;margin-bottom:.75rem}.at-breadcrumb{font-size:.6875rem;color:var(--at-muted);line-height:1.8;margin:0 0 1.5rem;overflow-wrap:anywhere}.at-card dl{margin:1.25rem 0 0}.at-card dt{font-size:.6875rem;color:var(--at-muted);line-height:1.5;margin-bottom:.5rem}.at-card dd{font-size:.8125rem;line-height:1.85;margin:0;overflow-wrap:anywhere}.at-card .at-specs{border-top:1px solid var(--at-rule);padding-top:.75rem;margin-top:1.5rem}.at-specs div{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:1rem;padding:.5rem 0}.at-specs dt,.at-specs dd{font-size:.75rem;line-height:1.65;margin:0}.at-specs dd{font-variant-numeric:tabular-nums}.at-card-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.25rem}
-.at-details{border-top:1px solid var(--at-rule);padding:1rem 0}.at-details summary{font-size:.75rem;line-height:1.7;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:1rem;cursor:pointer}.at-details summary::-webkit-details-marker{display:none}.at-details summary:after{content:"+";color:var(--at-muted)}.at-details[open] summary:after{content:"−"}.at-details-body{padding-top:1rem}.at-copy{font-size:.8125rem;line-height:1.85;color:var(--at-muted);margin:0;overflow-wrap:anywhere}.at-tree{display:flex;flex-direction:column;gap:.25rem}.at-tree button{font:inherit;font-size:.8125rem;line-height:1.7;text-align:left;border:1px solid transparent;border-radius:.25rem;background:#fff;padding:.5rem;color:var(--at-ink);cursor:pointer;overflow-wrap:anywhere}.at-tree button[aria-pressed="true"]{background:var(--at-selected);border-color:#c6d4f1}.at-tree button:hover{background:var(--at-soft)}
-.at-field{padding:1.25rem 0;border-bottom:1px solid #edf0f3}.at-field:first-child{padding-top:0}.at-field:last-child{border-bottom:0}.at-field h2{font-size:.8125rem;font-weight:600;line-height:1.6;margin:0 0 .5rem}.at-footer-note{font-size:.6875rem;line-height:1.85;color:var(--at-muted);padding-top:1.25rem;margin:0}
-.at-outline{position:fixed;pointer-events:none;border:1.5px solid var(--at-accent);box-sizing:border-box;z-index:10000;border-radius:2px}.at-jump{position:fixed;bottom:1rem;left:1rem;right:1rem;z-index:10001;border:1px solid #aabce7;background:#edf2ff;color:#244da8;box-shadow:0 4px 16px #20376514;border-radius:.375rem;padding:.875rem 1rem;font-size:.8125rem;cursor:pointer}
-.at-header [hidden],.at-notes [hidden],.at-outline[hidden],.at-jump[hidden],.at-layout>[hidden]{display:none!important}
-@media(min-width:56.001rem){.at-notes{min-height:calc(100svh - 3rem)}}
-@media(max-width:68.75rem){:root{--at-sidebar:20rem}.at-stage{padding:1.25rem}.at-tabpanel,.at-direction{padding:1.25rem}}
-@media(max-width:56rem){.at-header{padding:.1875rem .75rem;flex-wrap:wrap;gap:.25rem .75rem}.at-identity{flex:1 1 5rem}.at-tools{flex-wrap:wrap;max-width:100%}.at-layout{grid-template-columns:minmax(0,1fr)}.at-stage{padding:1rem}.at-ui{min-height:26rem}.at-placeholder{padding:2rem 1.5rem}.at-placeholder h1{font-size:1.25rem}.at-placeholder p{font-size:.8125rem}.at-notes{position:static;max-height:none;border-left:0;border-top:1px solid var(--at-rule);overflow:visible}.at-direction{padding:1.25rem 1.5rem}.at-tabpanel{padding:1.5rem;min-height:18rem;padding-bottom:4rem}.at-selection-foot{margin-top:1.25rem}.at-stage-foot{font-size:.625rem}.at-stage-label{align-items:flex-start}.at-stage-label span:last-child{max-width:55%;text-align:right}}
-@media(pointer:coarse){.at-header .at-button{min-height:2.75rem}}
-@media(prefers-reduced-motion:reduce){.at-outline,.at-jump{scroll-behavior:auto}}
+/* ═══ 评审外壳 ═══════════════════════════════════════════════════════
+   这一份样式只描述外壳：桌面、纸张、墨色、朱红批注。
+   画布内的排版、色彩、组件由项目自己决定，外壳不改写它们。
+   颜色只有墨色与一个批注色；朱红只出现在「当前被检查的元素」上。
+   ══════════════════════════════════════════════════════════════════ */
+:root{
+  --at-desk:#e8ebee;        /* 桌面：冷灰纸 */
+  --at-surface:#ffffff;     /* 纸张与说明栏 */
+  --at-sunken:#eff2f4;      /* 按下、选中的浅底 */
+  --at-ink:#14171a;         /* 正文与层级 */
+  --at-ink-raised:#242a30;  /* 墨色的抬起态（hover） */
+  --at-muted:#5b6169;       /* 次要文字，白底 6.2:1 */
+  --at-rule:#e4e8ec;
+  --at-rule-strong:#c6ccd3;
+  --at-hairline:rgba(17,20,24,.085);
+  --at-accent:#a83c26;      /* 批注朱红，白底 6.25:1，白字于其上 6.25:1 */
+  --at-accent-ink:#ffffff;
+  --at-shadow:0 1px 2px rgba(16,19,23,.05),0 18px 44px -20px rgba(16,19,23,.28);
+  --at-shadow-panel:0 1px 2px rgba(16,19,23,.04),0 10px 30px -18px rgba(16,19,23,.22);
+  --at-shadow-lift:0 2px 4px rgba(16,19,23,.06),0 14px 34px -10px rgba(16,19,23,.45);
+  --at-shadow-control:0 1px 2px rgba(16,19,23,.1),0 0 0 1px rgba(17,20,24,.055);
+  --at-halo:0 0 0 1px rgba(255,255,255,.7);
+  --at-font:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --at-mono:ui-monospace,SFMono-Regular,"SF Mono",Consolas,"Liberation Mono",monospace;
+  --at-sidebar:22.5rem;
+  --at-header:2.75rem;
+  --at-header-live:2.75rem; /* 由脚本量出实际高度（窄屏会折行） */
+  --at-r-sheet:14px;        /* 桌面上的大面 */
+  --at-r:10px;              /* 控件与卡片 */
+  --at-r-sm:7px;            /* 徽标、内部小块 */
+  --at-tap:1.875rem;
+  --at-ease:cubic-bezier(.2,.6,.2,1);
+}
+/* ── 隔离：项目界面只继承文档级环境，外壳组件规则不进入画布 ────────
+   html / body 只建立整页评审环境；其中会继承的文字缩放、字体与颜色等，
+   都在 .at-ui 边界显式复位。外壳盒模型不经全局 * 传播。 */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* 盒模型只发给外壳自己的元素，不用全局 *。画布内的项目元素不被写入
+   border-box，它们拿到的是浏览器默认值。 */
+:where(.at-header,.at-notes,.at-stage-bar,.at-stage-foot,.at-empty,.at-marker-layer,.at-marker,.at-outline,.at-jump),
+:where(.at-header,.at-notes,.at-stage-bar,.at-stage-foot,.at-empty) *{box-sizing:border-box}
+body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.55 var(--at-font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+/* 外壳文字容器的默认边距：这些容器都不是 #at-ui 的祖先。
+   画布里的空白占位不属于它们，自己清边距（见 .at-empty > *）。 */
+:where(.at-header,.at-notes,.at-stage-bar,.at-stage-foot,.at-jump) :is(h1,h2,h3,h4,p,dl,dd,ul,ol,figure,blockquote){margin:0}
+/* [hidden] 只强加在外壳自己的元素上：容器内与两个 body 级悬浮件。
+   项目里自己的 [hidden] 覆盖（例如 display:flex）不会被抢走。 */
+:where(.at-header,.at-notes,.at-stage-bar,.at-stage-foot) [hidden],
+:where(#at-notes,#at-jump,#at-outline,#at-marker-layer)[hidden]{display:none!important}
+/* code 样式只给外壳文字与空白占位的说明，不改项目里的代码块 */
+:where(.at-header,.at-notes,.at-stage-bar,.at-stage-foot,.at-empty) code{font-family:var(--at-mono);font-size:.75rem;background:var(--at-sunken);border-radius:4px;padding:.05em .3em;color:var(--at-ink);overflow-wrap:anywhere}
+.at-sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.at-mono{font-family:var(--at-mono);font-variant-numeric:tabular-nums}
+/* 焦点环用墨色：在白纸与灰桌上都够，也不把批注色消耗在交互态上。
+   只写给外壳自己的可聚焦元素（含画布内的编号徽标），
+   不用全局 button / summary / [tabindex]。 */
+:where(.at-seg,.at-button,.at-link,.at-tab,.at-tree button,.at-details summary,.at-objects summary,.at-marker,.at-jump,.at-card,.at-principle):focus-visible{outline:2px solid var(--at-ink);outline-offset:2px}
+/* 选中色只覆盖外壳文字；项目界面的选中色由项目自己决定 */
+:where(.at-header,.at-notes,.at-stage-bar,.at-stage-foot,.at-jump)::selection,
+:where(.at-header,.at-notes,.at-stage-bar,.at-stage-foot,.at-jump) ::selection{background:rgba(168,60,38,.16);color:inherit}
+@keyframes at-shell-fade{from{opacity:0}to{opacity:1}}
+
+/* ── 顶栏：吸顶玻璃条，44px，只有项目名与三个控制 ─────────────── */
+.at-header{position:sticky;top:0;z-index:2147483003;display:flex;align-items:center;justify-content:space-between;gap:.375rem 1rem;flex-wrap:wrap;min-height:var(--at-header);padding:.25rem 1.125rem;background:rgba(255,255,255,.86);-webkit-backdrop-filter:saturate(1.5) blur(14px);backdrop-filter:saturate(1.5) blur(14px);border-bottom:1px solid var(--at-hairline)}
+.at-name{font-size:.9375rem;font-weight:600;line-height:1.4;letter-spacing:-.012em;overflow-wrap:anywhere;min-width:0}
+.at-controls{display:flex;align-items:center;gap:.375rem;margin-left:auto;flex-wrap:wrap}
+.at-seg-group{display:inline-flex;gap:2px;padding:2px;border-radius:var(--at-r);background:var(--at-sunken)}
+.at-seg{font:inherit;font-size:.75rem;font-weight:500;line-height:1.4;min-height:var(--at-tap);padding:0 .625rem;border:0;border-radius:calc(var(--at-r) - 3px);background:transparent;color:var(--at-muted);cursor:pointer;transition:background-color .16s var(--at-ease),color .16s var(--at-ease),box-shadow .16s var(--at-ease)}
+.at-seg:hover{background:rgba(255,255,255,.65);color:var(--at-ink)}
+.at-seg[aria-pressed="true"]{background:var(--at-surface);color:var(--at-ink);font-weight:600;box-shadow:var(--at-shadow-control)}
+.at-button{display:inline-flex;align-items:center;gap:.375rem;font:inherit;font-size:.75rem;font-weight:500;line-height:1.4;min-height:var(--at-tap);padding:0 .5rem;border:0;border-radius:var(--at-r);background:transparent;color:var(--at-muted);cursor:pointer;transition:background-color .16s var(--at-ease),color .16s var(--at-ease)}
+.at-button:hover{background:var(--at-sunken);color:var(--at-ink)}
+.at-button[aria-pressed="true"]{color:var(--at-ink)}
+.at-dot{width:.4375rem;height:.4375rem;flex:none;border:1.5px solid var(--at-rule-strong);border-radius:2px;background:transparent;transition:background-color .16s var(--at-ease),border-color .16s var(--at-ease)}
+.at-button[aria-pressed="true"] .at-dot{background:var(--at-ink);border-color:var(--at-ink)}
+
+/* ── 布局：画布是主列，说明栏可收起 ────────────────────────────── */
+.at-layout{display:grid;grid-template-columns:minmax(0,1fr) var(--at-sidebar);align-items:start;gap:1rem;min-height:calc(100svh - var(--at-header));padding:1rem 1.125rem 1.5rem}
+.at-layout.at-canvas-only{grid-template-columns:minmax(0,1fr)}
+.at-stage{display:flex;flex-direction:column;gap:.875rem;min-width:0}
+.at-stage-bar{display:flex;align-items:baseline;justify-content:space-between;gap:.25rem 1rem;flex-wrap:wrap;padding:0 .125rem}
+.at-stage-title{font-size:.8125rem;font-weight:600;line-height:1.5;letter-spacing:-.006em}
+.at-metrics{display:flex;flex-wrap:wrap;gap:.25rem;font-family:var(--at-mono);font-size:.6875rem;line-height:1.6;color:var(--at-muted)}
+.at-metrics>span+span::before{content:"·";margin-right:.375rem;color:var(--at-rule-strong)}
+.at-metrics b{font-weight:500;color:var(--at-ink)}
+/* 画布边界：它既是外壳的纸张，也是项目的根。凡是外壳可能继承下来的
+   字体、字号、颜色、行高、字距、对齐、换行策略与盒模型，在这里一次复位
+   到浏览器默认值，外壳的样式不进入项目界面。 */
+.at-ui{position:relative;min-width:0;min-height:max(26rem,calc(100svh - 9.5rem));background:var(--at-surface);border:1px solid var(--at-hairline);border-radius:var(--at-r-sheet);box-shadow:var(--at-shadow);box-sizing:content-box;font:initial;color:initial;text-align:initial;text-indent:0;text-transform:none;letter-spacing:normal;word-spacing:normal;white-space:normal;word-break:normal;overflow-wrap:normal;text-wrap:wrap;font-variant-numeric:normal;font-feature-settings:normal;-webkit-text-size-adjust:auto;text-size-adjust:auto;-webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto}
+.at-stage-foot{margin:0;padding:0 .125rem;font-size:.75rem;line-height:1.6;color:var(--at-muted)}
+
+/* ── 空白画布：一句状态 + 一句做法，没有装饰框 ──────────────────── */
+.at-empty{display:grid;align-content:center;justify-items:start;gap:.5rem;box-sizing:border-box;min-height:inherit;padding:clamp(1.75rem,4vw,3rem);font-family:var(--at-font);font-size:.8125rem;line-height:1.75;color:var(--at-muted)}
+.at-empty>*{margin:0;width:min(100%,32rem)}
+.at-empty-label{font-family:var(--at-mono);font-size:.6875rem;line-height:1.6;color:var(--at-muted)}
+.at-empty-title{font-size:1.125rem;line-height:1.45;font-weight:600;letter-spacing:-.018em;color:var(--at-ink);text-wrap:balance}
+.at-empty-note{font-size:.75rem;line-height:1.7}
+
+/* ── 画布编号与描边 ────────────────────────────────────────────── */
+.at-marker-layer{position:absolute;inset:0;z-index:2147483000;pointer-events:none}
+.at-marker{position:absolute;left:0;top:0;display:grid;place-items:center;width:1.375rem;height:1.375rem;margin:0;padding:0;pointer-events:auto;border:1px solid var(--at-hairline);border-radius:var(--at-r-sm);background:rgba(255,255,255,.95);color:var(--at-muted);font-family:var(--at-mono);font-size:.6875rem;font-weight:500;line-height:1;cursor:pointer;box-shadow:0 1px 2px rgba(16,19,23,.12),0 3px 8px -3px rgba(16,19,23,.18);transition:background-color .14s var(--at-ease),color .14s var(--at-ease),border-color .14s var(--at-ease),box-shadow .14s var(--at-ease)}
+/* 命中区只比徽标大一圈（22 → 32px，触控 28 → 44px）：再大就会盖住相邻元素，
+   点选反而变糊。 */
+.at-marker::after{content:"";position:absolute;inset:-.3125rem;border-radius:inherit}
+.at-marker:hover{border-color:var(--at-ink);color:var(--at-ink)}
+/* 预览用空心徽标与虚线描边；实心朱红只代表「已固定」，两者不会同时出现。 */
+.at-marker[data-preview="true"]{border-color:var(--at-accent);color:var(--at-accent);background:var(--at-surface);box-shadow:0 0 0 3px rgba(168,60,38,.12),0 3px 8px -3px rgba(16,19,23,.22)}
+.at-marker[data-active="true"]{background:var(--at-accent);border-color:var(--at-accent);color:var(--at-accent-ink);box-shadow:0 0 0 3px rgba(168,60,38,.18),0 4px 12px -2px rgba(168,60,38,.42)}
+.at-outline{position:fixed;z-index:2147482999;pointer-events:none;border:1.5px solid var(--at-accent);border-radius:var(--at-r-sm);box-shadow:var(--at-halo)}
+.at-outline[data-preview="true"]{border-style:dashed;box-shadow:none}
+.at-marker:focus-visible{outline-color:var(--at-ink);outline-offset:3px}
+
+/* ── 说明栏 ────────────────────────────────────────────────────── */
+.at-notes{position:sticky;top:calc(var(--at-header-live,var(--at-header)) + 1rem);align-self:start;height:calc(100svh - var(--at-header-live,var(--at-header)) - 2rem);max-height:calc(100svh - var(--at-header-live,var(--at-header)) - 2rem);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;background:var(--at-surface);border:1px solid var(--at-hairline);border-radius:var(--at-r-sheet);box-shadow:var(--at-shadow-panel)}
+/* 说明栏顶部：方向摘要与页签同处一个吸顶单元，滚长面板时一起留在上方。
+   摘要不属于任何页签，所以切页签不会让它消失或改写。 */
+.at-notes-head{position:sticky;top:0;z-index:3;background:var(--at-surface)}
+.at-brief-head{padding:.875rem 1.25rem .8125rem;border-bottom:1px solid var(--at-rule)}
+.at-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.125rem;padding:.5rem .75rem 0;background:var(--at-surface);border-bottom:1px solid var(--at-hairline)}
+.at-tab{position:relative;font:500 .8125rem/1.4 var(--at-font);color:var(--at-muted);padding:.625rem .25rem;min-height:2.5rem;border:0;border-radius:var(--at-r-sm) var(--at-r-sm) 0 0;background:none;cursor:pointer;transition:color .16s var(--at-ease),background-color .16s var(--at-ease)}
+.at-tab:hover{color:var(--at-ink);background:var(--at-sunken)}
+.at-tab[aria-selected="true"]{color:var(--at-ink);font-weight:600}
+.at-tab[aria-selected="true"]::after{content:"";position:absolute;left:.25rem;right:.25rem;bottom:-1px;height:2px;border-radius:2px 2px 0 0;background:var(--at-ink)}
+.at-tabpanel{padding:1.125rem 1.25rem 2.5rem;animation:at-shell-fade .16s var(--at-ease)}
+.at-panel-head{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.875rem}
+.at-label{font-size:.75rem;font-weight:600;line-height:1.5;color:var(--at-muted)}
+.at-link{display:inline-flex;align-items:center;min-height:1.75rem;padding:0;border:0;background:none;font:inherit;font-size:.75rem;font-weight:500;line-height:1.5;color:var(--at-ink);text-align:left;text-decoration:underline;text-decoration-color:var(--at-rule-strong);text-underline-offset:3px;cursor:pointer;transition:text-decoration-color .16s var(--at-ease)}
+.at-link:hover{text-decoration-color:var(--at-ink)}
+.at-link:disabled{color:var(--at-muted);text-decoration:none;cursor:default}
+
+/* 元素卡：编号 + 名称 + 路径 + 用途 / 理由 / 依据 / 规格 */
+.at-card{min-height:4rem}
+.at-card-head{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+.at-card-head h3{font-size:1.0625rem;font-weight:600;line-height:1.4;letter-spacing:-.014em;min-width:0;overflow-wrap:anywhere;text-wrap:balance}
+.at-n{flex:none;display:inline-grid;place-items:center;width:1.25rem;height:1.25rem;border:1px solid var(--at-hairline);border-radius:6px;background:var(--at-sunken);color:var(--at-muted);font-family:var(--at-mono);font-size:.6875rem;line-height:1}
+.at-ver{margin-left:auto;font-family:var(--at-mono);font-size:.6875rem;line-height:1.5;color:var(--at-muted)}
+.at-path{margin:.375rem 0 .875rem;font-family:var(--at-mono);font-size:.6875rem;line-height:1.6;color:var(--at-muted);overflow-wrap:anywhere}
+.at-def dt{font-size:.75rem;line-height:1.5;color:var(--at-muted);margin-bottom:.25rem}
+.at-def dd{margin:0 0 .875rem;font-size:.8125rem;line-height:1.7;overflow-wrap:anywhere;text-wrap:pretty}
+.at-specs{margin:.25rem 0 0;border-top:1px solid var(--at-rule)}
+.at-specs>div{display:grid;grid-template-columns:minmax(0,7rem) minmax(0,1fr);gap:.5rem;padding:.4375rem 0;border-bottom:1px solid var(--at-rule)}
+.at-specs dt{margin:0;font-size:.6875rem;line-height:1.6;color:var(--at-muted)}
+.at-specs dd{margin:0;font-family:var(--at-mono);font-size:.6875rem;line-height:1.6;overflow-wrap:anywhere}
+.at-meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .4375rem;margin:.25rem 0 0;font-size:.75rem;line-height:1.6;color:var(--at-muted)}
+.at-actions{display:flex;flex-wrap:wrap;gap:.25rem .875rem;margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--at-rule)}
+/* 预览行：说明卡暂时显示的不是固定项时，先说清松手会退回哪里。 */
+.at-preview{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .4375rem;margin:0 0 .8125rem;padding:.4375rem .5rem;border-radius:var(--at-r-sm);background:var(--at-sunken);line-height:1.55}
+.at-preview-tag{flex:none;font-family:var(--at-mono);font-size:.6875rem;font-weight:500;color:var(--at-ink)}
+.at-preview-copy{min-width:0;font-size:.75rem;color:var(--at-muted);overflow-wrap:anywhere}
+.at-card[data-preview="true"] .at-n{background:var(--at-surface);border:1px dashed var(--at-accent);color:var(--at-accent)}
+.at-hint{display:grid;gap:.375rem}
+.at-hint-title{font-size:.875rem;font-weight:600;line-height:1.5;letter-spacing:-.008em}
+.at-copy{font-size:.8125rem;line-height:1.7;color:var(--at-muted);overflow-wrap:anywhere;text-wrap:pretty}
+.at-note{margin-top:1rem;font-size:.75rem;line-height:1.7;color:var(--at-muted)}
+.at-warn{margin-top:.875rem;padding:.625rem .75rem;border:1px solid var(--at-rule-strong);border-radius:var(--at-r-sm);background:var(--at-sunken);font-size:.75rem;line-height:1.65;color:var(--at-accent)}
+
+/* 元素列表：可收起；缩进表示嵌套，选中用墨色竖线而不是色块 */
+.at-objects{margin-top:1.75rem;padding-top:1.125rem;border-top:1px solid var(--at-rule)}
+.at-objects summary{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:1.75rem;border-radius:var(--at-r-sm);font-size:.75rem;font-weight:600;line-height:1.5;color:var(--at-muted);list-style:none;cursor:pointer}
+.at-objects summary::-webkit-details-marker{display:none}
+.at-objects summary::after{content:"";width:.4375rem;height:.4375rem;flex:none;margin-right:.25rem;border-right:1.5px solid var(--at-muted);border-bottom:1.5px solid var(--at-muted);transform:rotate(45deg);transition:transform .18s var(--at-ease)}
+.at-objects[open] summary::after{transform:rotate(-135deg)}
+.at-tree{display:flex;flex-direction:column;gap:2px;margin:.5rem 0 0;padding:0;list-style:none}
+.at-tree li+li{margin-top:0}
+.at-tree button{display:flex;align-items:center;gap:.5rem;width:100%;min-height:2.25rem;padding:.25rem .5rem;border:0;border-radius:var(--at-r-sm);background:none;color:var(--at-ink);font:inherit;font-size:.8125rem;line-height:1.5;text-align:left;cursor:pointer;transition:background-color .14s var(--at-ease)}
+.at-tree button:hover,.at-tree button[data-preview="true"]{background:var(--at-sunken)}
+.at-tree button[aria-pressed="true"]{background:var(--at-sunken);box-shadow:inset 2px 0 0 var(--at-ink);font-weight:600}
+.at-tree button[aria-pressed="true"] .at-n{border-color:var(--at-ink);color:var(--at-ink);background:var(--at-surface)}
+.at-tree button>span:last-child{min-width:0;overflow-wrap:anywhere}
+
+/* 设计简报 */
+.at-direction{display:flex;align-items:baseline;justify-content:space-between;gap:.125rem .75rem;flex-wrap:wrap}
+.at-direction-name{font-size:1.0625rem;font-weight:600;line-height:1.35;letter-spacing:-.014em;min-width:0;overflow-wrap:anywhere;text-wrap:balance}
+.at-status{font-family:var(--at-mono);font-size:.6875rem;line-height:1.5;color:var(--at-muted)}
+.at-read{margin-top:.3125rem;font-size:.8125rem;line-height:1.7;color:var(--at-ink);overflow-wrap:anywhere;text-wrap:pretty}
+.at-field{padding:1rem 0}
+.at-field+.at-field,.at-field+.at-details{border-top:1px solid var(--at-rule)}
+.at-field h2{font-size:.8125rem;font-weight:600;line-height:1.5;letter-spacing:-.006em;margin-bottom:.5rem}
+.at-principles{display:flex;flex-direction:column}
+.at-principle{display:grid;grid-template-columns:1.875rem minmax(0,1fr);column-gap:.5rem;padding:.625rem 0;border-top:1px solid var(--at-rule);border-radius:var(--at-r-sm)}
+.at-principle:first-child{border-top:0;padding-top:.125rem}
+.at-principle-id{grid-row:1;font-family:var(--at-mono);font-size:.6875rem;line-height:1.6;color:var(--at-muted)}
+.at-principle-name{grid-column:2;font-size:.8125rem;font-weight:600;line-height:1.5;margin-bottom:.125rem;overflow-wrap:anywhere}
+.at-principle .at-copy{grid-column:2}
+.at-principle[data-ref="true"]{margin:0 -.625rem;padding:.625rem;background:var(--at-sunken);box-shadow:inset 2px 0 0 var(--at-ink)}
+.at-principle[data-ref="true"]:first-child{padding-top:.625rem}
+
+/* 规格 */
+.at-table{width:100%;border-collapse:collapse;font-size:.75rem}
+.at-table th{text-align:left;padding:.375rem .5rem .5rem 0;font-size:.6875rem;font-weight:500;line-height:1.5;color:var(--at-muted);border-bottom:1px solid var(--at-rule-strong)}
+.at-table td{padding:.5rem .5rem .5rem 0;border-bottom:1px solid var(--at-rule);vertical-align:top;line-height:1.6;overflow-wrap:anywhere}
+.at-table th:last-child,.at-table td:last-child{padding-right:0;color:var(--at-muted)}
+.at-list{margin:0;padding-left:1.125rem;font-size:.8125rem;line-height:1.75;color:var(--at-muted)}
+.at-list li+li{margin-top:.25rem}
+.at-details{border-top:1px solid var(--at-rule)}
+.at-details summary{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;font-size:.8125rem;font-weight:500;line-height:1.5;border-radius:var(--at-r-sm);list-style:none;cursor:pointer}
+.at-details summary::-webkit-details-marker{display:none}
+.at-details summary::after{content:"";width:.4375rem;height:.4375rem;flex:none;margin-right:.25rem;border-right:1.5px solid var(--at-muted);border-bottom:1.5px solid var(--at-muted);transform:rotate(45deg);transition:transform .18s var(--at-ease)}
+.at-details[open] summary::after{transform:rotate(-135deg)}
+.at-details-body{padding:0 0 1rem}
+
+/* ── 窄屏：画布在上，说明在下；跳转条只在需要跨越时出现 ────────── */
+.at-jump{position:fixed;left:50%;bottom:calc(.875rem + env(safe-area-inset-bottom));z-index:2147483004;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;max-width:calc(100vw - 2rem);padding:.8125rem 1.25rem;border:0;border-radius:999px;background:var(--at-ink);box-shadow:var(--at-shadow-lift);font:500 .8125rem/1.4 var(--at-font);color:var(--at-surface);white-space:nowrap;cursor:pointer;transform:translateX(-50%);transition:background-color .16s var(--at-ease)}
+.at-jump:hover{background:var(--at-ink-raised)}
+
+@media(max-width:75rem){:root{--at-sidebar:20rem}}
+@media(max-width:56rem){
+  .at-header{padding:.375rem .875rem}
+  .at-layout{grid-template-columns:minmax(0,1fr);gap:.875rem;padding:.875rem .875rem 1.25rem}
+  .at-ui{min-height:22rem}
+  .at-notes{position:static;top:auto;height:auto;max-height:none;overflow:visible}
+  /* 窄屏没有滚动裁切，吸顶块停在顶栏下方；圆角单独补在它自己身上。 */
+  .at-notes-head{top:var(--at-header-live,var(--at-header));border-radius:var(--at-r-sheet) var(--at-r-sheet) 0 0}
+  .at-brief-head{padding:.75rem .875rem .6875rem}
+  .at-tabpanel{padding:1rem .875rem 3.5rem}
+}
+@media(pointer:coarse){
+  :root{--at-tap:2.75rem}
+  .at-seg,.at-button,.at-link,.at-tab,.at-tree button,.at-details summary,.at-objects summary{min-height:2.75rem}
+  .at-jump{min-height:2.75rem}
+  .at-marker{width:1.75rem;height:1.75rem;font-size:.75rem}
+  .at-marker::after{inset:-.5rem}
+  .at-tab[aria-selected="true"]::after{bottom:0}
+}
+/* 只在评审外壳上关闭动效。项目是否降级由项目自己决定，
+   否则一条 !important 全局规则会改掉项目的状态动效。 */
+@media(prefers-reduced-motion:reduce){
+  .at-header,.at-header *,.at-notes,.at-notes *,.at-stage-bar,.at-stage-bar *,.at-stage-foot,.at-jump,.at-marker,.at-outline{animation:none!important;transition:none!important}
+  .at-details summary::after,.at-objects summary::after{transition:none}
+}
 </style>
 </head>
 <body>
-<!-- TEMPLATE AUTHORING
-     See ../references/html-preview.md for the filling, registry, and review contract.
-     Copy this asset into the agreed output folder; preserve an existing project preview when revising.
-     Fill data-at-field locations in a project copy. They are authoring markers, not product targets.
-     Replace each prompt with actual content and update <title>. Keep prompts in this reusable source.
-     Localize visible text, accessible labels, document language, and runtime-generated messages.
-     PROJECT_NAME stays in the toolbar; direction, status, and Design Read stay above the notes tabs.
-     On narrow screens the notes follow the canvas. Hiding notes also hides the direction summary.
-     Replace the whole .at-placeholder for PROJECT_UI; scope product styles separately.
-     The review shell narrows the canvas: verify the product's own responsive layout separately.
-     Do not use shell tokens to decide the project's type, color, layout, components, or platform.
--->
-<header class="at-header">
-<div class="at-identity"><p class="at-name" data-at-field="PROJECT_NAME">项目名称</p></div>
-<div class="at-tools"><button class="at-button" id="at-mode" aria-pressed="true" hidden>标注模式</button><button class="at-button" id="at-panel" aria-expanded="true" aria-controls="at-notes">收起说明</button></div>
+<!-- ═══ 模板作者说明 ═══════════════════════════════════════════════════
+     这是可复用模板，不是项目本身，也不是设计系统。
+     结构固定：顶栏 → 画布（#at-ui，项目界面）→ 说明栏。
+     说明栏自上而下：方向摘要（方向名 / 状态 / 一句话 Design Read，吸顶常驻，
+     不随页签切换）→ 页签（元素 / 设计简报 / 规格）→ 当前页签内容。
+
+     风格不进模板：外壳只提供桌面、墨色与批注色；画布内的排版、颜色、
+     组件全部由项目决定。
+
+     样式隔离契约（改样式时请遵守）：
+       · 组件样式带 .at- 类名或 #at- id；html / body 只建立整页评审环境。
+         不写全局 *，文档级可继承值必须在 #at-ui 显式复位。
+       · 需要作用到“容器里的所有东西”时，用它的 .at- 容器做前缀；
+         不要用 :is(h1,p,...) 这种不带前缀的写法。
+       · #at-ui 不属于任何外壳容器，它是项目根：字体、字号、颜色、行高、
+         字距、对齐、换行、盒模型在这里复位到浏览器默认值。
+       · 画布内的外壳元素（.at-marker、.at-outline、.at-marker-layer、
+         .at-empty）在规则里逐个列出，不靠通配符。编号层是 #at-ui 的直接子元素，
+         项目若写 #at-ui > * 会命中它；项目样式请用具体选择器。
+       · !important 只用于 [hidden]，且只点名外壳自己的元素。
+     注：.at-ui 内的盒模型是 content-box（浏览器默认）。项目若需要
+     border-box，请在自己的样式里声明：#at-ui,#at-ui *{box-sizing:border-box}。
+
+     填写位置（data-at-field）：
+       PROJECT_NAME / PROJECT_UI / DIRECTION_NAME / DECISION_STATUS / DESIGN_READ /
+       CONTEXT / PRINCIPLES / DIRECTION_DETAILS / REFERENCES / AVOID /
+       PLATFORM_SPECS / VALIDATION_NOTES
+     画布：把 #at-ui 内的 .at-empty 整块换成项目界面，给可讨论的元素加 data-at-id。
+     注册表：#at-registry 的 JSON 数组。每条 {id, name, parent?, role, reason,
+       principle?, v?, specs?: [{label, value} | {label, css}]}。
+       principle 指向 data-principle；id 必须与画布元素一一对应，parent 不能成环。
+     改完刷新页面：编号、列表、说明在初始化时建立。
+     编号定位：先钉元素四角，越界或与其他编号相撞时退到元素内四角，
+     仍不成则停在首个候选位。不做文本矩形扫描，也不做多轮碰撞搜索。
+
+     交互契约：指针悬停或键盘聚焦（画布元素、编号、画布元素列表）临时预览
+     该元素的说明与描边；点击才固定；离开预览回到固定项的说明；Esc 或
+     「清除选择」同时清掉固定与预览。预览不写 pinned，也不改写注册表。
+
+     本文件只做三件事：展示设计、解释设计、按稳定 id 定位元素。
+     反馈、版本与迭代在对话中处理；这里不记录反馈、不保存状态、不修改设计。
+
+     ═══════════════════════════════════════════════════════════════════ -->
+<header class="at-header" data-od-id="review-toolbar">
+  <h1 class="at-name" data-at-field="PROJECT_NAME">项目名称</h1>
+  <div class="at-controls">
+    <div class="at-seg-group" id="at-mode-switch" role="group" aria-label="交互模式" data-od-id="mode-switch" hidden>
+      <button type="button" class="at-seg" id="at-mode-inspect" aria-pressed="true" data-od-id="mode-inspect">标注</button>
+      <button type="button" class="at-seg" id="at-mode-experience" aria-pressed="false" data-od-id="mode-experience">体验</button>
+    </div>
+    <button type="button" class="at-button" id="at-numbers" aria-pressed="true" data-od-id="toggle-numbers"><span class="at-dot" aria-hidden="true"></span>编号</button>
+    <button type="button" class="at-button" id="at-panel" aria-expanded="true" aria-controls="at-notes" data-od-id="toggle-notes">收起说明</button>
+  </div>
 </header>
+
 <main class="at-layout" id="at-layout">
-<section class="at-stage" aria-label="项目 UI 预览">
-<div class="at-stage-label"><span>项目界面</span><span id="at-hint">尚无可检查的元素</span></div>
-<div class="at-ui" id="at-ui" data-at-field="PROJECT_UI">
-<div class="at-placeholder"><div class="at-placeholder-inner"><div class="at-placeholder-mark" aria-hidden="true"></div><h1>把设计放在这里</h1><p>呈现当前方向的项目界面。<br>内容、布局与视觉语言，由项目决定。</p><p class="at-slot-label"><span>项目 UI 占位</span><span aria-hidden="true">DESIGN CANVAS</span></p></div></div>
-</div>
-<p class="at-stage-foot">填入设计后，可选择元素查看理由与规格。</p>
-</section>
-<aside class="at-notes" id="at-notes" aria-label="设计说明">
-<section class="at-direction" aria-labelledby="at-direction">
-<div class="at-direction-head"><p class="at-direction-label">当前方向</p><span class="at-status" data-at-field="DECISION_STATUS">状态待填写</span></div>
-<h2 class="at-direction-title" id="at-direction" data-at-field="DIRECTION_NAME">设计方向待填写</h2><p class="at-direction-read" data-at-field="DESIGN_READ">说明希望带来的感受，以及支撑这种感受的关键视觉选择。</p>
-</section>
-<div class="at-tabs" role="tablist" aria-label="设计说明类别">
-<button class="at-tab" role="tab" id="at-tab-element" aria-controls="at-pane-element" aria-selected="true" tabindex="0">元素说明</button>
-<button class="at-tab" role="tab" id="at-tab-brief" aria-controls="at-pane-brief" aria-selected="false" tabindex="-1">设计简报</button>
-<button class="at-tab" role="tab" id="at-tab-spec" aria-controls="at-pane-spec" aria-selected="false" tabindex="-1">规格记录</button>
-</div>
-<section class="at-tabpanel" role="tabpanel" id="at-pane-element" aria-labelledby="at-tab-element" tabindex="0">
-<div class="at-section-head"><h2>当前元素</h2><button class="at-text-button" id="at-clear" disabled>清除选择</button></div>
-<div id="at-selection" class="at-card" tabindex="-1"><div class="at-empty"><h3>还没有可检查的元素</h3><p>填入项目界面并关联说明后，选择元素，即可查看它的用途、设计理由与相关规格。</p></div></div>
-<p class="at-selection-foot" id="at-selection-help">元素说明会与对应的界面位置关联。</p>
-<details class="at-details" id="at-objects-section"><summary>设计对象</summary><div class="at-details-body"><div class="at-tree" id="at-tree"></div><p class="at-copy" id="at-tree-empty">这里将列出实际界面中可以讨论的区域与元素。</p></div></details>
-</section>
-<section class="at-tabpanel" role="tabpanel" id="at-pane-brief" aria-labelledby="at-tab-brief" tabindex="0" hidden>
-<div class="at-field"><h2>背景与约束</h2><p class="at-copy" data-at-field="CONTEXT">填写受众、用途、目标平台与已有约束。</p></div>
-<div class="at-field"><h2>方向细节</h2><p class="at-copy" data-at-field="DIRECTION_DETAILS">补充当前方向的排版、色彩、密度与动效选择，解释它们如何支撑预期感受。</p></div>
-<div class="at-field"><h2>参考与依据</h2><p class="at-copy" data-at-field="REFERENCES">记录实际查看过的参考，以及采用的具体特征。</p></div>
-<div class="at-field"><h2>避免事项</h2><p class="at-copy" data-at-field="AVOID">说明哪些处理会偏离当前方向，以及原因。</p></div>
-</section>
-<section class="at-tabpanel" role="tabpanel" id="at-pane-spec" aria-labelledby="at-tab-spec" tabindex="0" hidden>
-<div class="at-field"><h2>共用规格</h2><p class="at-copy" data-at-field="PLATFORM_SPECS">按目标平台填写共用规格。仅与某个元素有关的参数，放入该元素的说明。</p></div>
-<div class="at-field"><h2>假设与检查记录</h2><p class="at-copy" data-at-field="VALIDATION_NOTES">区分已确认、提议与待验证内容，记录实际检查及其限制。</p></div>
-<p class="at-footer-note">参数服务于设计意图。可以先说希望改变的感受，再讨论具体调整。</p>
-</section>
-</aside>
+  <section class="at-stage" aria-label="项目界面预览" data-od-id="design-canvas">
+    <div class="at-stage-bar">
+      <h2 class="at-stage-title">项目界面</h2>
+      <p class="at-metrics">
+        <span>宽 <b id="at-width">—</b></span>
+        <span id="at-count">未注册元素</span>
+      </p>
+      <span class="at-sr" id="at-live" role="status" aria-live="polite"></span>
+    </div>
+    <div class="at-ui" id="at-ui" data-at-field="PROJECT_UI" data-od-id="project-canvas">
+      <div class="at-empty">
+        <p class="at-empty-label">空白画布</p>
+        <p class="at-empty-title">把项目界面放进画布</p>
+        <p>替换 <code>#at-ui</code> 里的内容，放入项目实际界面；给要讨论的元素加 <code>data-at-id</code>；在 <code>#at-registry</code> 写清它们的用途与理由。</p>
+        <p class="at-empty-note">填写字段与注册格式见 <code>references/html-preview.md</code>。编号、列表与说明共用同一个号码。</p>
+      </div>
+    </div>
+    <p class="at-stage-foot" id="at-hint">悬停预览说明，点击固定选择，Esc 取消。</p>
+  </section>
+
+  <aside class="at-notes" id="at-notes" aria-label="设计说明" data-od-id="design-notes">
+    <div class="at-notes-head">
+      <div class="at-brief-head" role="group" aria-label="当前设计方向" data-od-id="direction-summary">
+        <div class="at-direction">
+          <h2 class="at-direction-name" data-at-field="DIRECTION_NAME">设计方向待填写</h2>
+          <span class="at-status" data-at-field="DECISION_STATUS">状态待填写</span>
+        </div>
+        <p class="at-read" data-at-field="DESIGN_READ">一句话说明受众、对象、视觉语言，以及配色与密度。</p>
+      </div>
+      <div class="at-tabs" role="tablist" aria-label="设计说明类别">
+        <button type="button" class="at-tab" role="tab" id="at-tab-element" data-tab="element" aria-controls="at-pane-element" aria-selected="true" tabindex="0" data-od-id="tab-element">元素</button>
+        <button type="button" class="at-tab" role="tab" id="at-tab-brief" data-tab="brief" aria-controls="at-pane-brief" aria-selected="false" tabindex="-1" data-od-id="tab-brief">设计简报</button>
+        <button type="button" class="at-tab" role="tab" id="at-tab-specs" data-tab="specs" aria-controls="at-pane-specs" aria-selected="false" tabindex="-1" data-od-id="tab-specs">规格</button>
+      </div>
+    </div>
+
+    <section class="at-tabpanel" role="tabpanel" id="at-pane-element" aria-labelledby="at-tab-element" data-od-id="panel-element">
+      <div class="at-panel-head">
+        <h2 class="at-label">当前元素</h2>
+        <button type="button" class="at-link" id="at-clear" disabled data-od-id="clear-selection">清除选择</button>
+      </div>
+      <div class="at-card" id="at-selection" tabindex="-1">
+        <div class="at-hint">
+          <p class="at-hint-title">还没有可检查的元素</p>
+          <p class="at-copy">放入项目界面并注册元素后，点击画布或下方列表即可看到它的用途、设计理由与规格。</p>
+        </div>
+      </div>
+      <details class="at-objects" open>
+        <summary>画布元素</summary>
+        <ul class="at-tree" id="at-tree" aria-label="画布元素" data-od-id="element-tree"></ul>
+        <p class="at-copy" id="at-tree-empty">注册元素后，这里按注册表顺序列出可讨论的区域；缩进表示嵌套。</p>
+        <p class="at-warn" id="at-diag" role="status" hidden></p>
+      </details>
+    </section>
+
+    <section class="at-tabpanel" role="tabpanel" id="at-pane-brief" aria-labelledby="at-tab-brief" data-od-id="panel-brief" hidden>
+      <div class="at-field">
+        <h2>背景与约束</h2>
+        <p class="at-copy" data-at-field="CONTEXT">填写受众、用途、目标平台与已有约束。</p>
+      </div>
+      <div class="at-field">
+        <h2>设计原则</h2>
+        <div class="at-principles" data-at-field="PRINCIPLES">
+          <div class="at-principle" data-principle="P1" tabindex="-1">
+            <p class="at-principle-id">P1</p>
+            <p class="at-principle-name">原则一</p>
+            <p class="at-copy">填写：这条原则约束什么判断，为什么它是这个方向的核心。</p>
+          </div>
+          <div class="at-principle" data-principle="P2" tabindex="-1">
+            <p class="at-principle-id">P2</p>
+            <p class="at-principle-name">原则二</p>
+            <p class="at-copy">填写：这条原则靠什么具体特征实现，边界在哪里。</p>
+          </div>
+          <div class="at-principle" data-principle="P3" tabindex="-1">
+            <p class="at-principle-id">P3</p>
+            <p class="at-principle-name">原则三</p>
+            <p class="at-copy">填写：当两条选择冲突时，这一条如何决定取舍。</p>
+          </div>
+        </div>
+      </div>
+      <div class="at-field">
+        <h2>设计选择</h2>
+        <p class="at-copy" data-at-field="DIRECTION_DETAILS">填写排版、色彩、形状与材质的具体选择，说明它们如何支撑预期感受。</p>
+      </div>
+      <details class="at-details">
+        <summary>参考依据</summary>
+        <div class="at-details-body">
+          <p class="at-copy" data-at-field="REFERENCES">记录实际查看过的参考，以及采用的具体特征；未验证的比较要标注。</p>
+        </div>
+      </details>
+      <details class="at-details">
+        <summary>避免事项</summary>
+        <div class="at-details-body">
+          <p class="at-copy" data-at-field="AVOID">说明哪些处理会偏离当前方向，以及原因。</p>
+        </div>
+      </details>
+      <p class="at-note">元素说明里的「依据」指向这里；一条原则只写一个判断。</p>
+    </section>
+
+    <section class="at-tabpanel" role="tabpanel" id="at-pane-specs" aria-labelledby="at-tab-specs" data-od-id="panel-specs" hidden>
+      <div class="at-field">
+        <h2>共用规格</h2>
+        <div data-at-field="PLATFORM_SPECS">
+          <table class="at-table">
+            <thead><tr><th>角色</th><th>值</th><th>用途</th></tr></thead>
+            <tbody>
+              <tr><td>字体</td><td class="at-mono">填写</td><td>显示字与正文的分工</td></tr>
+              <tr><td>字号阶</td><td class="at-mono">填写</td><td>层级数量与最小值</td></tr>
+              <tr><td>间距</td><td class="at-mono">填写</td><td>节奏与分组</td></tr>
+              <tr><td>圆角</td><td class="at-mono">填写</td><td>形状性格</td></tr>
+              <tr><td>动效</td><td class="at-mono">填写</td><td>时长、缓动与降级</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <details class="at-details" open>
+        <summary>假设与检查记录</summary>
+        <div class="at-details-body">
+          <ul class="at-list" data-at-field="VALIDATION_NOTES">
+            <li>区分已确认、提议与待验证的内容。</li>
+            <li>记录实际检查过的宽度、状态与失败项。</li>
+            <li>说明仍无法验证的部分，例如真机表现。</li>
+          </ul>
+        </div>
+      </details>
+      <p class="at-note">元素说明里的「实测」来自当前渲染结果，会随画布宽度变化；作者声明的平台值不带此标记。</p>
+    </section>
+  </aside>
 </main>
-<div id="at-outline" class="at-outline" hidden aria-hidden="true"></div>
-<button id="at-jump" class="at-jump" hidden>查看选中元素的说明 ↓</button>
-<!-- Registry: keep [] in this empty template. Register only real UI targets using data-at-id.
-     Each record: {id, name, parent?, role, reason, specs?: [{label, value} OR {label, css}]}.
-     IDs match unique elements inside #at-ui; parent references another record without cycles.
-     Use familiar names. Reload after editing the registry or target set.
-     Serialize valid JSON and escape < as \u003c so content cannot close this script element.
-     Authored value: label proposed/approximate values honestly. css: read a rendered CSS property.
-     Only CSS-based designs have CSS measurements; use platform-appropriate authored values otherwise.
-     Metadata is rendered as text, never as HTML. Review images/native previews are not native validation.
--->
+
+<div class="at-outline" id="at-outline" hidden aria-hidden="true"></div>
+<button type="button" class="at-jump" id="at-jump" hidden data-od-id="jump-to-notes">查看选中元素的说明 ↓</button>
+
 <script type="application/json" id="at-registry">[]</script>
 <script>
-(()=>{
-'use strict';
-const $=id=>document.getElementById(id),ui=$('at-ui'),notes=$('at-notes'),card=$('at-selection'),outline=$('at-outline'),jump=$('at-jump');
-const records=JSON.parse($('at-registry').textContent),registry=new Map(records.map(item=>[item.id,item]));
-const target=id=>[...ui.querySelectorAll('[data-at-id]')].find(el=>el.dataset.atId===id);
-const valid=id=>registry.has(id)&&!!target(id);
-let pinned=null,hovered=null,inspect=true,shown=true;
-const make=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el;};
-const tabs=[...document.querySelectorAll('.at-tab')];
-function activateTab(key){for(const tab of tabs){const active=tab.id==='at-tab-'+key;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;$(tab.getAttribute('aria-controls')).hidden=!active;}position();}
-for(const [index,tab] of tabs.entries()){
- tab.addEventListener('click',()=>activateTab(tab.id.slice(7)));
- tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();activateTab(tabs[next].id.slice(7));tabs[next].focus();});
-}
-function ancestors(id){const list=[],seen=new Set([id]);let parent=registry.get(id)?.parent;while(parent&&registry.has(parent)&&!seen.has(parent)){seen.add(parent);list.unshift(registry.get(parent));parent=registry.get(parent).parent;}return list;}
-function active(){return hovered||pinned;}
-function showPanel(value){shown=value;notes.hidden=!value;$('at-layout').classList.toggle('at-canvas-only',!value);$('at-panel').textContent=value?'收起说明':'显示说明';$('at-panel').setAttribute('aria-expanded',String(value));if(!value){pinned=null;hovered=null;inspect=false;}syncMode();render();requestAnimationFrame(position);}
-function select(id){pinned=valid(id)?id:null;hovered=null;if(pinned)activateTab('element');render();}
-function field(label,value){const dl=make('dl');dl.append(make('dt',label),make('dd',value));return dl;}
-function render(){
-const id=active(),entry=registry.get(id),el=id&&target(id);card.replaceChildren();
-$('at-clear').disabled=!pinned&&!hovered;
-$('at-tree').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.id===pinned)));
-if(!entry||!el){const empty=make('div',undefined,'at-empty');empty.append(make('h3',hasTargets?'选择一个元素':'还没有可检查的元素'),make('p',hasTargets?'在标注模式中选择界面元素，或展开下方“设计对象”定位。':'填入项目界面并关联说明后，选择元素，即可查看它的用途、设计理由与相关规格。'));card.append(empty);position();return;}
-card.append(make('p',hovered?'悬停预览':'已选择','at-section-label'),make('h3',entry.name));
-const trail=[...ancestors(id).map(item=>item.name),entry.name];card.append(make('p',trail.join(' / '),'at-breadcrumb'),field('用途',entry.role||'待填写'),field('设计理由',entry.reason||'待填写'));
-if(entry.specs?.length){const dl=make('dl',undefined,'at-specs');for(const spec of entry.specs){const row=make('div'),value=spec.css?getComputedStyle(el).getPropertyValue(spec.css):spec.value;row.append(make('dt',spec.label+(spec.css?' · 实测':'')),make('dd',value||'待填写'));dl.append(row);}card.append(dl);}
-const actions=make('div',undefined,'at-card-actions');
-if(valid(entry.parent)){const button=make('button','↑ '+registry.get(entry.parent).name,'at-text-button');button.onclick=()=>select(entry.parent);actions.append(button);}
-const back=make('button','定位到界面','at-text-button');back.onclick=()=>{el.scrollIntoView({block:'center'});position();};actions.append(back);card.append(actions);position();
-}
-function position(){
-const el=active()&&target(active());outline.hidden=true;jump.hidden=true;
-if(!inspect||!shown||!el||!el.getClientRects().length)return;
-const r=el.getBoundingClientRect();let left=Math.max(0,r.left),top=Math.max(0,r.top),right=Math.min(innerWidth,r.right),bottom=Math.min(innerHeight,r.bottom);
-for(let parent=el.parentElement;parent&&parent!==document.body;parent=parent.parentElement){const style=getComputedStyle(parent),rect=parent.getBoundingClientRect();if(/auto|scroll|hidden|clip/.test(style.overflowX)){left=Math.max(left,rect.left);right=Math.min(right,rect.right);}if(/auto|scroll|hidden|clip/.test(style.overflowY)){top=Math.max(top,rect.top);bottom=Math.min(bottom,rect.bottom);}}
-if(right>left&&bottom>top){outline.hidden=false;Object.assign(outline.style,{left:left+'px',top:top+'px',width:right-left+'px',height:bottom-top+'px'});}
-const narrow=matchMedia('(max-width:56rem)').matches;jump.hidden=!(pinned&&narrow&&card.getBoundingClientRect().top>=innerHeight);
-}
-for(const entry of records){if(!valid(entry.id))continue;const button=make('button',entry.name);button.dataset.id=entry.id;button.style.paddingLeft=(.5+Math.min(ancestors(entry.id).length,4)*.75)+'rem';button.onclick=()=>{inspect=true;syncMode();select(entry.id);target(entry.id).scrollIntoView({block:'center'});position();};$('at-tree').append(button);}
-const hasTargets=$('at-tree').children.length>0;$('at-tree-empty').hidden=hasTargets;$('at-mode').hidden=!hasTargets;
-function syncMode(){$('at-mode').setAttribute('aria-pressed',String(inspect));$('at-mode').textContent=inspect?'标注模式':'体验模式';$('at-hint').textContent=hasTargets?(inspect?'悬停查看 · 点击固定':'可以体验界面交互'):'尚无可检查的元素';$('at-selection-help').textContent=hasTargets?'悬停预览 · 点击固定 · Esc 清除':'元素说明会与对应的界面位置关联。';document.querySelector('.at-stage-foot').textContent=hasTargets?'选择具体元素，或直接描述希望改变的感受。':'填入设计后，可选择元素查看理由与规格。';}
-$('at-mode').onclick=()=>{inspect=!inspect;pinned=null;hovered=null;if(inspect&&!shown)showPanel(true);syncMode();render();};
-$('at-panel').onclick=()=>showPanel(!shown);$('at-clear').onclick=()=>select(null);
-function hit(event){const el=event.target.closest('[data-at-id]');return el&&ui.contains(el)&&valid(el.dataset.atId)?el.dataset.atId:null;}
-ui.addEventListener('pointerover',event=>{if(!inspect||!shown||event.pointerType==='touch')return;const id=hit(event);if(hovered!==id){hovered=id;render();}});
-ui.addEventListener('pointerleave',()=>{hovered=null;render();});
-ui.addEventListener('pointerdown',event=>{if(inspect&&shown)event.preventDefault();},true);
-ui.addEventListener('click',event=>{if(!inspect||!shown)return;event.preventDefault();event.stopImmediatePropagation();select(hit(event));},true);
-ui.addEventListener('keydown',event=>{if(inspect&&shown&&['Enter',' ','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key)){event.preventDefault();event.stopImmediatePropagation();select(hit(event));}},true);
-document.addEventListener('keydown',event=>{if(event.key==='Escape')select(null);});
-jump.onclick=()=>{activateTab('element');card.scrollIntoView({block:'center'});card.focus({preventScroll:true});position();};
-window.addEventListener('resize',()=>{render();});document.addEventListener('scroll',position,true);new ResizeObserver(position).observe(ui);syncMode();render();
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var ui = $('at-ui');
+  var notes = $('at-notes');
+  var layout = $('at-layout');
+  if (!ui || !notes || !layout) return;
+  var stage = ui.closest('.at-stage') || ui;
+  var card = $('at-selection');
+  var tree = $('at-tree');
+  var outline = $('at-outline');
+  var jump = $('at-jump');
+  var hint = $('at-hint');
+  var diag = $('at-diag');
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.at-tab'));
+  var narrow = window.matchMedia('(max-width: 56rem)');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var BADGE = 22;
+  var state = { inspect: true, numbers: true, panel: true, pinned: null, hovered: null, tab: 'element' };
+
+  var records = [];
+  var registry = new Map();
+  var targets = new Map();
+  var numbers = new Map();
+  var markers = new Map();
+  var principles = new Map();
+  var layer = null;
+  var refTimer = 0;
+  var refRow = null;
+  var rafId = 0;
+  var resizeId = 0;
+
+  function make(tag, text, cls) {
+    var el = document.createElement(tag);
+    if (text !== undefined) el.textContent = text;
+    if (cls) el.className = cls;
+    return el;
+  }
+  function announce(message) {
+    var live = $('at-live');
+    if (live) live.textContent = message;
+  }
+  function activeId() { return state.hovered || state.pinned; }
+  // 预览：指针或焦点临时指向另一个元素。它不改 pinned，只借用说明卡。
+  function isPreviewing() { return Boolean(state.hovered && state.hovered !== state.pinned); }
+
+  function setHover(id) {
+    if (!state.inspect) return;
+    var next = id && numbers.has(id) ? id : null;
+    if (next === state.hovered) return;
+    state.hovered = next;
+    // 只重画选择态：编号相对画布定位，悬停不改变画布几何，不必重排。
+    paintSelection();
+    drawOutline();
+    updateJump();
+  }
+
+  /* ── 原则索引：简报是静态标记，索引一次即可 ───────────────────── */
+  function indexPrinciples() {
+    principles = new Map();
+    var rows = document.querySelectorAll('.at-principle[data-principle]');
+    for (var i = 0; i < rows.length; i += 1) {
+      principles.set(rows[i].getAttribute('data-principle'), rows[i]);
+    }
+  }
+  function principleRow(value) { return principles.get(value) || null; }
+  function principleName(value) {
+    var row = principleRow(value);
+    var name = row && row.querySelector('.at-principle-name');
+    return name ? name.textContent.trim() : '';
+  }
+
+  /* ── 注册表与编号 ─────────────────────────────────────────────── */
+  function parseRegistry() {
+    var node = $('at-registry');
+    var text = node ? (node.textContent || '').trim() : '';
+    if (!text) return { list: [], broken: false, skipped: 0 };
+    var parsed;
+    try { parsed = JSON.parse(text); } catch (err) { return { list: [], broken: true, skipped: 0 }; }
+    if (!Array.isArray(parsed)) return { list: [], broken: true, skipped: 0 };
+    var seen = new Set();
+    var list = parsed.filter(function (record) {
+      if (!record || typeof record.id !== 'string' || !record.id || seen.has(record.id)) return false;
+      seen.add(record.id);
+      return true;
+    });
+    return { list: list, broken: false, skipped: parsed.length - list.length };
+  }
+
+  function indexTargets() {
+    targets = new Map();
+    var nodes = ui.querySelectorAll('[data-at-id]');
+    for (var i = 0; i < nodes.length; i += 1) {
+      var id = nodes[i].getAttribute('data-at-id');
+      if (id && !targets.has(id)) targets.set(id, nodes[i]);
+    }
+  }
+
+  function ancestors(id) {
+    var list = [];
+    var seen = new Set([id]);
+    var record = registry.get(id);
+    var parent = record ? record.parent : null;
+    while (parent && registry.has(parent) && !seen.has(parent)) {
+      seen.add(parent);
+      var next = registry.get(parent);
+      list.unshift(next);
+      parent = next.parent;
+    }
+    return list;
+  }
+
+  function listPreview(list) {
+    var head = list.slice(0, 4).join('、');
+    return list.length > 4 ? head + ' 等 ' + list.length + ' 个' : head;
+  }
+
+  // parent 成环时，缩进深度与「上级」导航都会静默出错，直接点名。
+  function cycleIds() {
+    var bad = [];
+    records.forEach(function (record) {
+      var seen = new Set([record.id]);
+      var parent = record.parent;
+      while (parent) {
+        if (seen.has(parent)) { bad.push(record.id); return; }
+        seen.add(parent);
+        var next = registry.get(parent);
+        parent = next ? next.parent : null;
+      }
+    });
+    return bad;
+  }
+
+  // 注册表与画布不一致时直接说出来：改名、删元素后最容易断在这里。
+  function diagnose(parsed) {
+    var messages = [];
+    if (parsed.broken) messages.push('注册表不是合法 JSON 数组，已按空表处理');
+    if (parsed.skipped) messages.push('注册表里有 ' + parsed.skipped + ' 条记录缺少 id 或 id 重复，已跳过');
+    var loops = cycleIds();
+    if (loops.length) messages.push('parent 成环：' + listPreview(loops));
+    var missing = [];
+    records.forEach(function (record) { if (!targets.has(record.id)) missing.push(record.id); });
+    if (missing.length) messages.push('记录找不到画布元素：' + listPreview(missing));
+    var extra = [];
+    targets.forEach(function (node, id) { if (!registry.has(id)) extra.push(id); });
+    if (extra.length) messages.push('画布元素未注册：' + listPreview(extra));
+    diag.textContent = messages.join('；');
+    diag.hidden = !messages.length;
+  }
+
+  function build() {
+    var parsed = parseRegistry();
+    records = parsed.list;
+    registry = new Map();
+    records.forEach(function (record) { registry.set(record.id, record); });
+    indexTargets();
+    numbers = new Map();
+    var n = 0;
+    records.forEach(function (record) {
+      if (targets.has(record.id)) numbers.set(record.id, (n += 1));
+    });
+    if (!state.pinned || !numbers.has(state.pinned)) state.pinned = null;
+    if (!state.hovered || !numbers.has(state.hovered)) state.hovered = null;
+    buildMarkers();
+    buildTree();
+    $('at-mode-switch').hidden = numbers.size === 0;
+    $('at-count').textContent = numbers.size ? numbers.size + ' 个元素' : '未注册元素';
+    diagnose(parsed);
+  }
+
+  function buildMarkers() {
+    if (layer) layer.remove();
+    layer = make('div', undefined, 'at-marker-layer');
+    layer.id = 'at-marker-layer';
+    ui.append(layer);
+    markers = new Map();
+    numbers.forEach(function (n, id) {
+      var record = registry.get(id);
+      var button = make('button', String(n), 'at-marker');
+      button.type = 'button';
+      button.setAttribute('aria-label', '元素 ' + n + ' ' + (record.name || id));
+      button.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!state.inspect) setInspect(true);
+        select(id, true);
+      });
+      // 编号本身也是预览入口；离开时不主动收尾，交给画布的 mouseover / mouseleave
+      // 判定下一个目标，避免徽标与元素之间来回闪一次。
+      button.addEventListener('mouseenter', function () { setHover(id); });
+      button.addEventListener('focus', function () { setHover(id); });
+      button.addEventListener('blur', function () { if (state.hovered === id) setHover(null); });
+      layer.append(button);
+      markers.set(id, button);
+    });
+  }
+
+  function buildTree() {
+    tree.replaceChildren();
+    numbers.forEach(function (n, id) {
+      var record = registry.get(id);
+      var depth = Math.min(ancestors(id).length, 4);
+      var button = make('button');
+      button.type = 'button';
+      button.dataset.id = id;
+      button.style.paddingLeft = (0.5 + depth * 0.75) + 'rem';
+      button.setAttribute('aria-pressed', 'false');
+      if (record.role) button.title = record.role;
+      button.append(make('span', String(n), 'at-n'), make('span', record.name || id));
+      // 指到或聚焦列表行先预览，点下去才固定。两个状态互不覆盖。
+      button.addEventListener('mouseenter', function () { setHover(id); });
+      button.addEventListener('mouseleave', function () { if (state.hovered === id) setHover(null); });
+      button.addEventListener('focus', function () { setHover(id); });
+      button.addEventListener('blur', function () { if (state.hovered === id) setHover(null); });
+      button.addEventListener('click', function () {
+        select(id);
+        // 窄屏说明在画布下方：选完却看不到内容等于没有反馈。
+        if (narrow.matches && cardPlacement() !== 'visible') revealNotes(false);
+      });
+      var item = document.createElement('li');
+      item.append(button);
+      tree.append(item);
+    });
+    $('at-tree-empty').hidden = numbers.size > 0;
+  }
+
+  /* ── 选择与说明 ───────────────────────────────────────────────── */
+  function select(id, bringCard) {
+    if (!numbers.has(id)) return;
+    state.pinned = id;
+    state.hovered = null;
+    if (state.tab !== 'element') activateTab('element');
+    render();
+    // 从画布点选时，说明栏若已滚到别处，需要把说明重新带到眼前。
+    // 从元素列表点选时不插手：列表本身就在眼前。
+    if (bringCard && !narrow.matches) {
+      // 常驻摘要与页签占住说明栏顶部，目标要落到它们下方才算可见。
+      var limit = notes.getBoundingClientRect().top + notesPad();
+      var cardTop = card.getBoundingClientRect().top;
+      if (cardTop < limit) notes.scrollTop += cardTop - limit;
+    }
+    announce('已选择元素 ' + numbers.get(id) + ' ' + (registry.get(id).name || id));
+  }
+
+  function clearSelection() {
+    if (!state.pinned && !state.hovered) return;
+    state.pinned = null;
+    state.hovered = null;
+    render();
+    announce('已清除选择');
+  }
+
+  function hintNode(title, copy) {
+    var wrap = make('div', undefined, 'at-hint');
+    wrap.append(make('p', title, 'at-hint-title'), make('p', copy, 'at-copy'));
+    return wrap;
+  }
+
+  function actionButton(label, id) {
+    var button = make('button', label, 'at-link');
+    button.type = 'button';
+    button.addEventListener('click', function () {
+      if (id) { select(id); return; }
+      scrollToEl(stage);
+    });
+    return button;
+  }
+
+  // 预览行只说两件事：这不是固定项，松手会回到哪里。
+  function previewRow() {
+    var row = make('div', undefined, 'at-preview');
+    row.append(make('span', '预览', 'at-preview-tag'));
+    var pinned = state.pinned ? registry.get(state.pinned) : null;
+    var copy = pinned
+      ? '离开后回到元素 ' + numbers.get(state.pinned) + ' ' + (pinned.name || state.pinned) + '；点击可固定这个元素'
+      : '点击画布中的元素即可固定；Esc 清除选择';
+    row.append(make('span', copy, 'at-preview-copy'));
+    return row;
+  }
+
+  function renderCard() {
+    var id = activeId();
+    var previewing = isPreviewing();
+    card.setAttribute('data-preview', String(previewing));
+    if (!id) {
+      card.replaceChildren(hintNode('选择一个元素',
+        numbers.size ? '在画布上悬停可预览说明，点击固定选择；也可以从下方列表选择。'
+                     : '画布元素注册后，这里会显示它的用途、设计理由与规格。'));
+      return;
+    }
+    var record = registry.get(id);
+    var target = targets.get(id);
+    if (!record || !target) {
+      card.replaceChildren(hintNode('元素不可用', '这个元素已从画布移除。请检查注册表与 data-at-id 是否一致。'));
+      return;
+    }
+    var parts = [];
+    if (previewing) parts.push(previewRow());
+
+    var head = make('div', undefined, 'at-card-head');
+    head.append(make('span', String(numbers.get(id)), 'at-n'), make('h3', record.name || id));
+    if (record.v) head.append(make('span', String(record.v), 'at-ver'));
+    parts.push(head);
+
+    var path = ancestors(id).map(function (r) { return r.name || r.id; }).join(' / ');
+    parts.push(make('p', (path ? path + ' · ' : '') + '#' + id, 'at-path'));
+
+    var dl = make('dl', undefined, 'at-def');
+    if (record.role) dl.append(make('dt', '用途'), make('dd', record.role));
+    if (record.reason) dl.append(make('dt', '设计理由'), make('dd', record.reason));
+    if (dl.children.length) parts.push(dl);
+
+    if (record.principle) {
+      var principle = principleRow(record.principle);
+      var name = principleName(record.principle);
+      var rel = make('p', undefined, 'at-meta');
+      rel.append(make('span', '依据'));
+      var link = make('button', record.principle + (name ? ' · ' + name : ' · 未找到对应原则'), 'at-link');
+      link.type = 'button';
+      if (principle) {
+        link.addEventListener('click', function () { focusPrinciple(record.principle); });
+      } else {
+        link.disabled = true;
+        link.title = '设计简报里没有 ' + record.principle + '，请检查 data-principle';
+      }
+      rel.append(link);
+      parts.push(rel);
+    }
+
+    var specs = Array.isArray(record.specs) ? record.specs.filter(function (spec) {
+      return spec && (spec.label || spec.css || spec.value);
+    }) : [];
+    if (specs.length) {
+      var list = make('dl', undefined, 'at-specs');
+      specs.forEach(function (spec) {
+        var row = make('div');
+        row.append(make('dt', spec.label || spec.css || '规格'));
+        var value = '';
+        if (spec.css) {
+          try { value = window.getComputedStyle(target).getPropertyValue(spec.css).trim(); } catch (err) { value = ''; }
+          value = (value || '未取到') + '（实测）';
+        } else {
+          value = spec.value === undefined || spec.value === null ? '' : String(spec.value);
+        }
+        row.append(make('dd', value));
+        list.append(row);
+      });
+      parts.push(list);
+    }
+
+    var parentRecord = record.parent ? registry.get(record.parent) : null;
+    var children = records.filter(function (r) { return r.parent === id && numbers.has(r.id); });
+    if ((parentRecord && numbers.has(parentRecord.id)) || children.length || narrow.matches) {
+      var actions = make('div', undefined, 'at-actions');
+      if (parentRecord && numbers.has(parentRecord.id)) {
+        actions.append(actionButton('上级 · ' + (parentRecord.name || parentRecord.id), parentRecord.id));
+      }
+      children.forEach(function (child) {
+        actions.append(actionButton('下级 · ' + (child.name || child.id), child.id));
+      });
+      if (narrow.matches) actions.append(actionButton('返回画布', null));
+      parts.push(actions);
+    }
+
+    card.replaceChildren.apply(card, parts);
+  }
+
+  function focusPrinciple(value) {
+    activateTab('brief');
+    var row = principleRow(value);
+    if (!row) return;
+    // 上一条高亮必须由这里撤掉：只靠定时器的话，连点两条原则会留下两条常亮。
+    if (refRow && refRow !== row) refRow.removeAttribute('data-ref');
+    refRow = row;
+    row.setAttribute('data-ref', 'true');
+    window.clearTimeout(refTimer);
+    refTimer = window.setTimeout(function () {
+      row.removeAttribute('data-ref');
+      if (refRow === row) refRow = null;
+    }, 2600);
+    if (narrow.matches) {
+      scrollToEl(row, headHeight() + 12);
+    } else {
+      var offset = row.getBoundingClientRect().top - notes.getBoundingClientRect().top;
+      notes.scrollTop += offset - notesPad();
+    }
+    try { row.focus({ preventScroll: true }); } catch (err) { row.focus(); }
+  }
+
+  /* ── 编号位置：钉住元素四角 ──────────────────────────────────────────── */
+  function overlaps(a, b) {
+    return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+  }
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  // 先读后写：所有矩形与尺寸读完再统一落位置，避免逐个编号触发重排。
+  function place() {
+    if (!layer || !numbers.size) return;
+    var box = layer.getBoundingClientRect();
+    if (!box.width || !box.height) return;
+    var first = markers.values().next().value;
+    var size = first && first.offsetWidth ? Math.round(first.offsetWidth) : BADGE;
+    var maxLeft = Math.max(2, box.width - size - 2);
+    var maxTop = Math.max(2, box.height - size - 2);
+    var placedRects = [];
+    var plan = [];
+
+    numbers.forEach(function (n, id) {
+      var target = targets.get(id);
+      var badge = markers.get(id);
+      if (!target || !badge) return;
+      var r = target.getBoundingClientRect();
+      if (r.bottom < box.top || r.top > box.bottom || r.right < box.left || r.left > box.right) {
+        plan.push({ badge: badge, hide: true });
+        return;
+      }
+      var x = r.left - box.left;
+      var y = r.top - box.top;
+      var w = r.width;
+      var h = r.height;
+      var half = Math.round(size / 2);
+      // 先钉元素四角（半个徽标压在角上），再退到元素内四角。
+      var candidates = [
+        [x - half, y - half], [x + w - half, y - half],
+        [x - half, y + h - half], [x + w - half, y + h - half],
+        [x + 4, y + 4], [x + w - 4 - size, y + 4],
+        [x + 4, y + h - 4 - size], [x + w - 4 - size, y + h - 4 - size]
+      ];
+      var spot = null;
+      for (var i = 0; i < candidates.length; i += 1) {
+        var left = Math.round(clamp(candidates[i][0], 2, maxLeft));
+        var top = Math.round(clamp(candidates[i][1], 2, maxTop));
+        var rect = { left: left, top: top, right: left + size, bottom: top + size };
+        if (!spot) spot = { left: left, top: top, rect: rect };
+        var hit = false;
+        for (var p = 0; p < placedRects.length; p += 1) {
+          if (overlaps(rect, placedRects[p])) { hit = true; break; }
+        }
+        if (!hit) { spot = { left: left, top: top, rect: rect }; break; }
+      }
+      placedRects.push(spot.rect);
+      plan.push({ badge: badge, left: spot.left, top: spot.top });
+    });
+
+    for (var k = 0; k < plan.length; k += 1) {
+      if (plan[k].hide) { plan[k].badge.style.visibility = 'hidden'; continue; }
+      plan[k].badge.style.visibility = '';
+      plan[k].badge.style.left = plan[k].left + 'px';
+      plan[k].badge.style.top = plan[k].top + 'px';
+    }
+  }
+
+  // 描边裁到画布内：窄屏滚到说明栏时，元素框不会横跨在说明文字上。
+  function drawOutline() {
+    var id = state.inspect ? activeId() : null;
+    var target = id ? targets.get(id) : null;
+    if (!target) { outline.hidden = true; return; }
+    outline.setAttribute('data-preview', String(isPreviewing()));
+    var r = target.getBoundingClientRect();
+    var frame = ui.getBoundingClientRect();
+    var left = Math.max(r.left, frame.left);
+    var top = Math.max(r.top, frame.top);
+    var right = Math.min(r.right, frame.right);
+    var bottom = Math.min(r.bottom, frame.bottom);
+    if (right - left < 2 || bottom - top < 2) { outline.hidden = true; return; }
+    outline.style.left = left + 'px';
+    outline.style.top = top + 'px';
+    outline.style.width = (right - left) + 'px';
+    outline.style.height = (bottom - top) + 'px';
+    outline.hidden = false;
+  }
+
+  /* ── 外壳状态 ─────────────────────────────────────────────────── */
+  function updateChrome() {
+    $('at-mode-inspect').setAttribute('aria-pressed', String(state.inspect));
+    $('at-mode-experience').setAttribute('aria-pressed', String(!state.inspect));
+    $('at-numbers').setAttribute('aria-pressed', String(state.numbers));
+    $('at-panel').setAttribute('aria-expanded', String(state.panel));
+    $('at-panel').textContent = state.panel ? '收起说明' : '展开说明';
+    $('at-clear').disabled = !activeId();
+    hint.textContent = state.inspect
+      ? '悬停预览说明，点击固定选择，Esc 取消。'
+      : '体验模式：画布内的交互按项目自身行为响应。';
+    if (layer) layer.hidden = !state.numbers || !state.inspect;
+  }
+
+  // 说明卡相对视口的位置：below / visible / above / hidden。窄屏只在 below 时给跳转。
+  function cardPlacement() {
+    if (!state.pinned) return 'hidden';
+    var box = card.getBoundingClientRect();
+    var view = window.innerHeight || 0;
+    if (!box.height) return 'hidden';
+    // 阈值跟顶栏走：顶栏折行变高时，说明卡还在它后面就不算「已到说明」。
+    var edge = headerOffset() + 24;
+    if (box.top >= view - edge) return 'below';
+    if (box.bottom <= edge) return 'above';
+    return 'visible';
+  }
+
+  // 跳转条只在「已选中、但说明还在视口下方」时出现，滑进说明区即消失。
+  var jumpKey = '';
+  function updateJump() {
+    var show = narrow.matches && state.panel && state.inspect && cardPlacement() === 'below';
+    var label = show ? '查看元素 ' + numbers.get(state.pinned) + ' 的说明 ↓' : '';
+    var key = show ? 'show:' + label : 'hide';
+    if (key === jumpKey) return;
+    jumpKey = key;
+    jump.hidden = !show;
+    if (show) jump.textContent = label;
+  }
+
+  // 选择态：固定走 aria-pressed，预览走 data-preview，两种状态不共享属性、
+  // 互不覆盖，松手时只需把预览清掉就能回到固定项。
+  function paintSelection() {
+    var buttons = tree.querySelectorAll('button');
+    for (var i = 0; i < buttons.length; i += 1) {
+      var id = buttons[i].dataset.id;
+      buttons[i].setAttribute('aria-pressed', String(id === state.pinned));
+      buttons[i].setAttribute('data-preview', String(id === state.hovered && id !== state.pinned));
+    }
+    numbers.forEach(function (n, key) {
+      var marker = markers.get(key);
+      if (!marker) return;
+      marker.setAttribute('data-active', String(key === state.pinned));
+      marker.setAttribute('data-preview', String(key === state.hovered && key !== state.pinned));
+    });
+    renderCard();
+  }
+
+  function render() {
+    paintSelection();
+    updateChrome();
+    updateJump();
+    drawOutline();
+    place();
+  }
+
+  var widthText = '';
+  function updateWidth() {
+    var width = Math.round(ui.getBoundingClientRect().width);
+    var text = width ? width + 'px' : '—';
+    if (text === widthText) return;
+    widthText = text;
+    $('at-width').textContent = text;
+  }
+
+  // 编号位置相对画布，滚动不会改变它；滚动只重画描边与跳转条，避免长页面上每帧重排。
+  function schedule() {
+    if (rafId) return;
+    rafId = window.requestAnimationFrame(function () {
+      rafId = 0;
+      updateWidth();
+      drawOutline();
+      updateJump();
+    });
+  }
+
+  function relayout() {
+    syncHeaderHeight();
+    updateWidth();
+    place();
+    drawOutline();
+    updateJump();
+  }
+
+  // 顶栏吸顶后，滚动目标要让开它的高度，否则标题会被压在玻璃条下面。
+  function headerOffset() {
+    var bar = document.querySelector('.at-header');
+    return bar ? Math.round(bar.getBoundingClientRect().height) : 0;
+  }
+
+  // 顶栏在窄屏会折行，固定 44px 会让吸顶页签钻到它后面；宽度变化时重新量一次。
+  function syncHeaderHeight() {
+    var h = headerOffset();
+    if (h) document.documentElement.style.setProperty('--at-header-live', h + 'px');
+  }
+
+  // 说明栏顶部是常驻的「方向摘要 + 页签」。滚动目标要让开它的高度，
+  // 否则标题和原则行会被压在摘要下面。
+  function headHeight() {
+    var head = notes.querySelector('.at-notes-head');
+    return head ? Math.round(head.getBoundingClientRect().height) : 0;
+  }
+  function notesPad() {
+    var head = notes.querySelector('.at-notes-head');
+    if (!head) return 8;
+    var occupied = head.getBoundingClientRect().bottom - notes.getBoundingClientRect().top;
+    return Math.max(0, Math.round(occupied)) + 8;
+  }
+
+  function scrollToEl(el, extra) {
+    var pad = headerOffset() + (extra === undefined ? 12 : extra);
+    var top = el.getBoundingClientRect().top + window.scrollY - pad;
+    window.scrollTo({ top: top, behavior: reduce.matches ? 'auto' : 'smooth' });
+  }
+
+  // 跳说明栏顶部而不是说明卡：窄屏页签吸顶，滚到卡片会把标题压在页签下面。
+  function revealNotes(focus) {
+    scrollToEl(notes);
+    if (!focus) return;
+    try { card.focus({ preventScroll: true }); } catch (err) { card.focus(); }
+  }
+
+  function setInspect(value) {
+    if (state.inspect === value) return;
+    state.inspect = value;
+    if (!value) state.hovered = null;
+    if (value && !state.panel) {
+      state.panel = true;
+      layout.classList.remove('at-canvas-only');
+      notes.hidden = false;
+    }
+    render();
+    announce(value ? '已进入标注模式' : '已进入体验模式');
+  }
+
+  function setPanel(value) {
+    state.panel = value;
+    layout.classList.toggle('at-canvas-only', !value);
+    notes.hidden = !value;
+    // 收起只清预览，不动固定项：重新展开时还能回到刚才检查的元素。
+    if (!value) state.hovered = null;
+    state.inspect = value;
+    render();
+    schedule();
+    announce(value ? '说明已展开' : '说明已收起');
+  }
+
+  function activateTab(name, focus) {
+    state.tab = name;
+    tabs.forEach(function (tab) {
+      var on = tab.dataset.tab === name;
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+      var pane = document.getElementById(tab.getAttribute('aria-controls'));
+      if (pane) pane.hidden = !on;
+      if (on && focus) tab.focus();
+    });
+  }
+
+  /* ── 事件 ─────────────────────────────────────────────────────── */
+  $('at-mode-inspect').addEventListener('click', function () { setInspect(true); });
+  $('at-mode-experience').addEventListener('click', function () { setInspect(false); });
+  $('at-numbers').addEventListener('click', function () {
+    state.numbers = !state.numbers;
+    // 体验模式下编号层是关闭的，单独点亮它等于“我要标注”，直接切回标注模式，
+    // 否则这个按钮点了什么也不会发生。
+    var wasExperience = !state.inspect;
+    if (state.numbers && wasExperience) setInspect(true);
+    else render();
+    announce(wasExperience && state.numbers ? '编号已显示，已切回标注模式'
+      : (state.numbers ? '编号已显示' : '编号已隐藏'));
+  });
+  $('at-panel').addEventListener('click', function () { setPanel(!state.panel); });
+  $('at-clear').addEventListener('click', clearSelection);
+  jump.addEventListener('click', function () { revealNotes(true); });
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () { activateTab(tab.dataset.tab, false); });
+    tab.addEventListener('keydown', function (event) {
+      var index = tabs.indexOf(tab);
+      var next = null;
+      if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
+      else if (event.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
+      else if (event.key === 'Home') next = tabs[0];
+      else if (event.key === 'End') next = tabs[tabs.length - 1];
+      if (!next) return;
+      event.preventDefault();
+      activateTab(next.dataset.tab, true);
+    });
+  });
+
+  ui.addEventListener('mouseover', function (event) {
+    if (!state.inspect) return;
+    if (!(event.target instanceof Element) || event.target.closest('.at-marker-layer')) return;
+    var node = event.target.closest('[data-at-id]');
+    var id = node ? node.getAttribute('data-at-id') : null;
+    setHover(id);
+  });
+  ui.addEventListener('mouseleave', function () { setHover(null); });
+  // 键盘与指针同等：Tab 到画布里的可聚焦元素时预览它所属的注册元素。
+  ui.addEventListener('focusin', function (event) {
+    if (!state.inspect) return;
+    if (!(event.target instanceof Element) || event.target.closest('.at-marker-layer')) return;
+    var node = event.target.closest('[data-at-id]');
+    if (node) setHover(node.getAttribute('data-at-id'));
+  });
+  // 焦点离开画布才收；在画布内部移动由下一次 focusin 接手，避免反复重画卡片。
+  ui.addEventListener('focusout', function (event) {
+    var to = event.relatedTarget;
+    if (to instanceof Element && ui.contains(to)) return;
+    setHover(null);
+  });
+
+  ui.addEventListener('click', function (event) {
+    if (!state.inspect) return;
+    if (!(event.target instanceof Element) || event.target.closest('.at-marker-layer')) return;
+    var node = event.target.closest('[data-at-id]');
+    event.preventDefault();
+    event.stopPropagation();
+    if (node) select(node.getAttribute('data-at-id'), true);
+    // 点到画布空白处等于取消固定，与常见检查器一致。
+    else if (state.pinned) clearSelection();
+  }, true);
+
+  ui.addEventListener('keydown', function (event) {
+    if (!state.inspect) return;
+    if (event.key !== 'Enter' && event.key !== ' ' && event.key !== 'Spacebar') return;
+    var node = event.target instanceof Element ? event.target.closest('[data-at-id]') : null;
+    if (!node) return;
+    event.preventDefault();
+    event.stopPropagation();
+    select(node.getAttribute('data-at-id'), true);
+  }, true);
+
+  document.addEventListener('keydown', function (event) {
+    // Esc 只在标注模式下属于外壳；体验模式把它留给项目自己。
+    if (event.key !== 'Escape' || event.defaultPrevented || !state.inspect) return;
+    var node = event.target;
+    if (node && (node.tagName === 'INPUT' || node.tagName === 'TEXTAREA' || node.tagName === 'SELECT' || node.isContentEditable)) return;
+    if (!state.pinned && !state.hovered) return;
+    clearSelection();
+  });
+
+  window.addEventListener('scroll', schedule, true);
+  window.addEventListener('resize', function () {
+    if (resizeId) return;
+    resizeId = window.requestAnimationFrame(function () { resizeId = 0; relayout(); });
+  });
+  window.addEventListener('load', relayout);
+  if (window.ResizeObserver) {
+    var observer = new ResizeObserver(function () { relayout(); });
+    observer.observe(ui);
+    observer.observe(notes);
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(relayout).catch(function () {});
+  }
+  if (narrow.addEventListener) narrow.addEventListener('change', function () { render(); relayout(); });
+  else if (narrow.addListener) narrow.addListener(function () { render(); relayout(); });
+
+  /* ── 初始化 ───────────────────────────────────────────────────── */
+  indexPrinciples();
+  build();
+  activateTab('element', false);
+  syncHeaderHeight();
+  render();
+  updateWidth();
 })();
 </script>
 </body>
