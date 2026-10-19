@@ -26,7 +26,7 @@ The metadata description enables contextual selection **when the host supports m
 
 ## Review checklist
 
-Compare a no-skill baseline, a frozen previous runtime, and the proposed runtime using [the evaluation protocol](references/evaluation.md) and [the fixed cases](references/cases.yaml). Give response generators only each case's `input`; keep `review` and the shared criteria hidden until scoring. Human review should judge meaning preservation, targeting, excess jargon, invented specifics, unnecessary tutorials, and whether repeated confusion results in a genuinely different repair strategy.
+Compare a no-skill baseline, a frozen previous runtime, and the proposed runtime using [the evaluation protocol](references/evaluation.md) and [the fixed cases](references/cases.yaml). Give response generators only each case's `input`; keep `review` and the shared criteria hidden until scoring. Human review should judge meaning preservation, targeting, avoidable jargon, empty or decorative wording, accuracy lost through over-compression, invented specifics, unnecessary tutorials, and whether repeated confusion results in a genuinely different repair strategy.
 
 ## Scope
 

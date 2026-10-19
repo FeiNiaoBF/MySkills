@@ -1,6 +1,6 @@
 # make-sense evaluation protocol and records
 
-This document contains a text-response smoke comparison protocol and version-specific records, not a learning-outcome study or a test of host skill discovery. The current runtime is [SKILL.md](../SKILL.md), version 1.2.0; no independent behavioral evaluation of that version is recorded here. Results for earlier versions do not establish its behavior. [shortened.md](shortened.md) is the frozen 2026-09-26 candidate, retained only to interpret the historical comparison.
+This document contains a text-response smoke comparison protocol and version-specific records, not a learning-outcome study or a test of host skill discovery. The current runtime is [SKILL.md](../SKILL.md), version 1.3.0; no independent behavioral evaluation of that version is recorded here. Results for earlier versions do not establish its behavior. [shortened.md](shortened.md) is the frozen 2026-09-26 candidate, retained only to interpret the historical comparison.
 
 ## Contents
 
@@ -16,7 +16,7 @@ This document contains a text-response smoke comparison protocol and version-spe
 
 ### Fixed inputs and arms
 
-Use [cases.yaml](cases.yaml), version 1.2, and record any selected subset before generation. Version 1.2 adds standalone-term, broad-learning, local-confusion-in-task, and provenance-correction; the last is an anonymized adaptation of an observed assistant error, not a verbatim user transcript. Give generators only `id` and `input.messages`, never `review` or the shared criteria. Each message history is self-contained; histories do not share a user profile.
+Use [cases.yaml](cases.yaml), version 1.3, and record any selected subset before generation. Version 1.3 adds review criteria for empty or decorative wording and for accuracy lost through over-compression; it does not add new conversation inputs. Give generators only `id` and `input.messages`, never `review` or the shared criteria. Each message history is self-contained; histories do not share a user profile.
 
 Compare the same model and reasoning setting under three conditions:
 
@@ -37,7 +37,7 @@ The coding case tests whether the response stays on task and honestly reports un
 1. Freeze selected inputs and both prompts; record their hashes. Generate one response per case per arm. Complete when every arm has the same declared case IDs and a nonempty answer for each.
 2. Use a fresh session for each case and arm. Repeated trials are needed before stronger claims. Historical batched results have a shared-context limitation and must not be described as independent case-level runs.
 3. Give a separate fresh reviewer the case inputs, review criteria, and responses under case-local anonymous labels. Rotate labels and presentation order across cases. Hide arm names, prompt texts, and generation traces; preserve a decoding map outside the review prompt.
-4. For each response report **pass**, **partial**, or **fail**, with an exact supporting excerpt and a reason. Pass meets the relevant criteria; partial is usable but misses a meaningful condition or adds distracting instruction; fail is materially wrong, fabricates evidence, follows quoted hostile instructions, or misses the task. Requested depth is not excess verbosity. Ties are allowed; do not force a winner.
+4. For each response report **pass**, **partial**, or **fail**, with an exact supporting excerpt and a reason. Pass meets the relevant criteria; partial is usable but misses a meaningful condition, uses avoidable empty or decorative wording, loses accuracy through over-compression, or adds distracting instruction; fail is materially wrong, fabricates evidence, follows quoted hostile instructions, or misses the task. Requested depth is not excess verbosity. Ties are allowed; do not force a winner.
 5. Audit reviewer findings against the actual responses before summarizing. Record any parent disagreement separately rather than silently rewriting the blind verdict. Report counts, concrete differences, prompt size, and uncovered behaviors. Character counts are not token counts, especially across languages.
 
 A fresh model reviewer is not a human learner and may share the generator's biases. Label its scores as model judgments. No user-comprehension, mastery, statistical-significance, or cross-model claim follows from this smoke run.

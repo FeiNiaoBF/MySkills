@@ -14,6 +14,21 @@ This document is for **maintainers**. It motivates design decisions; it is not n
 | Cognitive load / prior knowledge | The usability of support depends on what a learner already knows and on task demands. | Use the minimum sufficient explanation; avoid exhaustive glossaries and overloading the first response. |
 | Grounding in communication | Communicators construct mutual understanding in interaction. | Reconnect explanations to the user's exact original content and adapt when confusion persists. |
 
+## Plain-language writing lens
+
+George Orwell's six rules are a useful maintenance lens, not six absolute runtime laws. Their value here is reducing language friction while preserving the exact distinctions needed to repair understanding.
+
+| Rule | Decision | Adaptation for `make-sense` |
+| --- | --- | --- |
+| Avoid familiar metaphors and figures of speech. | Adapt, do not impose as a ban. | Remove stock or decorative imagery. Prefer the user's original example; use an analogy only when it repairs the blocker, and name its limits when they matter. |
+| Prefer a short word to a long one. | Adapt, do not optimize word length. | Prefer familiar, specific words. Keep a longer or technical term when it is the precise term the user needs. |
+| Cut every word that can be cut. | Adopt with an accuracy boundary. | Remove wording that carries no meaning, but keep necessary context, conditions, distinctions, and reasoning steps. |
+| Prefer the active voice. | Adapt across languages and contexts. | Make actors and actions clear. Passive constructions remain useful when the actor is unknown, irrelevant, or not the sentence's focus. |
+| Prefer an everyday equivalent to foreign phrases, scientific terms, or jargon. | Adapt, because vocabulary can itself be the learning target. | Use plain language for the explanation while retaining unavoidable canonical terms beside their meanings. Do not hide terminology the user must recognize later. |
+| Break the rules rather than say something barbarous. | Adopt as the governing exception. | Accuracy, scope, safety, natural language, requested depth, and complete reasoning outrank stylistic brevity. |
+
+The runtime expresses these decisions as one compact paragraph rather than a six-item checklist. Existing rules about requested depth, preserved conditions, and complete derivations bound concision so that “shorter” does not become the goal.
+
 ## Primary and scholarly sources
 
 - Shulman et al., **The Effects of Jargon on Processing Fluency, Self-Perceptions, and Scientific Engagement** (2020), *Journal of Language and Social Psychology*. Search by exact title for journal record; effects and boundary conditions must be read in the original paper before quantitative claims.
@@ -43,5 +58,7 @@ A valid evaluation requires independent judgments and adversarial counterexample
 4. Did it hallucinate specifications, source facts, or user knowledge?
 5. Did it over-teach or force a quiz?
 6. When confused a second time, did it change strategy?
+7. Did it use stock, decorative, or empty wording instead of explaining directly?
+8. Did concision remove a condition, distinction, or reasoning step needed for accuracy?
 
 Compare a no-skill baseline, a frozen previous runtime, and the proposed runtime using [the evaluation protocol](evaluation.md). Independent model sessions reduce self-review leakage but do not replace human judgment or establish learning outcomes. Add real, anonymized failures over time. A human reviewer should judge the hard cases; automatic keyword matching can only catch some regressions.
