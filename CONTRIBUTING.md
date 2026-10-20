@@ -13,6 +13,34 @@ cd MySkills
 
 已有 checkout 时直接进入其根目录，无需重新克隆。先运行 `git status --short`，确认并保留已有改动；不要把 Agent 的安装目录当作本仓库源码修改。改文档或维护工具时，只处理相关文件；改 Skill 时，再核对其入口、按需参考及 README 索引。
 
+## 新建 Skill 的分支流程
+
+每个新 Skill 单独从 `main` 的已提交状态创建 `skill/<name>` 分支；该分支只包含这个 Skill、必要的索引和相关验证改动。已有 Skill 的维护及其他任务按各自范围处理，不把它们顺带放进新 Skill 分支。
+
+### 开始前
+
+1. 运行 `git status --short --branch`、`git branch --show-current` 和 `git worktree list`，确认当前分支、未提交改动及其他工作树。可访问远端时先 `git fetch origin main`，用 `git log --oneline main..origin/main` 和 `git log --oneline origin/main..main` 比较两边提交；若本地落后，先在干净的 `main` 上执行 `git merge --ff-only origin/main`，若出现分叉先查明原因，不强制重置或自动改写历史。
+2. `main` 工作区干净时，在 `main` 所在工作树建分支：
+
+   ```bash
+   git switch main
+   git status --short --branch
+   git switch -c skill/<name>
+   ```
+
+   如果 `main` 上已有未提交改动，保留原工作区；在仓库外创建独立工作树：`git worktree add -b skill/<name> <outside-repo-path> main`。在新工作树中确认 `git status --short --branch`，再开始创作。不要把未提交改动带进新分支，也不要擅自 stash、提交或丢弃别人的改动。若无法确认 `main` 的合适基线，先解决该问题。
+
+### 开发与提交
+
+- 在 `skill/<name>` 上工作，每次切换上下文及提交前检查 `git status --short --branch`；只 stage 本次 Skill 的明确路径，检查 `git diff --cached` 和 `git diff --cached --check`。验证与提交要求见下文，不为别的 Skill 或工作树提交改动。
+- 完成后在该分支提交，检查 `git log --oneline main..HEAD` 和 `git diff main...HEAD`，确认本分支只包含本次新 Skill。主分支在开发期间前进时，先在分支上整合最新 `main` 并处理冲突，再重新验证受影响的内容。
+
+### 合并与收尾
+
+1. 确认新 Skill 已验证且分支改动经过复核；先检查 `main` 工作区是否干净、与远端关系是否明确。若 `main` 有未提交改动、分叉或合并冲突尚未解决，保留分支并说明阻碍，不为合并而改写或隐藏现有工作。
+2. 在 `main` 的工作树运行 `git switch main`（如果已经在 `main` 则无需切换），再执行 `git merge --no-ff skill/<name>`；若合并发生冲突，先 `git merge --abort`，在 Skill 分支整合最新 `main` 并解决冲突。合并后按受影响范围复核验证，运行 `git status --short --branch` 并检查合并记录。只有检查完成，才将这个 Skill 视为已并入 `main`。
+3. 合并后按需清理已合并分支及其独立工作树。合并和本地提交均不等于发布；Push 仍须用户授权，安装副本的更新另见 [README](README.md#安装与更新)。
+
 ## 修改放在哪里
 
 每个 Skill 放在 `skills/<category>/<name>/`，其中 `<name>` 与 `SKILL.md` frontmatter 的 `name` 完全一致。
