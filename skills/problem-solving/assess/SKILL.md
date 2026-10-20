@@ -9,7 +9,7 @@ description: >-
 license: MIT
 metadata:
   author: FeiNiaoBF
-  version: 0.1.0
+  version: 0.1.1
 ---
 
 # Assess
@@ -46,3 +46,7 @@ These describe confidence in a claim, not its importance. Use severity labels on
 ## Deliver the judgment
 
 Lead with whether the target appears fit for its stated purpose and any condition that could change that answer. Name the assessed scope, decisive criteria, and what was actually inspected or tested. Present material findings in priority order with concrete evidence, evidence status, effect, and a proportionate recommendation. Include meaningful strengths, limits, and the next check or decision where they affect the conclusion. Keep the response short for a small target; do not force empty headings or a fixed number of findings. If no material issue is supported, say so plainly.
+
+Deliver text as ordinary Markdown in the user's language. Use paragraphs for a short assessment; use clear headings and bullets when they make several findings easier to scan. Leave blank lines around headings and lists, use working Markdown links for sources and file locations, and fence code or commands with a language label. Use a table only when comparing like items helps. Do not wrap the whole report in a code block or replace prose with raw HTML, JSON, or YAML unless the user requests that format. Create a `.md` file only when a file deliverable is requested.
+
+Apply plain-writing principles to questions, progress updates, and the final assessment: use concrete words and active verbs, prefer short familiar terms, cut filler and stock phrases, and avoid decorative metaphors. Keep technical terms when they are more precise than everyday substitutes. Make each sentence carry a useful fact, reason, or action; clarity takes priority over any style rule.
