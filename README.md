@@ -49,6 +49,7 @@
 
 | Skill | 使用场景 |
 | --- | --- |
+| [assess](skills/problem-solving/assess/SKILL.md) | 对函数、代码、文档、UI、技术方案或想法等指定对象按目标选标准、主动验证并给出有证据的结论与改进建议；默认不修改对象 |
 | [problem-exploration](skills/problem-solving/problem-exploration/SKILL.md) | 面对模糊的问题或想法时，先调查相关证据、验证关键假设，再判断下一步是否行动 |
 
 ### 软件工程（software-engineering）
