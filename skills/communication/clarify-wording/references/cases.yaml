@@ -9,7 +9,7 @@
 #   actionable-skill-creation, visual-direction-without-wording-request
 # - Uncertainty: essential-gap, preserve-uncertain-detail
 # - Language and precedence: explicit-visual-wording-in-english
-version: "2.0"
+version: "2.0.1"
 cases:
   - id: explicit-idea-and-rephrase
     input:
@@ -74,7 +74,7 @@ cases:
         - role: user
           content: "代码审查里说的幂等是什么意思？拿重试支付请求举例解释。"
     review:
-      expect: "Explains the existing term in context; this is make-sense, not clarify-wording."
+      expect: "Explains the existing term in context instead of invoking wording clarification."
       avoid: "Rephrasing the user's clear question as if they could not express it."
 
   - id: improve-user-position-without-taking-over
@@ -162,7 +162,7 @@ cases:
         - role: user
           content: "这个页面太素了，我想要像 Linear 那样有质感，给我几个设计方向。"
     review:
-      expect: "Routes to aesthetic-translator for design directions rather than starting wording review."
+      expect: "Handles the request as a visual design-direction task rather than starting wording review."
       avoid: "Rewriting the request in a txt block and waiting for approval instead of addressing the design task."
 
   - id: explicit-visual-wording-in-english

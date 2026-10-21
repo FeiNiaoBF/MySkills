@@ -6,11 +6,11 @@ description: >-
   directions, explaining visual intent, component usage, tokens, states, and contextual
   rules. It reuses project conventions and supports Google's DESIGN.md format
   when requested or required by a target tool. Project requirements, behavior specs,
-  technical designs, architecture, and ADRs belong to project-docs. It does not turn
+  technical designs, architecture, and ADRs are outside this workflow. It does not turn
   ordinary styling edits or token questions into a documentation workflow.
 metadata:
   author: FeiNiaoBF
-  version: 1.3.1
+  version: 1.3.2
   date_added: "2026-04-09"
   risk: low
 disable-model-invocation: true
@@ -24,7 +24,7 @@ Create and maintain UI design documentation that guides actual UI work: explain 
 
 Use this workflow when the user explicitly requests this skill or asks to author, review, or update a UI `DESIGN.md` or equivalent design-system document. A passing mention of a color, token, or component does not require a document. The host-specific manual invocation settings are intentional; hosts may enforce them differently.
 
-This skill owns UI visual and component documentation, not every document that uses “design” in its name. Use `project-docs` for project requirements, externally observable behavior specifications, internal technical design, system architecture, and ADRs. A file named `DESIGN.md` does not decide the route: its primary reader task and content do. When one document needs both kinds of information, keep each rule in its authoritative source and use a short summary or link instead of copying the full specification.
+This skill owns UI visual and component documentation, not every document that uses “design” in its name. Project requirements, externally observable behavior specifications, internal technical design, system architecture, and ADRs are outside its scope. A file named `DESIGN.md` does not decide the task type: its primary reader task and content do. When one document needs both kinds of information, keep each rule in its authoritative source and use a short summary or link instead of copying the full specification.
 
 It can turn an approved visual direction, inspected UI, existing tokens, or a supplied design guide into a document without requiring another skill first. Other skills may complement it when the user chooses them, with no required order or handoff. A documentation task alone does not authorize UI implementation, external design-tool changes, or publication.
 

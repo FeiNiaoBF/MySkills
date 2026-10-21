@@ -6,14 +6,14 @@ description: >-
   or when a rejected interpretation reveals difficulty expressing their meaning.
   It leaves actionable requests alone unless wording help is requested.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # Clarify Wording
 
 This skill turns an unclear or partly expressed intent into clear, natural wording the user can reuse. When activated, it produces a draft for the user's review; the draft is not approval to carry out the task it describes.
 
-## Activation and routing
+## Activation and boundaries
 
 Activate when the user:
 
@@ -23,7 +23,7 @@ Activate when the user:
 
 For the initial response to an explicit skill invocation, prepare a draft for review even when the underlying task is already clear. The invocation does not authorize carrying out that task. After draft review, follow the continuation rule in step 6 instead of restarting this workflow.
 
-Without explicit invocation or a request for wording help, leave already actionable requests alone. Route questions about the meaning of an existing term, passage, or reasoning to `make-sense`, and vague visual preferences needing design specifications to `aesthetic-translator`. These routing defaults do not override an explicit request to draft wording about those topics.
+Without explicit invocation or a request for wording help, leave already actionable requests alone. Explaining the meaning of an existing term, passage, or reasoning step is outside this workflow, as is turning a visual preference into a design specification. These boundaries do not override an explicit request to draft wording about those topics.
 
 ## Workflow
 
@@ -36,7 +36,7 @@ Without explicit invocation or a request for wording help, leave already actiona
 
 ## Boundaries
 
-The output is wording for the user to review, not a specification or a decision on the user's behalf. Strengthen the expression only with meaning supported by the conversation. Use `grilling` only when the user asks to examine or stress-test an unresolved decision; it is not a routine clarification step.
+The output is wording for the user to review, not a specification or a decision on the user's behalf. Strengthen the expression only with meaning supported by the conversation. Do not turn clarification into stress-testing an unresolved decision or a broader interview unless the user explicitly asks for that separate task.
 
 ## Reply shape
 

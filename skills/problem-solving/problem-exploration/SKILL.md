@@ -9,7 +9,7 @@ description: >-
 license: MIT
 metadata:
   author: FeiNiaoBF
-  version: 0.1.1
+  version: 0.1.2
 ---
 
 # Problem Exploration
@@ -24,7 +24,7 @@ Help the user understand an unclear problem and decide what action, if any, is j
 - **Keep the work bounded.** Investigate subproblems that affect the main decision. Briefly note tangential findings; ask before expanding into an independent task.
 - **Validate only when useful.** Prefer the smallest safe, reversible check that can distinguish plausible explanations. A prototype or experiment is evidence, not production-ready work.
 - **Respect the task boundary.** Exploration authorizes relevant inspection and safe, isolated checks, not production changes or project setup. Use authorization already present in the conversation when continuing into implementation; do not ask for the same approval again. A request to explore alone ends with a recommendation.
-- **Use specialist workflows when they fit.** Apply the routing below to the actual task, not merely a keyword. Keep this Skill responsible for the open decision; use only the specialist work needed to resolve it.
+- **Stay independent at adjacent boundaries.** When the primary task is wording, explanation, visual design, diagnosis, documentation, or already-scoped implementation, do not force it through exploration. A broad investigation may still use the smallest relevant check from one of those disciplines as evidence, then return to the open decision.
 
 ## Adaptive workflow
 
@@ -52,20 +52,18 @@ Do not create a plan, report, issue, or project automatically. Record findings o
 
 Stop when the question is resolved, the evidence is sufficient to choose a next step, further investigation is unlikely to change the decision, or a critical dependency blocks progress. Distinguish a supported conclusion from an inconclusive check, exhausted investigation budget, or unavailable evidence. In the latter cases, give a conditional recommendation or the smallest missing observation needed to proceed. Do not continue merely to exhaust every possible avenue, or interpret failure to find evidence as proof that an option cannot work.
 
-## Routing
+## Adjacent task boundaries
 
-Use a named Skill only when it is available and its invocation conditions are met; otherwise use the appropriate existing workflow without requiring installation.
+Keep this Skill focused on an open decision rather than binding it to named companion Skills:
 
-| Actual task | Route |
-|---|---|
-| Put the user's intended message into clearer words | `clarify-wording`; a wording review does not authorize investigating the drafted task |
-| Explain a term, passage, or reasoning step | `make-sense` |
-| Turn an intended visual effect into a design proposal | `aesthetic-translator` |
-| Investigate reported broken, failing, or slow behavior | A diagnosis workflow such as `diagnosing-bugs`; do not require a confirmed cause before routing |
-| Build an isolated prototype to answer a specific question | `prototype`; retain the hypothesis, limits, and decision it must inform |
-| Write or maintain project documentation | `project-docs`; do not manufacture a documentation task from ordinary exploration |
+- Rephrasing the user's intended message is a wording task; it does not authorize investigating the task described by the draft.
+- Explaining an existing term, passage, or reasoning step is an explanation task unless a separate decision remains open.
+- Turning a desired visual effect into design directions is a design task; explore only the unresolved choice that needs evidence.
+- Reported broken, failing, or slow behavior calls for diagnosis of the observed behavior. A confirmed cause is not required before beginning that diagnosis; return here only when a broader decision remains unresolved.
+- A disposable prototype can be the bounded experiment in step 4 when it tests a stated hypothesis. Preserve its limits and the decision it must inform; do not treat it as production work.
+- Writing or maintaining project documentation is a separate deliverable. Record an exploration only when the user or project workflow needs a durable handoff.
 
-A broad question can contain a diagnostic or prototype subproblem. Resolve that subproblem, then return to the main decision instead of restarting discovery. Research tools can supply evidence without turning every investigation into a deep research report.
+A broad question can contain one of these subproblems. Resolve only the part needed as evidence, then return to the main decision instead of restarting discovery. Research tools can supply evidence without turning every investigation into a deep research report.
 
 ## Response
 
