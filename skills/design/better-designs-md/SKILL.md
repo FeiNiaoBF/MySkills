@@ -1,15 +1,16 @@
 ---
 name: better-designs-md
 description: >-
-  This skill writes UI design docs on explicit request. It creates, reviews,
-  and updates project design guidance from existing evidence or proposed
-  directions, explaining design intent, component usage, tokens, and contextual
+  This skill writes UI visual and component design docs on explicit request. It creates,
+  reviews, and updates UI design guidance from existing evidence or proposed
+  directions, explaining visual intent, component usage, tokens, states, and contextual
   rules. It reuses project conventions and supports Google's DESIGN.md format
-  when requested or required by a target tool. It does not turn ordinary styling
-  edits or token questions into a documentation workflow.
+  when requested or required by a target tool. Project requirements, behavior specs,
+  technical designs, architecture, and ADRs belong to project-docs. It does not turn
+  ordinary styling edits or token questions into a documentation workflow.
 metadata:
   author: FeiNiaoBF
-  version: 1.3.0
+  version: 1.3.1
   date_added: "2026-04-09"
   risk: low
 disable-model-invocation: true
@@ -17,13 +18,15 @@ disable-model-invocation: true
 
 # Better Designs MD
 
-Create and maintain design documentation that guides actual UI work: explain the intended look and feel, give applicable rules, and preserve the reasoning needed to apply them consistently. Write the document and conversation in the user's language unless the project specifies otherwise; preserve existing identifiers and any selected schema keys.
+Create and maintain UI design documentation that guides actual UI work: explain the intended look and feel, give applicable rules, and preserve the reasoning needed to apply them consistently. Write the document and conversation in the user's language unless the project specifies otherwise; preserve existing identifiers and any selected schema keys.
 
 ## Scope and invocation
 
-Use this workflow when the user explicitly requests this skill or asks to author, review, or update a `DESIGN.md` or equivalent design-system document. A passing mention of a color, token, or component does not require a document. The host-specific manual invocation settings are intentional; hosts may enforce them differently.
+Use this workflow when the user explicitly requests this skill or asks to author, review, or update a UI `DESIGN.md` or equivalent design-system document. A passing mention of a color, token, or component does not require a document. The host-specific manual invocation settings are intentional; hosts may enforce them differently.
 
-This skill owns design documentation. It can turn an approved direction, inspected UI, existing tokens, or a supplied design guide into a document without requiring another skill first. Other skills may complement it when the user chooses them, with no required order or handoff. A documentation task alone does not authorize UI implementation, external design-tool changes, or publication.
+This skill owns UI visual and component documentation, not every document that uses “design” in its name. Use `project-docs` for project requirements, externally observable behavior specifications, internal technical design, system architecture, and ADRs. A file named `DESIGN.md` does not decide the route: its primary reader task and content do. When one document needs both kinds of information, keep each rule in its authoritative source and use a short summary or link instead of copying the full specification.
+
+It can turn an approved visual direction, inspected UI, existing tokens, or a supplied design guide into a document without requiring another skill first. Other skills may complement it when the user chooses them, with no required order or handoff. A documentation task alone does not authorize UI implementation, external design-tool changes, or publication.
 
 ## Choose document scope and format
 

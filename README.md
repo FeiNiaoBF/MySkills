@@ -26,7 +26,7 @@
 | Skill | 使用场景 |
 | --- | --- |
 | [aesthetic-translator](skills/design/aesthetic-translator/SKILL.md) | 把日常视觉偏好转成设计方向，以对话说明和可检查元素的 HTML 预览同步迭代，附通用模板与目标平台规格 |
-| [better-designs-md](skills/design/better-designs-md/SKILL.md) | 按明确请求编写、审查或维护指导实际 UI 工作的设计文档，优先复用项目规范；Google DESIGN.md 格式仅在用户要求或目标工具需要时采用 |
+| [better-designs-md](skills/design/better-designs-md/SKILL.md) | 按明确请求编写、审查或维护 UI 视觉语言、设计令牌和组件规范；Google DESIGN.md 格式仅在用户要求或目标工具需要时采用 |
 | [frontend-guide](skills/design/frontend-guide/SKILL.md) | 先选清界面内容，以对话说明和“项目 UI＋顺序说明”的 HTML 初稿确认设计，附可替换占位模板；再沿项目技术栈实现，支持逐模块陪建 |
 
 ### 学习（learning）
@@ -58,7 +58,7 @@
 | --- | --- |
 | [code-subtraction](skills/software-engineering/code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
 | [project-implementation-planner](skills/software-engineering/project-implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，解释理由、记录必要决策并交接下一块可验证的开发工作 |
-| [project-docs](skills/software-engineering/project-docs/SKILL.md) | 为新项目逐步建立文档、为已有项目持续整理与维护；支持直接完成或共同打磨，以准确、充分、便于人类阅读和使用为目标 |
+| [project-docs](skills/software-engineering/project-docs/SKILL.md) | 编写和维护项目文档体系，包括 README、需求、规格、技术设计、架构和 ADR；支持直接完成或共同打磨 |
 | [skill-discovery-install](skills/software-engineering/skill-discovery-install/SKILL.md) | 用户主动要求查找、比较或安装 Skills 时，审查候选并按授权安装到项目级 `.agents/skills/` |
 
 ### 研究（research）
