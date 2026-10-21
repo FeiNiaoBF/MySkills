@@ -1,14 +1,14 @@
 ---
 name: frontend-guide
 description: >-
-  This skill helps users choose UI content and build interfaces, including
-  explicit module-by-module guidance. It clarifies basic and optional areas,
-  organizes selected content into a page structure, and pairs conversational
-  explanations with HTML design drafts. It supports design-only work and
-  implementation in the project's stack without restarting discovery for local
-  UI edits.
+  This skill helps users choose UI content and prepare implementation-ready
+  interface designs, including explicit module-by-module guidance. It clarifies
+  basic and optional areas, organizes selected content into a page structure,
+  and pairs conversational explanations with HTML design drafts and copyable
+  implementation prompts. It supports design-and-handoff work and implementation
+  in the project's stack without restarting discovery for local UI edits.
 metadata:
-  version: "0.2.2"
+  version: "0.3.0"
 ---
 
 # Frontend Guide
@@ -21,18 +21,22 @@ Focus on content, module responsibilities, layout relationships, interaction flo
 
 Match the workflow to the requested outcome. Discussion-only work stays in conversation; a reusable-template task follows the HTML reference without inventing product requirements; a project design uses steps 1–2 and 4; production implementation also uses step 3. Reuse completed steps when refining existing work. Design approval alone does not expand a design-only request into implementation; continue implementation when it is already authorized.
 
-For a project design, provide two corresponding deliverables as the page takes shape:
+For a project design, provide three corresponding deliverables as the page takes shape:
 
 - **Conversation:** explain the page's contents and their purposes, distinguish confirmed decisions from proposals, and summarize changes and remaining choices.
 - **HTML design draft:** save the project's UI and corresponding page explanations in the user-designated folder and keep them aligned with the discussion. Read [HTML preview requirements](references/html-preview.md) when preparing or updating the draft; it defines the delivery structure and how to use the bundled [HTML template](assets/design-draft.html).
+- **Implementation handoff:** include a complete, copyable Agent implementation prompt inside the HTML draft. Derive it from the same evidence as the displayed design and keep confirmed decisions, recommendations, and open questions distinct. It tells an implementation Agent what to build without making the HTML preview the production stack.
 
-Reuse an already designated output folder. If none is established, ask for the destination before saving; continue useful discussion meanwhile. A request for discussion only, text only, no files, or a later preview takes precedence. Do not create an HTML draft for an isolated UI fix merely because this skill exists.
+The HTML draft and implementation handoff together are the core file delivery for a project-design task. A text-only request may receive the same handoff in conversation instead. A request for discussion only, a local adjustment without a new draft, no files, or a later preview takes precedence; do not force a new HTML file merely because this Skill exists.
 
-An HTML draft is a review surface, not a change of production stack. For non-Web targets it is an approximation, not proof of native behavior. Once implementing the agreed interface, also deliver the actual project changes and its preview or run instructions.
+Reuse an already designated output folder. If none is established, ask for the destination before saving; continue useful discussion meanwhile.
+
+An HTML draft is a design-and-handoff surface, not a change of production stack. For non-Web targets it is an approximation, not proof of native behavior, and its implementation prompt must name the actual target platform and stack. By default, finish the agreed design and implementation handoff without modifying the application. Only change production code when the user has authorized implementation; when that authorization already exists, do not ask for it again.
 
 ## Working rules
 
-- Preserve the existing framework, components, toolchain, and design tokens. If no target stack is established, resolve that choice before production implementation; the HTML draft does not settle it.
+- Preserve the existing framework, components, toolchain, and design tokens. If no target stack is established, keep it as an open question in the handoff instead of choosing one silently; the HTML draft does not settle it.
+- Keep handoff status explicit: confirmed decisions are requirements, Agent recommendations remain recommendations, and unresolved questions stay open. Do not place an unconfirmed proposal in the acceptance criteria or phrase it as mandatory.
 - Use platform-native concepts: semantic HTML and CSS tokens on Web; widget constraints, `ThemeData`, and `ColorScheme` in Flutter. Reuse existing research; consult official documentation when component behavior or version-sensitive facts remain uncertain.
 - **Ordinary delivery:** carry authorized work through implementation and checks without module-by-module approval. Pause only for consequential unresolved choices or scope changes.
 - **Guided delivery:** only when explicitly requested, use the module-map and module-preview checkpoints below. Explain one or two relevant concepts when useful; do not attach a lesson to every ordinary delivery.
@@ -64,13 +68,13 @@ For multiple pages, state each page's responsibility and start with the user's p
 
 Give concrete, revisable layout defaults with target-platform units and behavior: width constraints, proportions, and adaptation to relevant windows or devices. Do not fix every dimension before seeing the page. Apply the project's visual direction; ask about unresolved choices only when they materially affect the design.
 
-Create or update the HTML design draft and its matching conversational explanation within the authorized scope, following the reference's filling instructions. Keep proposals visibly distinct from user-confirmed choices. The template describes the delivery structure, not the product's features or layout.
+Create or update the HTML design draft, its matching conversational explanation, and the implementation handoff within the authorized scope, following the reference's filling instructions. Generate the prompt from the actual displayed design and project evidence. It must cover implementation scope, component responsibilities, layout and interaction, key states, target stack and platform constraints, non-goals, and acceptance criteria. Keep confirmed decisions, Agent recommendations, and open questions visibly distinct; an open question may constrain implementation but is not an accepted requirement. The template describes the delivery structure, not the product's features, layout, or production technology.
 
 **Checkpoint:** in guided delivery, obtain feedback and confirmation of the module map before implementation. In ordinary delivery, proceed from the agreed scope without introducing a new approval gate for every draft.
 
 ### 3. Implement and refine when authorized
 
-Implement the essential modules first, using the project's native components, tokens, and established preview workflow. Check each meaningful change in a browser for Web, or through the project's app, emulator, or device workflow for native targets. Repair regressions introduced by the change.
+Implement the essential modules first, using the project's native components, tokens, and established preview workflow. The handoff prompt communicates the design but does not authorize code changes by itself. Check each meaningful change in a browser for Web, or through the project's app, emulator, or device workflow for native targets. Repair regressions introduced by the change.
 
 In guided delivery, show each completed module in page context, explain relevant choices, and wait for feedback before the next module. In ordinary delivery, continue through the agreed scope and present the complete page.
 
@@ -86,8 +90,8 @@ Check what applies to the agreed scope, fix issues introduced by this work, and 
 - **Interaction:** the agreed user flows and relevant loading, empty, error, and success states. Identify simulated data, disconnected actions, and missing persistence.
 - **Accessibility:** meaningful labels and image alternatives/semantics appropriate to the platform, keyboard navigation and visible focus where applicable, sufficient contrast, and usable touch/click targets.
 - **Consistency:** typography, spacing, and components follow project decisions. Check whether differences are intentional instead of treating every variation as a defect.
-- **HTML delivery:** apply the reference's shell and placeholder checks. Distinguish demonstrated behavior in the draft from behavior checked in the actual application.
+- **HTML delivery:** apply the reference's shell, placeholder, and implementation-handoff checks. Confirm the prompt is easy to find and copy, covers the required handoff fields, matches the displayed UI and explanations, and does not turn recommendations or open questions into requirements. Distinguish demonstrated behavior in the draft from behavior checked in the actual application, and say explicitly when a non-Web interface is only represented in HTML.
 
-Deliver a clear link or path and opening/run instructions when files are part of the request, useful actions to try when interactions are present, and a concise account of what was delivered, checked, and still limited. Report unavailable checks explicitly. Code inspection alone does not establish visual or interaction quality.
+Deliver a clear link or path and opening/run instructions when files are part of the request, useful actions to try when interactions are present, and a concise account of what was delivered, checked, and still limited. Point out the implementation prompt and how to copy it. Report unavailable checks explicitly. Code inspection alone does not establish visual or interaction quality.
 
 Implementation completion means the agreed scope and relevant checks are complete with gaps disclosed. User acceptance requires actual user feedback; do not invent acceptance or stop authorized ordinary delivery merely because feedback has not arrived.

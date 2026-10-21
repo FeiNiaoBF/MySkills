@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{PROJECT_NAME}} · 页面设计说明</title>
+  <title>{{PROJECT_NAME}} · 页面设计与开发交接</title>
   <style>
-    /* 交付外壳：中性围边 + 画布 + 编号说明栏。
+    /* 交付外壳：中性围边 + 画布 + 编号说明栏 + 开发交接。
        外壳只负责阅读排版，不承担项目视觉；项目 UI 自带样式放进 .template-ui-slot。
 
        这五条是外壳的视觉规则，改动前请先确认仍然成立：
@@ -53,9 +53,10 @@
     .template-header, .template-header *,
     .template-canvas, .template-ui-slot,
     .template-placeholder, .template-placeholder *,
-    .template-notes, .template-notes * { box-sizing: border-box; }
+    .template-notes, .template-notes *,
+    .template-handoff, .template-handoff * { box-sizing: border-box; }
 
-    .template-header, .template-placeholder, .template-notes {
+    .template-header, .template-placeholder, .template-notes, .template-handoff {
       font-family: var(--fg-font);
       color: var(--fg-ink);
       font-synthesis: none;
@@ -223,6 +224,105 @@
     .template-notes a:hover { color: var(--fg-ink); }
     .template-notes a:focus-visible { outline: 2px solid var(--fg-accent); outline-offset: 2px; }
 
+    /* 开发交接：完整提示词位于预览与说明之后，避免挤压设计画布。
+       代码块直接可选中复制，不依赖脚本，也不把交接内容伪装成审查控件。 */
+    .template-handoff {
+      padding: 0 var(--fg-inset) var(--fg-inset);
+      background: var(--fg-stage);
+    }
+    .template-handoff-panel {
+      border: 1px solid var(--fg-rule);
+      background: var(--fg-surface);
+    }
+    .template-handoff-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(12rem, 22rem);
+      gap: 1rem 2rem;
+      align-items: end;
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--fg-rule);
+    }
+    .template-handoff-kicker {
+      margin: 0 0 .25rem;
+      font-family: var(--fg-mono);
+      font-size: var(--fg-text-num);
+      line-height: 1.6;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+    .template-handoff-head h2 {
+      margin: 0;
+      font-size: var(--fg-text-title);
+      font-weight: 620;
+      line-height: 1.35;
+      text-wrap: balance;
+    }
+    .template-handoff-sub,
+    .template-handoff-target {
+      margin: .375rem 0 0;
+      font-size: var(--fg-text-meta);
+      line-height: 1.65;
+      color: var(--fg-muted);
+      text-wrap: pretty;
+    }
+    .template-handoff-target {
+      margin: 0;
+      text-align: right;
+    }
+    .template-handoff-body {
+      display: grid;
+      grid-template-columns: 15rem minmax(0, 1fr);
+    }
+    .template-handoff-guide {
+      padding: 1.25rem;
+    }
+    .template-handoff-guide h3 {
+      margin: 0;
+      font-size: var(--fg-text-heading);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .template-handoff-guide > p {
+      margin: .5rem 0 1rem;
+      font-size: var(--fg-text-meta);
+      line-height: 1.7;
+      color: var(--fg-muted);
+    }
+    .template-handoff-guide dl { margin: 0; }
+    .template-handoff-guide dt {
+      margin-top: .75rem;
+      font-size: var(--fg-text-meta);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .template-handoff-guide dd {
+      margin: .125rem 0 0;
+      font-size: var(--fg-text-meta);
+      line-height: 1.65;
+      color: var(--fg-muted);
+    }
+    .template-prompt {
+      display: block;
+      min-width: 0;
+      margin: 0;
+      padding: 1.25rem;
+      border-left: 1px solid var(--fg-rule);
+      background: oklch(98.3% 0.002 255);
+      font-family: var(--fg-mono);
+      font-size: var(--fg-text-meta);
+      line-height: 1.72;
+      color: var(--fg-ink);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      tab-size: 2;
+      user-select: text;
+    }
+    .template-prompt:focus-visible {
+      outline: 2px solid var(--fg-accent);
+      outline-offset: -3px;
+    }
+
     @media (max-width: 68rem) {
       :root { --fg-inset: 1rem; }
       .template-layout { grid-template-columns: minmax(0, 1fr); }
@@ -233,12 +333,22 @@
         border-top: 1px solid var(--fg-rule);
         padding: 1.25rem 1rem 2rem;
       }
+      .template-handoff-head { grid-template-columns: minmax(0, 1fr); }
+      .template-handoff-target { text-align: left; }
+      .template-handoff-body { grid-template-columns: minmax(0, 1fr); }
+      .template-prompt {
+        border-left: 0;
+        border-top: 1px solid var(--fg-rule);
+      }
     }
 
     @media (max-width: 26rem) {
       :root { --fg-inset: .75rem; }
       .template-notes { padding: 1.125rem .875rem 1.75rem; }
       .template-placeholder { padding: 1.5rem 1.125rem; }
+      .template-handoff-head,
+      .template-handoff-guide,
+      .template-prompt { padding: 1rem; }
     }
   </style>
 </head>
@@ -246,18 +356,21 @@
   <!-- 使用说明
        项目交付：复制本文件到约定目录，替换 {{...}} 标记与提示文字，删除用不到的小节，
        说明改成正式段落并去掉 .template-token，界面语言、可访问名称与 lang 改为用户语言。
+       实现提示词须按实际设计填写完整；已确认、建议和待定分开，待定项不得写成验收条件。
        区域小节按页面的阅读或操作顺序重复，一个区域不等于一个代码组件。
        模板交付：保留标记与提示文字，不要填入虚构的产品内容；空白画布是有意保留的。
        画布是容器而非视口：项目 UI 请优先以 .template-ui-slot 为容器查询上下文
        （@container canvas (max-width: ...)），不要用视口断点推断布局。
        容器查询只提供布局依据，不会裁剪绘制范围；固定层、100vw 与超宽内容仍需实际检查。
-       外壳不提供审查控件、读数或脚本，项目交互完全由放入画布的 UI 自己负责。 -->
+       外壳不提供审查控件或读数；项目交互完全由放入画布的 UI 自己负责。
+       下方实现提示词是设计交接内容，可直接选择复制，不代表已授权修改实际应用。 -->
   <header class="template-header">
     <p class="template-header-name">{{PROJECT_NAME}}</p>
-    <p class="template-header-kind">· 页面设计说明</p>
+    <p class="template-header-kind">· 页面设计与开发交接</p>
   </header>
 
-  <main class="template-layout">
+  <main>
+    <div class="template-layout">
     <!-- 画布：项目的页面设计直接从这里开始，上方不放读数条、刻度尺或工具栏。 -->
     <section class="template-canvas" aria-label="项目 UI 设计">
       <div class="template-ui-slot">
@@ -317,6 +430,82 @@
       </div>
 
     </aside>
+    </div>
+
+    <!-- 开发交接：项目交付时填写完整提示词；模板交付时保留结构与标记。
+         提示词必须和上方实际 UI、说明与状态一致。HTML 只表达设计意图，
+         目标平台和技术栈由项目证据决定，不因本文件是 HTML 而默认为 Web。 -->
+    <section class="template-handoff" aria-labelledby="implementation-prompt-title">
+      <div class="template-handoff-panel">
+        <header class="template-handoff-head">
+          <div>
+            <p class="template-handoff-kicker">Implementation handoff</p>
+            <h2 id="implementation-prompt-title">Agent 实现提示词</h2>
+            <p class="template-handoff-sub">整段选择并复制给编码 Agent；内容应与上方设计和说明保持一致。</p>
+          </div>
+          <p class="template-handoff-target">目标平台与技术栈：<span class="template-token">{{TARGET_STACK_AND_PLATFORM}}</span></p>
+        </header>
+
+        <div class="template-handoff-body">
+          <div class="template-handoff-guide">
+            <h3>状态如何使用</h3>
+            <p>实现要求、建议和未决事项不能混写。</p>
+            <dl>
+              <dt>已确认</dt>
+              <dd>可以直接实施并写入验收标准。</dd>
+              <dt>Agent 建议</dt>
+              <dd>保留推荐理由，用户确认前不是硬性要求。</dd>
+              <dt>待定</dt>
+              <dd>明确影响，只阻塞依赖该决定的工作。</dd>
+            </dl>
+          </div>
+
+          <pre class="template-prompt" tabindex="0" aria-label="可复制的 Agent 实现提示词"><code>你是负责在现有项目中实现以下界面的编码 Agent。先阅读项目代码、现有设计约束和平台规范；不要重新决定已经确认的内容，也不要把建议或待定项当成确定要求。
+
+## 目标平台与技术栈
+{{TARGET_STACK_AND_PLATFORM}}
+
+## 决策状态
+
+### 已确认
+{{CONFIRMED_DECISIONS}}
+
+### Agent 建议（尚未确认）
+{{AGENT_RECOMMENDATIONS}}
+
+### 待定事项
+{{OPEN_QUESTIONS}}
+
+## 实现范围
+{{IMPLEMENTATION_SCOPE}}
+
+## 组件职责
+{{COMPONENT_RESPONSIBILITIES}}
+
+## 布局与交互
+{{LAYOUT_AND_INTERACTIONS}}
+
+## 关键状态
+{{KEY_STATES}}
+
+## 技术与平台约束
+{{TECHNICAL_CONSTRAINTS}}
+
+## 非目标
+{{NON_GOALS}}
+
+## 验收标准
+{{ACCEPTANCE_CRITERIA}}
+
+## 执行要求
+- 保留项目现有框架、组件、设计令牌、数据边界和平台惯例。
+- 只把“已确认”内容作为要求；建议在用户确认前保持可选，待定事项不得自行补成产品决定。
+- 如果待定事项阻塞某部分实现，说明阻塞范围；继续完成不依赖该决定且可逆的工作。
+- HTML 设计稿只表达设计意图，不是生产技术选型。按目标平台实现并验证原生行为；无法访问设计稿时，以本提示词的已确认内容和验收标准为准。
+- 完成后报告修改内容、实际检查、与设计稿的差异及仍未解决的问题。</code></pre>
+        </div>
+      </div>
+    </section>
   </main>
 </body>
 </html>

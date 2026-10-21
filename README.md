@@ -27,7 +27,7 @@
 | --- | --- |
 | [aesthetic-translator](skills/design/aesthetic-translator/SKILL.md) | 把日常视觉偏好转成设计方向，以对话说明和可检查元素的 HTML 预览同步迭代，附通用模板与目标平台规格 |
 | [better-designs-md](skills/design/better-designs-md/SKILL.md) | 按明确请求编写、审查或维护 UI 视觉语言、设计令牌和组件规范；Google DESIGN.md 格式仅在用户要求或目标工具需要时采用 |
-| [frontend-guide](skills/design/frontend-guide/SKILL.md) | 先选清界面内容，以对话说明和“项目 UI＋顺序说明”的 HTML 初稿确认设计，附可替换占位模板；再沿项目技术栈实现，支持逐模块陪建 |
+| [frontend-guide](skills/design/frontend-guide/SKILL.md) | 先选清界面内容，以对话说明和“项目 UI＋顺序说明＋可复制实现提示词”的 HTML 初稿完成设计与开发交接；仅在授权后沿项目技术栈修改实际应用 |
 
 ### 学习（learning）
 
