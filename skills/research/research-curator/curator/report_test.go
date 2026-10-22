@@ -35,6 +35,13 @@ func TestDecodeReportRequiresKnownVersionAndStrictEnvelope(t *testing.T) {
 	}
 }
 
+func TestDecodeReportAllowsConfigurableLowGainWindow(t *testing.T) {
+	data := bytes.Replace(reportJSON(t), []byte(`"low_gain_window":3`), []byte(`"low_gain_window":2`), 1)
+	if _, err := curator.DecodeReport(data); err != nil {
+		t.Fatalf("rejected valid configurable low-gain window: %v", err)
+	}
+}
+
 func TestDecodeReportRejectsDuplicateProperties(t *testing.T) {
 	valid := reportJSON(t)
 	duplicate := bytes.Replace(valid, []byte(`"report_version":"1.0",`), []byte(`"report_version":"1.0","report_version":"1.0",`), 1)
@@ -88,7 +95,10 @@ func TestValidatePublicationAcceptsEachTerminalStopReason(t *testing.T) {
 		}
 		report.Article = &curator.Article{Title: "Budget-limited report", Language: "en", OutputForm: "article", Lead: "A limited synthetic report.", Sections: []curator.ArticleSection{{ID: "sec", Heading: "Limits", Blocks: []curator.ArticleBlock{{ID: "b", Kind: "paragraph", Role: "context", Text: "Research stopped at its budget.", ClaimIDs: []string{}, ConclusionIDs: []string{}}}}}}
 		report.Research.MaxRounds = 1
-		report.Run.Queries = append(report.Run.Queries, curator.Query{ID: "budget-query", QuestionID: "q1", Text: "synthetic budget query", At: "2026-01-01T00:00:00Z"})
+		query := curator.Query{ID: "budget-query", QuestionID: "q1", Text: "synthetic budget query", At: "2026-01-01T00:00:00Z", Provider: "synthetic", Tool: "fixture", RetrievalReference: "fixture query", CandidateSourceIDs: []string{}}
+		if err := (&curator.Recorder{Run: &report.Run}).RecordQuery(query); err != nil {
+			t.Fatal(err)
+		}
 		report.Research.Rounds = []curator.ResearchRound{{ID: "r1", QueryIDs: []string{"budget-query"}, QuestionIDs: []string{"q1"}, SearchIntent: "discovery", SearchAngle: "synthetic test", OriginTypesSearched: []string{"docs"}, AssessedSourceIDs: []string{}, RedundantSourceIDs: []string{}, NewClaimIDs: []string{}, NewOriginIDs: []string{}, NewContradictionRefs: []curator.EvidenceRef{}, NewQuestionIDs: []string{}, MaterialGain: "none", MaterialityReason: "the failed query produced no evidence", MaterialityEvidence: []curator.EvidenceRef{}, CoverageSnapshot: []curator.ReportCoverage{}, Gaps: []string{"retrieval failed"}, Status: "failed"}}
 		report.Research.Stop = curator.ResearchStop{Reason: "budget_exhausted", RoundIDs: []string{"r1"}, Rationale: "the one-round test budget was exhausted"}
 		if err := curator.Finalize(&report.Run); err != nil {
@@ -131,6 +141,53 @@ func TestRecordResearchRoundInvalidatesOldStop(t *testing.T) {
 	report.Research.Stop = curator.ResearchStop{Reason: "retrieval_blocked", RoundIDs: []string{}, Rationale: "stale stop"}
 	if err := curator.ValidateReport(report); err == nil {
 		t.Fatal("accepted terminal stop that ignored the final round")
+	}
+}
+
+func TestRecordResearchRoundAllowsReturningFromWriting(t *testing.T) {
+	report, err := curator.DecodeReport(reportJSON(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	report.Article = &curator.Article{Title: "Draft", Language: "en", OutputForm: "article", Lead: "Draft lead.", Sections: []curator.ArticleSection{{ID: "sec", Heading: "Draft", Blocks: []curator.ArticleBlock{{ID: "block", Kind: "paragraph", Role: "context", Text: "Draft text.", ClaimIDs: []string{}, ConclusionIDs: []string{}}}}}}
+	report.Research.Stop = curator.ResearchStop{Reason: "user_stopped", RoundIDs: []string{}, Rationale: "writing revealed a research gap"}
+	round := curator.ResearchRound{ID: "r1", QueryIDs: []string{}, QuestionIDs: []string{}, SearchIntent: "gap_fill", SearchAngle: "resolve a gap found while drafting", OriginTypesSearched: []string{}, AssessedSourceIDs: []string{}, RedundantSourceIDs: []string{}, NewClaimIDs: []string{}, NewOriginIDs: []string{}, NewContradictionRefs: []curator.EvidenceRef{}, NewQuestionIDs: []string{}, MaterialGain: "none", MaterialityReason: "the first retrieval attempt did not return inspectable material", MaterialityEvidence: []curator.EvidenceRef{}, CoverageSnapshot: []curator.ReportCoverage{}, Gaps: []string{"evidence needed for a draft claim"}, Status: "failed"}
+	if err := curator.RecordResearchRound(report, round); err != nil {
+		t.Fatalf("record follow-up research after writing started: %v", err)
+	}
+	if report.ReportVersion != "1.1" {
+		t.Fatalf("follow-up research handoff version = %q, want 1.1", report.ReportVersion)
+	}
+	encoded, err := json.Marshal(report)
+	if err != nil {
+		t.Fatal(err)
+	}
+	report, err = curator.DecodeReport(encoded)
+	if err != nil {
+		t.Fatalf("round-trip follow-up research handoff: %v", err)
+	}
+	if report.Article == nil || report.Article.Title != "Draft" {
+		t.Fatal("follow-up research discarded the draft article")
+	}
+	if !report.ArticleReviewRequired {
+		t.Fatal("follow-up research did not mark the draft for review")
+	}
+	if report.Research.Stop.Reason != "in_progress" {
+		t.Fatalf("follow-up research did not reopen the stop: %+v", report.Research.Stop)
+	}
+	if err := curator.ValidatePublication(report); err == nil {
+		t.Fatal("published draft before follow-up research and writing were completed")
+	}
+	report.Research.Stop = curator.ResearchStop{Reason: "user_stopped", RoundIDs: []string{"r1"}, Rationale: "follow-up research is complete"}
+	if err := curator.Finalize(&report.Run); err != nil {
+		t.Fatal(err)
+	}
+	if err := curator.ValidatePublication(report); err == nil {
+		t.Fatal("published a draft that was not reviewed after follow-up research")
+	}
+	report.ArticleReviewRequired = false
+	if err := curator.ValidatePublication(report); err != nil {
+		t.Fatalf("rejected article after explicit review: %v", err)
 	}
 }
 

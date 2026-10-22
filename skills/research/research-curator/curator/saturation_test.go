@@ -15,7 +15,10 @@ func saturationReport(t *testing.T) *curator.Report {
 	}
 	run := &report.Run
 	for i := 1; i <= 3; i++ {
-		run.Queries = append(run.Queries, curator.Query{ID: "query-search-" + string(rune('0'+i)), QuestionID: "q1", Text: []string{"overview primary sources", "fill the evidence gap", "search for counterevidence"}[i-1], At: "2026-01-01T00:00:00Z"})
+		q := curator.Query{ID: "query-search-" + string(rune('0'+i)), QuestionID: "q1", Text: []string{"overview primary sources", "fill the evidence gap", "search for counterevidence"}[i-1], At: "2026-01-01T00:00:00Z", Provider: "synthetic", Tool: "fixture", RetrievalReference: "fixture query", CandidateSourceIDs: []string{"s1"}}
+		if err := (&curator.Recorder{Run: run}).RecordQuery(q); err != nil {
+			t.Fatalf("record fixture query: %v", err)
+		}
 	}
 	report.Research.Coverage = []curator.ReportCoverage{{QuestionID: "q1", Status: "covered", ClaimIDs: []string{"c1"}, Gaps: []string{}}}
 	report.Research.Rounds = []curator.ResearchRound{
@@ -62,6 +65,19 @@ func TestEvaluateSaturationAcceptsThreeCoveredLowGainRounds(t *testing.T) {
 	}
 }
 
+func TestEvaluateSaturationUsesConfiguredLowGainWindow(t *testing.T) {
+	report := saturationReport(t)
+	report.Research.LowGainWindow = 2
+	assessment := curator.EvaluateSaturation(report)
+	if !assessment.Eligible || assessment.LowGainRounds != 2 || len(assessment.WindowRoundIDs) != 2 || assessment.WindowRoundIDs[0] != "r2" || assessment.WindowRoundIDs[1] != "r3" {
+		t.Fatalf("unexpected configurable-window assessment: %+v", assessment)
+	}
+	report.Research.Stop = curator.ResearchStop{Reason: "saturated", RoundIDs: assessment.WindowRoundIDs, Rationale: "two configured low-gain rounds followed complete coverage and counterevidence checks"}
+	if err := curator.ValidateReport(report); err != nil {
+		t.Fatalf("rejected saturated stop for configured window: %v", err)
+	}
+}
+
 func TestEvaluateSaturationAcceptsDocumentedStableDisagreement(t *testing.T) {
 	report := saturationReport(t)
 	source := report.Run.Sources[0]
@@ -74,7 +90,10 @@ func TestEvaluateSaturationAcceptsDocumentedStableDisagreement(t *testing.T) {
 	report.Run.Graph.Nodes = append(report.Run.Graph.Nodes, curator.Node{ID: "s2", Type: "Source", Label: "Alternative source"}, curator.Node{ID: "c2", Type: "Claim", Label: "Alternative claim"})
 	report.Run.Graph.Edges = append(report.Run.Graph.Edges, curator.Edge{From: "q1", To: "c2", Type: "addresses"}, curator.Edge{From: "s2", To: "c2", Type: "supports"})
 	report.Research.Coverage[0].ClaimIDs = []string{"c1", "c2"}
-	report.Run.Queries = append(report.Run.Queries, curator.Query{ID: "query-stable-disagreement", QuestionID: "q1", Text: "record both documented positions", At: "2026-01-01T00:00:00Z"})
+	query := curator.Query{ID: "query-stable-disagreement", QuestionID: "q1", Text: "record both documented positions", At: "2026-01-01T00:00:00Z", Provider: "synthetic", Tool: "fixture", RetrievalReference: "fixture query", CandidateSourceIDs: []string{"s2"}}
+	if err := (&curator.Recorder{Run: &report.Run}).RecordQuery(query); err != nil {
+		t.Fatal(err)
+	}
 	initial := saturationRound("r0", "query-stable-disagreement", "discovery", "record the already assessed alternative")
 	initial.MaterialGain = "material"
 	initial.MaterialityReason = "The research records an established opposing position; the final coverage preserves both claims."

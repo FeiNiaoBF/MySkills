@@ -30,7 +30,7 @@ func RenderReport(reportJSON []byte) ([]byte, error) {
 	}
 	var version string
 	var run, research, article json.RawMessage
-	if err := json.Unmarshal(root["report_version"], &version); err != nil || version != "1.0" {
+	if err := json.Unmarshal(root["report_version"], &version); err != nil || (version != "1.0" && version != "1.1") {
 		return nil, fmt.Errorf("visualizer: unsupported report version")
 	}
 	for key, target := range map[string]*json.RawMessage{"run": &run, "research": &research, "article": &article} {

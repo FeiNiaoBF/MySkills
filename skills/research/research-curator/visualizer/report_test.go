@@ -58,6 +58,13 @@ func TestRenderReportKeepsUntrustedTextInertAndOffline(t *testing.T) {
 	}
 }
 
+func TestRenderReportAcceptsV11FollowUpHandoff(t *testing.T) {
+	input := strings.Replace(reportFixture, `"report_version":"1.0",`, `"report_version":"1.1","article_review_required":true,`, 1)
+	if _, err := visualizer.RenderReport([]byte(input)); err != nil {
+		t.Fatalf("render v1.1 follow-up handoff: %v", err)
+	}
+}
+
 func TestRenderReportRejectsMalformedEnvelope(t *testing.T) {
 	for _, input := range []string{"", "{}", `{"report_version":"1.0","run":{}}`} {
 		if _, err := visualizer.RenderReport([]byte(input)); err == nil {

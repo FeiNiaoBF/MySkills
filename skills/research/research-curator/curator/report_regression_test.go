@@ -8,6 +8,17 @@ import (
 	"testing"
 )
 
+func TestReportV10RejectsV11ArticleReviewField(t *testing.T) {
+	r, err := curator.DecodeReport(reportJSON(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	r.ArticleReviewRequired = true
+	if err := curator.ValidateReport(r); err == nil {
+		t.Fatal("accepted article review state under report version 1.0")
+	}
+}
+
 func TestReportPreservesStrictLedgerBoundary(t *testing.T) {
 	valid := reportJSON(t)
 	for name, data := range map[string][]byte{

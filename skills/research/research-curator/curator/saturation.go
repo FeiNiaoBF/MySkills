@@ -16,12 +16,16 @@ func EvaluateSaturation(report *Report) SaturationAssessment {
 	if b := research.ResourceBudget; b != nil && b.Used >= b.Limit {
 		assessment.Reasons = append(assessment.Reasons, "declared resource budget ended; report budget_exhausted, not saturated")
 	}
-	if research.LowGainWindow != 3 {
-		assessment.Reasons = append(assessment.Reasons, "low-gain window must be three rounds")
+	if research.LowGainWindow < 1 {
+		assessment.Reasons = append(assessment.Reasons, "low-gain window must be positive")
 		return assessment
 	}
 	if research.MaxRounds < 1 || len(research.Rounds) > research.MaxRounds {
 		assessment.Reasons = append(assessment.Reasons, "round budget is invalid or exceeded")
+	}
+	if research.LowGainWindow > research.MaxRounds {
+		assessment.Reasons = append(assessment.Reasons, "low-gain window exceeds the round budget; saturation is unreachable")
+		return assessment
 	}
 	if len(report.Run.Contract.Questions) == 0 {
 		assessment.Reasons = append(assessment.Reasons, "no coverage questions are defined")
@@ -56,7 +60,7 @@ func EvaluateSaturation(report *Report) SaturationAssessment {
 		}
 		verified := false
 		for _, id := range item.ClaimIDs {
-			if claim, ok := claims[id]; ok && verifiedClaim(claim, assessedSources) && verifiedClaim(claim, sources) && contains(claim.QuestionIDs, question.ID) {
+			if claim, ok := claims[id]; ok && verifiedClaim(claim, assessedSources, &report.Run) && verifiedClaim(claim, sources, &report.Run) && contains(claim.QuestionIDs, question.ID) {
 				verified = true
 				break
 			}

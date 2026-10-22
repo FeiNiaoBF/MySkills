@@ -165,7 +165,7 @@ func TestCLIRecordCapturesQueryAndRetrievalTimes(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, item := range []struct{ kind, name, data string }{
-		{"query", "query.json", `{"id":"q1","question_id":"q","text":"synthetic query","at":"2000-01-01T00:00:00Z"}`},
+		{"query", "query.json", `{"id":"q1","question_id":"q","text":"synthetic query","at":"2000-01-01T00:00:00Z","provider":"synthetic","tool":"fixture","retrieval_reference":"synthetic test query record","candidate_source_ids":[]}`},
 		{"source", "source.json", `{"id":"s2","url":"https://example.org/lead","title":"Synthetic lead","type":"docs","original":true,"retrieved_at":"2000-01-01T00:00:00Z","content":"Unverified synthetic lead.","upstream_ids":[],"freshness":"any","fit":0.5,"evidence":0,"utility":0.2,"fit_reason":"synthetic","evidence_reason":"not inspected","utility_reason":"synthetic","status":"rejected","reason":"not inspected as evidence","verification":"unverified"}`},
 	} {
 		record := filepath.Join(d, item.name)

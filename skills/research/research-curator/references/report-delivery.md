@@ -15,6 +15,6 @@ go run ./cmd/researchcurator validate-report -in <report.json>
 go run ./cmd/researchcurator publish -in <report.json> [-out <topic-folder>]
 ```
 
-Publication requires an article, a terminal stop, and a sealed v1 run. Seal the exact run ledger with the existing `finalize` command, then put that sealed ledger back into the report envelope. Publishing does not search, verify truth, or establish Evidence Saturation. Intermediate files may be kept in the same topic directory; do not create a run-ID layer.
+Publication requires an article, a terminal stop, a sealed v1 run, and a cleared `article_review_required` flag. When `record-round` adds research after an article exists, it upgrades the report envelope to version `1.1`, retains the draft, and sets that flag. Review the retained draft against the final evidence before clearing it. Seal the exact run ledger with the existing `finalize` command, then put that sealed ledger back into the report envelope. Publishing does not search, verify truth, or establish Evidence Saturation. Intermediate files may be kept in the same topic directory; do not create a run-ID layer.
 
 Open the generated `index.html`. Confirm the answer is clear before the audit material, citations navigate to exact sources and inspected passages, source roles and limitations are honest, and the map contains only meaningful article-linked relationships. Test it offline when a browser is available; if not, say so. Preserve relevant temporary evidence on failures and never clean another run's files or pre-existing reports.

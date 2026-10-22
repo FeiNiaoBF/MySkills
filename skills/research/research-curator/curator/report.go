@@ -14,10 +14,11 @@ import (
 
 // Report is the versioned handoff from research to writing and local publication.
 type Report struct {
-	ReportVersion string         `json:"report_version"`
-	Run           Run            `json:"run"`
-	Research      ResearchRecord `json:"research"`
-	Article       *Article       `json:"article,omitempty"`
+	ReportVersion         string         `json:"report_version"`
+	Run                   Run            `json:"run"`
+	Research              ResearchRecord `json:"research"`
+	Article               *Article       `json:"article,omitempty"`
+	ArticleReviewRequired bool           `json:"article_review_required,omitempty"`
 }
 
 type ResearchRecord struct {
@@ -165,8 +166,11 @@ func ValidateReport(report *Report) error {
 	if report == nil {
 		return fmt.Errorf("nil report")
 	}
-	if report.ReportVersion != "1.0" {
+	if report.ReportVersion != "1.0" && report.ReportVersion != "1.1" {
 		return fmt.Errorf("unsupported report version %q", report.ReportVersion)
+	}
+	if report.ReportVersion == "1.0" && report.ArticleReviewRequired {
+		return fmt.Errorf("article review state requires report version 1.1")
 	}
 	if err := Validate(&report.Run); err != nil {
 		return fmt.Errorf("invalid embedded run: %w", err)
@@ -175,7 +179,7 @@ func ValidateReport(report *Report) error {
 	if strings.TrimSpace(r.Audience) == "" || strings.TrimSpace(r.Purpose) == "" {
 		return fmt.Errorf("research audience and purpose are required")
 	}
-	if r.MaxRounds < 1 || r.LowGainWindow != 3 || len(r.Rounds) > r.MaxRounds {
+	if r.MaxRounds < 1 || r.LowGainWindow < 1 || len(r.Rounds) > r.MaxRounds {
 		return fmt.Errorf("invalid research round budget or low-gain window")
 	}
 	if b := r.ResourceBudget; b != nil {
@@ -212,6 +216,9 @@ func ValidatePublication(report *Report) error {
 	}
 	if report.Article == nil {
 		return fmt.Errorf("article is required for publication")
+	}
+	if report.ArticleReviewRequired {
+		return fmt.Errorf("article must be reviewed after follow-up research before publication")
 	}
 	if report.Run.Metadata.Status != "finalized" {
 		return fmt.Errorf("publication requires a finalized evidence ledger")
@@ -417,7 +424,7 @@ func validateResearchReferences(report *Report) error {
 		if item.Status == "covered" {
 			verified := false
 			for _, id := range item.ClaimIDs {
-				if verifiedClaim(claims[id], verifiedSources) {
+				if verifiedClaim(claims[id], verifiedSources, &report.Run) {
 					verified = true
 				}
 			}

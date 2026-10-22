@@ -5,18 +5,20 @@ import (
 	"time"
 )
 
-// RecordResearchRound appends a validated round and invalidates any prior stop decision.
+// RecordResearchRound appends a validated round, invalidates any prior stop decision,
+// and preserves an existing article as a draft for review after follow-up research.
 // It does not mutate report when the new handoff is invalid.
 func RecordResearchRound(report *Report, round ResearchRound) error {
 	if report == nil {
 		return fmt.Errorf("nil report")
 	}
-	if report.Article != nil {
-		return fmt.Errorf("cannot append research after writing has started")
-	}
 	trial := *report
 	trial.Research = report.Research
 	trial.Research.Rounds = append(append([]ResearchRound{}, report.Research.Rounds...), round)
+	if trial.Article != nil {
+		trial.ArticleReviewRequired = true
+		trial.ReportVersion = "1.1"
+	}
 	trial.Research.Stop = ResearchStop{
 		Reason:    "in_progress",
 		RoundIDs:  []string{},
