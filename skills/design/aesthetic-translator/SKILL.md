@@ -10,7 +10,7 @@ description: >-
 metadata:
   author: FeiNiaoBF
   version: 0.3.0
-  date_added: 2026-09-05
+  date_added: "2026-09-05"
 ---
 
 # Aesthetic Translator
