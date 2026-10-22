@@ -33,7 +33,7 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [linear-algebra](skills/learning/linear-algebra/SKILL.md) | 基于 Strang / MIT 18.06 体系维护 Obsidian 线性代数知识笔记 |
+| [linear-algebra](skills/learning/linear-algebra/SKILL.md) | 通过直觉、精确表达、例子与概念联系，帮助用户理解线性代数并掌握推导和解题方法 |
 | [project-tech-mentor](skills/learning/project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
 | [project-reverse-engineering](skills/learning/project-reverse-engineering/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
 
