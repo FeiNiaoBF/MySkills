@@ -1,12 +1,11 @@
 ---
 name: frontend-guide
 description: >-
-  This skill helps users choose UI content and prepare implementation-ready
-  interface designs, including explicit module-by-module guidance. It clarifies
-  basic and optional areas, organizes selected content into a page structure,
-  and pairs conversational explanations with HTML design drafts and copyable
-  implementation prompts. It supports design-and-handoff work and implementation
-  in the project's stack without restarting discovery for local UI edits.
+  Use when a user is shaping a new or substantially redesigned interface and
+  needs to choose content, organize modules, or prepare a design-to-implementation
+  handoff. Turn confirmed choices into a page structure, an explained HTML draft,
+  and implementation prompts; implement in the project's stack when requested.
+  For visual direction from mood words or references, use aesthetic-translator.
 metadata:
   version: "0.3.0"
 ---

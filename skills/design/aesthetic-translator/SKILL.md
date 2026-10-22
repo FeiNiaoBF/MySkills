@@ -1,12 +1,10 @@
 ---
 name: aesthetic-translator
 description: >-
-  This skill helps users describe designs without design terminology. It turns
-  everyday visual preferences, rough ideas, and references into concrete visual
-  directions, conversational explanations, inspectable HTML previews, and
-  platform-appropriate specifications. It supports requests such as premium,
-  too plain, or like Linear, and refines existing designs from feedback. It does
-  not handle wording-only requests or restart discovery for precise styling edits.
+  Use when a user shares rough visual preferences, references, or design feedback
+  and needs a concrete visual direction. Translate everyday language into an
+  explained HTML preview and platform-specific design specifications. Not for
+  wording-only requests or isolated, precise styling edits.
 metadata:
   author: FeiNiaoBF
   version: 0.3.0

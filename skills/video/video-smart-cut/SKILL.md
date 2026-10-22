@@ -1,6 +1,6 @@
 ---
 name: video-smart-cut
-description: 本地完成长视频转写、精简、字幕对齐与成片校验。
+description: 当用户要处理本地长视频的转写、口播精简、字幕对齐或成片校验时使用；负责媒体与时间轴处理，不负责数学内容审校或 Manim 动画。
 metadata:
   author: FeiNiaoBF
   version: 4.0.0
