@@ -28,6 +28,6 @@ Whenever a new round is appended, use `record-round`: it resets the former stop 
 
 ## Synthesis and writing
 
-- Research must validate before Writing. Writing may organize and explain evidence, but may not create evidence, improve a verification status, or silently remove a disagreement. If a premise is missing, preserve the draft, return to Research, append a round, then review and revise affected claims and citations. `record-round` marks the retained article as needing review; clear `article_review_required` only after the article reflects the added evidence, before final validation and publication.
+- Research must validate before Writing. Writing may organize and explain evidence, but may not create evidence, improve verification status, or silently remove disagreement. If a premise is missing, follow the [workflow](../SKILL.md#workflow) to return to Research and revise the affected article before publication.
 - Put the answer first. Use the user's language and requested form; define necessary terms once; distinguish evidence from interpretation; use lists/tables only when they improve clarity.
 - Preserve exact qualifications, attribution, numbers, negations, conditions, and uncertainty. State limits and evidence asymmetry close to affected conclusions. Do not call a literature synthesis an experiment or imply methods that were not performed.
