@@ -35,7 +35,6 @@
 | --- | --- |
 | [linear-algebra](skills/learning/linear-algebra/SKILL.md) | 通过直觉、精确表达、例子与概念联系，帮助用户理解线性代数并掌握推导和解题方法 |
 | [project-tech-mentor](skills/learning/project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
-| [project-reverse-engineering](skills/learning/project-reverse-engineering/SKILL.md) | 从已有项目切片理解机制，练习修改、迁移和指导 AI 开发 |
 
 ### 沟通（communication）
 
@@ -60,6 +59,7 @@
 | [go-style](skills/software-engineering/go-style/SKILL.md) | 编写、修改或测试 Go 代码时遵循 Go 惯例及适用的 Google Go 风格指导；明确请求时也可评估 Go 风格 |
 | [project-implementation-planner](skills/software-engineering/project-implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，以固定六部分格式交付计划并交接下一块可验证的开发工作 |
 | [project-docs](skills/software-engineering/project-docs/SKILL.md) | 编写和维护项目文档体系，包括 README、需求、规格、技术设计、架构和 ADR；支持直接完成或共同打磨 |
+| [project-navigator](skills/software-engineering/project-navigator/SKILL.md) | 回到已有代码项目时建立整体认知，追踪运行机制、理解变更与设计取舍；需要时引导独立读码练习 |
 | [skill-discovery-install](skills/software-engineering/skill-discovery-install/SKILL.md) | 用户主动要求查找、比较或安装 Skills 时，审查候选并按授权安装到项目级 `.agents/skills/` |
 
 ### 研究（research）
@@ -132,7 +132,7 @@ npx skills update -p make-sense
 
 仅在明确要求更新整个范围时，使用 `npx skills update -g`（全局）或 `npx skills update -p`（当前项目）；这类更新不限于本仓库。
 
-本地 Git checkout、GitHub 上的源码和 CLI 安装的副本各有更新步骤：本地修改或 `git pull` 只改变 checkout；维护者推送到 GitHub 后，使用者再通过 CLI 获取已发布的修改。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。Skill 改名或移动目录后 `update` 也无法跟随：用新名重新 `skills add`，再用 `skills remove` 清理旧名。
+本地 Git checkout、GitHub 上的源码和 CLI 安装的副本各有更新步骤：本地修改或 `git pull` 只改变 checkout；维护者推送到 GitHub 后，使用者再通过 CLI 获取已发布的修改。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。Skill 改名或移动目录后 `update` 也无法跟随：用新名重新 `skills add`，再用 `skills remove` 清理旧名。例如已安装 `project-reverse-engineering` 的用户，在新版本发布后安装 `project-navigator`，核对新入口后再移除旧名；本地 checkout 的改名不会自动更新安装副本。
 
 若更新后 Agent 仍使用旧内容，核对它实际读取的 `SKILL.md` 路径和内容；有版本字段时一并比较。确认安装副本正确后，按宿主方式重新加载或开启新会话。不要只凭仓库版本号判断当前会话已使用新版。
 
