@@ -10,7 +10,7 @@ description: >-
 license: MIT
 metadata:
   author: FeiNiaoBF
-  version: 0.2.0
+  version: 0.2.1
 disable-model-invocation: true
 ---
 
@@ -26,7 +26,7 @@ Planning alone ends with a plan and any authorized documentation. It does not au
 
 ## Output contract
 
-Before delivering or revising a plan, read and follow [Planning output contract](references/output-format.md). It defines the fixed section order, field labels, stage IDs and statuses, revision rules, and saved-plan receipt. Keep the structure stable across tasks; vary the amount of detail and the implementation sequence. Read the [worked example](references/output-example.md) when applying the format for the first time or checking a borderline case. The example's stages and technology are illustrative, not defaults.
+Before delivering or revising a plan, read and follow [Planning output contract](references/output-format.md), including its writing rules and readability check. It defines the fixed section order, field labels, stage IDs and statuses, revision rules, and saved-plan receipt. Keep the structure stable across tasks; vary the amount of detail and the implementation sequence. Read the [worked example](references/output-example.md) when applying the format for the first time or checking a borderline case. The example's stages and technology are illustrative, not defaults.
 
 ## Plan from evidence
 
