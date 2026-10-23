@@ -58,7 +58,7 @@
 | --- | --- |
 | [code-subtraction](skills/software-engineering/code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
 | [go-style](skills/software-engineering/go-style/SKILL.md) | 编写、修改或测试 Go 代码时遵循 Go 惯例及适用的 Google Go 风格指导；明确请求时也可评估 Go 风格 |
-| [project-implementation-planner](skills/software-engineering/project-implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，解释理由、记录必要决策并交接下一块可验证的开发工作 |
+| [project-implementation-planner](skills/software-engineering/project-implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，以固定六部分格式交付计划并交接下一块可验证的开发工作 |
 | [project-docs](skills/software-engineering/project-docs/SKILL.md) | 编写和维护项目文档体系，包括 README、需求、规格、技术设计、架构和 ADR；支持直接完成或共同打磨 |
 | [skill-discovery-install](skills/software-engineering/skill-discovery-install/SKILL.md) | 用户主动要求查找、比较或安装 Skills 时，审查候选并按授权安装到项目级 `.agents/skills/` |
 
