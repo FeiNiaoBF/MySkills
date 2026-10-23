@@ -1,7 +1,6 @@
-# Project-digestion visual system
+# Guided exploration visual guidance
 
-Use an interactive artifact only when it makes the learner's question testable. A visual without a
-prediction, manipulation, comparison, or explanation is documentation, not a lesson.
+Use an interactive artifact only when it makes a guided exploration question testable. For ordinary orientation, a small text map or explanation is usually enough; do not require a learner action just to show an architecture relationship.
 
 ## Direction
 
@@ -26,8 +25,7 @@ orientation rail | question + visual stage
 controls         | prediction / checkpoint
 ```
 
-The first screen must answer: what am I learning, where am I, what evidence changed, and what do I do
-next?
+For an interactive lesson, the first screen must answer: what am I learning, where am I, what evidence changed, and what do I do next?
 
 ## Pattern contracts
 
