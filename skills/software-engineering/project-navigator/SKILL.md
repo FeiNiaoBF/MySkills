@@ -27,9 +27,13 @@ Choose the smallest mode that answers the request; do not require all modes or t
 ## Establish evidence before explanation
 
 1. Check the user's goal and existing context; inspect project instructions and workspace status before a potentially stateful check. Locate a project entry (README, module overview, or prior handoff), relevant architecture/ADR records, code symbols, tests and Git history as appropriate. Verify current behavior against implementation; documents and filenames are leads, not proof. Do not mechanically read every file.
-2. Build a small mental map: user-visible behavior → entry/interface → responsible modules → data and state boundaries → output. Start at system scale before drilling into the relevant slice. Cite the few files, symbols, tests or commits that support consequential claims; give a short reading route the user can follow. Avoid raw symbol dumps.
+2. Build a small mental map: user-visible behavior → entry/interface → responsible modules → data and state boundaries → output. Start at system scale before drilling into the relevant slice. Explain the relationships instead of dumping symbols.
 3. Separate **observed code or runtime behavior**, **recorded historical decisions**, **inferences**, and **unknowns**. Check contradictions between documentation and code and say what remains uncertain. If runtime behavior matters, use the narrowest safe check available; do not claim a static trace proves it ran. Question suspicious designs rather than rationalizing them.
 4. Answer at the user's requested depth: a concise orientation or mechanism first, then detail on demand. State how to verify the next important uncertainty. Do not silently modify production code, install dependencies, or run unsafe actions for a question about understanding.
+
+## Make the answer verifiable
+
+For key claims about architecture, flows, changes or decisions, place a locatable reference near the claim: a Markdown link to relevant source lines where supported, or a file path with line number or symbol; cite a test, commit/diff or decision record when that is the actual evidence. Give the user a short reading route that says what to open first and what they can check there. Do not dump links or attach a line number to every sentence. Code can establish current behavior but not an undocumented historical motive; say when the motive is unknown.
 
 ## Restore orientation across tasks
 
