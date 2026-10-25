@@ -59,7 +59,7 @@
 | [go-style](skills/software-engineering/go-style/SKILL.md) | 编写、修改或测试 Go 代码时遵循 Go 惯例及适用的 Google Go 风格指导；明确请求时也可评估 Go 风格 |
 | [project-implementation-planner](skills/software-engineering/project-implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，以固定六部分格式交付计划并交接下一块可验证的开发工作 |
 | [project-docs](skills/software-engineering/project-docs/SKILL.md) | 编写和维护项目文档体系，包括 README、需求、规格、技术设计、架构和 ADR；支持直接完成或共同打磨 |
-| [project-navigator](skills/software-engineering/project-navigator/SKILL.md) | 回到已有代码项目时建立整体认知，追踪运行机制、理解变更与设计取舍；需要时引导独立读码练习 |
+| [project-navigator](skills/software-engineering/project-navigator/SKILL.md) | 帮助用户恢复或建立现有项目的整体认知，追踪功能机制，解释工程变更与决策；可选引导独立探索代码 |
 | [skill-discovery-install](skills/software-engineering/skill-discovery-install/SKILL.md) | 用户主动要求查找、比较或安装 Skills 时，审查候选并按授权安装到项目级 `.agents/skills/` |
 
 ### 研究（research）
@@ -114,7 +114,7 @@ npx skills list -g -a pi
 
 确认列表中出现所选 Skill，并核对范围和目标 Agent。若未出现，先检查安装命令的 `-g`、`-a` 和执行目录是否与查看时一致。
 
-然后在目标 Agent 中按名称请求使用 Skill，并说明任务、材料和范围。例如，安装 `project-docs` 后可以请求：“请使用 project-docs 整理这个仓库的 README，保留已有事实和安装方式。”实际发现和加载方式由宿主决定；列表中已安装不代表当前会话已经加载。
+然后在目标 Agent 中按名称请求使用 Skill，并说明任务、材料和范围。例如，安装 `project-docs` 后可以请求：“请使用 project-docs 整理这个仓库的 README，保留已有事实和安装方式。”想重新理解项目时，可以请求：“请用 project-navigator 帮我建立这个仓库的整体认知，说明主要模块如何协作，并给出代码依据和下一步阅读入口。”实际发现和加载方式由宿主决定；列表中已安装不代表当前会话已经加载。
 
 ### 更新或在新电脑重装
 
