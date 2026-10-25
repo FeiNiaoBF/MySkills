@@ -1,110 +1,127 @@
 ---
 name: visual-explainer
 description: >-
-  Use only when the user explicitly invokes visual-explainer or asks to create an HTML explainer.
-  Turn a complex explanation into a clear, self-contained HTML page with a deliberate learning path,
-  accurate examples, and visuals that clarify relationships.
+  Use only when the user explicitly invokes `visual-explainer` or directly requests a
+  standalone HTML explainer page. Turn one complete explanation into a single offline
+  HTML file with an answer-first reading path and visuals that carry real relationships.
+  Not for chat answers, design previews, or research reports.
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 disable-model-invocation: true
 ---
 
 # Visual Explainer
 
-Create a self-contained HTML page that helps the reader understand a complete explanation. Design the explanation first; use the page to make its structure and relationships easy to follow.
+Produce one self-contained HTML page that carries a complete explanation. Decide the explanation before choosing a layout; the page exists to make its structure and relationships easy to follow.
 
 ## Invocation boundary
 
-- Run only after the user explicitly invokes `visual-explainer` or directly asks for an HTML explainer.
-- Do not create an HTML page because a question is long, complex, comparative, or explanatory.
-- If the user asks for an ordinary explanation, answer in the conversation and do not invoke this workflow.
-- Treat an explicit invocation as authorization to create the requested page. Ask one focused question only when a missing choice would materially change the explanation; otherwise state a reasonable assumption and proceed.
+- Start only when the user names `visual-explainer` or explicitly requests a standalone HTML explainer page.
+- Do not build a page because a question is long, comparative, technical, or hard to read in chat. Answer ordinary explanation requests in the conversation.
+- An explicit request authorizes building the page. Ask one focused question only when a missing choice would materially change the result; otherwise state a reasonable assumption and proceed.
+- If a page for this topic already exists, update it instead of creating a second file.
 
 ## Frame the explanation
 
-Before drafting, identify:
+Before drafting, settle:
 
-- The exact question the reader should be able to answer afterward.
-- The conclusion or mental model they need, not merely the topic they mentioned.
-- The prior knowledge shown in the request and the smallest set of prerequisites still missing.
-- The scope boundary: what this explanation covers and what it deliberately leaves out.
+- The question the reader must be able to answer after reading.
+- The conclusion or mental model they need, not the topic label they used.
+- Prior knowledge visible in the request, and the smallest missing prerequisite.
+- What this page covers and what it deliberately leaves out.
 
-Do not infer expertise from unrelated context. If several interpretations are possible, choose the one supported by the request; ask one focused question only when choosing incorrectly would materially change the explanation.
+Do not infer expertise from unrelated context. When several readings are plausible, take the one the request supports; ask only when the wrong choice would change the explanation substantially.
 
 ## Choose an explanation path
 
-Match the path to the shape of the reader's question. Combine paths only when one cannot answer the question completely.
+Match the path to the shape of the question. Use one path; combine two only when neither alone answers the question.
 
-- **Concept:** core meaning → useful intuition → concrete example → where the intuition stops working.
-- **Process or system:** purpose → participating parts → sequence and state changes → branches, failures, or recovery.
-- **Comparison or decision:** decision to make → relevant criteria → differences and trade-offs → recommendation under stated conditions.
-- **Claim or conclusion:** conclusion → supporting evidence or premises → reasoning between them → assumptions, uncertainty, and limits.
-- **Code or architecture:** observable behavior → responsible components → control or data flow → consequence of changing a component.
-- **History or evolution:** present result → turning points in chronological order → what changed at each point → why those changes matter now.
+| Path | Section order |
+| --- | --- |
+| Concept | core meaning → intuition → concrete example → where the intuition stops |
+| Process or system | purpose → parts → sequence and state changes → branches, failures, recovery |
+| Comparison or decision | decision → criteria → differences and trade-offs → recommendation and its conditions |
+| Claim or conclusion | conclusion → evidence or premises → reasoning → assumptions, uncertainty, limits |
+| Code or architecture | observable behavior → responsible components → control or data flow → effect of changing a component |
+| History or evolution | present state → turning points in time order → what changed → why it matters now |
 
-Do not force every explanation into the same template. Use the shortest path that preserves the reasoning the reader needs.
+Choose the shortest path that preserves the reasoning the reader needs. This table lists section orders; it does not ask every page to contain a table.
 
 ## Draft the explanation
 
-1. Put the answer or central mental model first. Do not make the reader finish the page to discover the conclusion.
-2. Order each later section so it relies only on ideas already introduced. Define a necessary term where it first affects the explanation.
-3. Give each section one explanatory job. Remove a section when it only repeats another section in a different form.
-4. Connect abstract ideas to observable behavior with a concrete example. Keep the example accurate, relevant, and consistent across sections.
-5. Distinguish facts, examples, assumptions, and recommendations. Mark illustrative values as illustrative and do not invent evidence.
-6. Preserve important exceptions, uncertainty, failure conditions, and evidence limits. Do not simplify them away for a cleaner story.
-7. Choose a visual form only for a relationship it expresses better than prose: sequence for order, table for comparison, diagram for relationships, or timeline for change.
+1. Lead with the answer or central model, short enough to read before scrolling.
+2. Order sections so each uses only ideas already introduced; define a term where it first affects the reasoning.
+3. Give every section one explanatory job. Delete a section that only restates another in different words.
+4. Anchor abstractions in one concrete example that stays accurate and consistent across sections.
+5. Keep facts, examples, assumptions, and recommendations visibly distinct. Label illustrative values; never invent evidence, statistics, quotations, benchmarks, or sources.
+6. Preserve material caveats, failure conditions, uncertainty, and evidence limits instead of smoothing them out for a cleaner story.
+7. Reserve a visual for a relationship prose handles worse: order, comparison, containment, flow, or change over time.
 
-## Separate explanation from presentation
+Language: write the page in the language the user asked for, otherwise the language they are using. Set `lang` to the matching BCP 47 tag (`zh-CN`, `en`, `ja`) and use one language consistently outside quoted terms.
 
-The model owns the meaning of the explanation: the conclusion, section order, definitions, examples, relationships, and caveats. Any present or future rendering tool owns presentation mechanics only.
+Length: no chapter quota and no padding. Typical pages need three to six chapters; a page that restates the chat answer at greater length has failed. Derive the reading time from the actual word or character count and keep it approximately honest.
 
-A rendering tool may arrange, style, or validate supplied content. It must not add factual claims, alter causality, silently remove qualifications, or reinterpret an example. Keep the explanation complete enough to review before presentation decisions are applied.
+Author the full text before styling. Styling may arrange, emphasize, and validate content; it must not add claims, reorder causality, drop qualifications, or reinterpret an example.
 
-Do not create a reference file until a real task introduces a substantial branch that the main workflow does not always need. Keep invocation, explanation design, and quality criteria in this file because they apply to every run.
+## Build the page
 
-## Build the HTML page
+Start from the bundled [HTML template](assets/explainer.html): copy it to the delivery location and edit the copy, never the asset.
 
-Before building, read and copy the bundled [HTML template](assets/explainer.html). Treat it as the visual, responsive, and accessibility baseline; do not edit the source asset for an individual task.
+The `{{...}}` strings are literal authoring markers. Replace every one — `lang`, `<title>`, labels, ARIA text, link targets, reading time — and delete the template's authoring comments. Search the finished file for `{{` before delivery.
 
-The `{{...}}` strings are literal authoring markers, not a template-engine contract. Replace every marker in the copied file, including document language, page title, visible labels, link targets, and accessible names. Search the finished file for unresolved `{{...}}` markers before delivery.
+The template is a visual and accessibility baseline plus optional modules, not a content outline:
 
-The template is not a required content outline. Match it to the explanation path chosen above:
+- Repeat, reorder, or delete chapters until each remaining section has one job.
+- Keep the ordered-sequence figure only for real order or causation. Adjust its items and `--process-columns` together, and keep a visible complete text equivalent. Replace it with the comparison table, prose, or a small inline SVG when another relationship is meant.
+- Use the comparison table for criteria and trade-offs. Keep its `<caption>`, header cells, and the keyboard-scrollable wrapper for narrow screens.
+- Remove the example, limits, or sources block when it carries no real content. Remove the reading-progress element and its script together, or keep both.
+- Keep ids unique, and keep chapter numbers, heading references, labels, and reading time consistent with the final sections.
+- Preserve the design tokens, wide desktop canvas, bounded prose width, narrow-screen reflow, visible focus, reduced-motion behavior, and print rules unless the task supplies a stronger requirement.
 
-- Repeat, reorder, or delete chapters so each remaining section has a distinct explanatory job.
-- Remove optional process, detail-list, example, caveat, scope, or source modules when they do not help answer the question.
-- Use the process figure only for an ordered sequence or causal chain. Adjust its items and `--process-columns` together, and retain a visible complete text equivalent. Replace it with a semantic table, relationship diagram, timeline, or other appropriate form when the subject requires one.
-- Keep IDs unique after adding or removing sections. Update heading references, accessible labels, chapter numbering, and reading-time text to agree with the final content.
-- Preserve the centralized design tokens, readable class names, wide desktop canvas, bounded prose width, narrow-screen reflow, keyboard focus, reduced-motion behavior, and print cleanup unless the task supplies a stronger requirement.
+Delivery constraints:
 
-Additional delivery requirements:
+- One `.html` file with all CSS and JavaScript inside; it must open from the filesystem with no build step and no network.
+- No CDN scripts, web fonts, remote images, or MathJax. Draw with HTML, CSS, and inline SVG; inline tiny assets as data URIs, and set formulas as HTML text or SVG paths instead of pulling a renderer.
+- JavaScript is optional and additive. Guard it so a deleted or renamed element cannot break the page, and keep every explanation readable with scripting disabled.
+- Save to the location the task implies: the folder the user named, the task's output folder, otherwise the workspace root. Use a descriptive kebab-case filename ending in `.html`, and never overwrite an unrelated existing file.
 
-- Deliver one complete `.html` file. Keep CSS and any necessary JavaScript inside that file so it works when opened locally without a build step or network access.
-- Use semantic headings and a clear reading order. Make the page responsive, keyboard accessible, and readable with high contrast and reduced motion support.
-- Use diagrams, callouts, examples, and tables to support the explanation. Keep all essential meaning available in text; do not rely on color, animation, hover, or interaction alone.
-- Add interaction only when it helps the reader inspect or understand the subject. Keep static content complete when scripts are unavailable.
-- Avoid decorative panels, repeated summaries, generic stock imagery, and controls that add no explanatory value.
-- Save the file in the current task's expected output location. If none is specified, use a clearly named file in the workspace and report its path.
+## Visual and accessibility baseline
+
+- Semantic structure: `header`, `main`, `section`, `footer`; exactly one `h1`; no skipped heading level; text that still makes sense read top to bottom.
+- Contrast: at least 4.5:1 for body text and 3:1 for large text, meaningful borders, and focus rings. Recheck every token pair after a palette change; the bundled light palette already passes.
+- Never encode meaning in color, position, animation, or hover alone. Pair each state or category with a label, a pattern, or text.
+- Keyboard and zoom: every interaction reachable and visible by keyboard, focus never removed, layout usable at 200% zoom and at 320 px width without clipping or hiding content behind horizontal scroll (wide tables excepted, inside the labelled scroll region).
+- Motion: honor `prefers-reduced-motion`; no autoplaying or looping motion in an explanation.
+- Figures: every diagram and table has a caption or adjacent text equivalent, decorative shapes are `aria-hidden`, and no essential text is baked into a raster image.
 
 ## Keep the scope clear
 
-- `visual-explainer` creates a complete, structured HTML explanation after explicit invocation.
-- `make-sense` explains a specific confusing term, passage, claim, or reasoning gap in the conversation. It can unpack several linked steps when needed, but stays anchored to the user's actual obstacle.
-- Do not turn the page into a generic lesson when the request concerns a narrower question. Do not claim that the page proves the reader learned the material.
+- `visual-explainer` builds one complete, standalone HTML explanation after an explicit request.
+- `make-sense` repairs a single confusing term, passage, or inference in the conversation and returns to the original task.
+- `research-curator` investigates a question across sources and publishes a traceable report ledger; this skill explains what is already understood and does not run retrieval or invent citations.
+- `aesthetic-translator` and `frontend-guide` produce design previews and implementation handoffs for an interface; this skill explains a subject, not a UI to build.
+- `project-navigator` explains an existing codebase in conversation; use this skill only when the user wants a standalone page.
+- Stay inside the requested question. A narrow question does not become a course, and the page does not prove the reader learned the material.
 
-## Review before delivery
+## Verify before delivery
 
-Check that:
+Content:
 
-- The page answers the requested question and gives the conclusion before supporting detail.
-- The chosen explanation path matches the shape of the question instead of following a generic template.
-- Each section has a distinct role, and the sequence does not rely on an unexplained prerequisite.
-- Every new term, causal link, and transition needed for the conclusion is stated rather than implied.
-- Examples, diagrams, and prose agree with one another and do not introduce unsupported claims.
-- Facts, illustrations, assumptions, recommendations, conditions, caveats, and evidence limits remain distinguishable.
-- Removing decorative or repeated content would not expose a missing reasoning step.
-- The page follows the appropriate explanation path rather than the template's initial section order.
-- The page contains no unresolved `{{...}}` authoring markers, filling instructions, or content copied from an unrelated example.
-- Each remaining template module helps explain a real relationship or necessary qualification; unused modules are removed.
-- The page opens as a local file and remains usable on a narrow screen and with keyboard navigation.
+- The page answers the requested question and states the conclusion before the supporting detail.
+- The section order follows the chosen path, each section has a distinct job, and no prerequisite appears after it is needed.
+- Examples, figures, tables, and prose agree; nothing claims more than the stated evidence; caveats and limits survive.
+- Deleting any decorative panel or repeated summary leaves no reasoning gap.
 
-Report the file path and briefly describe the explanation's structure. Do not also paste the full page into chat unless the user asks.
+File:
+
+- No unresolved `{{`, no template instructions, no leftover content from another topic.
+- No `http://` or `https://` outside the sources list, and no external `src`.
+- No duplicate `id` values and no second `h1`.
+- The file opens locally, stays readable with scripting disabled, and logs no console error with it enabled.
+
+Rendering:
+
+- Open the finished file and inspect it at desktop width, at 320 px, at 200% zoom, and with keyboard-only navigation.
+- Check print preview, and check a reduced-motion setting when the page relies on motion.
+
+Report the file path and the explanation's structure in two or three sentences. Do not paste the whole page into chat unless asked.

@@ -16,9 +16,13 @@
     1. Copy this file to the requested output location; do not edit the asset.
     2. Replace every marker, including lang, title, labels and ARIA text.
     3. Choose, repeat, reorder or delete sections to fit the explanation path.
-    4. Remove optional modules that do not clarify a real relationship.
+       Chapter indices are sequential labels: renumber them after any change.
+    4. Remove optional modules that do not clarify a real relationship. The
+       comparison table, example, limits and sources blocks are all optional.
     5. Remove authoring comments and never ship unresolved markers or invented facts.
     6. Keep essential meaning in visible text and make the result work offline.
+    7. Delete the reading-progress markup and its script together, or keep both;
+       the script already exits quietly when the markup is gone.
   -->
   <style>
     /* ================================================================
@@ -435,6 +439,7 @@
       margin: var(--space-2) 0 0;
       padding: 0;
       list-style: none;
+      counter-reset: step;
     }
 
     .step-item {
@@ -443,6 +448,7 @@
       gap: 18px;
       padding: 22px 0;
       border-bottom: 1px solid var(--line);
+      counter-increment: step;
     }
 
     .step-marker {
@@ -455,6 +461,10 @@
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 700;
+    }
+
+    .step-marker::before {
+      content: counter(step);
     }
 
     .step-item h4 {
@@ -470,7 +480,62 @@
     }
 
     /* ================================================================
-       8. EXAMPLE AND CAVEAT
+       8. COMPARISON TABLE
+       Scrolls inside a labelled, keyboard-focusable region on narrow screens
+       instead of forcing the page itself to scroll sideways.
+       ================================================================ */
+    .table-scroll {
+      max-width: 100%;
+      margin: var(--space-4) 0;
+      overflow-x: auto;
+    }
+
+    .table-scroll:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .compare-table caption {
+      margin-bottom: var(--space-2);
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: start;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: start;
+      vertical-align: top;
+    }
+
+    .compare-table thead th {
+      border-bottom: 2px solid var(--ink);
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 0.02em;
+    }
+
+    .compare-table tbody th {
+      font-weight: 700;
+    }
+
+    .compare-table tbody tr:last-child th,
+    .compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ================================================================
+       9. EXAMPLE AND CAVEAT
        ================================================================ */
     .example-block {
       margin-top: var(--space-4);
@@ -545,7 +610,7 @@
     }
 
     /* ================================================================
-       9. SOURCES
+       10. SOURCES
        Keep source titles human-readable; URLs may wrap on narrow screens.
        ================================================================ */
     .references {
@@ -594,7 +659,7 @@
     }
 
     /* ================================================================
-       10. RESPONSIVE AND PRINT
+       11. RESPONSIVE AND PRINT
        ================================================================ */
     @media (max-width: 660px) {
       .explainer-header {
@@ -753,9 +818,29 @@
 
       .chapter,
       .example-block,
+      .compare-table,
       .limit-note,
       .references-inner {
         break-inside: avoid;
+      }
+
+      .table-scroll {
+        overflow: visible;
+      }
+
+      .example-block {
+        border: 1px solid var(--line);
+        background: white;
+        color: var(--ink);
+      }
+
+      .example-label,
+      .example-caption {
+        color: var(--ink-soft);
+      }
+
+      .example-content {
+        color: var(--ink);
       }
 
       a {
@@ -790,32 +875,37 @@
       </div>
     </header>
 
-    <!-- TEMPLATE SLOT: question, category, reading time and framing -->
-    <section class="explainer-opening" aria-labelledby="page-title">
-      <div class="opening-grid">
-        <p class="opening-kicker">
-          {{EXPLANATION_TYPE}}
-          <span>{{READING_TIME}}</span>
-        </p>
-        <div>
-          <h1 class="explainer-title" id="page-title">{{PAGE_TITLE}}</h1>
-          <p class="explainer-deck">{{FRAMING_SENTENCE}}</p>
+    <!--
+      The title and the core answer stay inside main so that the skip link lands
+      on the document's real content, not midway through it.
+    -->
+    <main id="explainer-content">
+      <!-- TEMPLATE SLOT: question, category, reading time and framing -->
+      <section class="explainer-opening" aria-labelledby="page-title">
+        <div class="opening-grid">
+          <p class="opening-kicker">
+            {{EXPLANATION_TYPE}}
+            <span>{{READING_TIME}}</span>
+          </p>
+          <div>
+            <h1 class="explainer-title" id="page-title">{{PAGE_TITLE}}</h1>
+            <p class="explainer-deck">{{FRAMING_SENTENCE}}</p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- TEMPLATE SLOT: shortest complete answer -->
-    <section class="answer-strip" aria-labelledby="answer-heading">
-      <p class="answer-label" id="answer-heading">
-        {{CORE_ANSWER_LABEL}}
-        <span>{{CORE_ANSWER_HINT}}</span>
-      </p>
-      <div class="answer-copy">
-        <p>{{CORE_ANSWER}}</p>
-      </div>
-    </section>
+      <!-- TEMPLATE SLOT: shortest complete answer -->
+      <section class="answer-strip" aria-labelledby="answer-heading">
+        <p class="answer-label" id="answer-heading">
+          {{CORE_ANSWER_LABEL}}
+          <span>{{CORE_ANSWER_HINT}}</span>
+        </p>
+        <div class="answer-copy">
+          <p>{{CORE_ANSWER}}</p>
+        </div>
+      </section>
 
-    <main class="explainer-body" id="explainer-content">
+      <div class="explainer-body">
       <!--
         TEMPLATE SLOT: first explanatory section.
         This section order is not fixed. Repeat, remove or reorder chapters to
@@ -836,10 +926,9 @@
           -->
           <figure
             class="process-map"
-            aria-describedby="relationship-description"
             style="--process-columns: 3"
           >
-            <ol class="process-line" aria-label="{{RELATIONSHIP_ARIA_LABEL}}">
+            <ol class="process-line">
               <li class="process-step">
                 <span class="process-dot" aria-hidden="true"></span>
                 <span class="process-name">{{RELATIONSHIP_1_NAME}}</span>
@@ -863,26 +952,28 @@
 
           <!--
             OPTIONAL MODULE: expanded steps or key points.
-            Repeat or remove items to match what the reader actually needs.
+            Repeat or remove items to match what the reader actually needs. The
+            marker numbers come from CSS counters, so reordering items needs no
+            manual renumbering.
           -->
           <h3 class="step-list-heading">{{DETAIL_LIST_HEADING}}</h3>
-          <ol class="step-list" aria-label="{{DETAIL_LIST_ARIA_LABEL}}">
+          <ol class="step-list" role="list" aria-label="{{DETAIL_LIST_ARIA_LABEL}}">
             <li class="step-item">
-              <span class="step-marker">1</span>
+              <span class="step-marker" aria-hidden="true"></span>
               <div>
                 <h4>{{DETAIL_1_TITLE}}</h4>
                 <p>{{DETAIL_1_EXPLANATION}}</p>
               </div>
             </li>
             <li class="step-item">
-              <span class="step-marker">2</span>
+              <span class="step-marker" aria-hidden="true"></span>
               <div>
                 <h4>{{DETAIL_2_TITLE}}</h4>
                 <p>{{DETAIL_2_EXPLANATION}}</p>
               </div>
             </li>
             <li class="step-item">
-              <span class="step-marker">3</span>
+              <span class="step-marker" aria-hidden="true"></span>
               <div>
                 <h4>{{DETAIL_3_TITLE}}</h4>
                 <p>{{DETAIL_3_EXPLANATION}}</p>
@@ -892,9 +983,53 @@
         </div>
       </section>
 
+      <!--
+        OPTIONAL MODULE: comparison table.
+        Use for criteria and trade-offs. Keep the caption, keep table headers on
+        cells, and delete the whole block when no real comparison exists.
+      -->
+      <section class="chapter" aria-labelledby="chapter-comparison">
+        <p class="chapter-index">{{CHAPTER_2_INDEX}}</p>
+        <div>
+          <h2 class="chapter-title" id="chapter-comparison">{{COMPARISON_SECTION_TITLE}}</h2>
+          <p class="chapter-intro">{{COMPARISON_SECTION_INTRO}}</p>
+
+          <div class="table-scroll" tabindex="0" role="region"
+            aria-labelledby="comparison-caption">
+            <table class="compare-table">
+              <caption id="comparison-caption">{{COMPARISON_CAPTION}}</caption>
+              <thead>
+                <tr>
+                  <th scope="col">{{COMPARISON_CRITERION_LABEL}}</th>
+                  <th scope="col">{{COMPARISON_OPTION_A}}</th>
+                  <th scope="col">{{COMPARISON_OPTION_B}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{{COMPARISON_ROW_1}}</th>
+                  <td>{{COMPARISON_ROW_1_A}}</td>
+                  <td>{{COMPARISON_ROW_1_B}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">{{COMPARISON_ROW_2}}</th>
+                  <td>{{COMPARISON_ROW_2_A}}</td>
+                  <td>{{COMPARISON_ROW_2_B}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">{{COMPARISON_ROW_3}}</th>
+                  <td>{{COMPARISON_ROW_3_A}}</td>
+                  <td>{{COMPARISON_ROW_3_B}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- OPTIONAL MODULE: concrete example; delete when it adds no explanatory value -->
       <section class="chapter" aria-labelledby="chapter-example">
-        <p class="chapter-index">{{CHAPTER_2_INDEX}}</p>
+        <p class="chapter-index">{{CHAPTER_3_INDEX}}</p>
         <div>
           <h2 class="chapter-title" id="chapter-example">{{EXAMPLE_SECTION_TITLE}}</h2>
           <p class="chapter-intro">{{EXAMPLE_SECTION_INTRO}}</p>
@@ -909,7 +1044,7 @@
 
       <!-- OPTIONAL MODULE: limits, uncertainty or scope; retain when material -->
       <section class="chapter" aria-labelledby="chapter-limits">
-        <p class="chapter-index">{{CHAPTER_3_INDEX}}</p>
+        <p class="chapter-index">{{CHAPTER_4_INDEX}}</p>
         <div>
           <h2 class="chapter-title" id="chapter-limits">{{LIMITS_SECTION_TITLE}}</h2>
           <p class="chapter-intro">{{LIMITS_SECTION_INTRO}}</p>
@@ -925,6 +1060,7 @@
           <p class="source-note">{{SCOPE_NOTE}}</p>
         </div>
       </section>
+      </div>
     </main>
 
     <!-- OPTIONAL MODULE: sources; delete when the explanation has no sourced claims -->
@@ -945,40 +1081,48 @@
   <script>
     /* ================================================================
        READING PROGRESS
-       Presentation only: this script does not create or alter content.
+       Presentation only: this script does not create or alter content, and it
+       exits quietly when the progress element is deleted from the page.
        ================================================================ */
-    const explainerPage = document.querySelector(".explainer-page");
-    const progress = document.querySelector("#readingProgress");
-    const progressValue = document.querySelector("#readingProgressValue");
-    const progressText = document.querySelector("#readingProgressText");
-    const progressSuffix = progress.dataset.valueSuffix;
-    let progressFrame = null;
+    (function () {
+      const explainerPage = document.querySelector(".explainer-page");
+      const progress = document.querySelector("#readingProgress");
+      const progressValue = document.querySelector("#readingProgressValue");
+      const progressText = document.querySelector("#readingProgressText");
+      if (!explainerPage || !progress || !progressValue || !progressText) return;
 
-    function updateReadingProgress() {
-      progressFrame = null;
-      const pageRect = explainerPage.getBoundingClientRect();
-      const scrollableDistance = explainerPage.offsetHeight - window.innerHeight;
-      const percentage = scrollableDistance <= 0
-        ? 100
-        : Math.round(
-            (Math.min(Math.max(-pageRect.top, 0), scrollableDistance) / scrollableDistance) * 100
-          );
+      const progressSuffix = progress.dataset.valueSuffix || "";
+      let progressFrame = null;
 
-      progressValue.style.width = `${percentage}%`;
-      progressText.textContent = `${percentage}%`;
-      progress.setAttribute("aria-valuenow", String(percentage));
-      progress.setAttribute("aria-valuetext", `${percentage}% ${progressSuffix}`);
-    }
+      function updateReadingProgress() {
+        progressFrame = null;
+        const pageRect = explainerPage.getBoundingClientRect();
+        const scrollableDistance = explainerPage.offsetHeight - window.innerHeight;
+        const percentage = scrollableDistance <= 0
+          ? 100
+          : Math.round(
+              (Math.min(Math.max(-pageRect.top, 0), scrollableDistance) / scrollableDistance) * 100
+            );
 
-    function scheduleProgressUpdate() {
-      if (progressFrame !== null) return;
-      progressFrame = requestAnimationFrame(updateReadingProgress);
-    }
+        progressValue.style.width = `${percentage}%`;
+        progressText.textContent = `${percentage}%`;
+        progress.setAttribute("aria-valuenow", String(percentage));
+        progress.setAttribute(
+          "aria-valuetext",
+          progressSuffix ? `${percentage}% ${progressSuffix}` : `${percentage}%`
+        );
+      }
 
-    window.addEventListener("scroll", scheduleProgressUpdate, { passive: true });
-    window.addEventListener("resize", scheduleProgressUpdate);
-    window.addEventListener("pageshow", updateReadingProgress);
-    updateReadingProgress();
+      function scheduleProgressUpdate() {
+        if (progressFrame !== null) return;
+        progressFrame = requestAnimationFrame(updateReadingProgress);
+      }
+
+      window.addEventListener("scroll", scheduleProgressUpdate, { passive: true });
+      window.addEventListener("resize", scheduleProgressUpdate);
+      window.addEventListener("pageshow", updateReadingProgress);
+      updateReadingProgress();
+    })();
   </script>
 </body>
 </html>

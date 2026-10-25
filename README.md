@@ -42,7 +42,7 @@
 | --- | --- |
 | [clarify-wording](skills/communication/clarify-wording/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
 | [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，用精准的文本解释修复理解障碍并回到原任务 |
-| [visual-explainer](skills/communication/visual-explainer/SKILL.md) | 用户明确调用时，把完整解释设计成易理解、可离线打开的 HTML 页面；不会因问题复杂而自动生成页面 |
+| [visual-explainer](skills/communication/visual-explainer/SKILL.md) | 用户明确点名或要一份独立 HTML 解释页时，把已想清的解释做成离线的单文件页面；不会因为问题复杂而自动生成 |
 
 ### 问题探索（problem-solving）
 
