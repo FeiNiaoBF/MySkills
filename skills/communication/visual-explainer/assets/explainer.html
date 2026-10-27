@@ -22,7 +22,7 @@
     5. Remove authoring comments and never ship unresolved markers or invented facts.
     6. Keep essential meaning in visible text and make the result work offline.
     7. Delete the reading-progress markup and its script together, or keep both;
-       the script already exits quietly when the markup is gone.
+       it remains hidden until the script initializes it.
   -->
   <style>
     /* ================================================================
@@ -75,6 +75,7 @@
 
     html {
       scroll-behavior: smooth;
+      scroll-padding-block-start: 4.5rem;
       text-size-adjust: 100%;
     }
 
@@ -137,6 +138,11 @@
     /* ================================================================
        3. PAGE HEADER
        ================================================================ */
+    #page-title:focus {
+      outline: 3px solid var(--focus);
+      outline-offset: 4px;
+    }
+
     .explainer-page {
       min-height: 100vh;
       background: var(--paper);
@@ -173,6 +179,10 @@
       height: 9px;
       background: var(--accent);
       content: "";
+    }
+
+    .reading-progress[hidden] {
+      display: none;
     }
 
     .reading-progress {
@@ -302,6 +312,10 @@
       display: grid;
       grid-template-columns: 72px minmax(0, 1fr);
       gap: var(--space-3);
+    }
+
+    .chapter > div {
+      min-width: 0;
     }
 
     .chapter + .chapter {
@@ -816,12 +830,24 @@
         padding-left: 0;
       }
 
-      .chapter,
+      h1,
+      h2,
+      h3 {
+        break-after: avoid-page;
+      }
+
+      .answer-strip,
+      .process-map,
+      .step-item,
       .example-block,
-      .compare-table,
       .limit-note,
-      .references-inner {
-        break-inside: avoid;
+      .references li,
+      tr {
+        break-inside: avoid-page;
+      }
+
+      thead {
+        display: table-header-group;
       }
 
       .table-scroll {
@@ -846,11 +872,17 @@
       a {
         color: inherit;
       }
+
+      .references a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        overflow-wrap: anywhere;
+        font-size: 0.9em;
+      }
     }
   </style>
 </head>
 <body>
-  <a class="skip-link" href="#explainer-content">{{SKIP_LINK_LABEL}}</a>
+  <a class="skip-link" href="#page-title">{{SKIP_LINK_LABEL}}</a>
 
   <article class="explainer-page">
     <!-- TEMPLATE SLOT: document identity -->
@@ -859,6 +891,7 @@
       <div
         class="reading-progress"
         id="readingProgress"
+        hidden
         role="progressbar"
         aria-label="{{READING_PROGRESS_ARIA_LABEL}}"
         aria-valuemin="0"
@@ -888,7 +921,7 @@
             <span>{{READING_TIME}}</span>
           </p>
           <div>
-            <h1 class="explainer-title" id="page-title">{{PAGE_TITLE}}</h1>
+            <h1 class="explainer-title" id="page-title" tabindex="-1">{{PAGE_TITLE}}</h1>
             <p class="explainer-deck">{{FRAMING_SENTENCE}}</p>
           </div>
         </div>
@@ -1091,6 +1124,7 @@
       const progressText = document.querySelector("#readingProgressText");
       if (!explainerPage || !progress || !progressValue || !progressText) return;
 
+      progress.hidden = false;
       const progressSuffix = progress.dataset.valueSuffix || "";
       let progressFrame = null;
 
