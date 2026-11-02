@@ -23,6 +23,25 @@ Use the existing records for both the initial space and subsequent updates:
 
 For each space update, write a concise event detail with the round (or initialization), affected question/branch labels, the trigger and its source/claim references if any, the change, its rationale, and the next query or reopening condition. Record whether a branch is active, deferred, merged, or bounded for now. These are planning labels in free text, not new schema fields or round statuses. Keep enough prior state to resume a deferred branch or reverse a decision. When a concept comes from a passage, include its source ID and locator/quote; otherwise label it as a user term or a tentative research hypothesis. Reference canonical evidence rather than maintaining a second copy of it.
 
+Use this compact format in `event.detail` when a space update changes the next search decision; omit empty fields, but keep the labels stable:
+
+```text
+SPACE UPDATE | round: r02 | operation: expand
+questions: q1
+trigger: c3 / s7, locator ...; exposed an untested interface mechanism
+change: add branch b2 under q1; keep b1 active
+branches:
+- id: b2 | parent: q1 | status: active
+  hypothesis: interface fatigue may explain the observed failures
+  evidence_for: c3 (s7, locator ...)
+  evidence_against: none inspected
+  unresolved: whether fatigue precedes electrical breakdown
+  next_test: compare studies measuring fatigue and breakdown in the same system
+  reopen_if: evidence shows a different failure order
+```
+
+Use stable question IDs for answer obligations and short branch labels for exploratory paths. `evidence_for` and `evidence_against` must point to inspected claims and their source locators; use `none inspected` or `not yet searched` where appropriate. Do not use the template to turn a hypothesis into a verified claim. If an update does not change the next search decision, a full branch snapshot is unnecessary; record only the relevant query, source, claim, and round in the canonical ledger.
+
 The current graph has no `Concept` node or general mechanism/causal edge. Keep concept vocabulary and tentative relationships in event details. If a source makes a substantive relationship claim, record that proposition as a claim with inspected evidence. Use supported graph types only for their defined meanings; `derives_from` is not a substitute for “causes.” No schema change is needed for this workflow, and validation cannot judge the quality of these planning notes.
 
 ## Recursive rounds: select, retrieve, backfill, revise
