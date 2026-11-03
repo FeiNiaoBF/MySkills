@@ -1,6 +1,6 @@
 # Research curator
 
-A portable research skill and standard-library Go tools for bounded, evidence-backed research. Research and Writing remain separate: the v1 run ledger is the source of truth for inspected sources, claims, quotations, and provenance; a versioned envelope records rounds, coverage, gaps, source roles, and the current stop. Retrieval uses the host agent's search/fetch tools.
+A portable research skill and standard-library Go tools for bounded, evidence-backed research. Research and Writing remain separate: the `run.json` ledger is the source of truth for inspected sources, claims, quotations, and provenance; a versioned report envelope records rounds, coverage, gaps, source roles, and the current stop. Retrieval uses the host agent's search/fetch tools.
 
 ## Run
 
@@ -24,7 +24,7 @@ If `-out` is omitted, publication writes directly to `<system-temp>/research-cur
 
 ## Skill and references
 
-Read [SKILL.md](SKILL.md) for the short workflow. The [research guide](references/research-guide.md) covers the Research Contract, real retrieval, Evidence/Claim, provenance, counterevidence, coverage, Evidence Saturation, synthesis, writing, and limitations. [Report delivery](references/report-delivery.md) covers output and inspection. [DESIGN.md](DESIGN.md) documents the legacy v1 ledger; [ADR 0003](references/adr/0003-reader-first-report.md) records the reader-first and current-state decisions.
+Read [SKILL.md](SKILL.md) for the short workflow. The [research guide](references/research-guide.md) covers the Research Contract, real retrieval, Evidence/Claim, provenance, counterevidence, coverage, Evidence Saturation, synthesis, writing, and limitations. [Report delivery](references/report-delivery.md) covers output and inspection. [DESIGN.md](DESIGN.md) documents the current v2 `run.json` contract; legacy v1 runs remain supported. [ADR 0003](references/adr/0003-reader-first-report.md) records the reader-first and current-state decisions.
 
 ## Examples and verification
 

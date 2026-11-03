@@ -1,6 +1,6 @@
 # Research and writing guide
 
-Use this when planning a study or judging its evidence. The v1 run ledger is the source of truth for queries, sources, claims, quotations, provenance, and contradictions; the report envelope records research rounds, coverage, gaps, source roles, and the current stop. Recursive search means each round updates the problem space that guides the next round. It does not create a separate ledger or an unlimited search tree.
+Use this when planning a study or judging its evidence. The `run.json` ledger is the source of truth for queries, sources, claims, quotations, provenance, and contradictions; the report envelope records research rounds, coverage, gaps, source roles, and the current stop. Recursive search means each round updates the problem space that guides the next round. It does not create a separate ledger or an unlimited search tree.
 
 ## Research Contract and initial problem space
 
