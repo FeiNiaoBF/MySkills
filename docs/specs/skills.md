@@ -19,7 +19,7 @@ parent: myskills-architecture
 - 隐式调用是默认；需要用户明确触发的工作流在宿主扩展字段中声明，且不假定所有宿主都遵守这些字段。
 - 新增、改名或改变对外定位时，同步 `README.md` 的索引；只改一个 Skill 时不牵动其他 Skill。
 
-格式细节与验证命令见 `CONTRIBUTING.md`；布局与不变量见 `myskills-architecture`。
+格式细节与验证命令见 [`CONTRIBUTING.md`](../../CONTRIBUTING.md)；布局与不变量见 `myskills-architecture`。
 
 ## Children
 
