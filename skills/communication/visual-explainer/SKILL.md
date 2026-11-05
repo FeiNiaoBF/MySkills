@@ -98,9 +98,9 @@ Delivery constraints:
 
 - `visual-explainer` builds one complete, standalone HTML explanation after an explicit request.
 - `make-sense` repairs a single confusing term, passage, or inference in the conversation and returns to the original task.
-- `research-curator` investigates a question across sources and publishes a traceable report ledger; this skill explains what is already understood and does not run retrieval or invent citations.
-- `aesthetic-translator` and `frontend-guide` produce design previews and implementation handoffs for an interface; this skill explains a subject, not a UI to build.
-- `project-navigator` explains an existing codebase in conversation; use this skill only when the user wants a standalone page.
+- `research-report` investigates a question across sources and publishes a traceable report ledger; this skill explains what is already understood and does not run retrieval or invent citations.
+- `style-translator` and `ui-planner` produce design previews and implementation handoffs for an interface; this skill explains a subject, not a UI to build.
+- `project-guide` explains an existing codebase in conversation; use this skill only when the user wants a standalone page.
 - Stay inside the requested question. A narrow question does not become a course, and the page does not prove the reader learned the material.
 
 ## Verify before delivery

@@ -12,35 +12,35 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [math-video-workflow](skills/video/math-video-workflow/SKILL.md) | 编排分集数学视频的剪辑、审校和动画交接；视频任务的推荐入口 |
-| [video-smart-cut](skills/video/video-smart-cut/SKILL.md) | 本地转写、精简、字幕对齐与成片校验 |
-| [math-video-review](skills/video/math-video-review/SKILL.md) | 审校数学表述、推导、口误与动画候选 |
-| [manim-insertion-authoring](skills/video/manim-insertion-authoring/SKILL.md) | 设计并验证讲解中途插入的 Manim 场景 |
-| [manim-insertion-assembly](skills/video/manim-insertion-assembly/SKILL.md) | 按字幕语义把已验收场景装配为画面替换段 |
-| [manim-recap-video](skills/video/manim-recap-video/SKILL.md) | 制作片尾独立、无旁白的数学重温动画 |
+| [video-workflow](skills/video/video-workflow/SKILL.md) | 编排分集数学视频的剪辑、审校和动画交接；视频任务的推荐入口 |
+| [video-edit](skills/video/video-edit/SKILL.md) | 本地转写、精简、字幕对齐与成片校验 |
+| [math-review](skills/video/math-review/SKILL.md) | 审校数学表述、推导、口误与动画候选 |
+| [manim-authoring](skills/video/manim-authoring/SKILL.md) | 设计并验证讲解中途插入的 Manim 场景 |
+| [manim-assembly](skills/video/manim-assembly/SKILL.md) | 按字幕语义把已验收场景装配为画面替换段 |
+| [math-recap](skills/video/math-recap/SKILL.md) | 制作片尾独立、无旁白的数学重温动画 |
 
-中途画面替换使用 `manim-insertion-authoring` + `manim-insertion-assembly`，保持原声和总时长；片尾独立重温使用 `manim-recap-video`，追加拼接。两条路线不要混用。单集状态由课程项目中的 `workflow.yaml` 维护。
+中途画面替换使用 `manim-authoring` + `manim-assembly`，保持原声和总时长；片尾独立重温使用 `math-recap`，追加拼接。两条路线不要混用。单集状态由课程项目中的 `workflow.yaml` 维护。
 
 ### 设计（design）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [aesthetic-translator](skills/design/aesthetic-translator/SKILL.md) | 把日常视觉偏好转成设计方向，以对话说明和可检查元素的 HTML 预览同步迭代，附通用模板与目标平台规格 |
-| [better-designs-md](skills/design/better-designs-md/SKILL.md) | 按明确请求编写、审查或维护 UI 视觉语言、设计令牌和组件规范；Google DESIGN.md 格式仅在用户要求或目标工具需要时采用 |
-| [frontend-guide](skills/design/frontend-guide/SKILL.md) | 先选清界面内容，以对话说明和“项目 UI＋顺序说明＋可复制实现提示词”的 HTML 初稿完成设计与开发交接；仅在授权后沿项目技术栈修改实际应用 |
+| [style-translator](skills/design/style-translator/SKILL.md) | 把日常视觉偏好转成设计方向，以对话说明和可检查元素的 HTML 预览同步迭代，附通用模板与目标平台规格 |
+| [design-system](skills/design/design-system/SKILL.md) | 按明确请求编写、审查或维护 UI 视觉语言、设计令牌和组件规范；Google DESIGN.md 格式仅在用户要求或目标工具需要时采用 |
+| [ui-planner](skills/design/ui-planner/SKILL.md) | 先选清界面内容，以对话说明和“项目 UI＋顺序说明＋可复制实现提示词”的 HTML 初稿完成设计与开发交接；仅在授权后沿项目技术栈修改实际应用 |
 
 ### 学习（learning）
 
 | Skill | 使用场景 |
 | --- | --- |
 | [linear-algebra](skills/learning/linear-algebra/SKILL.md) | 通过直觉、精确表达、例子与概念联系，帮助用户理解线性代数并掌握推导和解题方法 |
-| [project-tech-mentor](skills/learning/project-tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
+| [tech-mentor](skills/learning/tech-mentor/SKILL.md) | 通过真实项目学习一门技术 |
 
 ### 沟通（communication）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [clarify-wording](skills/communication/clarify-wording/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
+| [wording-helper](skills/communication/wording-helper/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
 | [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，用精准的文本解释修复理解障碍并回到原任务 |
 | [visual-explainer](skills/communication/visual-explainer/SKILL.md) | 用户明确点名或要一份独立 HTML 解释页时，把已想清的解释做成离线的单文件页面；不会因为问题复杂而自动生成 |
 
@@ -49,31 +49,31 @@
 | Skill | 使用场景 |
 | --- | --- |
 | [assess](skills/problem-solving/assess/SKILL.md) | 对函数、代码、文档、UI、技术方案或想法等指定对象按目标选标准、主动验证并给出有证据的结论与改进建议；默认不修改对象 |
-| [problem-exploration](skills/problem-solving/problem-exploration/SKILL.md) | 面对方向未定的问题或想法，围绕影响决策的不确定性调查证据，判断是否行动及下一步怎么做 |
-| [bug-root-cause-safe-fix](skills/problem-solving/bug-root-cause-safe-fix/SKILL.md) | 排查并修复软件 Bug：追踪根因和影响范围，做最小安全修复并验证回归 |
+| [problem-analysis](skills/problem-solving/problem-analysis/SKILL.md) | 面对方向未定的问题或想法，围绕影响决策的不确定性调查证据，判断是否行动及下一步怎么做 |
+| [bugfix](skills/problem-solving/bugfix/SKILL.md) | 排查并修复软件 Bug：追踪根因和影响范围，做最小安全修复并验证回归 |
 
 ### 软件工程（software-engineering）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [code-subtraction](skills/software-engineering/code-subtraction/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
+| [code-simplification](skills/software-engineering/code-simplification/SKILL.md) | 用消融证据识别并删除不必要复杂度 |
 | [go-style](skills/software-engineering/go-style/SKILL.md) | 编写、修改或测试 Go 代码时遵循 Go 惯例及适用的 Google Go 风格指导；明确请求时也可评估 Go 风格 |
-| [project-implementation-planner](skills/software-engineering/project-implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，以固定六部分格式交付计划并交接下一块可验证的开发工作 |
+| [implementation-planner](skills/software-engineering/implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，以固定六部分格式交付计划并交接下一块可验证的开发工作 |
 | [project-docs](skills/software-engineering/project-docs/SKILL.md) | 编写和维护项目文档体系，包括 README、需求、规格、技术设计、架构和 ADR；支持直接完成或共同打磨 |
-| [project-navigator](skills/software-engineering/project-navigator/SKILL.md) | 帮助用户恢复或建立现有项目的整体认知，追踪功能机制，解释工程变更与决策；可选引导独立探索代码 |
-| [skill-discovery-install](skills/software-engineering/skill-discovery-install/SKILL.md) | 用户主动要求查找、比较或安装 Skills 时，审查候选并按授权安装到项目级 `.agents/skills/` |
+| [project-guide](skills/software-engineering/project-guide/SKILL.md) | 帮助用户恢复或建立现有项目的整体认知，追踪功能机制，解释工程变更与决策；可选引导独立探索代码 |
+| [skill-discovery](skills/software-engineering/skill-discovery/SKILL.md) | 用户主动要求查找、比较或安装 Skills 时，审查候选并按授权安装到项目级 `.agents/skills/` |
 
 ### 研究（research）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [research-curator](skills/research/research-curator/SKILL.md) | 用户明确需要深度、可复查报告时，用真实检索和可追溯证据产出离线 HTML；快速事实查询走宿主检索工具；默认输出到系统临时目录 `%TEMP%/research-curator/<topic>/` |
+| [research-report](skills/research/research-report/SKILL.md) | 用户明确需要深度、可复查报告时，用真实检索和可追溯证据产出离线 HTML；快速事实查询走宿主检索工具；默认输出到系统临时目录 `%TEMP%/research-curator/<topic>/` |
 
 ### 网络安全（network-security）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [router-proxy-diagnostics](skills/network-security/router-proxy-diagnostics/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
+| [network-diagnostics](skills/network-security/network-diagnostics/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
 
 ## 安装与更新
 
@@ -115,7 +115,7 @@ npx skills list -g -a pi
 
 确认列表中出现所选 Skill，并核对范围和目标 Agent。若未出现，先检查安装命令的 `-g`、`-a` 和执行目录是否与查看时一致。
 
-然后在目标 Agent 中按名称请求使用 Skill，并说明任务、材料和范围。例如，安装 `project-docs` 后可以请求：“请使用 project-docs 整理这个仓库的 README，保留已有事实和安装方式。”想重新理解项目时，可以请求：“请用 project-navigator 帮我建立这个仓库的整体认知，说明主要模块如何协作，并给出代码依据和下一步阅读入口。”实际发现和加载方式由宿主决定；列表中已安装不代表当前会话已经加载。
+然后在目标 Agent 中按名称请求使用 Skill，并说明任务、材料和范围。例如，安装 `project-docs` 后可以请求：“请使用 project-docs 整理这个仓库的 README，保留已有事实和安装方式。”想重新理解项目时，可以请求：“请用 project-guide 帮我建立这个仓库的整体认知，说明主要模块如何协作，并给出代码依据和下一步阅读入口。”实际发现和加载方式由宿主决定；列表中已安装不代表当前会话已经加载。
 
 ### 更新或在新电脑重装
 
@@ -133,7 +133,7 @@ npx skills update -p make-sense
 
 仅在明确要求更新整个范围时，使用 `npx skills update -g`（全局）或 `npx skills update -p`（当前项目）；这类更新不限于本仓库。
 
-本地 Git checkout、GitHub 上的源码和 CLI 安装的副本各有更新步骤：本地修改或 `git pull` 只改变 checkout；维护者推送到 GitHub 后，使用者再通过 CLI 获取已发布的修改。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。Skill 改名或移动目录后 `update` 也无法跟随：用新名重新 `skills add`，再用 `skills remove` 清理旧名。例如已安装 `project-reverse-engineering` 的用户，在新版本发布后安装 `project-navigator`，核对新入口后再移除旧名；本地 checkout 的改名不会自动更新安装副本。
+本地 Git checkout、GitHub 上的源码和 CLI 安装的副本各有更新步骤：本地修改或 `git pull` 只改变 checkout；维护者推送到 GitHub 后，使用者再通过 CLI 获取已发布的修改。新增 Skill 需要重新运行 `skills add` 并选择，不会随更新自动加入。Skill 改名或移动目录后 `update` 也无法跟随：用新名重新 `skills add`，再用 `skills remove` 清理旧名。例如已安装 `project-reverse-engineering` 的用户，在新版本发布后安装 `project-guide`，核对新入口后再移除旧名；本地 checkout 的改名不会自动更新安装副本。
 
 若更新后 Agent 仍使用旧内容，核对它实际读取的 `SKILL.md` 路径和内容；有版本字段时一并比较。确认安装副本正确后，按宿主方式重新加载或开启新会话。不要只凭仓库版本号判断当前会话已使用新版。
 

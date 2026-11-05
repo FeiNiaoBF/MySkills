@@ -1,0 +1,7 @@
+interface:
+  display_name: "项目式技术导师"
+  short_description: "通过递进真实项目掌握计算机实操技术"
+  default_prompt: "Use $tech-mentor to design a project-based learning path for Three.js."
+
+policy:
+  allow_implicit_invocation: false
