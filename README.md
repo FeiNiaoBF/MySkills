@@ -50,6 +50,7 @@
 | --- | --- |
 | [assess](skills/problem-solving/assess/SKILL.md) | 对函数、代码、文档、UI、技术方案或想法等指定对象按目标选标准、主动验证并给出有证据的结论与改进建议；默认不修改对象 |
 | [problem-exploration](skills/problem-solving/problem-exploration/SKILL.md) | 面对方向未定的问题或想法，围绕影响决策的不确定性调查证据，判断是否行动及下一步怎么做 |
+| [bug-root-cause-safe-fix](skills/problem-solving/bug-root-cause-safe-fix/SKILL.md) | 排查并修复软件 Bug：追踪根因和影响范围，做最小安全修复并验证回归 |
 
 ### 软件工程（software-engineering）
 
