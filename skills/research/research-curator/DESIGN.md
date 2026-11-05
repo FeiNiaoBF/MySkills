@@ -1,3 +1,11 @@
+---
+id: research-curator
+type: module-design
+status: draft
+title: Research curator 合同（run.json v2）
+parent: skills-collection
+---
+
 # Contract v2 (run.json version 2.0)
 Module: `researchcurator`. Public model package: `researchcurator/curator`. The renderer must expose `visualizer.Render(runJSON []byte) ([]byte, error)`; CLI imports it, never the reverse. Renderer consumes JSON; use DOM textContent or escaped templates, escape script-embedded JSON including `</script`, and allow only HTTP(S) links. No CDN or network dependencies.
 
