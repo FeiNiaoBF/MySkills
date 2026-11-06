@@ -9,7 +9,7 @@
 #   actionable-skill-creation, visual-direction-without-wording-request
 # - Uncertainty: essential-gap, preserve-uncertain-detail
 # - Language and precedence: explicit-visual-wording-in-english
-version: "2.0.1"
+version: "2.0.2"
 cases:
   - id: explicit-idea-and-rephrase
     input:
@@ -28,6 +28,24 @@ cases:
     review:
       expect: "Briefly confirms the inferred intent and presents a directly usable first-person request in a standalone txt code block. Does not list the Skills until the user reviews the wording and asks to continue."
       avoid: "Treating the skill call as approval to execute, returning only an unformatted paraphrase, or asking unnecessary terminology questions."
+
+  - id: explicit-call-always-starts-with-copy-ready-text
+    input:
+      messages:
+        - role: user
+          content: "请用 wording-helper 优化这条请求：帮我看看电脑上装的 Skills 都是干什么的。"
+    review:
+      expect: "The first substantive response content is a standalone txt code block containing a concise, copy-ready request. It clarifies that the scope is the Skills installed on this computer and asks for each name and purpose, without answering the request or inventing extra requirements. Any explanation comes after the block."
+      avoid: "An introductory paragraph before the block, a paraphrase outside a txt fence, answering the underlying request, or adding unsupported requirements."
+
+  - id: explicit-analysis-only-no-wording-block
+    input:
+      messages:
+        - role: user
+          content: "请用 wording-helper，只分析这段话有哪些歧义，不要帮我改写：下周处理迁移。"
+    review:
+      expect: "Analyzes the ambiguity without adding a txt wording draft because the user explicitly requested analysis only."
+      avoid: "Forcing a copy-ready request into a txt block despite the explicit no-rewrite instruction."
 
   - id: user-confirms-wording-and-continues
     input:

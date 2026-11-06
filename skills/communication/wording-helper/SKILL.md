@@ -6,7 +6,7 @@ description: >-
   understanding intent and organizing information. Leaves actionable requests alone
   unless wording help is requested.
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
 ---
 
 # Clarify Wording
@@ -23,7 +23,9 @@ Activate when the user:
 
 Do not activate just because a request is colloquial if it is already actionable. Do not treat a request to explain an existing term, passage, or reasoning as a request to rewrite it. Do not turn a visual preference into a specification unless the user asks for wording about it.
 
-When explicitly invoked, provide a reviewable wording draft first, even if the underlying task is otherwise clear. The draft is not authorization to execute the task it describes.
+When the user explicitly invokes `wording-helper`, make a copy-ready wording draft the first substantive part of the reply. Put it in a standalone fenced code block labeled `txt`; do not put an introduction, heading, or explanation before the block. Keep the block itself limited to the text the user can reuse. Any brief explanation may follow it. This applies even when the underlying request is already actionable: the user asked for wording help, not execution.
+
+If the user explicitly asks for analysis, an outline, or a structure **instead of** reusable wording, provide that form without forcing a `txt` block. A request for both wording and analysis still gets the `txt` block first.
 
 ## Core workflow
 
@@ -34,7 +36,7 @@ Think through these steps in order. They guide the work; do not mechanically exp
 3. **Set priorities.** Identify the core meaning that cannot be lost, supporting information that helps explain it, and details that are repetitive or unnecessary. Preserve emphasized requirements and meaningful caveats.
 4. **Organize logic.** Choose an order that makes the relationships easy to follow. Use the structure that fits the content—for example, context → problem → approach → outcome for an introduction; observation → cause → remedy for a technical explanation; or claim → reasons → evidence → limits for an argument. Treat these as options, not templates.
 5. **Refine expression.** Use direct, natural, precise language in the intended language and tone. Remove repetition and ambiguity, connect related ideas, and use terminology only when it improves precision for the audience. Keep enough explanation to preserve meaning; do not compress away useful context.
-6. **Check quality.** Confirm that the result is faithful, complete on the stated essentials, logically ordered, readable, and no longer than the purpose requires. Check that no unsupported facts, goals, decisions, promises, or conclusions have slipped in.
+6. **Check quality.** Confirm that the result is faithful, complete on the stated essentials, logically ordered, readable, and no longer than the purpose requires. For a copy-ready task request, make the requested action, scope, deliverable, and stated constraints easy to identify; include acceptance conditions only when the user supplied or clearly implied them. Check that no unsupported facts, goals, decisions, promises, or conclusions have slipped in.
 
 ## Handling ambiguity
 
@@ -46,8 +48,8 @@ If the user says the assistant misunderstood or acted prematurely, acknowledge t
 
 - Write in first person by default when drafting text the user may reuse; change perspective when the audience or purpose calls for it.
 - Use the language the user intends for the draft. The explanation around it should follow the user's conversation language.
-- For a reusable passage, present the wording in a standalone `txt` code block and put only the draft inside it. Keep the surrounding explanation brief; do not repeat the full draft outside the block.
-- If the user asks for analysis, an outline, or a structure rather than ready-to-send wording, provide that form instead of forcing a `txt` block.
+- For explicitly invoked wording work, the standalone `txt` block is the required primary deliverable and comes first. For other wording requests, when the user needs a reusable passage, present it in a standalone `txt` code block and put only the draft inside it. Keep the surrounding explanation brief; do not repeat the full draft outside the block.
+- If the user asks for analysis, an outline, or a structure rather than ready-to-send wording, provide that form instead of forcing a `txt` block, unless they also requested wording.
 - After presenting a draft, wait for review. If the user corrects it, revise and wait again. Approval of wording alone is not approval to carry out the described task. If the user approves and asks to proceed, use the approved wording as the instruction without asking for redundant confirmation. If they approve without asking to proceed, acknowledge the approval and stop.
 
 ## Boundaries
