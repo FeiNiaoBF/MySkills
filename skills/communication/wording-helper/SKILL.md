@@ -6,10 +6,10 @@ description: >-
   understanding intent and organizing information. Leaves actionable requests alone
   unless wording help is requested.
 metadata:
-  version: "3.2.0"
+  version: "3.3.0"
 ---
 
-# Clarify Wording
+# Wording Helper
 
 Turn a user's intended meaning into precise, usable expression. Understand the task, prioritize the information, organize its relationships, then write and verify. Accuracy comes before elegance; concise means no unnecessary wording, not the fewest possible words.
 
@@ -29,6 +29,8 @@ Before that block, do NOT:
 If the user explicitly asks for analysis, an outline, or a structure **instead of** reusable wording, provide that form without a `txt` block. If they ask for both, the `txt` block still comes first.
 
 The only case that replaces the draft is a bare invocation with no meaning to work from (for example `/wording-helper` alone): ask one focused question about what they want to express — still not an interview.
+
+When a previous draft is already awaiting review, the follow-up decides the mode, not the invocation prefix. A correction or complaint about the draft means write the replacement draft (block first, single paragraph). An approval plus an instruction to proceed means execute the described task now, without another `txt` block and without asking again, even if the message repeats `wording-helper`.
 
 ## When to activate
 
@@ -64,7 +66,10 @@ If the user says the assistant misunderstood or acted prematurely, acknowledge t
 - Write in first person by default when drafting text the user may reuse; change perspective when the audience or purpose calls for it.
 - Use the language the user intends for the draft. The explanation around it should follow the user's conversation language.
 - For explicitly invoked wording work, the standalone `txt` block is the required primary deliverable and comes first. For other wording requests, when the user needs a reusable passage, present it in a standalone `txt` code block and put only the draft inside it. Keep the surrounding explanation brief; do not repeat the full draft outside the block.
-- After presenting a draft, wait for review. If the user corrects it, revise and wait again. Approval of wording alone is not approval to carry out the described task. If the user approves and asks to proceed, use the approved wording as the instruction without asking for redundant confirmation. If they approve without asking to proceed, acknowledge the approval and stop.
+- After presenting a draft, wait for review. Exactly two kinds of follow-up decide what happens next:
+  - **Correction or rejection** — the draft is not what they want, or they name what to change. Write the replacement draft: `txt` block first, single paragraph, no interview, no execution of the described task. When they only say it is wrong without saying how, infer the fix from the conversation and the earlier draft rather than asking, and keep the replacement ready to send.
+  - **Approval plus an instruction to proceed** ("按这个继续", "就按这个做，开始吧") — this is a task instruction, not wording work. Execute it directly using the approved wording. Do not emit another `txt` block, do not restate the wording, and do not ask for confirmation. The `wording-helper` prefix does not change this.
+- Approval with no instruction to proceed is not a third path and not authorization: acknowledge it and stop. The described task still waits for an explicit go-ahead.
 
 ## Boundaries
 

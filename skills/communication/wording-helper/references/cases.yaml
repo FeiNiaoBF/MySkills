@@ -6,12 +6,13 @@
 #   explicit-call-single-paragraph-block,
 #   implicit-rejected-guess, improve-user-position-without-taking-over
 # - Review: user-confirms-wording-and-continues, approval-without-continuation,
+#   explicit-skill-prefix-approve-and-continue, explicit-call-rewrite-after-rejection,
 #   user-revises-draft, user-corrects-premature-action
 # - Exclusions: colloquial-but-actionable, existing-term-explanation,
 #   actionable-skill-creation, visual-direction-without-wording-request
 # - Uncertainty: essential-gap, preserve-uncertain-detail
 # - Language and precedence: explicit-visual-wording-in-english
-version: "2.2.0"
+version: "2.3.0"
 cases:
   - id: explicit-idea-and-rephrase
     input:
@@ -66,6 +67,38 @@ cases:
     review:
       expect: "The txt block holds one continuous paragraph carrying all three points inline, for example '一是…；二是…；三是…', with no line breaks, bullets, numbering, headings, or emphasis. Any explanation follows the block."
       avoid: "Breaking the draft into three lines or bullets, placing each sentence on its own line, hard-wrapping to a width, or splitting enumeration into a list."
+
+  - id: explicit-call-rewrite-after-rejection
+    input:
+      messages:
+        - role: user
+          content: "请使用 wording-helper。帮我写一段给同事的话，说明三件事：接口要改、文档要补、周五前完成。"
+        - role: assistant
+          content: |-
+            ```txt
+            我想请你配合完成三件事：接口需要调整，文档要同步补齐，请在周五前完成。
+            ```
+        - role: user
+          content: "/wording-helper 这版不行，重写：别用项目这个词，时间只说尽快。"
+    review:
+      expect: "The reply starts with a replacement txt block in one continuous paragraph that applies both corrections, keeps the three points inline, and asks nothing before or after the block."
+      avoid: "Asking what exactly to change, re-explaining the old draft, splitting the replacement into lines or bullets, or starting the described task."
+
+  - id: explicit-skill-prefix-approve-and-continue
+    input:
+      messages:
+        - role: user
+          content: "请使用 wording-helper。我想看看所有 Pi 可用的 Skills 各自负责什么。"
+        - role: assistant
+          content: |-
+            ```txt
+            请列出当前 Pi 可用的所有 Skills，并说明每个 Skill 的功能定位。
+            ```
+        - role: user
+          content: "/wording-helper 就按这个继续。"
+    review:
+      expect: "Treats the approved wording as the task instruction and lists the Pi Skills with their functions. The wording-helper prefix does not trigger another draft."
+      avoid: "Emitting another txt block, asking for confirmation again, restating the wording, refusing because the message used the skill name, or treating the prefix as a request to rephrase."
 
   - id: explicit-analysis-only-no-wording-block
     input:
