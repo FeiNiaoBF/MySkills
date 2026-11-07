@@ -2,6 +2,7 @@
 # Review fields are expectations, not extra user messages.
 # Topic index (search case IDs):
 # - Activation: explicit-idea-and-rephrase, explicit-skill-call-review-before-answer,
+#   explicit-call-task-shaped-request, explicit-call-bare-invocation,
 #   implicit-rejected-guess, improve-user-position-without-taking-over
 # - Review: user-confirms-wording-and-continues, approval-without-continuation,
 #   user-revises-draft, user-corrects-premature-action
@@ -9,7 +10,7 @@
 #   actionable-skill-creation, visual-direction-without-wording-request
 # - Uncertainty: essential-gap, preserve-uncertain-detail
 # - Language and precedence: explicit-visual-wording-in-english
-version: "2.0.2"
+version: "2.1.0"
 cases:
   - id: explicit-idea-and-rephrase
     input:
@@ -17,7 +18,7 @@ cases:
         - role: user
           content: "我知道大概想要什么，但说不清。帮我解释一下我的意思，再写成一句我能直接发给开发者的话。"
     review:
-      expect: "Briefly explains the inferred intent, then writes a clear first-person request in a standalone txt code block that preserves uncertainty and is ready to reuse. Waits for user review; does not proceed until the user confirms and asks to continue."
+      expect: "Presents a clear first-person request in a standalone txt code block, then briefly explains the inferred intent, preserving uncertainty. Waits for user review; does not proceed until the user confirms and asks to continue."
       avoid: "Starting implementation before confirmation, asking a long list of requirements questions, or inventing technical choices."
 
   - id: explicit-skill-call-review-before-answer
@@ -26,7 +27,7 @@ cases:
         - role: user
           content: "请使用 wording-helper。我想看看所有 Pi 可用的 Skills 各自负责什么。"
     review:
-      expect: "Briefly confirms the inferred intent and presents a directly usable first-person request in a standalone txt code block. Does not list the Skills until the user reviews the wording and asks to continue."
+      expect: "The first substantive content is a standalone txt code block with a directly usable first-person request; a brief intent note may follow. Does not list the Skills until the user reviews the wording and asks to continue."
       avoid: "Treating the skill call as approval to execute, returning only an unformatted paraphrase, or asking unnecessary terminology questions."
 
   - id: explicit-call-always-starts-with-copy-ready-text
@@ -37,6 +38,24 @@ cases:
     review:
       expect: "The first substantive response content is a standalone txt code block containing a concise, copy-ready request. It clarifies that the scope is the Skills installed on this computer and asks for each name and purpose, without answering the request or inventing extra requirements. Any explanation comes after the block."
       avoid: "An introductory paragraph before the block, a paraphrase outside a txt fence, answering the underlying request, or adding unsupported requirements."
+
+  - id: explicit-call-task-shaped-request
+    input:
+      messages:
+        - role: user
+          content: "请使用 wording-helper。我需要你给我重新整理一份把项目里的 Skills 按用途分类并说明安装过程的方案。如果你有什么不清楚的，先来问我。"
+    review:
+      expect: "The first substantive content is a standalone txt code block with a first-person, copy-ready request that keeps the stated goal and any genuinely open detail. Only after the block may a short intent note and at most one focused question follow."
+      avoid: "Inspecting the environment or project before drafting, asking about deliverable form, audience, scope, or pain points, turning 'ask me if unclear' into a multi-question form, producing the plan itself, or restating the skill's rules."
+
+  - id: explicit-call-bare-invocation
+    input:
+      messages:
+        - role: user
+          content: "/wording-helper"
+    review:
+      expect: "Asks one focused question about what the user wants to express. This is the only case where a question replaces the txt block."
+      avoid: "Drafting invented content, asking several questions, inspecting the environment, or explaining how the skill works."
 
   - id: explicit-analysis-only-no-wording-block
     input:
