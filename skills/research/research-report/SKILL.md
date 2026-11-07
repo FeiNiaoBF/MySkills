@@ -11,7 +11,7 @@ metadata:
   version: "2.3"
 ---
 
-# Research Curator
+# Research Report
 
 Help the user reach a well-supported conclusion through actual retrieval, inspected evidence, source comparison, and clear synthesis. Deliver the result as a traceable, offline `index.html` when the task merits a persistent report. Research establishes and validates evidence; Writing organizes and explains it without creating or upgrading evidence.
 
@@ -29,7 +29,7 @@ For a quick fact, a single-article explanation, ordinary code review, or request
 4. **Validate the research handoff** before Writing:
 
    ```bash
-   cd <research-curator-module>
+   cd <research-report-module>
    go run ./cmd/researchcurator validate-report -in <report.json>
    ```
 

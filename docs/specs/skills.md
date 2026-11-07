@@ -23,4 +23,4 @@ parent: myskills-architecture
 
 ## Children
 
-`research-curator` 是唯一携带可执行程序的 Skill，其内部契约由自身合同文档规定。
+`research-report` 是唯一携带可执行程序的 Skill，其内部契约由自身合同文档规定。

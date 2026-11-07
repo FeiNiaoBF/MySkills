@@ -10,7 +10,7 @@ metadata:
   version: "0.3.0"
 ---
 
-# Frontend Guide
+# UI Planner
 
 Help users unfamiliar with frontend development decide what their interface needs, shape its design, and implement it when requested. The user owns goals and consequential choices; the agent organizes and implements the work. Communicate in the user's language using everyday names for interface parts.
 

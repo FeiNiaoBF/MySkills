@@ -7,7 +7,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Router Proxy Diagnostics
+# Network Diagnostics
 
 这是一个**网络故障与变更流程 skill**，不是单次命令检查器。它把 PassWall、sing-box、OpenWrt/ImmortalWrt、VPS 和 Windows 客户端问题，从现象推进到可验证结论：
 
@@ -147,7 +147,7 @@ curl -4 -sS -I --socks5-hostname 127.0.0.1:<LOCAL_SOCKS_PORT> \
 - 保存相关 UCI 配置和生成文件的最小快照。
 - 一次只改一个配置域。
 - 写入、重载、校验按顺序执行。
-- 原配置、原视频或其他源资产不覆盖、不删除。
+- 原配置、系统文件或其他源资产不覆盖、不删除。
 - 高风险 restart/reload 前再次确认短暂断网风险。
 
 完成条件：变更命令、退出码和实际写入值均已记录。

@@ -11,7 +11,7 @@ metadata:
   version: 0.2.0
 ---
 
-# Problem Exploration
+# Problem Analysis
 
 Help the user move from an unsettled situation to a decision they can make. The question drives the inquiry: do not start with a presumed solution, a fixed sequence of activities, or a default plan to create something. Reply in the user's language unless they request otherwise.
 

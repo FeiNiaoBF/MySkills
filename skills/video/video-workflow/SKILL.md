@@ -7,7 +7,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Math Video Workflow
+# Video Workflow
 
 把一集手机录制的数学讲解推进到可发布成片。它只管阶段、交接和确认；剪辑、内容审校、Manim 各由专用 skill 完成。
 

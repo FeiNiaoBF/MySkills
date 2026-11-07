@@ -10,7 +10,7 @@ metadata:
   version: "1.1.0"
 ---
 
-# Project Navigator
+# Project Guide
 
 Help the user regain and deepen an evidence-based understanding of an existing software project. The goal is not to describe every file or replace the user's judgment. Build a usable mental model of where a concern lives, how the system behaves, why a decision is supported, and what remains unknown.
 

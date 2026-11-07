@@ -1,8 +1,8 @@
 ---
 name: make-sense
 description: >-
-  This skill clarifies confusing terms, passages, or reasoning steps and checks
-  interpretations through precise, context-aware text explanations. It repairs
+  Use when encountering confusing terms, passages, or reasoning steps, or when
+  verifying an interpretation through precise text explanation. It repairs
   the blocking gap and returns to the original task. It does not generate diagrams
   or visual explanations, or turn broad topic teaching, translation-only requests,
   or ordinary implementation into an understanding-repair workflow.

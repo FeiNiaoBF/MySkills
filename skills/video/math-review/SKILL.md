@@ -1,13 +1,13 @@
 ---
 name: math-review
-description: 审校数学视频的转写、口误、推导与动画候选。
+description: 当用户需要对数学讲解视频进行转写轻审、发布前终审，或排查口误、验算推导与提取 Manim 动画候选时使用；提供证据化问题清单，不替代用户重写内容。
 metadata:
   author: FeiNiaoBF
   version: 1.0.0
 disable-model-invocation: true
 ---
 
-# Math Video Review
+# Math Review
 
 对数学讲解视频做两阶段审校：转写后的轻审和发布前终审。输出证据化问题清单，不替用户重写讲解。
 

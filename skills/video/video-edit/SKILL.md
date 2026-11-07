@@ -7,7 +7,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Video Smart Cut
+# Video Edit
 
 将手机长视频处理为无特效的讲解成片。本 skill 负责媒体与时间轴，不判断数学内容，也不制作 Manim。
 

@@ -11,7 +11,7 @@ metadata:
   version: 1.0.0
 ---
 
-# Bug Root Cause and Safe Fix
+# Bugfix
 
 Fixing the bug is the goal. Do not stop at explaining the theory or hiding the
 symptom. Find the cause, understand the affected paths, make a small complete

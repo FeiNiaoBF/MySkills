@@ -1,13 +1,13 @@
 ---
 name: math-recap
-description: 将获批的数学概念制作为无旁白 Manim 重温段。
+description: 当用户明确需要制作视频片尾独立、无旁白的 Manim 数学重温动画段并进行拼接时使用；不用于讲解中途的画面替换，不负责正片剪辑。
 metadata:
   author: FeiNiaoBF
   version: 3.0.0
 disable-model-invocation: true
 ---
 
-# Manim Recap Video
+# Math Recap
 
 把用户批准的候选概念制作成教学视频末尾的无旁白动画重温段。本 skill 不选择候选、不剪手写正片，也不添加 BGM。
 

@@ -1,13 +1,13 @@
 ---
 name: manim-authoring
-description: 为教学视频撰写插入式 Manim 场景：设计、符号与视觉规范。
+description: 当用户需要为数学教学视频设计并实现讲解中途插入的 Manim 动画场景时使用；负责场景设计、数学符号规范与低清验收，不负责片尾独立重温或整片装配。
 metadata:
   author: FeiNiaoBF
   version: 1.0.0
 disable-model-invocation: true
 ---
 
-# Manim Insertion Authoring
+# Manim Authoring
 
 把已确认的数学关系写成插入式 Manim 场景：动画插在手写讲解**中间**，做画面替换，让抽象关系当场显形。不做片尾总结，不做装饰动画。
 

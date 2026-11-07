@@ -7,7 +7,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Project Tech Mentor
+# Tech Mentor
 
 Confirm the learning workspace before creating files; the current directory may be an unrelated repository. The outcome is evidenced project ability: the learner can build, verify, debug, and explain a useful technical artifact with progressively less guidance.
 

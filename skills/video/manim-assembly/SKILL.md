@@ -1,13 +1,13 @@
 ---
 name: manim-assembly
-description: 把已验收的 Manim 场景作为画面替换段装配进成片。
+description: 当用户需要将已验收的 Manim 场景按字幕语义时间表装配为讲解中途的画面替换段时使用；保持原音频与总时长连续，不负责片尾拼接或动画代码编写。
 metadata:
   author: FeiNiaoBF
   version: 1.0.0
 disable-model-invocation: true
 ---
 
-# Manim Insertion Assembly
+# Manim Assembly
 
 把已验收的 Manim 场景作为手写讲解**中间**的视觉替换段：原视频音频连续播放，Manim 只替换画面，不加旁白或 BGM。插入点按字幕语义定位，不凭视频总时长猜测。
 

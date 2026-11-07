@@ -1,5 +1,5 @@
 interface:
-  display_name: "Router Proxy Diagnostics"
+  display_name: "Network Diagnostics"
   short_description: "Safe PassWall and VPN diagnostics"
   default_prompt: "Use $network-diagnostics to take my PassWall, VPS, DNS, or VPN issue from baseline through minimal change, validation, and rollback if needed."
 policy:

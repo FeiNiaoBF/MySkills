@@ -1,13 +1,10 @@
 ---
 name: design-system
 description: >-
-  This skill writes UI visual and component design docs on explicit request. It creates,
-  reviews, and updates UI design guidance from existing evidence or proposed
-  directions, explaining visual intent, component usage, tokens, states, and contextual
-  rules. It reuses project conventions and supports Google's DESIGN.md format
-  when requested or required by a target tool. Project requirements, behavior specs,
-  technical designs, architecture, and ADRs are outside this workflow. It does not turn
-  ordinary styling edits or token questions into a documentation workflow.
+  Use on explicit request to write, review, or update UI visual language, design
+  tokens, and component specifications. Reuses project conventions and supports
+  Google's DESIGN.md format when requested. Project requirements, behavior specs,
+  architecture, and ADRs are outside this workflow. Not for ordinary styling edits.
 metadata:
   author: FeiNiaoBF
   version: 1.3.2
@@ -16,7 +13,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Better Designs MD
+# Design System
 
 Create and maintain UI design documentation that guides actual UI work: explain the intended look and feel, give applicable rules, and preserve the reasoning needed to apply them consistently. Write the document and conversation in the user's language unless the project specifies otherwise; preserve existing identifiers and any selected schema keys.
 

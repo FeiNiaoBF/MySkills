@@ -11,7 +11,7 @@ metadata:
   date_added: "2026-09-05"
 ---
 
-# Aesthetic Translator
+# Style Translator
 
 Translate the design a user has in mind into a concrete direction, a visible proposal, and usable specifications. Users need neither professional vocabulary nor a reference image. Reply in the user's language unless they request another language for the deliverable.
 

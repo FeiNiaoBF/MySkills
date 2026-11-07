@@ -14,7 +14,7 @@ metadata:
 disable-model-invocation: true
 ---
 
-# Project Implementation Planner
+# Implementation Planner
 
 Plan a sequence of small, verifiable software changes that serves the user's actual goal. Use software engineering judgment to improve robustness, readability, and ease of change; do not promise to eliminate future refactoring. Explain the recommendation in the user's language, preserving project terminology and code identifiers.
 

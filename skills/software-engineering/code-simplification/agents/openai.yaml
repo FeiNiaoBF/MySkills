@@ -1,5 +1,5 @@
 interface:
-  display_name: "Code Subtraction"
+  display_name: "Code Simplification"
   short_description: "Safely simplify code by removing unnecessary complexity"
   default_prompt: "Use $code-simplification to find and safely remove unnecessary complexity in my code, with ablation-based verification."
 policy:
