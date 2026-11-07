@@ -6,7 +6,7 @@ description: >-
   understanding intent and organizing information. Leaves actionable requests alone
   unless wording help is requested.
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
 ---
 
 # Clarify Wording
@@ -17,7 +17,7 @@ Turn a user's intended meaning into precise, usable expression. Understand the t
 
 When the user invokes `wording-helper` by name, this contract governs the turn from its first token. It is an order to execute, not reference material: discard any plan formed from the user's task framing before applying it.
 
-The first substantive content of the reply MUST be a standalone `txt` code block containing only copy-ready wording the user can reuse — no heading, lead-in, acknowledgement, intent summary, outline, plan, tool call, or question before it. Brief explanation and at most one focused question MAY follow the block.
+The first substantive content of the reply MUST be a standalone `txt` code block containing only copy-ready wording the user can reuse — no heading, lead-in, acknowledgement, intent summary, outline, plan, tool call, or question before it. The block is one continuous paragraph: no line breaks, no bullet or numbered lists, no headings or emphasis markers. Brief explanation and at most one focused question MAY follow the block.
 
 Before that block, do NOT:
 
@@ -57,8 +57,10 @@ Resolve ordinary wording choices from context. Preserve an undecided detail in t
 
 If the user says the assistant misunderstood or acted prematurely, acknowledge that plainly, without defending the earlier assumption. Then use the correction and the relevant context to restate the intended meaning.
 
-## Draft and review
+## Draft format and review
 
+- Write the reusable text as one unbroken paragraph of plain prose. Do not start a new line per sentence, per item, to list alternatives, or to fit a width; do not use bullet points, numbering, headings, or emphasis inside the block. Express enumeration inline within the sentence (for example "一是…；二是…"). A fenced block preserves line breaks literally, so any break shows up as a broken draft.
+- Only when the user explicitly asks for a multi-paragraph or sectioned document may the block contain paragraph breaks. Even then, never one line per sentence and never a list rendered as separate lines.
 - Write in first person by default when drafting text the user may reuse; change perspective when the audience or purpose calls for it.
 - Use the language the user intends for the draft. The explanation around it should follow the user's conversation language.
 - For explicitly invoked wording work, the standalone `txt` block is the required primary deliverable and comes first. For other wording requests, when the user needs a reusable passage, present it in a standalone `txt` code block and put only the draft inside it. Keep the surrounding explanation brief; do not repeat the full draft outside the block.

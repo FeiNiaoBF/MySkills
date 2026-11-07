@@ -3,6 +3,7 @@
 # Topic index (search case IDs):
 # - Activation: explicit-idea-and-rephrase, explicit-skill-call-review-before-answer,
 #   explicit-call-task-shaped-request, explicit-call-bare-invocation,
+#   explicit-call-single-paragraph-block,
 #   implicit-rejected-guess, improve-user-position-without-taking-over
 # - Review: user-confirms-wording-and-continues, approval-without-continuation,
 #   user-revises-draft, user-corrects-premature-action
@@ -10,7 +11,7 @@
 #   actionable-skill-creation, visual-direction-without-wording-request
 # - Uncertainty: essential-gap, preserve-uncertain-detail
 # - Language and precedence: explicit-visual-wording-in-english
-version: "2.1.0"
+version: "2.2.0"
 cases:
   - id: explicit-idea-and-rephrase
     input:
@@ -45,8 +46,8 @@ cases:
         - role: user
           content: "请使用 wording-helper。我需要你给我重新整理一份把项目里的 Skills 按用途分类并说明安装过程的方案。如果你有什么不清楚的，先来问我。"
     review:
-      expect: "The first substantive content is a standalone txt code block with a first-person, copy-ready request that keeps the stated goal and any genuinely open detail. Only after the block may a short intent note and at most one focused question follow."
-      avoid: "Inspecting the environment or project before drafting, asking about deliverable form, audience, scope, or pain points, turning 'ask me if unclear' into a multi-question form, producing the plan itself, or restating the skill's rules."
+      expect: "The first substantive content is a standalone txt code block holding a first-person, copy-ready request as one continuous paragraph that keeps the stated goal and any genuinely open detail. Only after the block may a short intent note and at most one focused question follow."
+      avoid: "Inspecting the environment or project before drafting, asking about deliverable form, audience, scope, or pain points, turning 'ask me if unclear' into a multi-question form, producing the plan itself, restating the skill's rules, or splitting the request into numbered lines or bullets inside the block."
 
   - id: explicit-call-bare-invocation
     input:
@@ -56,6 +57,15 @@ cases:
     review:
       expect: "Asks one focused question about what the user wants to express. This is the only case where a question replaces the txt block."
       avoid: "Drafting invented content, asking several questions, inspecting the environment, or explaining how the skill works."
+
+  - id: explicit-call-single-paragraph-block
+    input:
+      messages:
+        - role: user
+          content: "请使用 wording-helper。帮我写一段给同事的话，说明三件事：接口要改、文档要补、周五前完成。"
+    review:
+      expect: "The txt block holds one continuous paragraph carrying all three points inline, for example '一是…；二是…；三是…', with no line breaks, bullets, numbering, headings, or emphasis. Any explanation follows the block."
+      avoid: "Breaking the draft into three lines or bullets, placing each sentence on its own line, hard-wrapping to a width, or splitting enumeration into a list."
 
   - id: explicit-analysis-only-no-wording-block
     input:
