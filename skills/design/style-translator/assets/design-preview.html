@@ -58,6 +58,8 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
 :where(.at-header,.at-notes,.at-stage-bar,.at-stage-foot,.at-empty) code{font-family:var(--at-mono);font-size:.75rem;background:var(--at-sunken);border-radius:4px;padding:.05em .3em;color:var(--at-ink);overflow-wrap:anywhere}
 .at-sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .at-mono{font-family:var(--at-mono);font-variant-numeric:tabular-nums}
+.at-skip{position:fixed;z-index:2147483005;top:.75rem;left:1rem;padding:.5rem .75rem;border:1px solid var(--at-ink);border-radius:var(--at-r-sm);background:var(--at-surface);color:var(--at-ink);font:500 .8125rem/1.4 var(--at-font);text-decoration:none;transform:translateY(-200%);transition:transform .16s var(--at-ease)}
+.at-skip:focus{transform:none;outline:2px solid var(--at-ink);outline-offset:2px}
 /* 焦点环用墨色：在白纸与灰桌上都够，也不把批注色消耗在交互态上。
    只写给外壳自己的可聚焦元素（含画布内的编号徽标），
    不用全局 button / summary / [tabindex]。 */
@@ -98,7 +100,7 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
 
 /* ── 空白画布：一句状态 + 一句做法，没有装饰框 ──────────────────── */
 .at-empty{display:grid;align-content:center;justify-items:start;gap:.5rem;box-sizing:border-box;min-height:inherit;padding:clamp(1.75rem,4vw,3rem);font-family:var(--at-font);font-size:.8125rem;line-height:1.75;color:var(--at-muted)}
-.at-empty>*{margin:0;width:min(100%,32rem)}
+.at-empty>*:not(.at-sr){margin:0;width:min(100%,32rem)}
 .at-empty-label{font-family:var(--at-mono);font-size:.6875rem;line-height:1.6;color:var(--at-muted)}
 .at-empty-title{font-size:1.125rem;line-height:1.45;font-weight:600;letter-spacing:-.018em;color:var(--at-ink);text-wrap:balance}
 .at-empty-note{font-size:.75rem;line-height:1.7}
@@ -119,6 +121,8 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
 
 /* ── 说明栏 ────────────────────────────────────────────────────── */
 .at-notes{position:sticky;top:calc(var(--at-header-live,var(--at-header)) + 1rem);align-self:start;height:calc(100svh - var(--at-header-live,var(--at-header)) - 2rem);max-height:calc(100svh - var(--at-header-live,var(--at-header)) - 2rem);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;background:var(--at-surface);border:1px solid var(--at-hairline);border-radius:var(--at-r-sheet);box-shadow:var(--at-shadow-panel)}
+.at-notes:focus{outline:none}
+.at-notes:focus-visible{outline:2px solid var(--at-ink);outline-offset:-2px}
 /* 说明栏顶部：方向摘要与页签同处一个吸顶单元，滚长面板时一起留在上方。
    摘要不属于任何页签，所以切页签不会让它消失或改写。 */
 .at-notes-head{position:sticky;top:0;z-index:3;background:var(--at-surface)}
@@ -232,12 +236,13 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
 /* 只在评审外壳上关闭动效。项目是否降级由项目自己决定，
    否则一条 !important 全局规则会改掉项目的状态动效。 */
 @media(prefers-reduced-motion:reduce){
-  .at-header,.at-header *,.at-notes,.at-notes *,.at-stage-bar,.at-stage-bar *,.at-stage-foot,.at-jump,.at-marker,.at-outline{animation:none!important;transition:none!important}
+  .at-header,.at-header *,.at-notes,.at-notes *,.at-stage-bar,.at-stage-bar *,.at-stage-foot,.at-jump,.at-marker,.at-outline,.at-skip{animation:none!important;transition:none!important}
   .at-details summary::after,.at-objects summary::after{transition:none}
 }
 </style>
 </head>
 <body>
+<a class="at-skip" href="#at-notes">跳到设计说明</a>
 <!-- ═══ 模板作者说明 ═══════════════════════════════════════════════════
      这是可复用模板，不是项目本身，也不是设计系统。
      结构固定：顶栏 → 画布（#at-ui，项目界面）→ 说明栏。
@@ -282,7 +287,7 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
 
      ═══════════════════════════════════════════════════════════════════ -->
 <header class="at-header" data-od-id="review-toolbar">
-  <h1 class="at-name" data-at-field="PROJECT_NAME">项目名称</h1>
+  <p class="at-name" data-at-field="PROJECT_NAME">项目名称</p>
   <div class="at-controls">
     <div class="at-seg-group" id="at-mode-switch" role="group" aria-label="交互模式" data-od-id="mode-switch" hidden>
       <button type="button" class="at-seg" id="at-mode-inspect" aria-pressed="true" data-od-id="mode-inspect">标注</button>
@@ -305,6 +310,7 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
     </div>
     <div class="at-ui" id="at-ui" data-at-field="PROJECT_UI" data-od-id="project-canvas">
       <div class="at-empty">
+        <h1 class="at-sr">设计评审预览</h1>
         <p class="at-empty-label">空白画布</p>
         <p class="at-empty-title">把项目界面放进画布</p>
         <p>替换 <code>#at-ui</code> 里的内容，放入项目实际界面；给要讨论的元素加 <code>data-at-id</code>；在 <code>#at-registry</code> 写清它们的用途与理由。</p>
@@ -314,7 +320,7 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
     <p class="at-stage-foot" id="at-hint">悬停预览说明，点击固定选择，Esc 取消。</p>
   </section>
 
-  <aside class="at-notes" id="at-notes" aria-label="设计说明" data-od-id="design-notes">
+  <aside class="at-notes" id="at-notes" aria-label="设计说明" data-od-id="design-notes" tabindex="-1">
     <div class="at-notes-head">
       <div class="at-brief-head" role="group" aria-label="当前设计方向" data-od-id="direction-summary">
         <div class="at-direction">

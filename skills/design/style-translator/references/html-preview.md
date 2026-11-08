@@ -4,7 +4,8 @@ Read this when creating, maintaining, or revising the visual deliverable. The bu
 
 ## Delivery structure
 
-- **Compact toolbar:** show the project name and review actions. Do not put an explanatory hero or a full-width direction brief above the UI.
+- **Compact toolbar:** show the project name and review actions. The project name is a `p`, not a heading; the project UI (or the empty template's hidden `h1`) provides the page's single `h1`. Do not put an explanatory hero or a full-width direction brief above the UI.
+- **Skip link:** keep the first focusable element linked to `#at-notes`, and keep the notes panel `tabindex="-1"` so keyboard users can bypass the toolbar and canvas.
 - **Main canvas:** make the project's actual UI the dominant content. The shell does not prescribe its features, layout, typography, colors, components, or platform.
 - **Direction summary:** keep the direction name, decision status, and Design Read above the notes tabs so they remain available while switching explanations.
 - **Element tab:** show one selected item's name, location, role, design reason, and relevant specifications. A collapsible object list provides another selection route.
@@ -88,7 +89,7 @@ Resolve feedback using the selected item or its familiar name and surrounding co
 Inspect the artifact in an available browser and check the scope actually delivered:
 
 - **Shell and composition:** wide and narrow layouts, long names, text enlargement, readable contrast/focus, UI prominence, reachable notes, and no unintended horizontal overflow. Check screenshots as well as code; the compact toolbar must still accommodate its labels and controls.
-- **Filled project:** remove filling prompts and empty slots; verify every registered target and parent, unique IDs, and agreement between UI, names, reasons, and specifications. Check relevant responsive and represented interaction states, including a sample revision's affected values.
+- **Filled project:** remove filling prompts and empty slots; verify every registered target and parent, unique IDs, one page `h1`, the skip-link target, and agreement between UI, names, reasons, and specifications. Check relevant responsive and represented interaction states, including a sample revision's affected values.
 - **Selection when present:** a module and nested element, repeated items where applicable, object-list and parent selection, hover restoration, clearing, keyboard access, and touch alternatives. Verify pinning opens the element tab without hover disrupting another tab; test notes collapse, mode switching, and narrow-screen jump/return. Confirm the represented product action does not fire during inspection for the controls actually used.
 - **Reusable template:** preserve its authoring fields and intentional empty state. Exercise shell controls directly; validate inspection with in-memory or temporary fixtures without leaving sample targets in the asset. Do not describe those checks as testing a real application.
 - **Delivery:** provide the entry link or launch instructions, a brief explanation of how to select and discuss elements, and what was actually checked. Distinguish browser simulation from real device checks and HTML approximation from native validation. Report unavailable checks; neither code review nor successful automation establishes visual approval or production readiness.
