@@ -333,15 +333,15 @@ function renderGraph() {
  let cy;
  try {
   cy = cytoscape({ container: $('graph'), elements: model.nodes.concat(model.edges), style: [
-   { selector: 'node', style: { 'background-color': '#347f76', 'label': 'data(label)', 'color': '#1f3032', 'font-size': 12, 'text-wrap': 'wrap', 'text-max-width': 180, 'text-valign': 'bottom', 'text-margin-y': 7, 'width': 34, 'height': 34 } },
-   { selector: 'node[type="claim"]', style: { 'background-color': '#d3a64a', 'shape': 'round-rectangle', 'width': 'label', 'height': 'label', 'padding': 8 } },
-   { selector: 'node[type="conclusion"]', style: { 'background-color': '#77927b', 'shape': 'hexagon', 'width': 'label', 'height': 'label', 'padding': 8 } },
-   { selector: 'edge', style: { 'width': 2, 'line-color': '#7b8a86', 'target-arrow-color': '#7b8a86', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'label': 'data(label)', 'font-size': 10, 'text-background-color': '#fff', 'text-background-opacity': 1, 'text-background-padding': 3 } },
+   { selector: 'node', style: { 'background-color': '#347f76', 'label': 'data(label)', 'color': '#1f3032', 'font-size': 13, 'text-wrap': 'wrap', 'text-max-width': 200, 'text-valign': 'bottom', 'text-margin-y': 9, 'width': 38, 'height': 38 } },
+   { selector: 'node[type="claim"]', style: { 'background-color': '#d3a64a', 'shape': 'round-rectangle', 'width': 'label', 'height': 'label', 'padding': 10 } },
+   { selector: 'node[type="conclusion"]', style: { 'background-color': '#77927b', 'shape': 'hexagon', 'width': 'label', 'height': 'label', 'padding': 10 } },
+   { selector: 'edge', style: { 'width': 2, 'line-color': '#7b8a86', 'target-arrow-color': '#7b8a86', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'label': 'data(label)', 'font-size': 11, 'text-background-color': '#fff', 'text-background-opacity': 1, 'text-background-padding': 4 } },
    { selector: 'edge[type="contradicts"]', style: { 'line-color': '#a6402e', 'target-arrow-color': '#a6402e', 'line-style': 'dashed' } },
-  ], layout: { name: 'breadthfirst', directed: true, padding: 28, spacingFactor: 1.25 }, wheelSensitivity: .2 });
+  ], layout: { name: 'breadthfirst', directed: true, padding: 50, spacingFactor: 0.8 }, wheelSensitivity: .2 });
   cy.on('tap', 'node', event => { const data = event.target.data(); if (data.sourceID) openSource(data.sourceID); });
  } catch (error) { setText('graph-message', t('mapUnavailable')); }
- const fit = () => { if (cy) { cy.resize(); cy.layout({ name: 'breadthfirst', directed: true, padding: 28, spacingFactor: 1.25 }).run(); cy.fit(undefined, 28); } };
+ const fit = () => { if (cy) { cy.resize(); cy.layout({ name: 'breadthfirst', directed: true, padding: 50, spacingFactor: 0.8 }).run(); cy.fit(undefined, 50); } };
  details.addEventListener('toggle', () => { if (details.open) requestAnimationFrame(fit); });
 }
 function openSource(id) {
