@@ -338,9 +338,9 @@
       .template-region-tag { gap: 0 .375rem; }
     }
 
-    /* 中等宽度（手机横屏到小平板）：保留线框，但缩小尺寸与间距，
-       让样例和说明栏都不至于被拉得太长。 */
-    @container canvas (min-width: 28.01rem) and (max-width: 48rem) {
+    /* 中等宽度（手机横屏到窄桌面）：保留线框，但缩小尺寸与间距，
+       让样例和说明栏都不至于被拉得太长；宽桌面才恢复完整尺寸。 */
+    @container canvas (min-width: 28.01rem) and (max-width: 66rem) {
       .template-layout-sample { gap: 1rem; }
       .template-layout-map {
         gap: .375rem;
