@@ -7,7 +7,7 @@ description: >-
   wording-only requests or isolated, precise styling edits.
 metadata:
   author: FeiNiaoBF
-  version: 0.3.0
+  version: 0.3.1
   date_added: "2026-09-05"
 ---
 
