@@ -48,7 +48,7 @@ In a template copy:
 
 1. Add a unique `data-at-id` to each review target inside `#at-ui`.
 2. Fill the JSON array in `#at-registry`. Each record has `id`, `name`, `role`, `reason`, optional `parent`, and optional `specs`.
-3. Match each `id` to exactly one rendered target. A `parent` names another record; keep relationships acyclic. Preserve IDs and familiar names across revisions, updating removed or renamed items together with the UI.
+3. Match each `id` to exactly one rendered target. A `parent` names another record; keep relationships acyclic. Duplicate `data-at-id` values, missing parents, missing targets, and parent cycles appear in the notes diagnostics; resolve them before delivery. Preserve IDs and familiar names across revisions, updating removed or renamed items together with the UI.
 4. Reload after changing the registry or target set: the bundled runtime builds its map and object list at initialization. Do not assume it automatically discovers new dynamic states or targets.
 
 Registry entries are the single source for element names, explanations, and parent relationships. The following illustrates the schema only; it does not require a title in every project:

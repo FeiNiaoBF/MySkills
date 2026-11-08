@@ -452,6 +452,7 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
   var records = [];
   var registry = new Map();
   var targets = new Map();
+  var duplicateTargets = [];
   var numbers = new Map();
   var markers = new Map();
   var principles = new Map();
@@ -520,10 +521,16 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
 
   function indexTargets() {
     targets = new Map();
+    duplicateTargets = [];
     var nodes = ui.querySelectorAll('[data-at-id]');
     for (var i = 0; i < nodes.length; i += 1) {
       var id = nodes[i].getAttribute('data-at-id');
-      if (id && !targets.has(id)) targets.set(id, nodes[i]);
+      if (!id) continue;
+      if (targets.has(id)) {
+        if (duplicateTargets.indexOf(id) === -1) duplicateTargets.push(id);
+      } else {
+        targets.set(id, nodes[i]);
+      }
     }
   }
 
@@ -569,6 +576,12 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
     if (parsed.skipped) messages.push('注册表里有 ' + parsed.skipped + ' 条记录缺少 id 或 id 重复，已跳过');
     var loops = cycleIds();
     if (loops.length) messages.push('parent 成环：' + listPreview(loops));
+    var missingParents = [];
+    records.forEach(function (record) {
+      if (record.parent && !registry.has(record.parent)) missingParents.push(record.id);
+    });
+    if (missingParents.length) messages.push('记录 parent 不存在：' + listPreview(missingParents));
+    if (duplicateTargets.length) messages.push('画布元素 data-at-id 重复：' + listPreview(duplicateTargets));
     var missing = [];
     records.forEach(function (record) { if (!targets.has(record.id)) missing.push(record.id); });
     if (missing.length) messages.push('记录找不到画布元素：' + listPreview(missing));
@@ -851,11 +864,12 @@ body{margin:0;background:var(--at-desk);color:var(--at-ink);font:400 .875rem/1.5
       var y = r.top - box.top;
       var w = r.width;
       var h = r.height;
-      var half = Math.round(size / 2);
-      // 先钉元素四角（半个徽标压在角上），再退到元素内四角。
+      // 优先放在元素外侧，避免徽标压住被标注的文字；外侧不可用时再退回内侧。
       var candidates = [
-        [x - half, y - half], [x + w - half, y - half],
-        [x - half, y + h - half], [x + w - half, y + h - half],
+        [x - size, y], [x + w, y],
+        [x - size, y + h - size], [x + w, y + h - size],
+        [x, y - size], [x + w - size, y - size],
+        [x, y + h], [x + w - size, y + h],
         [x + 4, y + 4], [x + w - 4 - size, y + 4],
         [x + 4, y + h - 4 - size], [x + w - 4 - size, y + h - 4 - size]
       ];
