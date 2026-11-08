@@ -6,7 +6,7 @@ description: >-
   HTML file with an answer-first reading path and visuals that carry real relationships.
   Not for chat answers, design previews, or research reports.
 metadata:
-  version: "0.4.1"
+  version: "0.5.0"
 disable-model-invocation: true
 ---
 

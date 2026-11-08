@@ -515,8 +515,11 @@
       outline-offset: 3px;
     }
 
+    /* 表格保留可读最小宽度；窄屏交给外层 .table-scroll 横向滚动，
+       caption 在 .table-scroll 内保持可见。 */
     .compare-table {
       width: 100%;
+      min-width: 34rem;
       border-collapse: collapse;
       font-size: 15px;
       line-height: 1.6;
@@ -725,6 +728,13 @@
         gap: 8px;
       }
 
+      .compare-table caption {
+        position: sticky;
+        left: 0;
+        width: calc(100vw - 44px);
+        max-width: 100%;
+      }
+
       .chapter + .chapter {
         margin-top: 60px;
         padding-top: 60px;
@@ -834,6 +844,31 @@
         max-width: none;
         padding-right: 0;
         padding-left: 0;
+      }
+
+      .explainer-opening {
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+      }
+
+      .answer-strip {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+      }
+
+      .explainer-body {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+      }
+
+      .chapter + .chapter {
+        margin-top: 2rem;
+        padding-top: 2rem;
+      }
+
+      .references {
+        padding-top: 2rem;
+        padding-bottom: 0;
       }
 
       h1,
