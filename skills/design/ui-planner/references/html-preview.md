@@ -7,6 +7,7 @@ Read this when preparing or updating the HTML design draft. Start with the bundl
 - **Header:** show only one simple identity line such as `{{PROJECT_NAME}}-ui-planner`. The name and a short type descriptor may use separate elements when they still read as that single line. Do not turn the header into a toolbar of review modes, viewport switches, or metadata.
 - **Main area:** make the actual project's UI the dominant content. The shell does not prescribe the product's navigation, modules, visual style, or feature set.
 - **Explanations:** place directly readable explanations on the right, ordered by the page's structure or task flow. On narrow screens, move them below the design without obscuring it. They do not depend on clicking or hovering over the UI.
+- **Layout overview:** a compact region-to-layout table in the notes mirrors the canvas tags and region explanations. It is a summary of this page's choices, not a second copy of the layout dictionary; use the exact names and levels from the canvas.
 - Explain page purpose, meaningful regions and their arrangement, relevant flows/states, layout adaptation, and unresolved choices as needed. Repeat or remove explanation sections to fit the project; not every page needs every heading.
 - **Implementation handoff:** place a clearly titled, directly copyable Agent implementation prompt below the preview and explanations. Keep it subordinate to the actual UI but easy to reach. The prompt and HTML are one delivery: it must describe the displayed design, not a separate imagined interface.
 - The prompt covers implementation scope, component responsibilities, layout and interaction, key states, target platform and technical constraints, non-goals, and acceptance criteria. Mark user-confirmed decisions, Agent recommendations, and open questions separately; open items are not requirements or acceptance criteria.
@@ -16,9 +17,10 @@ The template uses a neutral gray surround, a white design surface, a numbered ex
 
 ### Layout names
 
-Each meaningful region carries a visible tag at its top-left with the exact pattern name from [layout-patterns.md](layout-patterns.md), for example `Bento Grid · 便当格 · 区块级`. The region's explanation repeats the same name and level, and the implementation handoff's "Layout and interaction" section uses the same words for the same regions.
+Each meaningful region carries a visible tag at its top-left with the exact pattern name from [layout-patterns.md](layout-patterns.md), for example `Bento Grid · 便当格 · 区块级`. The layout overview in the notes lists the same region-to-name pairs; the region's explanation repeats the name and level, and the implementation handoff's "Layout and interaction" section uses the same words for the same regions.
 
 - Keep the tag inside the region, not in a floating legend or a separate key.
+- Keep the layout overview a short summary of this page's regions. Do not paste the full pattern dictionary into it.
 - Do not label wrappers or decorative fragments. Label the region the user would point at, including a list area when the pattern is list-level.
 - Do not introduce synonyms such as "banner" in one place and "hero" in another.
 - Keep tags visible during review so the user can name a region and ask for a specific change. Remove review-only tags from production code; keep the names in documentation and the handoff.
@@ -32,7 +34,8 @@ The `{{...}}` labels are literal replacement markers, not a template engine. For
 - `PROJECT_UI`: replace the entire `.template-layout-sample` element inside `.template-ui-slot` with the project's page design, including its own layout and any agreed interactions. Remove the sample-only styling as appropriate. Add a visible layout tag to each meaningful region.
 - `PAGE_PURPOSE`: describe the audience, task, and scope of the page.
 - `REGION_NAME` and `REGION_EXPLANATION`: name a meaningful page region and explain its contents, purpose, and arrangement. Repeat this section in a useful reading or task order; a region need not equal a code component.
-- `LAYOUT_NAME`: use the exact pattern name and level from [layout-patterns.md](layout-patterns.md), such as `Bento Grid · 便当格 · 区块级`. The same name appears on the region's canvas tag and in the handoff.
+- `LAYOUT_NAME`: use the exact pattern name and level from [layout-patterns.md](layout-patterns.md), such as `Bento Grid · 便当格 · 区块级`. The same name appears on the region's canvas tag, in the layout overview, and in the handoff.
+- `LAYOUT_OVERVIEW`: replace the sample rows in the notes table with the project's regions. Each row names one region and the exact layout name/level used on its canvas tag; keep the table, region notes, and handoff in sync. Do not expand it into the full dictionary.
 - `FLOWS_AND_STATES`: describe relevant actions and feedback, identifying simulated or unfinished behavior.
 - `LAYOUT_AND_ADAPTATION`: explain the relationships between regions and how they adapt to relevant sizes.
 - `DECISIONS_AND_OPEN_QUESTIONS`: distinguish confirmed choices, current proposals, and remaining decisions using actual conversation/project evidence.
@@ -58,7 +61,7 @@ Keep product and shell styles scoped separately. The product UI sits inside `.te
 
 Save in the user-designated folder with a clear entry file and opening instructions. Keep required assets alongside it using portable relative links.
 
-Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, the implementation handoff is easy to find and select, and no region causes horizontal overflow or hides content. Confirm the shell adds no review controls or selection-driven behavior. Check that each canvas layout tag names a region the user can point at, and that the same name appears in its explanation and the handoff.
+Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, the implementation handoff is easy to find and select, and no region causes horizontal overflow or hides content. Confirm the shell adds no review controls or selection-driven behavior. Check that each canvas layout tag names a region the user can point at, and that the same name appears in the layout overview, its explanation, and the handoff.
 
 Check the implementation prompt against the UI and explanations section by section. A coding Agent should be able to identify the implementation scope, components, layout and interactions, key states, technical constraints, non-goals, acceptance criteria, and every unresolved decision without guessing. Copy the complete prompt from the rendered page and confirm its text remains intact. For a non-Web target, verify that both the nearby guidance and prompt name the real platform and do not imply that the HTML itself is production code.
 

@@ -316,6 +316,17 @@
       color: var(--fg-muted);
       overflow-wrap: anywhere;
     }
+    .template-sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     /* 说明栏：跟住阅读位置。画布比说明长时整栏留在视野内；
        说明本身长过一屏时正常随页滚动——不给它内部滚动条，否则内容等于被藏起来。 */
@@ -392,6 +403,47 @@
       font-weight: 600;
       color: var(--fg-ink);
     }
+    .template-layout-overview {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--fg-text-meta);
+      line-height: 1.5;
+    }
+    .template-layout-overview th,
+    .template-layout-overview td {
+      padding: .4375rem 0;
+      border-bottom: 1px solid var(--fg-rule-soft);
+      text-align: start;
+      vertical-align: top;
+    }
+    .template-layout-overview thead th {
+      padding-top: 0;
+      font-size: var(--fg-text-num);
+      font-weight: 500;
+      color: var(--fg-muted);
+      border-bottom: 1px solid var(--fg-rule-strong);
+    }
+    .template-layout-overview tbody th {
+      width: 40%;
+      padding-right: .75rem;
+      font-weight: 600;
+      color: var(--fg-ink);
+      overflow-wrap: anywhere;
+    }
+    .template-layout-overview td { color: var(--fg-muted); }
+    .template-layout-overview td b {
+      display: block;
+      font-weight: 600;
+      color: var(--fg-ink);
+      overflow-wrap: anywhere;
+    }
+    .template-layout-overview td span {
+      display: block;
+      font-size: var(--fg-text-num);
+      color: var(--fg-muted);
+    }
+    .template-layout-overview tbody tr:last-child th,
+    .template-layout-overview tbody tr:last-child td { border-bottom: 0; }
     /* 网格子元素会被块化，标记需要显式贴合内容宽度。 */
     .template-note > .template-token { justify-self: start; }
 
@@ -535,7 +587,7 @@
        实现提示词须按实际设计填写完整；已确认、建议和待定分开，待定项不得写成验收条件。
        区域小节按页面的阅读或操作顺序重复，一个区域不等于一个代码组件。
        模板交付：保留标记与提示文字，不要填入虚构的产品内容；画布中的布局样例只展示名字与位置，是有意保留的。
-       布局名取自 references/layout-patterns.md（页面 / 区块 / 集合三级）；画布标签、说明栏与实现提示词必须使用同一个名字。
+       布局名取自 references/layout-patterns.md（页面 / 区块 / 集合三级）；画布标签、布局总览、区域说明与实现提示词必须使用同一个名字。
        用户点名一个区域时只改该区域；不要把布局名当成整页重排的理由。
        画布是容器而非视口：项目 UI 请优先以 .template-ui-slot 为容器查询上下文
        （@container canvas (max-width: ...)），不要用视口断点推断布局。
@@ -648,6 +700,27 @@
           <h3>页面目标</h3>
           <p>服务谁、解决什么、做到哪一步。</p>
           <span class="template-token">{{PAGE_PURPOSE}}</span>
+        </section>
+
+        <!-- 布局总览：按画布样例替换为实际区域；一行一个区域，布局名与画布标签一致。
+             改一个区域时只动该行点名的布局，不顺带重排其他区域。 -->
+        <section class="template-note">
+          <h3>布局总览</h3>
+          <p>一行一个区域；改一个区域时只动该行点名的布局。</p>
+          <table class="template-layout-overview">
+            <caption class="template-sr-only">区域与布局名对照</caption>
+            <thead>
+              <tr><th scope="col">区域</th><th scope="col">布局名 · 层级</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">页面外壳</th><td><b>Sidebar Layout</b><span>侧边栏布局 · 页面级</span></td></tr>
+              <tr><th scope="row">首屏</th><td><b>Hero Section</b><span>首屏大横幅 · 区块级</span></td></tr>
+              <tr><th scope="row">功能区</th><td><b>Bento Grid</b><span>便当格 · 区块级</span></td></tr>
+              <tr><th scope="row">图文段</th><td><b>Split Section</b><span>图文分栏 · 区块级</span></td></tr>
+              <tr><th scope="row">文章列表</th><td><b>Masonry</b><span>瀑布流 · 集合级</span></td></tr>
+              <tr><th scope="row">页尾</th><td><b>Full-width Section</b><span>通栏 · 区块级</span></td></tr>
+            </tbody>
+          </table>
         </section>
 
         <!-- 按页面顺序重复本节：一个区域一个说明，不必与代码组件一一对应。 -->

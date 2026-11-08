@@ -91,11 +91,12 @@ The dictionary has three levels. A page usually combines one page-level pattern 
 
 ## One-to-one labels
 
-The same name appears in three places, with no synonyms:
+The same name appears in four places, with no synonyms:
 
 1. **Canvas:** a visible tag at the top-left of each named region, showing the exact English name and a short Chinese description, for example `Bento Grid · 便当格`.
-2. **Region explanation:** the region's note repeats the same name and, when useful, the level.
-3. **Implementation handoff:** the "Layout and interaction" section names each region with the same pattern.
+2. **Layout overview:** a compact table in the notes listing each region with the same name and level. Summarize this page's choices; do not paste the whole dictionary.
+3. **Region explanation:** the region's note repeats the same name and, when useful, the level.
+4. **Implementation handoff:** the "Layout and interaction" section names each region with the same pattern.
 
 The tag belongs to the region, not to a floating legend. Do not label wrappers or decorative fragments. When a region contains a collection-level pattern, label the collection area itself, not its parent section.
 
