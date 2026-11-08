@@ -270,9 +270,13 @@ function renderCoverageAndAudit() {
    if (source) details.append(el('p', `${source.title || source.url} · ${L.sourceTime}: ${source.retrieved_at}`, 'source-meta'));
   }
   if (round.materiality_reason) details.append(el('p', round.materiality_reason));
-  if (arr(round.gaps).length) { const list = el('ul', undefined, 'gap-list'); for (const gap of round.gaps) list.append(el('li', gap)); details.append(list); }
+  if (arr(round.gaps).length) { const list = el('ul', undefined, 'gap-list'); for (const gap of arr(round.gaps)) list.append(el('li', gap)); details.append(list); }
   roundList.append(details);
  }
+ const roundSection = roundList.closest('details');
+ if (roundSection) roundSection.hidden = !arr(research.rounds).length;
+ const roleGrid = document.querySelector('.audit-grid');
+ if (roleGrid) roleGrid.hidden = !roleGrid.querySelector('.source-card');
 }
 
 function graphModel() {

@@ -30,7 +30,7 @@ The output is a single self-contained HTML document. The article and lead come f
 - The map is derived only from article-referenced source/claim/conclusion links; source and claim IDs are internal and are not displayed. No conclusion node is fabricated when the ledger has none. The text relationship list remains available if Cytoscape fails.
 - Source roles are explicit where present: verified evidence, candidate lead, and context source. The report displays exact passages, locators, upstream-source links, and event timestamps.
 - Comparative reports show a qualified concentration reminder when most verified citations share one URL host; this is a prompt to explain source limits, not an accusation of bias or a corroboration score.
-- The report has responsive, print, and reduced-motion styles. Browser operation and screen-reader behavior require separate verification; Go tests and JS syntax checks do not establish them.
+- The report has responsive, print, and reduced-motion styles. Print output omits the graph, table of contents, footer, and raw JSON. Browser operation and screen-reader behavior require separate verification; Go tests and JS syntax checks do not establish them.
 
 The article determines which ledger claims and sources appear in citations and the evidence map. Exact source and claim identifiers are used only to navigate the embedded ledger; reader-facing labels use titles, claims, conclusions, and numbered source notes. The graph shows recorded support/contradiction relations, not evidence strength or independent corroboration.
 
