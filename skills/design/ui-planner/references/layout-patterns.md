@@ -75,6 +75,9 @@ The dictionary has three levels. A page usually combines one page-level pattern 
 | **Dashboard Grid vs Kanban Board** | Dashboard = glance at independent metrics; Kanban = move items through stages. |
 | **Magazine vs Stacked Sections** | Magazine = asymmetric editorial composition; Stacked Sections = simple vertical bands with one job each. |
 | **Feed vs List View** | Feed = rich, social or activity items; List View = compact rows for scanning and selection. |
+| **Feature Grid vs Card Grid** | Feature Grid = a section of benefit or feature cards; Card Grid = a collection of independent items. |
+| **Feed vs Timeline** | Feed = a scrolling stream of rich items; Timeline = chronological items along an axis. |
+| **Media Strip vs Gallery** | Media Strip = a horizontal row of media; Gallery = a visual grid or flow. |
 | **Full-width Section vs Full-bleed** | Full-width = a band spanning the content width; Full-bleed = edge-to-edge media or color. |
 | **Sticky / Pinned Scroll vs Sticky Sidebar** | Sticky/Pinned Scroll = a page experience; Sticky Sidebar = a persistent rail while content scrolls. |
 
