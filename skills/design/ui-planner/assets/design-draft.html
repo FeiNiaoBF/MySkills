@@ -338,6 +338,125 @@
       .template-region-tag { gap: 0 .375rem; }
     }
 
+    /* 页面级 shell 样例：折叠的作者参考，不是项目内容。
+       项目交付时随 .template-layout-sample 整块替换。 */
+    .template-shell-samples {
+      border-top: 1px solid var(--fg-rule);
+      padding-top: .75rem;
+    }
+    .template-shell-samples > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 1.75rem;
+      padding: .25rem 0;
+      font-size: var(--fg-text-meta);
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--fg-ink);
+      list-style: none;
+      cursor: pointer;
+    }
+    .template-shell-samples > summary::-webkit-details-marker { display: none; }
+    .template-shell-samples > summary::after {
+      content: "";
+      width: .4375rem;
+      height: .4375rem;
+      flex: none;
+      margin-right: .25rem;
+      border-right: 1.5px solid var(--fg-muted);
+      border-bottom: 1.5px solid var(--fg-muted);
+      transform: rotate(45deg);
+    }
+    .template-shell-samples[open] > summary::after { transform: rotate(-135deg); }
+    .template-shell-samples > summary:focus-visible {
+      outline: 2px solid var(--fg-accent);
+      outline-offset: 2px;
+    }
+    .template-shell-intro {
+      margin: .375rem 0 .75rem;
+      font-size: var(--fg-text-meta);
+      line-height: 1.6;
+      color: var(--fg-muted);
+      text-wrap: pretty;
+    }
+    .template-shell-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .75rem;
+    }
+    .template-shell-card {
+      display: grid;
+      gap: .5rem;
+      padding: .625rem;
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-surface);
+    }
+    .template-shell-card .template-region-tag { margin: 0; }
+    .template-shell-mini {
+      display: grid;
+      gap: .25rem;
+      min-height: 7rem;
+      padding: .375rem;
+      border: 1px dashed var(--fg-rule);
+      background: var(--fg-stage);
+    }
+    .template-mini-bar {
+      height: .375rem;
+      background: var(--fg-rule);
+    }
+    .template-mini-bar.is-soft { background: var(--fg-rule-soft); }
+    .template-mini-block {
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-surface);
+    }
+    .template-mini-topnav { grid-template-rows: auto 1fr; }
+    .template-mini-topnav .template-mini-body {
+      display: grid;
+      align-content: start;
+      gap: .375rem;
+    }
+    .template-mini-topnav .template-mini-hero { height: 2.5rem; }
+    .template-mini-topnav .template-mini-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .375rem;
+    }
+    .template-mini-topnav .template-mini-row > div { height: 1.5rem; }
+    .template-mini-grail { grid-template-rows: auto 1fr auto; }
+    .template-mini-grail .template-mini-body {
+      display: grid;
+      grid-template-columns: 1.1fr 3fr 1.1fr;
+      gap: .25rem;
+    }
+    .template-mini-grail .template-mini-side,
+    .template-mini-grail .template-mini-main { min-height: 3.5rem; }
+    .template-mini-dash { grid-template-rows: auto 1fr; }
+    .template-mini-dash .template-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: 1.25rem;
+      gap: .25rem;
+    }
+    .template-mini-dash .template-mini-grid > div {
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-surface);
+    }
+    .template-mini-dash .template-mini-grid .is-wide { grid-column: span 2; }
+    .template-mini-master { grid-template-rows: auto 1fr; }
+    .template-mini-master .template-mini-body {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: .25rem;
+    }
+    .template-mini-master .template-mini-list,
+    .template-mini-master .template-mini-detail { min-height: 4rem; }
+
+    @container canvas (max-width: 28rem) {
+      .template-shell-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+
     /* 标记：只用等宽字体与花括号表明这是待替换的插槽，不加边框、不铺底色。 */
     .template-token {
       display: inline-block;
@@ -631,6 +750,7 @@
         padding: 1rem 0;
       }
       .template-notes-head { position: static; }
+      .template-shell-samples { display: none !important; }
       .template-handoff { padding: 0; background: #fff; }
       .template-handoff-head { grid-template-columns: minmax(0, 1fr); }
       .template-handoff-target { text-align: left; }
@@ -662,6 +782,7 @@
        布局名取自 references/layout-patterns.md（页面 / 区块 / 集合三级）；画布标签、布局总览、区域说明与实现提示词必须使用同一个名字。
        用户点名一个区域时只改该区域；不要把布局名当成整页重排的理由。
        窄屏样例只保留布局名与顺序，隐藏线框细节，让说明栏提前出现；宽屏仍显示完整线框。
+       “更多页面级布局样例”是可折叠的作者参考；项目交付时随样例整块替换，打印时不输出。
        画布是容器而非视口：项目 UI 请优先以 .template-ui-slot 为容器查询上下文
        （@container canvas (max-width: ...)），不要用视口断点推断布局。
        容器查询只提供布局依据，不会裁剪绘制范围；固定层、100vw 与超宽内容仍需实际检查。
@@ -756,6 +877,67 @@
               </div>
             </section>
           </div>
+
+          <!-- 页面级 shell 样例：折叠参考；项目交付时随样例整块替换。 -->
+          <details class="template-shell-samples">
+            <summary>更多页面级布局样例</summary>
+            <p class="template-shell-intro">主样例使用 Sidebar Layout；换页面外壳时先比较这四种。</p>
+            <div class="template-shell-grid">
+              <div class="template-shell-card">
+                <p class="template-region-tag"><b>Top-nav + Content</b><span>顶部导航 · 页面级</span></p>
+                <div class="template-shell-mini template-mini-topnav" aria-hidden="true">
+                  <div class="template-mini-bar"></div>
+                  <div class="template-mini-body">
+                    <div class="template-mini-block template-mini-hero"></div>
+                    <div class="template-mini-row">
+                      <div class="template-mini-block"></div>
+                      <div class="template-mini-block"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="template-shell-card">
+                <p class="template-region-tag"><b>Holy Grail</b><span>圣杯布局 · 页面级</span></p>
+                <div class="template-shell-mini template-mini-grail" aria-hidden="true">
+                  <div class="template-mini-bar"></div>
+                  <div class="template-mini-body">
+                    <div class="template-mini-block template-mini-side"></div>
+                    <div class="template-mini-block template-mini-main"></div>
+                    <div class="template-mini-block template-mini-side"></div>
+                  </div>
+                  <div class="template-mini-bar is-soft"></div>
+                </div>
+              </div>
+
+              <div class="template-shell-card">
+                <p class="template-region-tag"><b>Dashboard Grid</b><span>仪表盘网格 · 页面级</span></p>
+                <div class="template-shell-mini template-mini-dash" aria-hidden="true">
+                  <div class="template-mini-bar"></div>
+                  <div class="template-mini-grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div class="is-wide"></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="template-shell-card">
+                <p class="template-region-tag"><b>Master-Detail</b><span>主从布局 · 页面级</span></p>
+                <div class="template-shell-mini template-mini-master" aria-hidden="true">
+                  <div class="template-mini-bar"></div>
+                  <div class="template-mini-body">
+                    <div class="template-mini-block template-mini-list"></div>
+                    <div class="template-mini-block template-mini-detail"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
     </section>

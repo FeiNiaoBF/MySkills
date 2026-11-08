@@ -84,6 +84,7 @@ The dictionary has three levels. A page usually combines one page-level pattern 
 ## Choose with the user
 
 - Ask about a region, not the whole page. "功能区用 Bento Grid 还是 Feature Grid？" is easier to answer than "整页换哪种布局？"
+- When the page-level shell is undecided, open the bundled samples in the HTML template (Sidebar Layout, Top-nav + Content, Holy Grail, Dashboard Grid, Master-Detail) and compare them before naming regions.
 - When the user has not named a pattern, offer two or three candidates and state what each changes. Do not present the whole dictionary as a menu.
 - When the user names one region, change only that region. Preserve the shell, navigation, and unaffected sections.
 - If a named pattern does not fit the content, say so and propose the closest fit. A name is not a reason to force content into it.
