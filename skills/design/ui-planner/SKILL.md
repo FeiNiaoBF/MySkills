@@ -8,7 +8,7 @@ description: >-
   stack when requested. For visual direction from mood words or references, use
   style-translator.
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # UI Planner

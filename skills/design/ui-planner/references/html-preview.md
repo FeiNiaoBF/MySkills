@@ -4,7 +4,7 @@ Read this when preparing or updating the HTML design draft. Start with the bundl
 
 ## Delivery structure
 
-- **Header:** show only one simple identity line such as `{{PROJECT_NAME}}-ui-planner`. The name and a short type descriptor may use separate elements when they still read as that single line. Do not turn the header into a toolbar of review modes, viewport switches, or metadata.
+- **Header:** show only one simple identity line such as `{{PROJECT_NAME}}-ui-planner`. The project name is the document's single `h1`; the short type descriptor is a `p`, not a second heading. Do not turn the header into a toolbar of review modes, viewport switches, or metadata.
 - **Main area:** make the actual project's UI the dominant content. The shell does not prescribe the product's navigation, modules, visual style, or feature set.
 - **Explanations:** place directly readable explanations on the right, ordered by the page's structure or task flow. On narrow screens, move them below the design without obscuring it. They do not depend on clicking or hovering over the UI.
 - **Layout overview:** a compact region-to-layout table in the notes mirrors the canvas tags and region explanations. It is a summary of this page's choices, not a second copy of the layout dictionary; use the exact names and levels from the canvas.
@@ -62,6 +62,8 @@ Keep product and shell styles scoped separately. The product UI sits inside `.te
 Save in the user-designated folder with a clear entry file and opening instructions. Keep required assets alongside it using portable relative links.
 
 Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, the implementation handoff is easy to find and select, and no region causes horizontal overflow or hides content. Confirm the shell adds no review controls or selection-driven behavior. Check that each canvas layout tag names a region the user can point at, and that the same name appears in the layout overview, its explanation, and the handoff.
+
+Check the document outline (one `h1`, ordered headings) and a print or PDF preview: the canvas, notes, and handoff stack without clipped prompt text or blank pages.
 
 Check the implementation prompt against the UI and explanations section by section. A coding Agent should be able to identify the implementation scope, components, layout and interactions, key states, technical constraints, non-goals, acceptance criteria, and every unresolved decision without guessing. Copy the complete prompt from the rendered page and confirm its text remains intact. For a non-Web target, verify that both the nearby guidance and prompt name the real platform and do not imply that the HTML itself is production code.
 

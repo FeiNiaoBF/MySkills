@@ -64,7 +64,7 @@
     }
 
     /* 顶栏：项目名与文件类型共同组成一条简单身份信息。
-       两个 <p> 仅用于分别控制字重与颜色；不加入按钮、读数或其他元数据。
+       项目名是文档唯一的 h1，类型说明保持 p；不加入按钮、读数或其他元数据。
        不吸顶：画布高度已按一屏算好，吸顶只能在名字换行时与说明栏错位。 */
     .template-header {
       display: flex;
@@ -77,7 +77,8 @@
       background: var(--fg-surface);
       border-bottom: 1px solid var(--fg-rule);
     }
-    .template-header p { margin: 0; }
+    .template-header p,
+    .template-header h1 { margin: 0; }
     /* 中文不做负字距：字面已经紧凑，收负值只会让方块字互相贴住。 */
     .template-header-name {
       min-width: 0;
@@ -578,6 +579,44 @@
       .template-handoff-guide,
       .template-prompt { padding: 1rem; }
     }
+
+    /* 打印/PDF：把评审外壳收成纸面文档；画布、说明和提示词按顺序排版。
+       不隐藏任何替换标记，避免打印稿看起来像已确认的项目内容。 */
+    @media print {
+      @page { margin: 14mm; }
+      body { background: #fff; }
+      .template-header { position: static; background: #fff; }
+      .template-layout { display: block; padding: 0; }
+      .template-canvas { padding: 0; background: #fff; }
+      .template-ui-slot { min-height: 0; container-type: normal; }
+      .template-notes {
+        position: static;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        border-left: 0;
+        border-top: 1px solid var(--fg-rule);
+        padding: 1rem 0;
+      }
+      .template-notes-head { position: static; }
+      .template-handoff { padding: 0; background: #fff; }
+      .template-handoff-head { grid-template-columns: minmax(0, 1fr); }
+      .template-handoff-target { text-align: left; }
+      .template-handoff-body { display: block; }
+      .template-handoff-guide { padding: 0 0 1rem; }
+      .template-prompt {
+        border-left: 0;
+        border-top: 1px solid var(--fg-rule);
+        max-height: none;
+        overflow: visible;
+      }
+      .template-layout-map,
+      .template-note,
+      .template-layout-overview tr { break-inside: avoid; }
+      .template-handoff-head { break-after: avoid; }
+      .template-token { color: var(--fg-ink); }
+      a { color: inherit; text-decoration: none; }
+    }
   </style>
 </head>
 <body>
@@ -585,6 +624,7 @@
        项目交付：复制本文件到约定目录，替换 {{...}} 标记与提示文字，删除用不到的小节，
        说明改成正式段落并去掉 .template-token，界面语言、可访问名称与 lang 改为用户语言。
        实现提示词须按实际设计填写完整；已确认、建议和待定分开，待定项不得写成验收条件。
+       项目名是文档唯一的 h1，类型说明保持 p；打印/PDF 前检查画布、说明与提示词是否完整分页。
        区域小节按页面的阅读或操作顺序重复，一个区域不等于一个代码组件。
        模板交付：保留标记与提示文字，不要填入虚构的产品内容；画布中的布局样例只展示名字与位置，是有意保留的。
        布局名取自 references/layout-patterns.md（页面 / 区块 / 集合三级）；画布标签、布局总览、区域说明与实现提示词必须使用同一个名字。
@@ -595,14 +635,15 @@
        外壳不提供审查控件或读数；项目交互完全由放入画布的 UI 自己负责。
        下方实现提示词是设计交接内容，可直接选择复制，不代表已授权修改实际应用。 -->
   <header class="template-header">
-    <p class="template-header-name">{{PROJECT_NAME}}</p>
+    <h1 class="template-header-name">{{PROJECT_NAME}}</h1>
     <p class="template-header-kind">· 页面设计与开发交接</p>
   </header>
 
   <main>
     <div class="template-layout">
     <!-- 画布：项目的页面设计直接从这里开始，上方不放读数条、刻度尺或工具栏。 -->
-    <section class="template-canvas" aria-label="项目 UI 设计">
+    <section class="template-canvas" aria-labelledby="template-canvas-title">
+      <h2 class="template-sr-only" id="template-canvas-title">项目 UI 设计</h2>
       <div class="template-ui-slot">
         <!-- PROJECT_UI：用项目页面设计替换整个 .template-layout-sample（含布局样例）。
              只放入页面内容，不放入项目的整份 <html>；页级选择器请限定在 .template-ui-slot 内，
