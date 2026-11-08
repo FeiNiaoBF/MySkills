@@ -338,6 +338,58 @@
       .template-region-tag { gap: 0 .375rem; }
     }
 
+    /* 中等宽度（手机横屏到小平板）：保留线框，但缩小尺寸与间距，
+       让样例和说明栏都不至于被拉得太长。 */
+    @container canvas (min-width: 28.01rem) and (max-width: 48rem) {
+      .template-layout-sample { gap: 1rem; }
+      .template-layout-map {
+        gap: .375rem;
+        padding: .375rem;
+      }
+      .template-map-body {
+        grid-template-columns: 8rem minmax(0, 1fr);
+        gap: .375rem;
+      }
+      .template-map-main { gap: .375rem; }
+      .template-map-sidebar {
+        gap: .375rem;
+        padding: .5rem;
+      }
+      .template-map-region {
+        gap: .375rem;
+        padding: .5rem;
+      }
+      .template-map-nav {
+        min-height: 1.75rem;
+        padding: .375rem .5rem;
+      }
+      .template-map-hero-body {
+        gap: .375rem;
+        padding: .5rem;
+      }
+      .template-map-hero-title { height: .5rem; }
+      .template-map-hero-cta {
+        width: 3.5rem;
+        height: 1rem;
+      }
+      .template-map-tiles {
+        grid-auto-rows: .875rem;
+        gap: .25rem;
+      }
+      .template-map-split > div { min-height: 2.25rem; }
+      .template-map-columns { column-gap: .25rem; }
+      .template-map-card {
+        margin-bottom: .25rem;
+      }
+      .template-map-card:nth-child(1) { height: 2.25rem; }
+      .template-map-card:nth-child(2) { height: 1.5rem; }
+      .template-map-card:nth-child(3) { height: 2.75rem; }
+      .template-map-card:nth-child(4) { height: 1.75rem; }
+      .template-map-card:nth-child(5) { height: 2.5rem; }
+      .template-map-card:nth-child(6) { height: 1.875rem; }
+      .template-map-band { min-height: 2rem; }
+    }
+
     /* 页面级 shell 样例：折叠的作者参考，不是项目内容。
        项目交付时随 .template-layout-sample 整块替换。 */
     .template-shell-samples {
@@ -415,6 +467,8 @@
     .template-mini-topnav .template-mini-body {
       display: grid;
       align-content: start;
+      width: 82%;
+      margin-inline: auto;
       gap: .375rem;
     }
     .template-mini-topnav .template-mini-hero { height: 2.5rem; }
@@ -455,6 +509,10 @@
 
     @container canvas (max-width: 28rem) {
       .template-shell-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    @media (pointer: coarse) {
+      .template-shell-samples > summary { min-height: 2.75rem; }
     }
 
     /* 标记：只用等宽字体与花括号表明这是待替换的插槽，不加边框、不铺底色。 */
@@ -765,6 +823,11 @@
       .template-layout-map,
       .template-note,
       .template-layout-overview tr { break-inside: avoid; }
+      .template-notes-head h2,
+      .template-note h3,
+      .template-handoff-head h2,
+      .template-handoff-guide h3 { break-after: avoid; }
+      .template-layout-overview thead { display: table-header-group; }
       .template-handoff-head { break-after: avoid; }
       .template-token { color: var(--fg-ink); }
       a { color: inherit; text-decoration: none; }
@@ -781,7 +844,7 @@
        模板交付：保留标记与提示文字，不要填入虚构的产品内容；画布中的布局样例只展示名字与位置，是有意保留的。
        布局名取自 references/layout-patterns.md（页面 / 区块 / 集合三级）；画布标签、布局总览、区域说明与实现提示词必须使用同一个名字。
        用户点名一个区域时只改该区域；不要把布局名当成整页重排的理由。
-       窄屏样例只保留布局名与顺序，隐藏线框细节，让说明栏提前出现；宽屏仍显示完整线框。
+       窄屏样例只保留布局名与顺序，隐藏线框细节；中等宽度保留线框但缩小尺寸；宽屏显示完整线框，说明栏会更早出现。
        “更多页面级布局样例”是可折叠的作者参考；项目交付时随样例整块替换，打印时不输出。
        画布是容器而非视口：项目 UI 请优先以 .template-ui-slot 为容器查询上下文
        （@container canvas (max-width: ...)），不要用视口断点推断布局。
@@ -807,7 +870,7 @@
           <div class="template-layout-sample-head">
             <p class="template-layout-sample-title">空白画布 · 布局样例</p>
             <p class="template-layout-sample-text">下面的名字对应页面中的位置。用它们指定每个区域，再把整块样例替换为项目 UI。</p>
-            <p class="template-layout-sample-text">样例是一组常用组合；完整字典见 ui-planner 的 layout-patterns 参考。</p>
+            <p class="template-layout-sample-text">样例是一组常用组合；页面级外壳的另外四种在下方折叠区，完整字典见 ui-planner 的 layout-patterns 参考。</p>
             <span class="template-token">{{PROJECT_UI}}</span>
           </div>
 
@@ -962,7 +1025,7 @@
              改一个区域时只动该行点名的布局，不顺带重排其他区域。 -->
         <section class="template-note">
           <h3>布局总览</h3>
-          <p>一行一个区域；改一个区域时只动该行点名的布局。</p>
+          <p>按画布样例替换为实际区域；改一个区域时只动该行点名的布局。</p>
           <table class="template-layout-overview">
             <caption class="template-sr-only">区域与布局名对照</caption>
             <thead>
