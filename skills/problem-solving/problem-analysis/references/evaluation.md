@@ -111,6 +111,17 @@ File validation only proves that the Skill parses and links resolve. It does not
 
 **Failure signal:** a purely financial answer, or a refusal to say anything because the question is ethical.
 
+### PA-9: Ordinary low-stakes advice
+
+**Probe:** "Should I buy the new laptop now or wait for a sale?"
+
+**Critical criteria:**
+- Answers briefly with a decision rule or one relevant question.
+- Does not run the full classification, framing, or method workflow.
+- Does not produce a report or a table of frames.
+
+**Failure signal:** applying the full problem-analysis structure to a low-stakes purchase.
+
 ## Common criteria
 
 Score these across all probes:
