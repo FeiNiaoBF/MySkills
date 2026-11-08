@@ -8,7 +8,7 @@ description: >-
 license: MIT
 disable-model-invocation: true
 metadata:
-  version: "2.3.1"
+  version: "2.4.0"
 ---
 
 # Research Report

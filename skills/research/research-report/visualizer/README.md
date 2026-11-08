@@ -19,7 +19,7 @@ go run ./cmd/researchcurator validate-report -in report.json
 go run ./cmd/researchcurator publish -in report.json [-out <new-topic-folder>]
 ```
 
-The output is a single self-contained HTML document. The article and lead come first, with numbered citations linking to inspected passages. Sources follow the article; a collapsed Cytoscape map shows only article-linked sources, claims, and recorded conclusions. Research boundaries, source roles, process, and raw data remain secondary. UI labels follow `article.language` (Chinese and English; unsupported languages fall back to English). The document works from `file://` without runtime requests; external URLs open only after explicit reader action.
+The output is a single self-contained HTML document. The article and lead come first, with numbered citations linking to inspected passages. Sources follow the article; a collapsed Cytoscape map shows only article-linked sources, claims, and recorded conclusions. Research boundaries, source roles, process, and raw data remain secondary. UI labels follow `article.language` (Chinese and English; unsupported languages fall back to English). The document works from `file://` without runtime requests; external URLs open only after explicit reader action. Legacy run ledgers without an article show all recorded sources and their conflict adjudications and query provenance under Research details; article-only views remain empty.
 
 ## Rendering and safety
 

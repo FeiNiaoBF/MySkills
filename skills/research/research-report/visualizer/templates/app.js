@@ -14,11 +14,13 @@ const zh = /^zh(?:[-_]|$)/i.test(str(article?.language));
 const L = zh ? {
  reportKicker:'研究报告', important:'重要限制', readArticle:'阅读正文', sourceNotes:'来源与引文', researchDetails:'研究过程与边界',
  keyLimits:'阅读前请注意', evidenceMap:'证据关系图', evidenceMapIntro:'只显示正文引用的来源、观点和结论。连线表示记录的支持或反驳关系，不代表证据强弱。',
- mapUnavailable:'关系图暂不可用；下方文字关系仍可查看。', mapEmpty:'正文没有可展示的来源—观点关系。', sourceNotesIntro:'编号对应正文中的引文。展开来源可查看实际检索的段落及其用途。',
+ mapUnavailable:'关系图暂不可用；下方文字关系仍可查看。', mapEmpty:'正文没有可展示的来源—观点关系。', sourceNotesIntro:'编号对应正文中的引文。展开来源可查看实际检索的段落及其用途。', legacySourcesIntro:'这是旧版证据台账，没有面向读者的正文引文；下方列出全部已记录来源。',
  evidence:'已核实证据', candidate_lead:'未核实线索', context_source:'背景资料', selected:'已采用', rejected:'未采用', selected_unverified:'台账标为已采用，但来源未核实，不能作为证据',
  sourceType:'资料类型', duplicate:'重复来源', superseded:'已被替代', openSource:'打开原始来源', inspectedPassage:'实际检查的段落', published:'发布于', retrieved:'检索于', upstream:'上游/转引来源', evidenceBalance:'来源集中度提醒',
  usedFor:'用于支持或讨论的观点', supports:'支持', contradicts:'反驳', unverified:'未核实', failed:'获取失败', verified:'已核对原文',
  researchBoundary:'研究范围与停止原因', coverage:'问题覆盖情况', remainingGaps:'尚存缺口与限制', processAndSources:'搜索与来源评估',
+ conflictAdjudications:'冲突裁定', queryProvenance:'查询 → 候选来源',
+ adjRationale:'理由', adjOutcome:'结果', adjFinalEffect:'最终处理', adjSourceIds:'来源', adjClaims:'观点', retrievalReference:'检索记录',
  candidateLeads:'未作为证据的线索', contextSources:'背景资料', rounds:'研究轮次', rawData:'完整研究记录',
  noSources:'没有可追溯的来源记录。', noClaims:'正文没有链接到已记录的观点。', noGaps:'没有记录其他研究缺口。', noItems:'无记录。',
  stop_in_progress:'研究仍在进行', stop_saturated:'达到本次范围内的证据饱和', stop_budget_exhausted:'研究预算已用尽', stop_retrieval_blocked:'检索受阻', stop_user_stopped:'按用户要求停止',
@@ -34,11 +36,13 @@ const L = zh ? {
 } : {
  reportKicker:'Research report', important:'Important limits', readArticle:'Read the article', sourceNotes:'Sources and citations', researchDetails:'Research details',
  keyLimits:'Important limits to keep in mind', evidenceMap:'Evidence map', evidenceMapIntro:'Only sources, claims, and conclusions cited by the article appear here. Lines show recorded support or contradiction, not strength.',
- mapUnavailable:'The graph is unavailable; the text relationships below remain accessible.', mapEmpty:'The article has no recorded source-to-claim relationships to show.', sourceNotesIntro:'Numbers match the citations in the article. Expand a source to inspect the retrieved passage and how it was used.',
+ mapUnavailable:'The graph is unavailable; the text relationships below remain accessible.', mapEmpty:'The article has no recorded source-to-claim relationships to show.', sourceNotesIntro:'Numbers match the citations in the article. Expand a source to inspect the retrieved passage and how it was used.', legacySourcesIntro:'This is a legacy evidence ledger without article citations; all recorded sources are listed below.',
  evidence:'Verified evidence', candidate_lead:'Candidate lead', context_source:'Context source', selected:'Selected', rejected:'Not selected', selected_unverified:'Ledger marks selected, but retrieval is unverified; not evidence',
  sourceType:'Source type', duplicate:'Duplicate source', superseded:'Superseded', openSource:'Open original source', inspectedPassage:'Inspected passage', published:'Published', retrieved:'Retrieved', upstream:'Upstream or cited origin', evidenceBalance:'Evidence concentration check',
  usedFor:'Claims using this source', supports:'Supports', contradicts:'Contradicts', unverified:'Unverified', failed:'Retrieval failed', verified:'Passage checked',
  researchBoundary:'Research scope and stopping point', coverage:'Question coverage', remainingGaps:'Remaining gaps and limitations', processAndSources:'Search and source assessment',
+ conflictAdjudications:'Conflict adjudications', queryProvenance:'Query → candidate provenance',
+ adjRationale:'Rationale', adjOutcome:'Outcome', adjFinalEffect:'Final effect', adjSourceIds:'Sources', adjClaims:'Claims', retrievalReference:'Retrieval reference',
  candidateLeads:'Leads not used as evidence', contextSources:'Context sources', rounds:'Research rounds', rawData:'Complete research record',
  noSources:'No traceable source records.', noClaims:'The article is not linked to recorded claims.', noGaps:'No additional research gaps were recorded.', noItems:'None recorded.',
  stop_in_progress:'Research is still in progress', stop_saturated:'Evidence saturation reached for this scope', stop_budget_exhausted:'Research budget exhausted', stop_retrieval_blocked:'Retrieval was blocked', stop_user_stopped:'Stopped at the user’s request',
@@ -186,8 +190,10 @@ function sourceCard(source, number, compact = false) {
  card.append(head);
  const meta = el('p', undefined, 'source-meta');
  if (source.type) meta.append(document.createTextNode(`${t('sourceType')}: ${source.type} · `));
- const selection = role === 'candidate_lead' && source.status === 'selected' ? t('selected_unverified') : t(source.status, source.status);
- meta.append(document.createTextNode(`${t(source.verification, source.verification)} · ${selection}`));
+ const verification = str(source.verification);
+ const status = str(source.status);
+ const selection = role === 'candidate_lead' && status === 'selected' ? t('selected_unverified') : (status ? t(status, status) : t('unverified'));
+ meta.append(document.createTextNode([verification ? t(verification) : '', selection].filter(Boolean).join(' · ')));
  card.append(meta);
  const href = safeURL(str(source.url));
  if (href) { const a = el('a', t('openSource')); a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; card.append(a); }
@@ -221,8 +227,9 @@ function sourceCard(source, number, compact = false) {
 }
 function renderSources() {
  const list = $('source-list'); list.replaceChildren();
- if (!citedSources.length) list.append(el('p', t('noSources'), 'empty-state'));
- citedSources.forEach((source, index) => list.append(sourceCard(source, index + 1)));
+ const listSources = citedSources.length ? citedSources : (!report ? sources : []);
+ if (!listSources.length) list.append(el('p', t('noSources'), 'empty-state'));
+ listSources.forEach((source, index) => list.append(sourceCard(source, index + 1)));
  for (const role of ['candidate_lead', 'context_source']) {
   const target = $(role === 'candidate_lead' ? 'candidate-list' : 'context-list');
   target.replaceChildren();
@@ -349,6 +356,64 @@ function renderLegacyAudit() {
   const context = $('context-list'); context.replaceChildren();
   for (const source of sources.filter(item => sourceRole(item) === 'context_source')) context.append(sourceCard(source, null, true));
   $('evidence-map').hidden = true;
+  const read = document.querySelector('.toc a[href="#article-panel"]');
+  if (read) read.hidden = true;
+  const intro = $('source-intro');
+  if (intro) intro.textContent = L.legacySourcesIntro;
+  const researchDetails = $('research-details');
+  if (researchDetails) researchDetails.hidden = true;
+  const processSummary = $('process-summary');
+  if (processSummary) processSummary.hidden = true;
+  const roundDetails = $('round-list')?.closest('details');
+  if (roundDetails) roundDetails.hidden = true;
+  const roleGrid = document.querySelector('.audit-grid');
+  if (roleGrid) roleGrid.hidden = true;
+ }
+}
+function renderAdjudications() {
+ const details = $('adjudication-details');
+ const list = $('adjudications');
+ if (!details || !list) return;
+ const items = arr(run.adjudications);
+ if (!items.length) { details.hidden = true; return; }
+ details.hidden = false;
+ list.replaceChildren();
+ for (const item of items) {
+  const block = el('details', undefined, 'record');
+  const target = [item.target_type, item.target_id].filter(Boolean).join(' ');
+  block.append(el('summary', `${target || item.id || ''}${item.status ? ' · ' + item.status : ''}`));
+  if (item.rationale) block.append(el('p', `${L.adjRationale}: ${item.rationale}`));
+  if (item.outcome) block.append(el('p', `${L.adjOutcome}: ${item.outcome}`));
+  if (item.final_effect) block.append(el('p', `${L.adjFinalEffect}: ${item.final_effect}`));
+  if (arr(item.source_ids).length) block.append(el('p', `${L.adjSourceIds}: ${arr(item.source_ids).join(', ')}`, 'source-meta'));
+  if (arr(item.claim_ids).length) block.append(el('p', `${L.adjClaims}: ${arr(item.claim_ids).join(', ')}`, 'source-meta'));
+  for (const evidence of arr(item.evidence)) {
+   if (evidence.quote) block.append(el('blockquote', evidence.quote, 'quote'));
+   if (evidence.locator) block.append(el('p', evidence.locator, 'source-meta'));
+   if (evidence.verification) block.append(el('p', t(evidence.verification), 'source-meta'));
+  }
+  list.append(block);
+ }
+}
+function renderQueryProvenance() {
+ const section = $('query-provenance');
+ const list = $('query-list');
+ if (!section || !list) return;
+ const queries = arr(run.queries);
+ if (!queries.length) { section.hidden = true; return; }
+ section.hidden = false;
+ list.replaceChildren();
+ for (const query of queries) {
+  const block = el('details', undefined, 'record');
+  const tools = [query.provider, query.tool].filter(Boolean).join(' / ');
+  block.append(el('summary', `${query.text || query.id || ''}${tools ? ' · ' + tools : ''}`));
+  if (query.retrieval_reference) block.append(el('p', `${L.retrievalReference}: ${query.retrieval_reference}`, 'source-meta'));
+  for (const id of arr(query.candidate_source_ids)) {
+   const source = sourceByID.get(String(id));
+   const status = source ? (source.status || 'unknown') : 'unknown';
+   block.append(el('p', `${id} → ${status}${source?.reason ? ' · ' + source.reason : ''}`, 'source-meta'));
+  }
+  list.append(block);
  }
 }
 function renderRaw() { $('raw').textContent = JSON.stringify(payload, null, 2); }
@@ -360,6 +425,8 @@ renderArticle();
 renderSources();
 if (research) renderCoverageAndAudit();
 renderLegacyAudit();
+renderAdjudications();
+renderQueryProvenance();
 renderGraph();
 renderRaw();
 })();
