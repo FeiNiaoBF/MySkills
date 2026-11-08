@@ -2,12 +2,13 @@
 name: ui-planner
 description: >-
   Use when a user is shaping a new or substantially redesigned interface and
-  needs to choose content, organize modules, or prepare a design-to-implementation
-  handoff. Turn confirmed choices into a page structure, an explained HTML draft,
-  and implementation prompts; implement in the project's stack when requested.
-  For visual direction from mood words or references, use style-translator.
+  needs to choose content, organize modules, name layout patterns, or prepare a
+  design-to-implementation handoff. Turn confirmed choices into a page structure,
+  an explained HTML draft, and implementation prompts; implement in the project's
+  stack when requested. For visual direction from mood words or references, use
+  style-translator.
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # UI Planner
@@ -23,7 +24,7 @@ Match the workflow to the requested outcome. Discussion-only work stays in conve
 For a project design, provide three corresponding deliverables as the page takes shape:
 
 - **Conversation:** explain the page's contents and their purposes, distinguish confirmed decisions from proposals, and summarize changes and remaining choices.
-- **HTML design draft:** save the project's UI and corresponding page explanations in the user-designated folder and keep them aligned with the discussion. Read [HTML preview requirements](references/html-preview.md) when preparing or updating the draft; it defines the delivery structure and how to use the bundled [HTML template](assets/design-draft.html).
+- **HTML design draft:** save the project's UI and corresponding page explanations in the user-designated folder and keep them aligned with the discussion. Give each meaningful region a visible layout tag from the [layout pattern vocabulary](references/layout-patterns.md); the region explanation and the implementation handoff repeat the same name. Read [HTML preview requirements](references/html-preview.md) when preparing or updating the draft; it defines the delivery structure and how to use the bundled [HTML template](assets/design-draft.html).
 - **Implementation handoff:** include a complete, copyable Agent implementation prompt inside the HTML draft. Derive it from the same evidence as the displayed design and keep confirmed decisions, recommendations, and open questions distinct. It tells an implementation Agent what to build without making the HTML preview the production stack.
 
 The HTML draft and implementation handoff together are the core file delivery for a project-design task. A text-only request may receive the same handoff in conversation instead. A request for discussion only, a local adjustment without a new draft, no files, or a later preview takes precedence; do not force a new HTML file merely because this Skill exists.
@@ -35,6 +36,7 @@ An HTML draft is a design-and-handoff surface, not a change of production stack.
 ## Working rules
 
 - Preserve the existing framework, components, toolchain, and design tokens. If no target stack is established, keep it as an open question in the handoff instead of choosing one silently; the HTML draft does not settle it.
+- **Name the arrangement, not the look:** use the [layout pattern vocabulary](references/layout-patterns.md) in step 2. The name describes how a region is arranged; visual style stays with the existing direction. When the user names one region, change only that region.
 - Keep handoff status explicit: confirmed decisions are requirements, Agent recommendations remain recommendations, and unresolved questions stay open. Do not place an unconfirmed proposal in the acceptance criteria or phrase it as mandatory.
 - Use platform-native concepts: semantic HTML and CSS tokens on Web; widget constraints, `ThemeData`, and `ColorScheme` in Flutter. Reuse existing research; consult official documentation when component behavior or version-sensitive facts remain uncertain.
 - **Ordinary delivery:** carry authorized work through implementation and checks without module-by-module approval. Pause only for consequential unresolved choices or scope changes.
@@ -63,9 +65,11 @@ If the requested content and functions are already clear, skip this selection st
 
 Map the selected content into the actual interface structure: page regions, navigation, main content, side panels, overlays, and relevant states. A vertically stacked landing page is one possible structure, not the universal model. A feature does not necessarily require its own visible region, page, or code component.
 
-For multiple pages, state each page's responsibility and start with the user's priority. Use a compact module map when helpful: everyday name, purpose, included elements, important interactions/states, layout constraints, and implementation priority. Reuse existing component boundaries where appropriate.
+Name each region's arrangement with the [layout pattern vocabulary](references/layout-patterns.md). When the user has not named one, offer two or three candidates with their tradeoffs; when the user names one region, change only that region. The same name goes on the region's canvas tag, its explanation, and the implementation handoff.
 
-Give concrete, revisable layout defaults with target-platform units and behavior: width constraints, proportions, and adaptation to relevant windows or devices. Do not fix every dimension before seeing the page. Apply the project's visual direction; ask about unresolved choices only when they materially affect the design.
+For multiple pages, state each page's responsibility and start with the user's priority. Use a compact module map when helpful: everyday name, layout pattern name, purpose, included elements, important interactions/states, layout constraints, and implementation priority. Reuse existing component boundaries where appropriate.
+
+Give concrete, revisable layout defaults with target-platform units and behavior: width constraints, proportions, and adaptation to relevant windows or devices. Use the named pattern as the shared reference, then specify what it means here rather than restating the pattern. Do not fix every dimension before seeing the page. Apply the project's visual direction; ask about unresolved choices only when they materially affect the design.
 
 Create or update the HTML design draft, its matching conversational explanation, and the implementation handoff within the authorized scope, following the reference's filling instructions. Generate the prompt from the actual displayed design and project evidence. It must cover implementation scope, component responsibilities, layout and interaction, key states, target stack and platform constraints, non-goals, and acceptance criteria. Keep confirmed decisions, Agent recommendations, and open questions visibly distinct; an open question may constrain implementation but is not an accepted requirement. The template describes the delivery structure, not the product's features, layout, or production technology.
 

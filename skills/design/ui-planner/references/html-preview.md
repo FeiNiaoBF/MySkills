@@ -14,14 +14,25 @@ Read this when preparing or updating the HTML design draft. Start with the bundl
 
 The template uses a neutral gray surround, a white design surface, a numbered explanation column, and a full-width implementation handoff below them. Its typography and spacing distinguish headings, readable guidance, secondary replacement markers, and copyable prompt text. The `--fg-*` CSS properties control shell colors, fonts, and proportions; section numbers follow document order automatically. These are adjustable starting points. Reuse the project's established visual direction for its UI; the shell is not the product design system.
 
+### Layout names
+
+Each meaningful region carries a visible tag at its top-left with the exact pattern name from [layout-patterns.md](layout-patterns.md), for example `Bento Grid · 便当格 · 区块级`. The region's explanation repeats the same name and level, and the implementation handoff's "Layout and interaction" section uses the same words for the same regions.
+
+- Keep the tag inside the region, not in a floating legend or a separate key.
+- Do not label wrappers or decorative fragments. Label the region the user would point at, including a list area when the pattern is list-level.
+- Do not introduce synonyms such as "banner" in one place and "hero" in another.
+- Keep tags visible during review so the user can name a region and ask for a specific change. Remove review-only tags from production code; keep the names in documentation and the handoff.
+- When the user names one region, change only that region. Preserve the shell, navigation, and unaffected sections.
+
 ## Fill the template
 
 The `{{...}}` labels are literal replacement markers, not a template engine. For a new draft, copy the file to the agreed output folder and edit that copy; preserve and update an existing draft when continuing work. Do not edit the bundled asset for an ordinary project delivery. The shell requires no build step or JavaScript dependency; the embedded UI may need its own assets or scripts.
 
 - `PROJECT_NAME`: replace both the document title and visible header name.
-- `PROJECT_UI`: replace the entire `.template-placeholder` element inside `.template-ui-slot` with the project's page design, including its own layout and any agreed interactions. Remove the placeholder-only styling as appropriate.
+- `PROJECT_UI`: replace the entire `.template-layout-sample` element inside `.template-ui-slot` with the project's page design, including its own layout and any agreed interactions. Remove the sample-only styling as appropriate. Add a visible layout tag to each meaningful region.
 - `PAGE_PURPOSE`: describe the audience, task, and scope of the page.
 - `REGION_NAME` and `REGION_EXPLANATION`: name a meaningful page region and explain its contents, purpose, and arrangement. Repeat this section in a useful reading or task order; a region need not equal a code component.
+- `LAYOUT_NAME`: use the exact pattern name and level from [layout-patterns.md](layout-patterns.md), such as `Bento Grid · 便当格 · 区块级`. The same name appears on the region's canvas tag and in the handoff.
 - `FLOWS_AND_STATES`: describe relevant actions and feedback, identifying simulated or unfinished behavior.
 - `LAYOUT_AND_ADAPTATION`: explain the relationships between regions and how they adapt to relevant sizes.
 - `DECISIONS_AND_OPEN_QUESTIONS`: distinguish confirmed choices, current proposals, and remaining decisions using actual conversation/project evidence.
@@ -39,15 +50,15 @@ Replace the filling instructions with project-specific explanations and handoff 
 
 Keep product and shell styles scoped separately. The product UI sits inside `.template-ui-slot`, whose available width differs from the browser viewport while the notes are beside it. Check product layout within that space; viewport-wide sizing, fixed overlays, and viewport breakpoints may otherwise overlap the notes or misrepresent adaptation. Adjust the draft's containment as needed and disclose remaining differences from the target application.
 
-**Template-only request:** retain replaceable labels and guidance showing what belongs in each slot, including the implementation-prompt structure. Do not fill them with an invented reader, dashboard, stack, or other sample product. A reusable template is complete when its structure and filling expectations are clear; its empty UI slot is intentional.
+**Template-only request:** retain replaceable labels and guidance showing what belongs in each slot, including the implementation-prompt structure. The canvas sample shows layout names and positions; keep it as guidance, not as invented product content. Do not fill the slots with an invented reader, dashboard, stack, or other sample product. A reusable template is complete when its structure and filling expectations are clear; its sample UI slot is intentional.
 
-**Project-design request:** deliver the actual project's UI, corresponding explanations, and a filled implementation prompt. Empty slots, authoring instructions, or a prompt that merely says “match the design” do not satisfy this request. Use representative content and enough interaction to review the agreed flows; disclose mocks and unfinished states. For native targets, state that the HTML demonstrates design intent and does not establish native rendering or behavior.
+**Project-design request:** deliver the actual project's UI, corresponding explanations, and a filled implementation prompt. Replace the layout sample with the project UI and keep a visible layout tag on each meaningful region. Empty slots, authoring instructions, or a prompt that merely says “match the design” do not satisfy this request. Use representative content and enough interaction to review the agreed flows; disclose mocks and unfinished states. For native targets, state that the HTML demonstrates design intent and does not establish native rendering or behavior.
 
 ## Storage and checks
 
 Save in the user-designated folder with a clear entry file and opening instructions. Keep required assets alongside it using portable relative links.
 
-Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, the implementation handoff is easy to find and select, and no region causes horizontal overflow or hides content. Confirm the shell adds no review controls or selection-driven behavior.
+Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, the implementation handoff is easy to find and select, and no region causes horizontal overflow or hides content. Confirm the shell adds no review controls or selection-driven behavior. Check that each canvas layout tag names a region the user can point at, and that the same name appears in its explanation and the handoff.
 
 Check the implementation prompt against the UI and explanations section by section. A coding Agent should be able to identify the implementation scope, components, layout and interactions, key states, technical constraints, non-goals, acceptance criteria, and every unresolved decision without guessing. Copy the complete prompt from the rendered page and confirm its text remains intact. For a non-Web target, verify that both the nearby guidance and prompt name the real platform and do not imply that the HTML itself is production code.
 

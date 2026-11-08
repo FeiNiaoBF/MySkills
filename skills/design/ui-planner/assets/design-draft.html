@@ -52,11 +52,11 @@
     /* 尺寸与排版只作用于外壳自身的元素；预留位内部的项目样式不受影响。 */
     .template-header, .template-header *,
     .template-canvas, .template-ui-slot,
-    .template-placeholder, .template-placeholder *,
+    .template-layout-sample, .template-layout-sample *,
     .template-notes, .template-notes *,
     .template-handoff, .template-handoff * { box-sizing: border-box; }
 
-    .template-header, .template-placeholder, .template-notes, .template-handoff {
+    .template-header, .template-layout-sample, .template-notes, .template-handoff {
       font-family: var(--fg-font);
       color: var(--fg-ink);
       font-synthesis: none;
@@ -116,28 +116,192 @@
       border: 1px solid var(--fg-rule);
     }
 
-    /* 空白画布：一行标题、一句约束、一个标记，不预设任何产品。 */
-    .template-placeholder {
+    /* 布局样例：只展示布局名与位置，不预设产品内容。项目交付时整块替换。
+       名字取自 references/layout-patterns.md；画布标签、说明栏与提示词共用同一套名字。 */
+    .template-layout-sample {
       display: grid;
-      place-items: center;
+      gap: 1.25rem;
+      align-content: start;
       min-height: inherit;
-      padding: clamp(1.5rem, 4vw, 3rem);
-      text-align: center;
+      padding: clamp(1.25rem, 3vw, 2rem);
     }
-    .template-placeholder-content { max-width: 22rem; }
-    .template-placeholder-title {
+    .template-layout-sample-head { max-width: 36rem; }
+    .template-layout-sample-title {
       margin: 0 0 .375rem;
       font-size: var(--fg-text-body);
       font-weight: 600;
       line-height: 1.5;
       text-wrap: balance;
     }
-    .template-placeholder-text {
+    .template-layout-sample-text {
       margin: 0;
       font-size: var(--fg-text-meta);
       line-height: 1.7;
       color: var(--fg-muted);
       text-wrap: pretty;
+    }
+    .template-layout-sample .template-token { margin-top: .75rem; }
+
+    /* 页面级骨架：导航条 + 侧边栏与主内容；通栏在骨架之外，占满样例宽度。
+       虚线只表示“这是样例”，不进入项目 UI。 */
+    .template-layout-map {
+      display: grid;
+      gap: .5rem;
+      padding: .5rem;
+      border: 1px dashed var(--fg-rule);
+      background: var(--fg-stage);
+    }
+    .template-map-nav {
+      display: flex;
+      align-items: center;
+      gap: .375rem;
+      min-height: 2rem;
+      padding: .375rem .625rem;
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-surface);
+      color: var(--fg-muted);
+      font-size: var(--fg-text-num);
+      line-height: 1.4;
+    }
+    .template-map-nav-label { flex: none; margin-right: .25rem; }
+    .template-map-nav .template-map-line { width: 2.5rem; }
+    .template-map-nav .template-map-line:last-child { margin-left: auto; width: 4rem; }
+    .template-map-body {
+      display: grid;
+      grid-template-columns: 10.5rem minmax(0, 1fr);
+      gap: .5rem;
+    }
+    .template-map-sidebar {
+      display: grid;
+      align-content: start;
+      gap: .5rem;
+      padding: .625rem;
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-surface);
+    }
+    .template-map-sidebar .template-region-tag { margin-bottom: .125rem; }
+    .template-map-main {
+      display: grid;
+      gap: .5rem;
+      min-width: 0;
+    }
+    .template-map-region {
+      display: grid;
+      gap: .5rem;
+      align-content: start;
+      padding: .625rem;
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-surface);
+    }
+    .template-region-tag {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: .125rem .5rem;
+      margin: 0;
+      font-size: var(--fg-text-num);
+      line-height: 1.5;
+      color: var(--fg-muted);
+      pointer-events: none;
+    }
+    .template-region-tag b {
+      font-size: var(--fg-text-meta);
+      font-weight: 600;
+      color: var(--fg-ink);
+    }
+    .template-map-line {
+      height: .3125rem;
+      border-radius: 999px;
+      background: var(--fg-rule-soft);
+    }
+    .template-map-line.is-medium { width: 70%; }
+    .template-map-line.is-short { width: 45%; }
+    .template-map-hero-body {
+      display: grid;
+      gap: .5rem;
+      place-items: start;
+      padding: .75rem;
+      background: var(--fg-stage);
+    }
+    .template-map-hero-title {
+      width: 60%;
+      height: .625rem;
+      border-radius: 999px;
+      background: var(--fg-rule);
+    }
+    .template-map-hero-cta {
+      width: 4.25rem;
+      height: 1.25rem;
+      border-radius: 999px;
+      background: var(--fg-rule-strong);
+    }
+    .template-map-tiles {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: 1.25rem;
+      gap: .375rem;
+    }
+    .template-map-tile {
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-stage);
+    }
+    .template-map-tile.is-wide { grid-column: span 2; }
+    .template-map-tile.is-tall { grid-row: span 2; }
+    .template-map-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .375rem;
+    }
+    .template-map-split > div {
+      min-height: 3.25rem;
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-stage);
+    }
+    .template-map-columns {
+      columns: 3;
+      column-gap: .375rem;
+    }
+    .template-map-card {
+      break-inside: avoid;
+      margin: 0 0 .375rem;
+      border: 1px solid var(--fg-rule-soft);
+      background: var(--fg-stage);
+    }
+    .template-map-card:nth-child(1) { height: 3.25rem; }
+    .template-map-card:nth-child(2) { height: 2.25rem; }
+    .template-map-card:nth-child(3) { height: 4rem; }
+    .template-map-card:nth-child(4) { height: 2.5rem; }
+    .template-map-card:nth-child(5) { height: 3.5rem; }
+    .template-map-card:nth-child(6) { height: 2.75rem; }
+    .template-map-full { border-style: dashed; }
+    .template-map-band {
+      display: grid;
+      place-items: center;
+      min-height: 2.75rem;
+      background: var(--fg-stage);
+    }
+    .template-map-band .template-map-line { width: 45%; }
+
+    /* 容器变窄时先收侧边栏，再收便当格与瀑布流；这是样例的适配，不是项目规则。 */
+    @container canvas (max-width: 44rem) {
+      .template-map-body { grid-template-columns: minmax(0, 1fr); }
+      .template-map-sidebar {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        align-items: center;
+      }
+      .template-map-sidebar .template-region-tag { grid-column: 1 / -1; }
+      .template-map-split { grid-template-columns: minmax(0, 1fr); }
+    }
+    @container canvas (max-width: 30rem) {
+      .template-map-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .template-map-columns { columns: 2; }
+      .template-map-sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @container canvas (max-width: 22rem) {
+      .template-map-tiles { grid-template-columns: minmax(0, 1fr); }
+      .template-map-tile.is-wide { grid-column: span 1; }
+      .template-map-tile.is-tall { grid-row: span 1; }
+      .template-map-columns { columns: 1; }
     }
 
     /* 标记：只用等宽字体与花括号表明这是待替换的插槽，不加边框、不铺底色。 */
@@ -151,7 +315,6 @@
       color: var(--fg-muted);
       overflow-wrap: anywhere;
     }
-    .template-placeholder .template-token { margin-top: 1rem; }
 
     /* 说明栏：跟住阅读位置。画布比说明长时整栏留在视野内；
        说明本身长过一屏时正常随页滚动——不给它内部滚动条，否则内容等于被藏起来。 */
@@ -215,6 +378,18 @@
       line-height: 1.78;
       color: var(--fg-muted);
       text-wrap: pretty;
+    }
+    .template-note p.template-note-layout {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: .25rem .5rem;
+      font-size: var(--fg-text-meta);
+      line-height: 1.6;
+    }
+    .template-note-layout > span:first-child {
+      font-weight: 600;
+      color: var(--fg-ink);
     }
     /* 网格子元素会被块化，标记需要显式贴合内容宽度。 */
     .template-note > .template-token { justify-self: start; }
@@ -345,7 +520,7 @@
     @media (max-width: 26rem) {
       :root { --fg-inset: .75rem; }
       .template-notes { padding: 1.125rem .875rem 1.75rem; }
-      .template-placeholder { padding: 1.5rem 1.125rem; }
+      .template-layout-sample { padding: 1.5rem 1.125rem; }
       .template-handoff-head,
       .template-handoff-guide,
       .template-prompt { padding: 1rem; }
@@ -358,7 +533,9 @@
        说明改成正式段落并去掉 .template-token，界面语言、可访问名称与 lang 改为用户语言。
        实现提示词须按实际设计填写完整；已确认、建议和待定分开，待定项不得写成验收条件。
        区域小节按页面的阅读或操作顺序重复，一个区域不等于一个代码组件。
-       模板交付：保留标记与提示文字，不要填入虚构的产品内容；空白画布是有意保留的。
+       模板交付：保留标记与提示文字，不要填入虚构的产品内容；画布中的布局样例只展示名字与位置，是有意保留的。
+       布局名取自 references/layout-patterns.md；画布标签、说明栏与实现提示词必须使用同一个名字。
+       用户点名一个区域时只改该区域；不要把布局名当成整页重排的理由。
        画布是容器而非视口：项目 UI 请优先以 .template-ui-slot 为容器查询上下文
        （@container canvas (max-width: ...)），不要用视口断点推断布局。
        容器查询只提供布局依据，不会裁剪绘制范围；固定层、100vw 与超宽内容仍需实际检查。
@@ -374,26 +551,94 @@
     <!-- 画布：项目的页面设计直接从这里开始，上方不放读数条、刻度尺或工具栏。 -->
     <section class="template-canvas" aria-label="项目 UI 设计">
       <div class="template-ui-slot">
-        <!-- PROJECT_UI：用项目页面设计替换整个 .template-placeholder。
+        <!-- PROJECT_UI：用项目页面设计替换整个 .template-layout-sample（含布局样例）。
              只放入页面内容，不放入项目的整份 <html>；页级选择器请限定在 .template-ui-slot 内，
              避免外壳的排版与颜色被覆盖。
              若项目 UI 需要固定明暗，就给它自己这一层声明 color-scheme。 -->
-        <div class="template-placeholder">
-          <div class="template-placeholder-content">
-            <p class="template-placeholder-title">空白画布</p>
-            <p class="template-placeholder-text">放入项目页面设计，内容与交互由项目决定。</p>
+        <div class="template-layout-sample">
+          <div class="template-layout-sample-head">
+            <p class="template-layout-sample-title">空白画布 · 布局样例</p>
+            <p class="template-layout-sample-text">下面的名字对应页面中的位置。用它们指定每个区域，再把整块样例替换为项目 UI。</p>
             <span class="template-token">{{PROJECT_UI}}</span>
+          </div>
+
+          <div class="template-layout-map" role="group" aria-label="布局样例：侧边栏布局、首屏大横幅、便当格、左右分屏、瀑布流、通栏">
+            <div class="template-map-nav" aria-hidden="true">
+              <span class="template-map-nav-label">全局导航</span>
+              <span class="template-map-line"></span>
+              <span class="template-map-line"></span>
+              <span class="template-map-line"></span>
+            </div>
+
+            <div class="template-map-body">
+              <div class="template-map-sidebar">
+                <p class="template-region-tag"><b>Sidebar Layout</b><span>侧边栏布局 · 页面级</span></p>
+                <span class="template-map-line" aria-hidden="true"></span>
+                <span class="template-map-line is-medium" aria-hidden="true"></span>
+                <span class="template-map-line" aria-hidden="true"></span>
+                <span class="template-map-line is-short" aria-hidden="true"></span>
+              </div>
+
+              <div class="template-map-main">
+                <section class="template-map-region">
+                  <p class="template-region-tag"><b>Hero Section</b><span>首屏大横幅 · 区块级</span></p>
+                  <div class="template-map-hero-body" aria-hidden="true">
+                    <span class="template-map-hero-title"></span>
+                    <span class="template-map-hero-cta"></span>
+                  </div>
+                </section>
+
+                <section class="template-map-region">
+                  <p class="template-region-tag"><b>Bento Grid</b><span>便当格 · 区块级</span></p>
+                  <div class="template-map-tiles" aria-hidden="true">
+                    <span class="template-map-tile is-wide is-tall"></span>
+                    <span class="template-map-tile is-tall"></span>
+                    <span class="template-map-tile"></span>
+                    <span class="template-map-tile"></span>
+                    <span class="template-map-tile is-wide"></span>
+                  </div>
+                </section>
+
+                <section class="template-map-region">
+                  <p class="template-region-tag"><b>Split Screen</b><span>左右分屏 · 区块级</span></p>
+                  <div class="template-map-split" aria-hidden="true">
+                    <div></div>
+                    <div></div>
+                  </div>
+                </section>
+
+                <section class="template-map-region">
+                  <p class="template-region-tag"><b>Masonry</b><span>瀑布流 · 列表级</span></p>
+                  <div class="template-map-columns" aria-hidden="true">
+                    <div class="template-map-card"></div>
+                    <div class="template-map-card"></div>
+                    <div class="template-map-card"></div>
+                    <div class="template-map-card"></div>
+                    <div class="template-map-card"></div>
+                    <div class="template-map-card"></div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <section class="template-map-region template-map-full">
+              <p class="template-region-tag"><b>Full-width Section</b><span>通栏 · 区块级</span></p>
+              <div class="template-map-band" aria-hidden="true">
+                <span class="template-map-line"></span>
+              </div>
+            </section>
           </div>
         </div>
       </div>
     </section>
 
     <!-- 说明栏：把提示文字换成正式段落，REGION_NAME 换成真实区域名称并删掉 token 标记。
+         每个区域的 LAYOUT_NAME 必须与画布标签使用同一个布局名。
          本节顺序按页面顺序排列，可按项目增减，不要求每页都写满。 -->
     <aside class="template-notes" aria-labelledby="template-notes-title">
       <div class="template-notes-head">
         <h2 id="template-notes-title">页面说明</h2>
-        <p class="template-notes-sub">条目按页面顺序排列，可按项目增减</p>
+        <p class="template-notes-sub">条目按页面顺序排列；布局名与画布标签一一对应</p>
       </div>
 
       <div class="template-notes-list">
@@ -406,6 +651,7 @@
         <!-- 按页面顺序重复本节：一个区域一个说明，不必与代码组件一一对应。 -->
         <section class="template-note">
           <h3>{{REGION_NAME}}</h3>
+          <p class="template-note-layout"><span>布局</span> <span class="template-token">{{LAYOUT_NAME}}</span></p>
           <p>放什么，为何在这里，与谁相邻。</p>
           <span class="template-token">{{REGION_EXPLANATION}}</span>
         </section>
@@ -483,6 +729,7 @@
 {{COMPONENT_RESPONSIBILITIES}}
 
 ## 布局与交互
+每个区域先写与画布标签一致的布局名，再写交互与适配：
 {{LAYOUT_AND_INTERACTIONS}}
 
 ## 关键状态
