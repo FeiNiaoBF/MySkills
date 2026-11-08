@@ -73,7 +73,7 @@ The template is a visual and accessibility baseline plus optional modules, not a
 
 - Repeat, reorder, or delete chapters until each remaining section has one job.
 - Keep the ordered-sequence figure only for real order or causation. Adjust its items and `--process-columns` together, and keep a visible complete text equivalent. Replace it with the comparison table, prose, or a small inline SVG when another relationship is meant.
-- Use the comparison table for criteria and trade-offs. Keep its `<caption>`, header cells, and the keyboard-scrollable wrapper for narrow screens.
+- Use the comparison table for criteria and trade-offs. Keep its `<caption>` and header cells. On narrow screens, rows stack with their option labels; keep the wrapper for wider tables.
 - Remove the example, limits, or sources block when it carries no real content. Remove the reading-progress element and its script together, or keep both.
 - Keep ids unique, and keep chapter numbers, heading references, labels, and reading time consistent with the final sections.
 - Preserve the design tokens, wide desktop canvas, bounded prose width, narrow-screen reflow, visible focus, reduced-motion behavior, and print rules unless the task supplies a stronger requirement.
