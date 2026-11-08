@@ -65,7 +65,7 @@ If the requested content and functions are already clear, skip this selection st
 
 Map the selected content into the actual interface structure: page regions, navigation, main content, side panels, overlays, and relevant states. A vertically stacked landing page is one possible structure, not the universal model. A feature does not necessarily require its own visible region, page, or code component.
 
-Name each region's arrangement with the [layout pattern vocabulary](references/layout-patterns.md). When the user has not named one, offer two or three candidates with their tradeoffs; when the user names one region, change only that region. The same name goes on the region's canvas tag, its explanation, and the implementation handoff.
+Name each region's arrangement with the [layout pattern vocabulary](references/layout-patterns.md); it covers page, section, and collection levels. When the user has not named one, offer two or three candidates with their tradeoffs; when the user names one region, change only that region. The same name goes on the region's canvas tag, its explanation, and the implementation handoff.
 
 For multiple pages, state each page's responsibility and start with the user's priority. Use a compact module map when helpful: everyday name, layout pattern name, purpose, included elements, important interactions/states, layout constraints, and implementation priority. Reuse existing component boundaries where appropriate.
 

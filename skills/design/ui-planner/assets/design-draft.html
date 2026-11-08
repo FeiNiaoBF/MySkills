@@ -140,6 +140,7 @@
       color: var(--fg-muted);
       text-wrap: pretty;
     }
+    .template-layout-sample-text + .template-layout-sample-text { margin-top: .375rem; }
     .template-layout-sample .template-token { margin-top: .75rem; }
 
     /* 页面级骨架：导航条 + 侧边栏与主内容；通栏在骨架之外，占满样例宽度。
@@ -534,7 +535,7 @@
        实现提示词须按实际设计填写完整；已确认、建议和待定分开，待定项不得写成验收条件。
        区域小节按页面的阅读或操作顺序重复，一个区域不等于一个代码组件。
        模板交付：保留标记与提示文字，不要填入虚构的产品内容；画布中的布局样例只展示名字与位置，是有意保留的。
-       布局名取自 references/layout-patterns.md；画布标签、说明栏与实现提示词必须使用同一个名字。
+       布局名取自 references/layout-patterns.md（页面 / 区块 / 集合三级）；画布标签、说明栏与实现提示词必须使用同一个名字。
        用户点名一个区域时只改该区域；不要把布局名当成整页重排的理由。
        画布是容器而非视口：项目 UI 请优先以 .template-ui-slot 为容器查询上下文
        （@container canvas (max-width: ...)），不要用视口断点推断布局。
@@ -559,6 +560,7 @@
           <div class="template-layout-sample-head">
             <p class="template-layout-sample-title">空白画布 · 布局样例</p>
             <p class="template-layout-sample-text">下面的名字对应页面中的位置。用它们指定每个区域，再把整块样例替换为项目 UI。</p>
+            <p class="template-layout-sample-text">样例是一组常用组合；完整字典见 ui-planner 的 layout-patterns 参考。</p>
             <span class="template-token">{{PROJECT_UI}}</span>
           </div>
 
@@ -608,7 +610,7 @@
                 </section>
 
                 <section class="template-map-region">
-                  <p class="template-region-tag"><b>Masonry</b><span>瀑布流 · 列表级</span></p>
+                  <p class="template-region-tag"><b>Masonry</b><span>瀑布流 · 集合级</span></p>
                   <div class="template-map-columns" aria-hidden="true">
                     <div class="template-map-card"></div>
                     <div class="template-map-card"></div>
