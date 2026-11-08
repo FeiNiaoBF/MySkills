@@ -63,7 +63,7 @@ Save in the user-designated folder with a clear entry file and opening instructi
 
 Before delivery, inspect the rendered layout at relevant widths: the name remains readable, the UI is primary, explanations are directly available in order, the implementation handoff is easy to find and select, and no region causes horizontal overflow or hides content. Confirm the shell adds no review controls or selection-driven behavior. Check that each canvas layout tag names a region the user can point at, and that the same name appears in the layout overview, its explanation, and the handoff.
 
-Check the document outline (one `h1`, ordered headings) and a print or PDF preview: the canvas, notes, and handoff stack without clipped prompt text or blank pages.
+Check the document outline (one `h1`, ordered headings) and a print or PDF preview: the canvas, notes, and handoff stack without clipped prompt text or blank pages. On narrow screens, the layout sample may hide wireframe detail, but it must keep the layout names and order and bring the notes into view without a long empty scroll.
 
 Check the implementation prompt against the UI and explanations section by section. A coding Agent should be able to identify the implementation scope, components, layout and interactions, key states, technical constraints, non-goals, acceptance criteria, and every unresolved decision without guessing. Copy the complete prompt from the rendered page and confirm its text remains intact. For a non-Web target, verify that both the nearby guidance and prompt name the real platform and do not imply that the HTML itself is production code.
 

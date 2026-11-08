@@ -306,6 +306,37 @@
       .template-map-columns { columns: 1; }
     }
 
+    /* 手机上样例只保留名字与位置：隐藏线框细节，区域变成紧凑的名字行。
+       这样说明栏不会排在 1300px 的样例之后；桌面和宽屏仍保留完整线框。 */
+    @container canvas (max-width: 28rem) {
+      .template-layout-sample {
+        gap: .875rem;
+        padding: 1rem;
+      }
+      .template-layout-map {
+        gap: .375rem;
+        padding: .375rem;
+      }
+      .template-map-nav {
+        min-height: 1.5rem;
+        padding: .25rem .5rem;
+      }
+      .template-map-nav .template-map-line { display: none; }
+      .template-map-body,
+      .template-map-main { gap: .375rem; }
+      .template-map-sidebar {
+        display: block;
+        padding: .5rem .625rem;
+      }
+      .template-map-sidebar > .template-map-line { display: none; }
+      .template-map-region {
+        gap: .25rem;
+        padding: .5rem .625rem;
+      }
+      .template-map-region > :not(.template-region-tag) { display: none; }
+      .template-region-tag { gap: 0 .375rem; }
+    }
+
     /* 标记：只用等宽字体与花括号表明这是待替换的插槽，不加边框、不铺底色。 */
     .template-token {
       display: inline-block;
@@ -629,6 +660,7 @@
        模板交付：保留标记与提示文字，不要填入虚构的产品内容；画布中的布局样例只展示名字与位置，是有意保留的。
        布局名取自 references/layout-patterns.md（页面 / 区块 / 集合三级）；画布标签、布局总览、区域说明与实现提示词必须使用同一个名字。
        用户点名一个区域时只改该区域；不要把布局名当成整页重排的理由。
+       窄屏样例只保留布局名与顺序，隐藏线框细节，让说明栏提前出现；宽屏仍显示完整线框。
        画布是容器而非视口：项目 UI 请优先以 .template-ui-slot 为容器查询上下文
        （@container canvas (max-width: ...)），不要用视口断点推断布局。
        容器查询只提供布局依据，不会裁剪绘制范围；固定层、100vw 与超宽内容仍需实际检查。
