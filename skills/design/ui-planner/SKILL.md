@@ -1,12 +1,6 @@
 ---
 name: ui-planner
-description: >-
-  Use when a user is shaping a new or substantially redesigned interface and
-  needs to choose content, organize modules, name layout patterns, or prepare a
-  design-to-implementation handoff. Turn confirmed choices into a page structure,
-  an explained HTML draft, and implementation prompts; implement in the project's
-  stack when requested. For visual direction from mood words or references, use
-  style-translator.
+description: 用户在设计新界面或大改版，需要选内容、组织模块、命名布局或准备实现交接时使用；产出页面结构、HTML 初稿与实现提示词；视觉方向从模糊偏好开始用 style-translator。
 metadata:
   version: "0.9.0"
 ---
@@ -17,7 +11,7 @@ Help users unfamiliar with frontend development decide what their interface need
 
 ## Scope and delivery
 
-Focus on content, module responsibilities, layout relationships, interaction flows, states, and implementation. Reuse established visual direction and design-system decisions; a separate visual-style exploration is not a prerequisite. This skill works independently and does not assign work to other skills.
+Focus on content, module responsibilities, layout relationships, interaction flows, states, and implementation. Reuse established visual direction and design-system decisions; a separate visual-style exploration is not a prerequisite.
 
 Match the workflow to the requested outcome. Discussion-only work stays in conversation; a reusable-template task follows the HTML reference without inventing product requirements; a project design uses steps 1–2 and 4; production implementation also uses step 3. Reuse completed steps when refining existing work. Design approval alone does not expand a design-only request into implementation; continue implementation when it is already authorized.
 
@@ -55,7 +49,7 @@ If the user supplies only a product type or cannot name the UI they need, do not
 2. Offer relevant optional areas and the situations where they help. State assumptions, and ask a focused question if missing context materially changes the options.
 3. Let the user select, remove, or add content. Resolve the content scope before designing it. If the user explicitly delegates these choices, state the chosen scope and assumptions and proceed.
 
-For example, for an ebook reader, opening a book and displaying its text may be basic. A bookshelf helps manage many books but may be unnecessary for opening a single file. Notes help close reading; synchronization helps cross-device use. Present these as choices with reasons, not a fixed reader feature list.
+内容分层示例见 [content-examples.md](references/content-examples.md)。
 
 If the requested content and functions are already clear, skip this selection step. Do not restart discovery for a local change or turn a missing page parameter into a product requirements interview.
 

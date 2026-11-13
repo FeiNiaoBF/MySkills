@@ -1,10 +1,6 @@
 ---
 name: design-system
-description: >-
-  Use on explicit request to write, review, or update UI visual language, design
-  tokens, and component specifications. Reuses project conventions and supports
-  Google's DESIGN.md format when requested. Project requirements, behavior specs,
-  architecture, and ADRs are outside this workflow. Not for ordinary styling edits.
+description: 仅在用户明确要求编写、审查或更新 UI 视觉语言、设计令牌或组件规范时使用；不用于需求、架构、ADR 或普通样式修改。
 metadata:
   author: FeiNiaoBF
   version: 1.3.2
@@ -19,11 +15,11 @@ Create and maintain UI design documentation that guides actual UI work: explain 
 
 ## Scope and invocation
 
-Use this workflow when the user explicitly requests this skill or asks to author, review, or update a UI `DESIGN.md` or equivalent design-system document. A passing mention of a color, token, or component does not require a document. The host-specific manual invocation settings are intentional; hosts may enforce them differently.
+Use this workflow when the user explicitly requests this skill or asks to author, review, or update a UI `DESIGN.md` or equivalent design-system document. A passing mention of a color, token, or component does not require a document.
 
 This skill owns UI visual and component documentation, not every document that uses “design” in its name. Project requirements, externally observable behavior specifications, internal technical design, system architecture, and ADRs are outside its scope. A file named `DESIGN.md` does not decide the task type: its primary reader task and content do. When one document needs both kinds of information, keep each rule in its authoritative source and use a short summary or link instead of copying the full specification.
 
-It can turn an approved visual direction, inspected UI, existing tokens, or a supplied design guide into a document without requiring another skill first. Other skills may complement it when the user chooses them, with no required order or handoff. A documentation task alone does not authorize UI implementation, external design-tool changes, or publication.
+It can turn an approved visual direction, inspected UI, existing tokens, or a supplied design guide into a document without requiring another skill first. A documentation task alone does not authorize UI implementation, external design-tool changes, or publication.
 
 ## Choose document scope and format
 

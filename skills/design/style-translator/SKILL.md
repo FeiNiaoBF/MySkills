@@ -1,10 +1,6 @@
 ---
 name: style-translator
-description: >-
-  Use when a user shares rough visual preferences, references, or design feedback
-  and needs a concrete visual direction. Translate everyday language into an
-  explained HTML preview and platform-specific design specifications. Not for
-  wording-only requests or isolated, precise styling edits.
+description: 用户给出模糊视觉偏好、参考或设计反馈，需要具体视觉方向时使用；产出可检查的 HTML 预览与平台规格；不用于纯措辞或局部样式修改。
 metadata:
   author: FeiNiaoBF
   version: 0.5.1
@@ -17,7 +13,7 @@ Translate the design a user has in mind into a concrete direction, a visible pro
 
 ## Scope and delivery
 
-Focus on intended feeling, visual language, emphasis, typography, color, density, detail, and motion. Use layout and interaction choices where they support that direction; keep the design usable as well as visually coherent. This skill works independently and does not assign work to other skills.
+Focus on intended feeling, visual language, emphasis, typography, color, density, detail, and motion. Use layout and interaction choices where they support that direction; keep the design usable as well as visually coherent.
 
 For project design, provide two corresponding deliverables:
 
@@ -26,7 +22,7 @@ For project design, provide two corresponding deliverables:
 
 Reuse the user-designated output folder and existing preview. If no destination is established, ask before saving and continue useful discussion meanwhile. Honor requests for discussion only, text only, no files, a later preview, or another format. Do not generate a new HTML artifact for an isolated styling fix when the existing preview or implementation already suffices. Disclose unavailable rendering.
 
-Match the workflow to the requested outcome. For reusable-template maintenance, follow the reference's template-only branch and retain an empty project slot. For project design, fill that slot with the actual proposal. Reuse completed steps when refining accepted work; do not restart discovery after each revision.
+Match the workflow to the requested outcome. For reusable-template maintenance, follow the reference's template-only branch and retain an empty project slot. For project design, fill that slot with the actual proposal.
 
 A review preview does not change the production stack or prove application behavior. Design approval alone does not expand a design-only request into production implementation, backend work, or deployment. Continue implementation when already authorized, using the project's stack and checks. Preserve established project decisions and task scope.
 
@@ -67,15 +63,7 @@ Keep text readable, preserve visible focus and state distinctions, and respect r
 
 ## Internal calibration
 
-Use these three axes to compare candidate directions, not as a numeric questionnaire for the user. Ranges are starting hypotheses, not platform rules.
-
-| Axis | Scale | Typical starting ranges |
-|---|---|---|
-| VARIANCE | 1: strict grid; 10: deliberately broken grid | Tools 3–5; marketing 7–9 |
-| MOTION | 1: no motion; 10: pronounced physical motion | Productivity 2–4; consumer experiences 6–8 |
-| DENSITY | 1: gallery spacing; 10: compact information display | Reading 2–3; terminals 7–9 |
-
-Calm/minimal directions often favor restrained layout and motion. Luxury may use generous spacing; experimental work may use stronger contrast in layout and motion. Trust does not require low density: a professional tool may need compact, predictable structure. Translate the axes into actual choices, such as reading line-height around 1.6, a specific spacing scale, or a 200 ms fade without bounce. Adjust them to content, platform, and accessibility needs; do not leave the result as three numbers.
+见 [内部校准三轴](references/calibration.md)。
 
 ## When labels are not helping
 
@@ -89,7 +77,7 @@ With Material 3, Fluent, Carbon, or another established system, map the directio
 
 ## Avoid generic styling by default
 
-Evaluate purple gradients, stock illustrations, shadows everywhere, excessive font families, emoji icons, repeated centered three-card layouts, and decorative glass effects against the actual brief. Do not paste a universal blacklist into every brief: these treatments, including pure black or white, can be appropriate when the reference, design system, or accessibility requirements support them. The Avoid section should explain what would undermine this particular direction.
+见 [默认避免的通用样式](references/avoid-generic.md)。
 
 ## Reference navigation and boundaries
 
