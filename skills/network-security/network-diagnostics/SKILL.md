@@ -1,6 +1,6 @@
 ---
 name: network-diagnostics
-description: Use when a PassWall, sing-box, OpenWrt/ImmortalWrt, VPS, or Windows client connection is broken or needs a safe change; diagnose from a read-only baseline, then apply minimal changes with backup, validation, and rollback.
+description: PassWall、sing-box、OpenWrt/ImmortalWrt、VPS 或 Windows 客户端断网或需安全变更时使用；先只读基线，再最小变更并验证回滚。
 metadata:
   author: FeiNiaoBF
   version: 2.0.0
@@ -21,10 +21,8 @@ disable-model-invocation: true
 
 使用本 skill 处理以下完整任务：
 
-- DNS、IP、IPv6 泄漏或解析异常的诊断
 - PassWall 分流、节点、透明代理或重启变更
 - sing-box VLESS Reality 节点的连通性验证
-- Claude、Cloudflare 等服务的网络故障定位
 - 已知配置变更后的验证、回滚和 incident closeout
 
 仅问一个简单的命令或概念时，不启动完整流程；直接回答即可。
@@ -62,27 +60,8 @@ disable-model-invocation: true
 
 ### 2. Baseline：采集只读证据
 
-客户端基线：
-
-```powershell
-curl.exe -4 --max-time 15 https://api.ipify.org
-curl.exe -6 --max-time 15 https://api64.ipify.org
-nslookup baidu.com <ROUTER_IP>
-nslookup api.ipify.org <ROUTER_IP>
-curl.exe -4 -I --max-time 15 https://api.anthropic.com
-```
-
-路由器只读基线：
-
-```sh
-uci show passwall.@global[0]
-uci show passwall.myshunt
-uci show passwall.AIGC
-ps w
-netstat -lntup
-free
-swapon -s
-```
+客户端基线：IPv4/IPv6 出口、DNS 解析、目标 API 的 HTTP 状态。
+路由器只读基线：UCI 配置、进程、监听端口、内存与 swap；客户端与路由器的完整命令见 [baseline.md](references/baseline.md)。
 
 记录时间、命令、退出码和关键输出。不要把完整配置、订阅内容、私钥或 token 粘贴进报告。
 
