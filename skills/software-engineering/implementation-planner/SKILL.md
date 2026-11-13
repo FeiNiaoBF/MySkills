@@ -1,12 +1,6 @@
 ---
 name: implementation-planner
-description: >-
-  Use when the user explicitly requests a staged implementation plan for a software
-  project or invokes this skill. It orders the next decisions and work from
-  confirmed goals, dependencies, uncertainty, and engineering risk; explains
-  priorities, records only useful project decisions, and hands off a bounded next
-  slice in a consistent Markdown format. Ordinary feature requests do not trigger
-  a project-wide planning flow.
+description: 仅在用户明确要求分阶段实施计划或点名本 skill 时使用；按依赖、不确定性与风险排出下一块可验证工作，交付固定格式计划；普通功能请求不触发。
 license: MIT
 metadata:
   author: FeiNiaoBF
@@ -20,7 +14,7 @@ Plan a sequence of small, verifiable software changes that serves the user's act
 
 ## Activation and responsibility
 
-Run only when the user invokes this skill or explicitly asks for staged project implementation planning. This skill owns priority decisions, their explanation, and the next development handoff. It does not automatically run for a scoped feature, a routine coding request, a documentation edit, or a technology question. Host-specific manual invocation settings may not be enforced by every host.
+Run only when the user invokes this skill or explicitly asks for staged project implementation planning. This skill owns priority decisions, their explanation, and the next development handoff. It does not automatically run for a scoped feature, a routine coding request, a documentation edit, or a technology question.
 
 Planning alone ends with a plan and any authorized documentation. It does not authorize building an entire system. If the same request already authorizes development, present the relevant sequence and continue with the first bounded slice using the normal coding workflow; do not require a separate development skill or ask for the same permission again. Subsequent slices follow the user's authorized scope and feedback, rather than treating a speculative roadmap as blanket authorization. External publication and consequential irreversible changes follow their own approval rules.
 

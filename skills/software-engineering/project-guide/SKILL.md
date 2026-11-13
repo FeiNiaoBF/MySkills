@@ -1,9 +1,6 @@
 ---
 name: project-guide
-description: >-
-  Use when the user needs to understand, re-enter, or investigate an existing software project:
-  its structure, runtime flow, recent changes, or engineering decisions. Start from project evidence,
-  explain relationships and uncertainty, and make guided practice optional.
+description: 用户需要理解、重新进入或调查现有项目的结构、运行流程、近期变更或工程决策时使用；以项目证据解释关系与不确定性。
 license: MIT
 metadata:
   author: FeiNiaoBF
@@ -14,15 +11,7 @@ metadata:
 
 Help the user regain and deepen an evidence-based understanding of an existing software project. The goal is not to describe every file or replace the user's judgment. Build a usable mental model of where a concern lives, how the system behaves, why a decision is supported, and what remains unknown.
 
-Use this skill when the user asks to:
-
-- orient themselves in a project or return after time away;
-- trace how a feature runs from input to output;
-- understand a recent or specified engineering change and its project impact;
-- understand an architecture or implementation decision;
-- reverse-engineer code, or learn to explore a project independently.
-
-Do not insert this workflow into ordinary implementation tasks. A concise implementation handoff belongs to the project's normal completion workflow; use this skill when the user wants deeper project understanding. Do not modify production code as part of an explanation unless the user separately authorizes an exercise or implementation.
+Do not modify production code as part of an explanation unless the user separately authorizes an exercise or implementation.
 
 ## Choose a mode
 
@@ -38,7 +27,7 @@ If the request is ambiguous and different modes would lead to materially differe
 
 ## Evidence and explanation rules
 
-1. **Inspect before explaining.** Read applicable project instructions and inspect the relevant code, tests, configuration, docs, and history. Treat names and summaries as clues, not proof of behavior. Check the current working tree and preserve user changes.
+1. **Inspect before explaining.** Read applicable project instructions and inspect the relevant code, tests, configuration, docs, and history. Treat names and summaries as clues, not proof of behavior.
 2. **Start with the system location.** Explain the overall role of the target before detailing symbols. For a broad orientation, move from project purpose and major responsibilities to relationships, then to a concrete entry point. Do not mechanically walk the directory tree.
 3. **Explain relationships.** Show how components interact, how data changes, where state is owned, and which constraints shape the design. Prefer a small, useful model to a list of paths and symbols.
 4. **Attach important claims to evidence.** Cite repository paths and symbols; include line references when the inspected view supports them. For runtime behavior, connect source to tests, logs, traces, or an observed command result. Explain the shortest useful reading path when that helps the user continue independently.
@@ -144,10 +133,6 @@ A useful explanation improves orientation; it does not prove the user has master
 
 ## Boundaries with related Skills
 
-- **tech-mentor** builds proficiency in a technology through progressive projects. Use `project-guide` when the main object is understanding an existing project's system and code.
-- **make-sense** repairs a local confusion about a term, passage, or reasoning step. Use `project-guide` when the question depends on project structure, actual call/data flow, a change, or a system decision.
-- **project-docs** creates and maintains authoritative project documentation. This Skill can identify a stale or missing source and explain the discrepancy; route durable documentation work through `project-docs`.
-- **code-review** assesses a fixed set of code changes against standards and a specification, including defects and risks. Use `explain-change` to help the user understand what the change does in the surrounding system. A request can need both, but neither substitutes for the other.
-- **assess** evaluates a specified artifact or direction against its intended purpose. Use it for an independent judgment; use `explain-decision` to reconstruct what evidence supports a project's decision and what remains unknown.
+- **tech-mentor** / **make-sense** / **project-docs** / **code-review** / **assess** 的分工见 [routing.md](references/routing.md)。
 
-Routine implementation, verification, and concise completion reporting remain in the project's normal workflow. This Skill is not a required post-task step. Do not introduce it merely because code was changed.
+Routine implementation, verification, and concise completion reporting remain in the project's normal workflow. This Skill is not a required post-task step.
