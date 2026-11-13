@@ -1,11 +1,6 @@
 ---
 name: problem-analysis
-description: >-
-  Use when the problem itself is unclear, contested, or badly framed. Identify
-  what kind of problem it is and what question must be answered, then choose the
-  inquiry method and theory that fit and recommend a justified next step. Do not
-  use for factual lookups, fixed-target assessment, bug diagnosis, or
-  already-scoped work.
+description: 问题本身不清楚、有争议或框架可疑时使用；先判断问题类型与真正要回答的问题，再选方法与推荐下一步；不用于事实查询、评估、Bug 诊断或已定范围的工作。
 license: MIT
 metadata:
   author: FeiNiaoBF
@@ -30,11 +25,8 @@ If the user explicitly invokes this Skill for a clear task, do not manufacture u
 
 ## Operating stance
 
-- **Problem-driven, not method-driven.** A method must produce evidence that could change the recommendation.
-- **Theory is a lens, not a verdict.** State its assumptions and predictions; test a rival when the claim matters.
 - **Framing is part of the answer.** Personal, organizational, market, and structural frames imply different evidence and remedies.
 - **One recommendation, not a menu.** Say what you recommend, why, and what would change it.
-- **Proportionate rigor.** Match depth to stakes, reversibility, and time.
 - **No action is an option.** Status quo, waiting, or a small probe may be right.
 
 ## Work the problem
@@ -122,6 +114,6 @@ An explicit "we cannot decide yet because X is a value choice or Y is missing" i
 
 Lead with your read of the problem and your recommendation. Then give only what the user needs to judge it: type and frame, why this approach, decisive evidence, alternatives and conditions, and next step. Mark claims as verified, inferred, or unknown when it matters.
 
-Match the detail to the stakes. Do not narrate the framework or force headings for a small question. Reply in the user's language unless they request otherwise.
+Match the detail to the stakes. Do not narrate the framework or force headings for a small question.
 
 For sources and limits, see [references/foundations.md](references/foundations.md). For behavioral test cases, see [references/evaluation.md](references/evaluation.md).

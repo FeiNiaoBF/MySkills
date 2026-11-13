@@ -1,11 +1,6 @@
 ---
 name: bugfix
-description: >-
-  Use when the user reports a software bug, error, regression, or unexpected
-  behavior and wants diagnosis or a fix. Trace evidence through logs, code, and
-  call paths to identify the root cause and impact; make the smallest safe fix
-  and verify it with relevant tests. Explain the cause, change, verification,
-  and prevention clearly.
+description: 用户报告软件缺陷、报错、回归或异常行为并要诊断或修复时使用；追到根因，做最小修复并验证回归。
 license: MIT
 metadata:
   version: 1.0.0
@@ -13,9 +8,7 @@ metadata:
 
 # Bugfix
 
-Fixing the bug is the goal. Do not stop at explaining the theory or hiding the
-symptom. Find the cause, understand the affected paths, make a small complete
-change, and verify the result.
+The goal is the root cause gone, the smallest complete change, and regression evidence for the original failure. Do not stop at a theory or hide the symptom.
 
 ## Workflow
 
@@ -47,10 +40,8 @@ change, and verify the result.
 4. **Implement and verify**
    - Make the fix and add or update regression coverage for the original failure
      and relevant edge cases.
-   - Run the focused tests first, then broader tests, static checks, or builds
-     when useful and available.
-   - Review the diff for unrelated changes and recheck the original failure path
-     plus adjacent behavior.
+   - Verify the original failure path and adjacent behavior; choose test scope by regression risk.
+   - Review the diff for unrelated changes.
    - If verification fails, investigate and continue fixing. If a check cannot
      run, state why. Report only checks actually performed and their observed
      results; never imply unrun checks passed.
@@ -63,11 +54,3 @@ change, and verify the result.
      regression test, or monitoring signal.
    - Keep theory in service of the repair; do not let a long explanation replace
      the fix.
-
-## Principles
-
-- Repair first: the desired outcome is a safe, correct, complete fix.
-- Root cause over symptom suppression.
-- Control risk with the smallest complete change and a clear impact assessment.
-- Verify the behavior and relevant regressions with evidence.
-- Be direct about uncertainty, test limitations, and remaining risk.
