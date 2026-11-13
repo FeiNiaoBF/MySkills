@@ -1,10 +1,6 @@
 ---
 name: wording-helper
-description: >-
-  Use when users need clearer wording or structured expression. Helps turn rough,
-  complex, or partly expressed ideas into clear, accurate wording by first
-  understanding intent and organizing information. Leaves actionable requests alone
-  unless wording help is requested.
+description: 用户需要更清楚的措辞或有结构的表达时使用；先把意图说清，再给可复用文字；不用于可执行请求或术语解释。
 metadata:
   version: "3.3.0"
 ---

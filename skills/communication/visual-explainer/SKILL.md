@@ -1,10 +1,6 @@
 ---
 name: visual-explainer
-description: >-
-  Use only when the user explicitly invokes `visual-explainer` or directly requests a
-  standalone HTML explainer page. Turn one complete explanation into a single offline
-  HTML file with an answer-first reading path and visuals that carry real relationships.
-  Not for chat answers, design previews, or research reports.
+description: 仅在用户点名 visual-explainer 或要求独立 HTML 解释页时使用；产出单文件离线页面；不用于对话回答、设计预览或研究报告。
 metadata:
   version: "0.5.0"
 disable-model-invocation: true
@@ -45,7 +41,7 @@ Match the path to the shape of the question. Use one path; combine two only when
 | Code or architecture | observable behavior → responsible components → control or data flow → effect of changing a component |
 | History or evolution | present state → turning points in time order → what changed → why it matters now |
 
-Choose the shortest path that preserves the reasoning the reader needs. This table lists section orders; it does not ask every page to contain a table.
+Choose the shortest path that preserves the reasoning the reader needs.
 
 ## Draft the explanation
 
@@ -96,11 +92,7 @@ Delivery constraints:
 
 ## Keep the scope clear
 
-- `visual-explainer` builds one complete, standalone HTML explanation after an explicit request.
-- `make-sense` repairs a single confusing term, passage, or inference in the conversation and returns to the original task.
-- `research-report` investigates a question across sources and publishes a traceable report ledger; this skill explains what is already understood and does not run retrieval or invent citations.
-- `style-translator` and `ui-planner` produce design previews and implementation handoffs for an interface; this skill explains a subject, not a UI to build.
-- `project-guide` explains an existing codebase in conversation; use this skill only when the user wants a standalone page.
+- 与 `make-sense`、`research-report`、`style-translator`、`ui-planner`、`project-guide` 的分工见 [routing.md](references/routing.md)。
 - Stay inside the requested question. A narrow question does not become a course, and the page does not prove the reader learned the material.
 
 ## Verify before delivery
