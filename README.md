@@ -57,7 +57,7 @@
 | Skill | 使用场景 |
 | --- | --- |
 | [code-simplification](skills/software-engineering/code-simplification/SKILL.md) | 通过引用分析与消融证据，识别并安全删除死代码、重复逻辑、过度抽象与冗余依赖 |
-| [go-style](skills/software-engineering/go-style/SKILL.md) | 编写、修改、测试或审查 Go 代码时，按内置规则直接优化命名、错误处理、接口与依赖、切片与 map、并发和测试；明确请求时也可只评估不修改 |
+| [go-style](skills/software-engineering/go-style/SKILL.md) | 编写、修改、调试、优化/重构或审查 Go 代码时，按内置规则直接改写命名、错误处理、接口与依赖、切片与 map、并发和测试；明确请求时也可只评估不修改 |
 | [implementation-planner](skills/software-engineering/implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，以固定六部分格式交付计划并交接下一块可验证的开发工作 |
 | [project-docs](skills/software-engineering/project-docs/SKILL.md) | 编写和维护项目文档体系，包括 README、需求、规格、技术设计、架构和 ADR；支持直接完成或共同打磨 |
 | [project-guide](skills/software-engineering/project-guide/SKILL.md) | 帮助用户恢复或建立现有项目的整体认知，追踪功能机制，解释工程变更与决策；可选引导独立探索代码 |
