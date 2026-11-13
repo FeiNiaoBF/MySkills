@@ -90,17 +90,7 @@ ffmpeg -y -i anim.mp4 -f lavfi -i "anullsrc=r=44100:cl=stereo" -shortest \
 - 中文 `Text` 用 Microsoft YaHei（否则方块）；公式用 `MathTex`。
 - 动态用 `ValueTracker` + `always_redraw` 驱动。
 
-P1 场景清单（可复用模板）：
-
-| 场景 | 内容 |
-|---|---|
-| S1 Increment | 微分棍缩短 → `dx` |
-| S2 Secant to Tangent | 割线直角阶梯（`Δx` 横腿 + `Δy` 竖腿） |
-| S3 Derivative Definition | 定义式用 `TransformMatchingShapes` 成形 |
-| S4 Area Invariant | 面积恒为 2（`always_redraw` Polygon + DecimalNumber 不变量展示） |
-| S5 First Order Term | 结论快闪 + 收束语 |
-
-时长以数学节奏为准，勿注水（P1 五景共 87s）。
+复用模板见 [P1 场景清单](references/scene-examples.md)。
 
 ## 学习资产
 
@@ -127,18 +117,4 @@ README 记录课程映射，但视频分集编号与 MIT lecture/unit 编号是�
 
 ## Pitfalls
 
-实测坑，勿再踩：
-
-1. **几何元素必须“长在几何上”**：辅助线（`Δx`/`Δy` 直角阶梯）从 P/Q 坐标推出（`corner=[Q.x, P.y]`），禁画悬空独立小棍——S2 首版悬空被用户点名返工。Q→P 重合时按 tracker 淡出，否则残留脏元素。
-2. **concat 音频参数必须一致**：Manim 输出无音轨，先补 `anullsrc` 静音轨并显式对齐编码（aac／44100／stereo）。
-3. **竖改横不是只改 `-r`**：内容坐标（如 S4 面积数字 `DOWN*1.15`）在横版会压到图形上，需重排到空白区（`DOWN*2.6 + LEFT*4.2`）；改完预览抽帧确认。
-4. **`set_cap` 交叉淡化瞬态**：FadeOut 旧 + FadeIn 新 同时进行时，新旧字幕宽度不同会短暂交叠约 0.5s；在意的话改成先后淡出。
-5. **ffmpeg 多输入抽帧的流选择坑**：`-ss t1 -i a -ss t2 -i b -frames:v 1 x y` 全部取自同一流 → 逐帧单独跑 ffmpeg 再拼图。
-
-另有：
-
-- `always_redraw` 的回调必须返回 Mobject；标量关系使用普通函数。
-- 动态辅助线应从被标注对象计算，重合时显式淡出。
-- Manim 默认无音轨；直接与含音轨正片拼接可能失败或出现异常。
-- 输出分辨率变化会改变可用布局，不只是一项渲染参数变化。
-- 无视觉检查能力时把预览交给用户验收，不宣称画面正确；静帧不能验证动态过程，涉及运动/收敛/转场时抽一小段序列看。
+见 [实测坑](references/pitfalls.md)。

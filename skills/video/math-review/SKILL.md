@@ -75,7 +75,4 @@ disable-model-invocation: true
 
 ## Pitfalls
 
-- 不把 ASR 的高置信度当成数学正确性。
-- 不用全局词典替代上下文判断。
-- 不因字幕已修改就声称口误已解决；成片注释方式由用户决定。
-- 看不到画面时明确写“未核对”，不从转写猜板书。
+见 [审校坑](references/pitfalls.md)。

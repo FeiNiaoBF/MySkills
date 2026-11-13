@@ -173,26 +173,12 @@ FontName=Microsoft YaHei,FontSize=16,Bold=1,PrimaryColour=&H0000FFFF,OutlineColo
 
 完成条件：最终视频、外挂字幕、参数记录和验证报告齐全。
 
-## 字幕文本修复
+## 按需参考
 
-`fix_srt_text.py` 通用引擎 + `srt_rules.json` 规则库。引擎零硬编码规则，三层机制：PASS1 等长短语 + 简繁（对齐自检，失败回退）／PASS2 delta 家族子词合并（`del|ta|x`、`Delta|x` 两种切法，保时间跨度）／PASS3 不等长替换（整段重写 + 按原词跨度重切）。
-
-新视频：复制引擎改头部路径常量 → 跑 → 残留检索必须归零。新错字只改 `srt_rules.json` 追加规则，不动引擎。口误无通用规则，按 P1 模式加临时 rechunk 条目（改正确表述 + 句尾「（口误）」）。引擎幂等已验证（md5 前后一致）。
-
-修复边界：
-
-- 简繁统一等确定性规范可批量执行，但要保留变更记录。
-- 同音术语只能在有上下文和音频/板书证据时按 episode 定向修改。
-- “损失→瞬时”“倒数→导数”“1%→½”等均不是全局规则。
-- 实际发音错误与 ASR 错误分开记录：ASR 错误可纠正字幕；口误先征得用户确认，再决定保留原话、加注或提供勘误。
-- 残留字符串计数只能发现候选，不能证明语义正确。
-
-## 参数旋钮
-
-- 剪辑激进度：`threshold -30dB`（更狠）／`-40dB`（更保守）；`margin 0.2s` 呼吸感
-- 字幕断句：`split_cues(max_chars=16, hard_chars=24, max_dur=4, hard_dur=6)`
-- 语气词表：`fillers_from_json.py` 的 `FILLERS` 集合
-- 码率：8M 适合 1080×1920 白板字迹；源码率低可降
+- 字幕修复与参数：[text-repair.md](references/text-repair.md)。
+- 内容审校：[content-review.md](references/content-review.md)。
+- 实测坑：[pitfalls.md](references/pitfalls.md)。
+- 选型来源：[sources.md](references/sources.md)。
 
 ## 工程目录与命名约定
 
@@ -212,17 +198,6 @@ $VIDEO_TMP/                   # 决策文件 + 渲染中间产物（不进同步
 
 转写产物先落原片目录再移进 `转写/`；成品旁的 srt 用字幕母本复制，保证播放器外挂同名自动加载。
 
-## 内容审校（教学/知识类视频必做）
-
-token 预算纪律（先读本节再动 LLM）：本地做确定性工作，LLM 只做判断性工作。
-
-- 转写／剪辑／修复执行／校验 = 全本地脚本，零 LLM。
-- LLM 只看被标记的片段：先跑 `review_filter.py` 出摘要（标记词 + 长段；logprob 传 0 禁用——实测同音错字声学置信度高，`lp` 筛不出错字）。
-- 修复规则在 `srt_rules.json`：新视频先全量套用 + 残留检索；残留 = 0 则零 LLM 参与；残留 > 0 才让 LLM 只读摘要找新模式。
-- 会话卫生：进度条输出会污染上下文，`auto-editor`／`ffmpeg` 一律 `--progress none` / `-v error` 后台跑；全文 txt 只读一次。
-
-流程：通读摘要（非全文）验算推导 → 产出勘误 MD（问题点 + 时间戳 + 正确表述 + 验算通过清单）→ 错字修复跑两轮（每轮后残留检索必须归零）→ 口误改正确表述 + 句尾「（口误）」标注，勘误 MD 记录原话/应为对照表 → self-eval 门（`audit_v1` + `verify_srt` + 抽帧看字幕 + 抽听三处）。
-
 ## 验证
 
 至少完成：
@@ -233,42 +208,4 @@ token 预算纪律（先读本节再动 LLM）：本地做确定性工作，LLM 
 4. 首、中、尾及每个剪辑/旋转边界抽帧。
 5. 抽听开头、密集剪辑段和结尾。
 6. 确认源文件与最终产物均未被覆盖。
-
-## Pitfalls
-
-实测坑，勿再踩：
-
-1. auto-editor v29 大改：无 `--silent-threshold`，改用 `--edit "audio:threshold=-35dB"`；`--export v1` 的 JSON 可直接当输入渲染。
-2. faster-whisper GPU 要 `cublas64_12.dll`（venv 默认无）；CPU int8 足够（small 9.3x，medium 2.2x，14 线程）。
-3. whisper 词级 token 中文 = 单字；small 不带标点、medium 带标点。切分必须用段落文本逐字对齐词序列（标点挂前词），直接按字数切会切碎词。
-4. medium 段落常连到 30s+，SRT 必须重切；段边界词时间戳有交叠，全局单调化钳制必须有。
-5. 数学口播必须 `initial_prompt` 术语表，否则“导数→岛数”“公式→公司”。残留错字模式：相迁／学历／解（减）／SOPX／区域（趋于）／delta 三种切法／简繁漂移。
-6. `merge_fillers` 曾把剪除区间留成 GAP（不渲染 = 时长对，但 remap 漏算 → 字幕漂移 8.3s）。已修：交叠必须显式 99999 块零 GAP；`audit_v1.py` 就是防复发用的。
-7. 渲染输出勿直接写同步目录（锁文件报“被占用”），先落本地再移动。
-8. 删除类操作需用户实时批准，批量删除前列清单等确认。
-9. 手机竖屏视频常为 VFR：帧率不一致时秒→帧换算会与 auto-editor 内部帧号错位；`audit_v1` 偏差 > 0.5s 先查这个。
-10. 删静音后响度感知更不稳定：用 `loudnorm=I=-14:LRA=11:TP=-1.5` 归一到流媒体标准。
-11. 错字不可完全预测：同音频重跑 medium 错字会漂移；转写 JSON 是一次性资产勿重跑。同音错字 `lp` 正常，`logprob` 只能筛幻觉/漏听。
-12. LLM 降耗分工（实测）：同主题第 2 个视频起，规则库 + 摘要预筛 + 残留驱动 = 审校类 token 降 60–80%；首视频无法省。
-13. ffmpeg 多输入抽帧的流选择坑：`-ss t1 -i a -ss t2 -i b -frames:v 1 x y` 全部取自同一流 → 逐帧单独跑 ffmpeg 再 `xstack`/`hstack` 拼图；抽帧自检必须逐格看（曾发现 10 帧全同帧）。
-14. auto-editor 渲染有 seek 风暴：v1 决策 chunk 密度高（>1000）时耗时随素材时长非线性爆炸。渲染改用 `v1_to_ffmpeg.py` 直剪，auto-editor 只保留 `--export v1` 做决策分析。
-15. 后台长渲染进程易被外部 -15 杀（机器睡眠/杀软/OOM），特征：日志卡在 "Creating audio"，输出文件停止增长。长渲染分段跑（每段 < 2min）规避；检查退出码是否为 -15。
-16. 原片时间轴 ≠ 剪辑时间轴：朝向/内容分界点必须用 `map_time()` 映射到剪辑轴再切（曾发生 `-ss` 超出 cut 片末尾的空文件事故）。
-17. `concat`/滤镜 SAR 必须一致：`crop`/`scale` 后 SAR 会带尾数（1215:1216），`concat` 前两侧都 `setsar=1`，否则报 "SAR do not match"。
-18. 字幕烧录（`subtitles`）路径：用绝对路径且转义盘符冒号，文件必须真实存在（曾写错路径连烧 3 次失败）；srt 先复制到本地 `$VIDEO_TMP` 再烧，别直接读同步目录。
-19. 手机横持拍摄源（HEVC 常带旋转元数据）：ffmpeg 解码自动转成竖帧，内容侧躺；`transpose=1` 顺时针转正；`cropdetect` 在解码后帧上跑。
-
-另有若干通用判断坑：
-
-- 不从单次失败猜测同步盘、睡眠、显存或 seek 是根因；记录进程、日志和退出码后再下结论。
-- 音频 true peak 超标说明输出存在峰值风险，不足以单独证明录音时 ADC 削波。
-- 两个文件时长相近不足以证明内容重复；需比较时间线或抽样内容。
-- 复用旧脚本前先做短样本端到端测试；固定 fps、滤镜链类型错误、脆弱断点续跑和提前删除分片均是阻断项。
-
-## 社区参考
-
-- browser-use/video-use：音频优先哲学 + ask/confirm/execute/self-eval/persist 工作流
-- 6missedcalls/video-editing-skill：离散脚本 + SKILL.md 路由结构
-- anthropics/skills + VoltAgent/awesome-agent-skills：官方与精选索引
-- auto-editor 官方文档：`anorm` 响度归一参数（`ebu:i/lra/tp`）
-- whisper + 静音检测 + LLM 选段模式；注意云端 STT 方案（如 Ceeon/videocut）不符合本地优先要求
+7. 删除类操作需用户实时批准，批量删除前列清单等确认。
