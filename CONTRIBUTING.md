@@ -1,6 +1,6 @@
 # 贡献与验证
 
-本指南维护仓库的目录、格式、内容和验证规则。选择、安装或更新 Skill 见 [README](README.md)；Agent 执行任务时还须遵守 [AGENTS.md](AGENTS.md) 的工作边界。
+本指南维护仓库的目录、格式、内容和验证规则。选择、安装或更新 Skill 见 [README](README.md)；Agent 执行任务时还须遵守 [AGENTS.md](AGENTS.md) 的工作边界，改 Skill 前先读 [Skill 编辑清单](docs/agent/skill-edit.md)。
 
 ## 准备工作
 
@@ -69,6 +69,7 @@ Frontmatter 必须是可解析的 YAML：
 
 - `name` 与目录名一致。
 - `description` 先说明触发条件，再说明能力范围；**前 57 个字符应说明何时使用**，不是总长最多 57 字符。触发是否清楚需要人工判断。
+- 描述随 skill 列表每轮加载：自动调用型不超过 140 字符，手动触发型（`disable-model-invocation: true`）不超过 100 字符。近义词、场景举例和工作流步骤放正文，`scripts/context_budget.py` 负责报出超限。
 - `metadata` 必须为映射；作者、版本、日期等自定义字段放在其中。`license` 等标准字段可保留在顶层。
 - 本 Skill 内的相对链接必须指向真实文件。跨 Skill 用名称路由，不用跨目录相对链接共享实现；共同规则放明确的公共文档。
 
@@ -126,6 +127,7 @@ $venv = Join-Path $env:TEMP "pi-agent/myskills-venv"
 $python = Join-Path $venv "Scripts/python.exe"
 & $python -B scripts/validate_skills.py
 & $python -B -m unittest discover -s tests -v
+& $python -B scripts/context_budget.py
 git diff --check
 ```
 
@@ -135,6 +137,7 @@ git diff --check
 venv="${TMPDIR:-/tmp}/pi-agent/myskills-venv"
 "$venv/bin/python" -B scripts/validate_skills.py
 "$venv/bin/python" -B -m unittest discover -s tests -v
+"$venv/bin/python" -B scripts/context_budget.py
 git diff --check
 ```
 

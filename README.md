@@ -12,12 +12,12 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [video-workflow](skills/video/video-workflow/SKILL.md) | 编排分集数学视频的剪辑、审校和动画交接；视频任务的推荐入口 |
+| [video-workflow](skills/video/video-workflow/SKILL.md) | 一集视频的阶段协调与交接；视频任务入口 |
 | [video-edit](skills/video/video-edit/SKILL.md) | 本地转写、精简、字幕对齐与成片校验 |
-| [math-review](skills/video/math-review/SKILL.md) | 审校数学表述、推导、口误与动画候选 |
-| [manim-authoring](skills/video/manim-authoring/SKILL.md) | 设计并验证讲解中途插入的 Manim 场景 |
-| [manim-assembly](skills/video/manim-assembly/SKILL.md) | 按字幕语义把已验收场景装配为画面替换段 |
-| [math-recap](skills/video/math-recap/SKILL.md) | 制作片尾独立、无旁白的数学重温动画 |
+| [math-review](skills/video/math-review/SKILL.md) | 数学表述、推导、口误与动画候选审校 |
+| [manim-authoring](skills/video/manim-authoring/SKILL.md) | 设计并验证讲解中途的 Manim 场景 |
+| [manim-assembly](skills/video/manim-assembly/SKILL.md) | 按字幕语义把场景装配为画面替换 |
+| [math-recap](skills/video/math-recap/SKILL.md) | 片尾独立、无旁白的数学重温动画 |
 
 中途画面替换使用 `manim-authoring` + `manim-assembly`，保持原声和总时长；片尾独立重温使用 `math-recap`，追加拼接。两条路线不要混用。单集状态由课程项目中的 `workflow.yaml` 维护。
 
@@ -25,55 +25,55 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [style-translator](skills/design/style-translator/SKILL.md) | 把日常视觉偏好转成设计方向，以对话说明和可检查元素的 HTML 预览同步迭代，附通用模板与目标平台规格 |
-| [design-system](skills/design/design-system/SKILL.md) | 按明确请求编写、审查或维护 UI 视觉语言、设计令牌和组件规范；Google DESIGN.md 格式仅在用户要求或目标工具需要时采用 |
-| [ui-planner](skills/design/ui-planner/SKILL.md) | 先选清界面内容，用统一的前端布局字典（页面 / 区块 / 集合三级，如 Hero Section、Bento Grid、Masonry）标注每个页面区域并列出布局总览，以对话说明和“项目 UI＋顺序说明＋可复制实现提示词”的 HTML 初稿完成设计与开发交接；仅在授权后沿项目技术栈修改实际应用 |
+| [style-translator](skills/design/style-translator/SKILL.md) | 视觉偏好 → 设计方向、HTML 预览与平台规格 |
+| [design-system](skills/design/design-system/SKILL.md) | UI 视觉语言、设计令牌与组件规范 |
+| [ui-planner](skills/design/ui-planner/SKILL.md) | 选内容、排布局、出 HTML 初稿与实现提示词 |
 
 ### 学习（learning）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [linear-algebra](skills/learning/linear-algebra/SKILL.md) | 通过直觉、精确表达、例子与概念联系，帮助用户理解线性代数并掌握推导和解题方法 |
-| [tech-mentor](skills/learning/tech-mentor/SKILL.md) | 以递进式实操项目为主线，通过状态跟踪、代码实现与迁移检验，引导学习者掌握实用技术 |
+| [linear-algebra](skills/learning/linear-algebra/SKILL.md) | 理解线性代数概念、推导与解题 |
+| [tech-mentor](skills/learning/tech-mentor/SKILL.md) | 用递进项目掌握一项技术 |
 
 ### 沟通（communication）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [wording-helper](skills/communication/wording-helper/SKILL.md) | 把没说清的想法解释明白，并重述成保留原意、可直接使用的用户话术 |
-| [make-sense](skills/communication/make-sense/SKILL.md) | 不懂术语、段落或推理步骤，或想核对理解时，用精准的文本解释修复理解障碍并回到原任务 |
-| [visual-explainer](skills/communication/visual-explainer/SKILL.md) | 用户明确点名或要一份独立 HTML 解释页时，把已想清的解释做成离线的单文件页面；不会因为问题复杂而自动生成 |
+| [wording-helper](skills/communication/wording-helper/SKILL.md) | 把没说清的想法变成可直接使用的措辞 |
+| [make-sense](skills/communication/make-sense/SKILL.md) | 解释卡住的术语、段落或推理 |
+| [visual-explainer](skills/communication/visual-explainer/SKILL.md) | 用户点名时生成单文件 HTML 解释页 |
 
 ### 问题探索（problem-solving）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [assess](skills/problem-solving/assess/SKILL.md) | 对函数、代码、文档、UI、技术方案或想法等指定对象按目标选标准、主动验证并给出有证据的结论与改进建议；默认不修改对象 |
-| [problem-analysis](skills/problem-solving/problem-analysis/SKILL.md) | 面对未定或框架可疑的问题，先判断问题类型与结构、澄清真正要回答的问题，再选择相称的方法与理论，给出有依据的推荐方案 |
-| [bugfix](skills/problem-solving/bugfix/SKILL.md) | 排查并修复软件 Bug：追踪根因和影响范围，做最小安全修复并验证回归 |
+| [assess](skills/problem-solving/assess/SKILL.md) | 按用途评估指定对象并给出证据化结论 |
+| [problem-analysis](skills/problem-solving/problem-analysis/SKILL.md) | 澄清问题类型与真正要回答的问题 |
+| [bugfix](skills/problem-solving/bugfix/SKILL.md) | 追根因、最小修复并验证回归 |
 
 ### 软件工程（software-engineering）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [code-simplification](skills/software-engineering/code-simplification/SKILL.md) | 通过引用分析与消融证据，识别并安全删除死代码、重复逻辑、过度抽象与冗余依赖 |
-| [go-style](skills/software-engineering/go-style/SKILL.md) | 编写、修改、调试、优化/重构或审查 Go 代码时，按内置规则直接改写命名、错误处理、接口与依赖、切片与 map、并发和测试；明确请求时也可只评估不修改 |
-| [implementation-planner](skills/software-engineering/implementation-planner/SKILL.md) | 手动启动，依据需求、依赖与工程风险排列实施顺序，以固定六部分格式交付计划并交接下一块可验证的开发工作 |
-| [project-docs](skills/software-engineering/project-docs/SKILL.md) | 编写和维护项目文档体系，包括 README、需求、规格、技术设计、架构和 ADR；支持直接完成或共同打磨 |
-| [project-guide](skills/software-engineering/project-guide/SKILL.md) | 帮助用户恢复或建立现有项目的整体认知，追踪功能机制，解释工程变更与决策；可选引导独立探索代码 |
-| [skill-discovery](skills/software-engineering/skill-discovery/SKILL.md) | 用户主动要求查找、比较或安装 Skills 时，审查候选并按授权安装到项目级 `.agents/skills/` |
+| [code-simplification](skills/software-engineering/code-simplification/SKILL.md) | 用证据识别并安全删除多余复杂度 |
+| [go-style](skills/software-engineering/go-style/SKILL.md) | 按内置规则直接改写或审查 Go 代码 |
+| [implementation-planner](skills/software-engineering/implementation-planner/SKILL.md) | 手动启动的分阶段实施计划 |
+| [project-docs](skills/software-engineering/project-docs/SKILL.md) | 编写与维护 README、需求、规格、架构、ADR |
+| [project-guide](skills/software-engineering/project-guide/SKILL.md) | 理解现有项目的结构、流程与决策 |
+| [skill-discovery](skills/software-engineering/skill-discovery/SKILL.md) | 查找、比较并按授权安装现成 Skill |
 
 ### 研究（research）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [research-report](skills/research/research-report/SKILL.md) | 用户明确需要深度、可复查报告时，用真实检索和可追溯证据产出离线 HTML；快速事实查询走宿主检索工具；默认输出到系统临时目录 `%TEMP%/research-curator/<topic>/` |
+| [research-report](skills/research/research-report/SKILL.md) | 多来源调查与可追溯的离线 HTML 报告 |
 
 ### 网络安全（network-security）
 
 | Skill | 使用场景 |
 | --- | --- |
-| [network-diagnostics](skills/network-security/network-diagnostics/SKILL.md) | OpenWrt/ImmortalWrt、PassWall、sing-box/VPS 的只读诊断及带备份、回滚的最小变更 |
+| [network-diagnostics](skills/network-security/network-diagnostics/SKILL.md) | OpenWrt/PassWall/sing-box 只读诊断与最小变更 |
 
 ## 安装与更新
 
@@ -151,6 +151,7 @@ npx skills update -p make-sense
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 目录与格式规则、内容要求、验证及提交流程 |
 | [AGENTS.md](AGENTS.md) | Agent 的任务边界和执行约定 |
 | [docs/](docs/) | 仓库级研究、设计与实施记录；阅读时注意各记录的状态，不能直接视为当前 Skill 行为 |
+| [docs/context-budget.md](docs/context-budget.md) | 每轮上下文的度量、五种处置与模型升级后的复跑方法 |
 | [scripts/](scripts/) · [tests/](tests/) | 仓库维护工具及其回归测试 |
 
 `docs/`、`scripts/`、`tests/` 和隐藏目录不作为 Skill 安装。具体技能的用法与按需参考从上方索引进入。

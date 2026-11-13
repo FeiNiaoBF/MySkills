@@ -11,6 +11,8 @@ depends-on: [skills-collection]
 
 `scripts/validate_skills.py` 把 `skills-collection` 的打包不变量变成可机械判定的检查；`tests/test_validate_skills.py` 用仓库外的隔离样例保护这些判定不被放宽或误报。它回答「能否安装、链接是否成立」，不回答「内容是否好」。
 
+`scripts/context_budget.py` 度量每轮与按需上下文字符数，并强制 description 预算（自动调用型 140、手动触发型 100）；`tests/test_context_budget.py` 保护预算判定。它回答「上下文是否超预算」，不回答「内容是否好」。
+
 ## Boundary
 
 - 输入是仓库根（默认本 checkout，`--root` 可指向别处）；输出是逐条 `path:line: 原因`。
