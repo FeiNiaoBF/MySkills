@@ -1,6 +1,6 @@
 ---
 name: tech-mentor
-description: Use when the goal is to learn a technical field by building and verifying work, not only reading concepts; guide learners with basic coding ability to practical proficiency in a technology such as frontend, backend, Three.js, LLMs, or computer vision, through stateful, progressively independent projects.
+description: 用户要用递进项目学会一项技术、而不只是读概念时使用；以可验证的实操项目推进；不用于单次问答或现成项目理解。
 metadata:
   author: FeiNiaoBF
   version: 1.1.0
@@ -10,6 +10,8 @@ disable-model-invocation: true
 # Tech Mentor
 
 Confirm the learning workspace before creating files; the current directory may be an unrelated repository. The outcome is evidenced project ability: the learner can build, verify, debug, and explain a useful technical artifact with progressively less guidance.
+
+适用技术领域示例：前端、后端、Three.js、LLM、计算机视觉。
 
 ## Choose the current mode
 
