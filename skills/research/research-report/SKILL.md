@@ -1,10 +1,6 @@
 ---
 name: research-report
-description: >-
-  Use when the user needs a substantial, multi-source investigation and a saved,
-  traceable offline HTML report, such as a complex comparison, contested topic,
-  open-source ecosystem study, or product and industry research. Not for quick
-  factual lookups, single-article explanations, ordinary code reviews, or brief answers.
+description: 用户需要多来源深度调查并保存可追溯的离线 HTML 报告时使用；不用于快速事实查询、单篇解读、代码审查或短答。
 license: MIT
 disable-model-invocation: true
 metadata:
@@ -17,7 +13,7 @@ Help the user reach a well-supported conclusion through actual retrieval, inspec
 
 ## Check fit before starting
 
-Use the full workflow when the question needs substantial investigation across multiple relevant sources and the user needs a durable, traceable report. Complex comparisons, contested topics, open-source ecosystem studies, and product or industry research are typical cases. A subject merely being described as “research” is not sufficient.
+A subject merely being described as “research” is not sufficient. Complex comparisons, contested topics, open-source ecosystem studies, and product or industry research are typical cases.
 
 For a quick fact, a single-article explanation, ordinary code review, or request for a brief answer, respond briefly in the conversation without starting the research ledger or generating HTML. If the desired depth or report deliverable is unclear and would change the work, ask one focused question before starting the full workflow.
 
