@@ -1,4 +1,4 @@
-# Documentation Planning Rules v0.5
+# Documentation Planning Rules
 
 ## 1. 从信息到文档
 
@@ -149,4 +149,4 @@ README 通常同时是使用者入口和项目介绍，不意味着它必须承�
 - [Google Developer Documentation Style Guide](https://developers.google.com/style/highlights)：清楚用词、主动表达、条件先于指令、可读的链接和操作步骤。中文写作采用其清晰性原则，不照搬英文语法。
 - [GitHub：About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)：项目入口与相对链接约定，不规定所有文档的文件名。
 - [ADR 实践](https://adr.github.io/)：记录单个重要决定及理由、取舍和后果；遵循项目已有状态流程。
-- [ASD-STE100](https://www.asd-ste100.org/)：受控技术英语的参考。这里只借鉴术语一致、表达明确的方向，不宣称符合标准，也不把英文词表或句长规则应用于中文。当前规则未依据完整标准逐条核验。
+- [Orwell 六原则](https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/politics-and-the-english-language/) 与 [ASD-STE100](https://www.asd-ste100.org/)：写作规则的来源。执行细则见 [写作规则](writing-rules.md)；STE 的英文规则只用于英文技术文档，不宣称符合标准，也不把英文词表、句长或冠词规则套到中文。
