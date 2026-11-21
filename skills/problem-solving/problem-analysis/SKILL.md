@@ -3,8 +3,8 @@ name: problem-analysis
 description: 问题本身不清楚、有争议或框架可疑时使用；先判断问题类型与真正要回答的问题，再选方法与推荐下一步；不用于事实查询、评估、Bug 诊断或已定范围的工作。
 license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 1.1.0
+  author: Yeelight
+  version: "1.1.0"
 ---
 
 # Problem Analysis

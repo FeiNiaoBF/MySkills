@@ -3,7 +3,7 @@ name: project-guide
 description: 用户需要理解、重新进入或调查现有项目的结构、运行流程、近期变更或工程决策时使用；以项目证据解释关系与不确定性。
 license: MIT
 metadata:
-  author: FeiNiaoBF
+  author: Yeelight
   version: "1.1.0"
 ---
 

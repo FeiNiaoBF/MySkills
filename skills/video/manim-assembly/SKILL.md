@@ -1,9 +1,10 @@
 ---
 name: manim-assembly
 description: 当用户需要将已验收的 Manim 场景按字幕语义时间表装配为讲解中途的画面替换段时使用；保持原音频与总时长连续，不负责片尾拼接或动画代码编写。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 1.0.0
+  author: Yeelight
+  version: "1.0.0"
 disable-model-invocation: true
 ---
 

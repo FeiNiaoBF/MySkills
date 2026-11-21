@@ -1,9 +1,10 @@
 ---
 name: network-diagnostics
 description: PassWall、sing-box、OpenWrt/ImmortalWrt、VPS 或 Windows 客户端断网或需安全变更时使用；先只读基线，再最小变更并验证回滚。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 2.0.0
+  author: Yeelight
+  version: "2.0.0"
 disable-model-invocation: true
 ---
 

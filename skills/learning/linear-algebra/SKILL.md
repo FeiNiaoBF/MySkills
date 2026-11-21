@@ -4,9 +4,10 @@ description: >-
   当用户想理解线性代数概念、推导、证明或解题时使用；通过直觉、准确的数学表达、
   例子与概念联系帮助用户建立可迁移的理解。适用于从向量空间和线性变换到特征值、
   正交投影与奇异值分解等主题；不要求用户使用特定教材或笔记工具。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 2.0.0
+  author: Yeelight
+  version: "2.0.0"
 ---
 
 # 线性代数理解

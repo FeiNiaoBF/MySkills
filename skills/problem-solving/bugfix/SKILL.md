@@ -3,7 +3,8 @@ name: bugfix
 description: 用户报告软件缺陷、报错、回归或异常行为并要诊断或修复时使用；追到根因，做最小修复并验证回归。
 license: MIT
 metadata:
-  version: 1.0.0
+  author: Yeelight
+  version: "1.0.0"
 ---
 
 # Bugfix

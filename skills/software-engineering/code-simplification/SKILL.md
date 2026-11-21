@@ -5,8 +5,8 @@ description: >
   帮助用证据判断是否应删减，并在任务授权时实施与验证。一般结构重构且没有减法目标时不使用。
 license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 2.1.0
+  author: Yeelight
+  version: "2.1.0"
 disable-model-invocation: true
 ---
 

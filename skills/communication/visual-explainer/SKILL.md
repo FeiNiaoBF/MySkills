@@ -1,7 +1,9 @@
 ---
 name: visual-explainer
 description: 仅在用户点名 visual-explainer 或要求独立 HTML 解释页时使用；产出单文件离线页面；不用于对话回答、设计预览或研究报告。
+license: MIT
 metadata:
+  author: Yeelight
   version: "0.5.0"
 disable-model-invocation: true
 ---

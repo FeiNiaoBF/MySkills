@@ -1,9 +1,10 @@
 ---
 name: video-edit
 description: 当用户要处理本地长视频的转写、口播精简、字幕对齐或成片校验时使用；负责媒体与时间轴处理，不负责数学内容审校或 Manim 动画。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 4.0.0
+  author: Yeelight
+  version: "4.0.0"
 disable-model-invocation: true
 ---
 

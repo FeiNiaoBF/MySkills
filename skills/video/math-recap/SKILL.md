@@ -1,9 +1,10 @@
 ---
 name: math-recap
 description: 当用户明确需要制作视频片尾独立、无旁白的 Manim 数学重温动画段并进行拼接时使用；不用于讲解中途的画面替换，不负责正片剪辑。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 3.0.0
+  author: Yeelight
+  version: "3.0.0"
 disable-model-invocation: true
 ---
 

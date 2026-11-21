@@ -4,6 +4,7 @@ description: 用户需要多来源深度调查并保存可追溯的离线 HTML �
 license: MIT
 disable-model-invocation: true
 metadata:
+  author: Yeelight
   version: "2.5.0"
 ---
 

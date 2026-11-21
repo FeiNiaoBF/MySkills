@@ -1,7 +1,9 @@
 ---
 name: make-sense
 description: 用户卡在术语、段落或推理步骤，需要精确文字解释并回到原任务时使用；不用于图表、主题教学、翻译或普通实现。
+license: MIT
 metadata:
+  author: Yeelight
   version: "1.3.0"
 ---
 

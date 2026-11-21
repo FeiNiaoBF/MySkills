@@ -3,7 +3,8 @@ name: skill-discovery
 description: 用户主动要求查找、比较或安装现成 Agent Skill 时使用；从 skills.sh、Skills CLI、补充目录和来源仓库中寻找候选，审查适配性与安全后按授权安装到项目级 Skills。
 license: MIT
 metadata:
-  version: 0.2.0
+  author: Yeelight
+  version: "0.2.0"
 disable-model-invocation: true
 ---
 

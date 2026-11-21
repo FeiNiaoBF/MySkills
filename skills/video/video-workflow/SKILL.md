@@ -1,9 +1,10 @@
 ---
 name: video-workflow
 description: 当用户开始、继续或收尾一集数学讲解视频，并需要协调转写、剪辑、内容审校或动画交接时使用；跟踪端到端阶段与确认，不替代单项剪辑、审校或 Manim 制作流程。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 1.0.0
+  author: Yeelight
+  version: "1.0.0"
 disable-model-invocation: true
 ---
 

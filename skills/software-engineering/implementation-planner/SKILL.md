@@ -3,8 +3,8 @@ name: implementation-planner
 description: 仅在用户明确要求分阶段实施计划或点名本 skill 时使用；按依赖、不确定性与风险排出下一块可验证工作，交付固定格式计划；普通功能请求不触发。
 license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 0.2.1
+  author: Yeelight
+  version: "0.2.1"
 disable-model-invocation: true
 ---
 

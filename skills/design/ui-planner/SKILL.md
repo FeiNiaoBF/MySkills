@@ -1,7 +1,9 @@
 ---
 name: ui-planner
 description: 用户在设计新界面或大改版，需要选内容、组织模块、命名布局或准备实现交接时使用；产出页面结构、HTML 初稿与实现提示词；视觉方向从模糊偏好开始用 style-translator。
+license: MIT
 metadata:
+  author: Yeelight
   version: "0.9.0"
 ---
 

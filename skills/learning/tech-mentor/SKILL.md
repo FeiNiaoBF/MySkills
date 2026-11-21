@@ -1,9 +1,10 @@
 ---
 name: tech-mentor
 description: 用户要用递进项目学会一项技术、而不只是读概念时使用；以可验证的实操项目推进；不用于单次问答或现成项目理解。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 1.1.0
+  author: Yeelight
+  version: "1.1.0"
 disable-model-invocation: true
 ---
 

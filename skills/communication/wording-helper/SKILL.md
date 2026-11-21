@@ -1,7 +1,9 @@
 ---
 name: wording-helper
 description: 用户需要更清楚的措辞或有结构的表达时使用；先把意图说清，再给可复用文字；不用于可执行请求或术语解释。
+license: MIT
 metadata:
+  author: Yeelight
   version: "3.3.0"
 ---
 

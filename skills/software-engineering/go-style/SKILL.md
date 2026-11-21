@@ -3,7 +3,8 @@ name: go-style
 description: 编写、修改、调试、优化/重构或审查 Go 代码时使用：按内置规则直接改写命名、错误处理、接口、切片与 map、并发和测试，不需查阅外部风格指南。
 license: MIT
 metadata:
-  version: 0.3.0
+  author: Yeelight
+  version: "0.3.0"
 ---
 
 # Go Style

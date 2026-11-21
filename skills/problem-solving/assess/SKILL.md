@@ -3,8 +3,8 @@ name: assess
 description: 用户要求评估一个具体函数、代码、文档、UI、方案或想法时使用；按用途定标准、可验证就验证，给出有证据的结论；评估本身不授权修改。
 license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 0.1.1
+  author: Yeelight
+  version: "0.1.1"
 ---
 
 # Assess

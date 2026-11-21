@@ -1,9 +1,10 @@
 ---
 name: design-system
 description: 仅在用户明确要求编写、审查或更新 UI 视觉语言、设计令牌或组件规范时使用；不用于需求、架构、ADR 或普通样式修改。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 1.3.2
+  author: Yeelight
+  version: "1.3.2"
   date_added: "2026-04-09"
   risk: low
 disable-model-invocation: true

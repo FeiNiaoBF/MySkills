@@ -1,9 +1,10 @@
 ---
 name: style-translator
 description: 用户给出模糊视觉偏好、参考或设计反馈，需要具体视觉方向时使用；产出可检查的 HTML 预览与平台规格；不用于纯措辞或局部样式修改。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 0.5.1
+  author: Yeelight
+  version: "0.5.1"
   date_added: "2026-09-05"
 ---
 

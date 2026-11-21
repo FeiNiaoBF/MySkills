@@ -3,7 +3,8 @@ name: project-docs
 description: 用户要为新项目建文档，或规划、编写、维护已有项目文档时使用；覆盖 README、需求、规格、设计、架构与 ADR；只做适用性判断或需求访谈时不触发。
 license: MIT
 metadata:
-  version: 0.8.0
+  author: Yeelight
+  version: "0.8.0"
 ---
 
 # project-docs

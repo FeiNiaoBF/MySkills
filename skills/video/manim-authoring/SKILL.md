@@ -1,9 +1,10 @@
 ---
 name: manim-authoring
 description: 当用户需要为数学教学视频设计并实现讲解中途插入的 Manim 动画场景时使用；负责场景设计、数学符号规范与低清验收，不负责片尾独立重温或整片装配。
+license: MIT
 metadata:
-  author: FeiNiaoBF
-  version: 1.0.0
+  author: Yeelight
+  version: "1.0.0"
 disable-model-invocation: true
 ---
 
