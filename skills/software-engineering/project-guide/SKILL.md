@@ -4,135 +4,136 @@ description: 用户需要理解、重新进入或调查现有项目的结构、�
 license: MIT
 metadata:
   author: Yeelight
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Project Guide
 
-Help the user regain and deepen an evidence-based understanding of an existing software project. The goal is not to describe every file or replace the user's judgment. Build a usable mental model of where a concern lives, how the system behaves, why a decision is supported, and what remains unknown.
+帮用户基于项目证据重新建立并深化对现有软件项目的理解。目标不是逐个描述文件或替用户下判断，而是建立好用的心智模型：关注点在哪、系统怎么运行、依据支持了什么决定、还有哪些未知。
 
-Do not modify production code as part of an explanation unless the user separately authorizes an exercise or implementation.
+除非用户另行授权做练习或实现，解释过程中不修改生产代码。
 
-## Choose a mode
+## 选择工作模式
 
-Select the smallest mode that answers the user's question. Combine modes only when necessary. If the target is clear, proceed without asking the user to choose a mode.
+选择能回答当前问题的最小模式，必要时才组合。目标明确时直接推进，不要求用户先选模式。
 
-- **orient** — establish the project's purpose, current state, major parts, relationships, constraints, and a useful reading path.
-- **trace-flow** — follow one feature from a real entry point through important control, data, state, error, and output paths.
-- **explain-change** — explain a concrete change in the context of the existing system, using a diff, commit range, tests, or records.
-- **explain-decision** — explain a recorded or inferred engineering decision, its constraints, trade-offs, and consequences.
-- **guided-exploration** — help the user build independent code understanding through prediction, tracing, and a small verification task. Use only when the user wants to learn or practice; never make it a prerequisite for a quick explanation.
+| 模式 | 适用问题 | 核心动作 |
+| --- | --- | --- |
+| `orient` | 项目做什么、现在到哪一步、主要组成、关系与入口在哪 | 从整体到局部梳理目的、现状、核心职责与关系、约束和阅读路径 |
+| `trace-flow` | 某个功能从真实入口到输出的完整链路怎么走 | 顺着真实控制、数据、状态、错误和输出路径追踪 |
+| `explain-change` | 某次改动/提交/diff 在现有系统里起什么作用 | 结合 diff、提交范围、测试或记录说明改了什么、为何改、影响谁 |
+| `explain-decision` | 某项工程决策的依据、约束、取舍和后果 | 查权威记录并核对当前实现，区分明文依据与代码反推 |
+| `guided-exploration` | 想自己动手预测、追踪并验证对代码的理解 | 仅在用户想学或练时使用：预测、观察、对照，再做一个小验证任务 |
 
-If the request is ambiguous and different modes would lead to materially different work, ask one focused question. Otherwise state a bounded assumption and continue.
+若请求有歧义，且不同模式会导致实质不同的工作，只问一个聚焦问题；否则写明有限假设后继续。
 
-## Evidence and explanation rules
+## 证据与解释规则
 
-1. **Inspect before explaining.** Read applicable project instructions and inspect the relevant code, tests, configuration, docs, and history. Treat names and summaries as clues, not proof of behavior.
-2. **Start with the system location.** Explain the overall role of the target before detailing symbols. For a broad orientation, move from project purpose and major responsibilities to relationships, then to a concrete entry point. Do not mechanically walk the directory tree.
-3. **Explain relationships.** Show how components interact, how data changes, where state is owned, and which constraints shape the design. Prefer a small, useful model to a list of paths and symbols.
-4. **Attach important claims to evidence.** Cite repository paths and symbols; include line references when the inspected view supports them. For runtime behavior, connect source to tests, logs, traces, or an observed command result. Explain the shortest useful reading path when that helps the user continue independently.
-5. **Separate evidence classes.** Make clear which claims are:
-   - **Verified facts:** directly supported by current code, tests, runtime observation, a diff, or a record.
-   - **Recorded decisions:** explicitly documented or confirmed in an authoritative source.
-   - **Inferences:** plausible explanations drawn from current implementation or history, but not directly confirmed.
-   - **Unknowns:** evidence is missing, conflicting, or inaccessible.
-6. **Do not invent history.** Current code can establish what the system does, but not necessarily why an earlier author chose it. A commit message or later explanation is evidence of what was recorded, not proof that the rationale is complete or correct. Say when motivation cannot be confirmed.
-7. **Respect evidence limits.** A passing test supports only the cases it exercises. A static call graph may miss reflection, callbacks, generated code, or runtime configuration. A missing reference in search does not prove a component is unused.
-8. **Keep the answer proportional.** Lead with the useful mental model or conclusion. Add call details, edge cases, alternatives, or diagrams when they help answer the user's question. Do not produce a full architecture document or HTML page by default.
-9. **Keep independent judgment.** Point out contradictions, stale documentation, questionable assumptions, or gaps that affect the explanation. Do not treat an Agent-authored implementation as correct by default.
+1. **先读证据再解释。** 读适用的项目约定，检查相关代码、测试、配置、文档和历史。名称与摘要只是线索，不是行为证明。
+2. **先定系统位置再抠细节。** 先讲目标在整体中的角色，再讲具体符号。做全局导览时，从项目目的和主要职责推进到关系，再到具体入口；不要机械地遍历目录树。
+3. **解释关系。** 讲清组件如何交互、数据如何变化、状态归谁所有、哪些约束塑造了设计。小而好用的模型胜过路径和符号清单。
+4. **重要结论附证据。** 引用仓库路径和符号，检查视角允许时附行号。运行时行为要连到测试、日志、链路追踪或实际命令结果。能帮用户独立继续时，给出最短的有用阅读路径。
+5. **区分证据类别。** 明确哪些结论属于：
+   - **已核实事实**：当前代码、测试、运行观察、diff 或记录直接支持。
+   - **已记录决定**：权威来源中明确写明或确认。
+   - **推断**：从当前实现或历史中合理推出，但未直接证实。
+   - **未知**：证据缺失、冲突或不可访问。
+6. **不编造历史。** 当前代码能确立系统做什么，但不一定能确立早先作者为何这样选。提交信息或事后说明只能证明当时记录了什么，不能证明理由完整或正确。动机无法确认时直接说明。
+7. **守住证据边界。** 通过的测试只支持它覆盖的用例；静态调用图可能漏掉反射、回调、生成代码或运行时配置；搜索里没有引用不证明组件未被使用。
+8. **详略与问题相称。** 先给有用的心智模型或结论。调用细节、边界情况、备选方案或图表只在有助于回答时加入。默认不产出完整架构文档或 HTML 页面。
+9. **保持独立判断。** 指出矛盾、过期文档、可疑假设或影响解释的缺口。不因为实现由 Agent 编写就默认正确。
 
-## Mode procedures
+## 各模式做法
 
-### orient — project understanding and location
+### orient — 项目理解与定位
 
-1. Identify the project goal and current implementation state from its README, entry points, configuration, code, tests, and recent history as relevant. Distinguish shipped behavior from plans and incomplete work.
-2. Find a small set of major responsibilities and establish their relationships from imports, call sites, interfaces, dependency wiring, data ownership, or runtime evidence. A directory tree alone is not an architecture model.
-3. Locate important entry points, external boundaries, data paths, state owners, and consequential constraints or decisions. Include only what helps the user's next step.
-4. Present a compact overview from whole to part: project purpose and state; major components and how they connect; one or more paths into the code; important constraints and uncertainties; a recommended next place to inspect.
-5. If no authoritative architecture map exists and the user needs durable documentation, explain the gap and offer the relevant `project-docs` task. Do not silently create or maintain a second project map here.
+1. 从 README、入口、配置、代码、测试和近期历史辨认项目目标与当前实现状态；区分已落地行为、计划和未完成工作。
+2. 从导入、调用点、接口、依赖装配、数据归属或运行时证据中，找出一小组主要职责并确立它们的关系。目录树本身不是架构模型。
+3. 定位重要入口、外部边界、数据路径、状态所有者和影响重大的约束或决定；只保留有助于用户下一步的内容。
+4. 按从整体到局部给出紧凑概览：项目目的与状态；主要组件及其连接方式；一条或多条进入代码的路径；重要约束与不确定性；建议下一步查看的位置。
+5. 没有权威架构图且用户需要持久文档时，说明缺口并建议走 `project-docs`；不要在这里悄悄创建或维护第二份项目地图。
 
-Do not claim an exhaustive inventory unless one was requested and actually completed.
+除非用户要求且确实完成，不要声称做过穷尽盘点。
 
-### trace-flow — runtime mechanism
+### trace-flow — 运行时机制
 
-Choose one user-visible capability or concrete behavior. Trace it from the real entry point through the important steps:
+选一个用户可见的能力或具体行为，从真实入口追踪：
 
-1. input and validation;
-2. participating functions, modules, services, or processes;
-3. important data transformations and ownership changes;
-4. state updates or persistence;
-5. relevant errors, branches, and recovery behavior;
-6. output and the caller or user who observes it.
+1. 输入与校验；
+2. 参与的函数、模块、服务或进程；
+3. 重要的数据转换与归属变化；
+4. 状态更新或持久化；
+5. 相关错误、分支与恢复行为；
+6. 输出，以及观察它的调用方或用户。
 
-Follow actual calls, interfaces, configuration, and tests. Mark dynamic or unobserved edges as inferred or unverified. Explain the mechanism rather than paraphrasing every line. Use ordered steps for a simple path; use a compact diagram or table when it makes branching, ownership, or state easier to understand. Keep a textual explanation of essential meaning alongside any diagram.
+沿着实际调用、接口、配置和测试走。动态或未观测到的边标为推断或未验证。解释机制，不要逐行复述。简单路径用有序步骤；分支、归属或状态较复杂时，用紧凑的图或表，并保留关键含义的文字说明。
 
-### explain-change — engineering change
+### explain-change — 工程改动
 
-Determine the requested range and baseline from the user, Git history, branch comparison, or current diff. Preserve uncommitted changes and do not assume all workspace changes belong to the target task.
+从用户、Git 历史、分支对比或当前 diff 确定请求的范围与基线。保留未提交改动，不要假设所有工作区改动都属于目标任务。
 
-Explain, in this order as relevant:
+按相关顺序说明：
 
-- the original behavior or problem, with evidence or an explicit note if it is not recoverable;
-- the goal and constraints from the request, issue, or confirmed records;
-- the chosen approach and its evidence-backed rationale; distinguish recorded rationale from inference;
-- the actual files, symbols, interfaces, and behavior changed;
-- how the changed path now works in the surrounding system;
-- tests or other checks run, their observed results, and their coverage limits;
-- likely effects on callers, data, operations, or future changes, marking unverified effects as such.
+- 原有行为或问题，附证据；无法还原时明确说明；
+- 来自请求、Issue 或已确认记录的目标与约束；
+- 选定的做法及其有证据支撑的理由；区分已记录的理由与推断；
+- 实际改动的文件、符号、接口和行为；
+- 改动后的路径在周围系统中如何工作；
+- 运行过的测试或其他检查、观察到的结果及其覆盖边界；
+- 对调用方、数据、运维或后续改动的可能影响，未验证的影响要标明。
 
-Use the actual diff and relevant surrounding code. A commit title or diff summary alone is not enough to explain system impact. Do not say a change fixed a problem unless relevant behavior was verified.
+使用实际 diff 和相关周边代码；提交标题或 diff 摘要本身不足以说明系统影响。未验证相关行为时，不要说某个改动修好了问题。
 
-### explain-decision — engineering decision
+### explain-decision — 工程决策
 
-1. Search the authoritative sources first: ADRs, requirements, design documents, issue or review records, and relevant commit history.
-2. Verify what the current implementation and tests establish about the decision's behavior and constraints.
-3. Explain the problem, confirmed constraints, chosen option, documented rationale, alternatives if there is evidence for them, trade-offs, and consequences for extension or operation.
-4. Label any rationale reconstructed from code as an inference. If no reliable record explains why the choice was made, say so instead of assigning an imagined historical motive.
-5. Identify whether the decision is still reflected in current code. If the record and implementation conflict, report both with their sources and do not silently choose one as authoritative.
+1. 先查权威来源：ADR、需求、设计文档、Issue 或评审记录、相关提交历史。
+2. 核对当前实现和测试能确立该决策的哪些行为与约束。
+3. 说明问题、已确认约束、选定方案、已记录理由、有证据的备选方案、取舍，以及对扩展或运维的后果。
+4. 从代码反推的理由标为推断。没有可靠记录解释选择原因时直接说明，不要编造历史动机。
+5. 判断该决策是否仍体现在当前代码中。记录与实现冲突时，连同来源一起报告，不要悄悄选一方当权威。
 
-Do not create or update an ADR as part of explanation. If the user asks to record a decision, route the writing task through `project-docs` after the decision is confirmed.
+解释过程中不创建或更新 ADR。用户要求记录决定时，在决定确认后把写作任务交给 `project-docs`。
 
-### guided-exploration — independent understanding
+### guided-exploration — 独立理解
 
-Use the retained reverse-engineering learning loop, scoped to one real slice and one cognitive goal:
+沿用逆向工程式学习循环，只针对一个真实切片和一个认知目标：
 
-1. Agree what the user wants to be able to locate, explain, change, or direct. Calibrate only prerequisites that affect the exercise.
-2. Give enough orientation to locate the entry point, relevant symbols, state/data owner, and available evidence. Mark inferred edges as unverified.
-3. When meaningful, ask the user to predict a call, value, state change, side effect, or owner before revealing the observation. Do not force prediction when the user asks for a direct explanation.
-4. Inspect source, tests, traces, or runtime behavior; compare prediction with observation and explain any important difference.
-5. Offer one bounded, safe exercise only when authorized: a changed input, boundary case, small repair, contract-preserving edit, or targeted test. Use an isolated worktree or scratch copy if it could alter the user's project and no in-place change was requested.
-6. Check the target capability with the narrowest useful evidence. Record what the user demonstrated, not merely what was explained. Recommend the next learning step; do not start it silently.
+1. 约定用户希望做到能定位、解释、修改或主导什么。只校准会影响练习的前置知识。
+2. 给出足够的定位线索：入口、相关符号、状态或数据所有者、可用证据；推断出来的边标为未验证。
+3. 有意义时，在揭示观察结果前请用户预测一次调用、值、状态变化、副作用或所有者。用户要求直接解释时不要强推预测。
+4. 检查源码、测试、链路追踪或运行时行为，比较预测与观察，解释重要差异。
+5. 仅在获授权时提供一个有边界、安全的练习：改输入、边界用例、小修复、不破坏契约的修改或针对性测试。若可能改动用户项目且未要求就地修改，使用隔离 worktree 或临时副本。
+6. 用最小有效证据检查目标能力，记录用户实际展示了什么，而不只是解释了什么。推荐下一步学习动作，但不悄悄开始。
 
-A brief conversation checkpoint is sufficient unless the project already has a learning record. Do not create a durable learner profile or a separate knowledge base by default.
+除非项目已有学习记录，简短对话检查点即可；默认不创建持久的学习者画像或独立知识库。
 
-For a focused interactive trace artifact, follow [visual-system.md](references/visual-system.md). Use it only when interaction tests the learner's model; ordinary explanations do not need an HTML artifact.
+需要聚焦的交互式追踪产物时，按 [visual-system.md](references/visual-system.md) 处理；只有交互能检验学习者的模型时才使用，普通解释不需要 HTML 产物。
 
-## Knowledge continuity across tasks
+## 跨任务的知识连续性
 
-Treat the repository, not the Agent's conversation memory, as the source of project knowledge.
+把仓库而非 Agent 的对话记忆当作项目知识来源。
 
-- Reuse current project documents and code. Prefer one authoritative location for each durable fact or decision; link to it instead of copying it into a parallel map.
-- Distinguish durable project knowledge (purpose, responsibilities, contracts, architecture constraints, confirmed decisions) from task-local observations (current diff, one command result, temporary hypothesis, unresolved issue).
-- Do not persist a generated orientation or change explanation automatically. If the user needs future maintainers to rely on it, route to `project-docs` and update the appropriate authoritative document with evidence.
-- Check relevant documents against current code and recent history before relying on them. If they are stale, conflicting, or lack a clear owner, mark the discrepancy and explain which claims were re-verified. Do not perform a whole-documentation audit unless requested.
-- Use Git history to recover changes and prior records where available, but do not assume commit messages preserve full design rationale.
-- When a future task starts, rebuild only the context needed for that question from source material; do not require the same persistent map to be copied across projects or sessions.
+- 复用当前项目文档和代码。每个持久事实或决定优先只保留一个权威位置，链接过去而不是复制成平行地图。
+- 区分持久项目知识（目的、职责、契约、架构约束、已确认决定）与任务局部观察（当前 diff、一次命令结果、临时假设、未解决 issue）。
+- 不自动持久化生成的导览或改动解释。若用户需要未来维护者依赖它，走 `project-docs`，用证据更新相应权威文档。
+- 依赖相关文档前，先对照当前代码和近期历史；文档过期、冲突或没有明确负责人时，标出差异并说明重新核实了哪些结论。除用户要求外，不做全量文档审计。
+- 可用时借助 Git 历史还原改动和既往记录，但不要假设提交信息保存了完整设计理由。
+- 新任务开始时，只从源材料重建该问题所需的上下文；不要求同一份持久地图跨项目或跨会话复制。
 
-## Completion check
+## 完成检查
 
-Before answering, verify that:
+回答前确认：
 
-- the selected mode answers the user's actual question;
-- the explanation states how the relevant parts relate, not just what files exist;
-- important claims point to evidence, while inference and unknowns remain clearly labelled;
-- behavior, rationale, and verification are not conflated;
-- the scope and limits of checks are visible;
-- the user has a concrete next place to inspect when that helps them continue independently.
+- 所选模式回答了用户真正的问题；
+- 解释说明了相关部分如何关联，而不只是列出文件；
+- 重要结论指向证据，推断和未知仍然清楚标注；
+- 行为、理由和验证没有混为一谈；
+- 检查的范围与局限可见；
+- 能帮用户继续时，给出了具体的下一处查看位置。
 
-A useful explanation improves orientation; it does not prove the user has mastered the system. Only guided-exploration can assess a practiced capability, and only within its stated scope.
+有用的解释改善的是方向感，不证明用户已经掌握系统。只有 `guided-exploration` 能评估练过的能力，且只在其声明的范围内。
 
-## Boundaries with related Skills
+## 与相关 Skill 的边界
 
-- **tech-mentor** / **make-sense** / **project-docs** / **code-review** / **assess** 的分工见 [routing.md](references/routing.md)。
-
-Routine implementation, verification, and concise completion reporting remain in the project's normal workflow. This Skill is not a required post-task step.
+- 与 **tech-mentor**、**make-sense**、**project-docs**、**code-review**、**assess** 的分工见 [routing.md](references/routing.md)。
+- 常规实现、验证和简短的完成汇报仍走项目日常工作流；本 Skill 不是任务完成后的必需步骤。

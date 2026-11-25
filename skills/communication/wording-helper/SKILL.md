@@ -1,78 +1,85 @@
 ---
 name: wording-helper
-description: 用户需要更清楚的措辞或有结构的表达时使用；先把意图说清，再给可复用文字；不用于可执行请求或术语解释。
+description: 用户需要更清楚的措辞或有结构的表达时使用；先补准确的词，再给可复用文字；不用于可执行请求或术语解释。
 license: MIT
 metadata:
   author: Yeelight
-  version: "3.3.0"
+  version: "3.5.0"
 ---
 
 # Wording Helper
 
-Turn a user's intended meaning into precise, usable expression. Understand the task, prioritize the information, organize its relationships, then write and verify. Accuracy comes before elegance; concise means no unnecessary wording, not the fewest possible words.
+把用户想表达的意思变成准确、可用的表达：先理解任务，找到能命名它的词，再排定信息主次、组织关系，最后写出来并核对。用户说不清时，瓶颈常常在词而不在想法。准确优先于修饰；简洁是没有多余措辞，不是词越少越好。
 
-## Explicit invocation contract (mandatory)
+## 点名调用契约（强制）
 
-When the user invokes `wording-helper` by name, this contract governs the turn from its first token. It is an order to execute, not reference material: discard any plan formed from the user's task framing before applying it.
+用户按名称调用 `wording-helper` 时，本契约从回复的第一个字符起生效。它是执行指令，不是参考资料：先丢弃按用户任务框架形成的任何计划，再开始。
 
-The first substantive content of the reply MUST be a standalone `txt` code block containing only copy-ready wording the user can reuse — no heading, lead-in, acknowledgement, intent summary, outline, plan, tool call, or question before it. The block is one continuous paragraph: no line breaks, no bullet or numbered lists, no headings or emphasis markers. Brief explanation and at most one focused question MAY follow the block.
+回复的第一个实质内容必须是一个独立的 `txt` 代码块，块内只放用户可直接复用的措辞——块之前不得有标题、引入语、确认、意图概括、大纲、计划、工具调用或提问。块内按下文「草稿格式与复查」写成单一连续段落；该单段要求在此强制适用。块之后可以跟简短说明和最多一个聚焦的措辞问题。
 
-Before that block, do NOT:
+在该代码块之前，禁止：
 
-- call tools, inspect the environment, read files or repositories, or gather context that is not already in the conversation;
-- ask about deliverable form, audience, length, scope, pain points, or boundaries — a user line such as "ask me if anything is unclear" authorizes one focused wording question later, never a requirements interview;
-- restate these rules, narrate the diagnosis, or explain what the skill does;
-- start the described task, even when the request reads like an instruction ("write a plan", "list my skills", "fix this bug"). Draft the wording of that request; execution waits for approval.
+- 调用工具、检查环境、读取文件或仓库，或收集对话中尚不存在的上下文；
+- 询问交付形式、受众、篇幅、范围、痛点或边界——用户一句“不清楚就问我”只授权稍后提出一个聚焦的措辞问题，绝不授权需求访谈；
+- 复述这些规则、解说诊断过程或解释本 Skill 做什么；
+- 开始被描述的任务，即使请求读起来像指令（“写个计划”“列出我的 skills”“修这个 bug”）。只起草该请求的措辞；执行等待批准。
 
-If the user explicitly asks for analysis, an outline, or a structure **instead of** reusable wording, provide that form without a `txt` block. If they ask for both, the `txt` block still comes first.
+如果用户明确只要分析、大纲、结构或术语清单**而不是**可复用措辞，按该形式给出，不放 `txt` 块；如果两者都要，`txt` 块仍然最前。
 
-The only case that replaces the draft is a bare invocation with no meaning to work from (for example `/wording-helper` alone): ask one focused question about what they want to express — still not an interview.
+唯一取代草稿的情形是没有任何可加工含义的裸调用（例如只发 `/wording-helper`）：问一个聚焦问题，弄清对方想表达什么——仍然不是访谈。
 
-When a previous draft is already awaiting review, the follow-up decides the mode, not the invocation prefix. A correction or complaint about the draft means write the replacement draft (block first, single paragraph). An approval plus an instruction to proceed means execute the described task now, without another `txt` block and without asking again, even if the message repeats `wording-helper`.
+上一份草稿仍在等待复查时，由后续消息决定模式，而不是由调用前缀决定。对草稿提出更正或抱怨，就写替换草稿（块在前、单段）。批准并指示继续，表示现在执行被描述的任务：不再输出 `txt` 块，不再复述措辞，不再询问，即使消息重复了 `wording-helper`。
 
-## When to activate
+## 何时激活
 
-Activate when the user:
+在用户出现以下情况时激活：
 
-- explicitly invokes `wording-helper`;
-- asks to clarify, organize, rewrite, or improve wording or an idea; or
-- after a misunderstanding, indicates that their meaning still needs to be expressed more clearly.
+- 明确点名 `wording-helper`；
+- 要求澄清、组织、改写或改进措辞或想法；
+- 要求为自己的模糊想法补词、找术语，或问专家会怎么称呼它；或
+- 在误解之后表示，自己的意思仍需要表达得更清楚。
 
-Do not activate just because a request is colloquial if it is already actionable. Do not treat a request to explain an existing term, passage, or reasoning as a request to rewrite it. Do not turn a visual preference into a specification unless the user asks for wording about it.
+请求虽然口语化但已经可执行时，不因此激活。要求解释既有术语、段落或推理，不视为要求改写；为模糊想法找词则是本 Skill 的工作。视觉偏好不是要求，除非用户明确要为其写措辞。
 
-## Core workflow
+## 核心流程
 
-Think through these steps in order. They guide the work; do not mechanically expose every step or force a fixed template onto the final wording.
+按顺序考虑这些步骤。它们指导工作；不要在成品措辞里机械暴露每一步，也不要硬套固定模板。
 
-1. **Understand intent.** Identify what the user wants to communicate, the intended audience and purpose, and any stated position, tone, or constraints. Use the relevant conversation context, not just the latest sentence. Separate explicit information from inference. Do not mistake the user's phrasing for the underlying goal.
-2. **Extract information.** Sort the source material into relevant facts, background, problem, goal, method, constraints, evidence, and open choices as applicable. Keep only categories useful for this task; do not invent missing content.
-3. **Set priorities.** Identify the core meaning that cannot be lost, supporting information that helps explain it, and details that are repetitive or unnecessary. Preserve emphasized requirements and meaningful caveats.
-4. **Organize logic.** Choose an order that makes the relationships easy to follow. Use the structure that fits the content—for example: context → problem → approach → outcome for an introduction; observation → cause → remedy for a technical explanation; or claim → reasons → evidence → limits for an argument. Treat these as options, not templates.
-5. **Refine expression.** Use direct, natural, precise language in the intended language and tone. Remove repetition and ambiguity, connect related ideas, and use terminology only when it improves precision for the audience. Keep enough explanation to preserve meaning; do not compress away useful context.
-6. **Check quality.** Confirm that the result is faithful, complete on the stated essentials, logically ordered, readable, and no longer than the purpose requires. For a copy-ready task request, make the requested action, scope, deliverable, and stated constraints easy to identify; include acceptance conditions only when the user supplied or clearly implied them. Check that no unsupported facts, goals, decisions, promises, or conclusions have slipped in.
+1. **理解意图。** 弄清用户想传达什么、受众与目的，以及已说明的立场、语气或约束。使用相关对话上下文，而不只是最后一句。区分明确信息与推断。不要把用户的说法误当成底层目标。
+2. **找到准确的词。** 描述里出现“那种做法”“这种感觉”或需要一整句才解释得清的东西，就是缺词的信号：先找它在本领域或相邻领域的名字。有就用这个词替代那串解释；没有就保持具体描述。好词让对方知道该做什么，不只是听起来专业。只用你知道含义和用法的词；不确定是否成立时宁可描述，不造词。
+3. **提取信息。** 把材料按需要归入事实、背景、问题、目标、方法、约束、证据和未定选项等类别。只保留对当前任务有用的类别；不编造缺失内容。
+4. **排定主次。** 找出不能丢失的核心含义、有助于说明它的支撑信息，以及重复或多余的细节。保留被强调的要求和有意义的限定。
+5. **组织逻辑。** 选择让关系容易跟上的顺序。用适合内容的结构——例如介绍用“背景 → 问题 → 做法 → 结果”，技术解释用“观察 → 原因 → 处理”，论证用“主张 → 理由 → 证据 → 局限”。把这些当作选项，不是模板。
+6. **打磨表达。** 按目标语言和语气使用直接、自然、准确的语言。删除重复与歧义，连接相关想法。术语只在受众能懂、或能在句内用白话带出时使用；对方不懂就保留白话，必要时在括号里给一次术语。保留足够解释以免丢失含义；不要为了压缩删掉有用上下文。
+7. **检查质量。** 确认结果忠实、覆盖已说明的要点、逻辑有序、可读，且不超过目的所需。对可直接复制的任务请求，让要求的动作、范围、交付物和已说明的约束容易辨认；只有用户提供或明确暗示时才加入验收条件。检查是否混入了无依据的事实、目标、决定、承诺或结论。
 
-## Handling ambiguity
+## 术语与出处
 
-Resolve ordinary wording choices from context. Preserve an undecided detail in the draft when that can represent the user's meaning accurately. Ask one focused question only when the missing choice would materially change the meaning and cannot be preserved without misrepresenting the user. That question, if any, comes after the draft and is one question — not a form, checklist, or stress test of unrelated decisions.
+- 用户没要术语时，块后的说明最多点一两个真正影响理解的词；不列词表、不贴链接。
+- 用户要术语清单、出处或“专家会怎么叫”时，按[术语模式](references/vocabulary.md)执行。
 
-If the user says the assistant misunderstood or acted prematurely, acknowledge that plainly, without defending the earlier assumption. Then use the correction and the relevant context to restate the intended meaning.
+## 处理歧义
 
-## Draft format and review
+普通措辞选择按上下文解决。尚未确定的细节，只要能在不歪曲用户意思的前提下准确呈现，就保留在草稿中。只有缺失的选择会实质改变含义、且不确认就无法避免歪曲用户时，才问一个聚焦问题。该问题若存在，放在草稿之后，且只有一个——不是表单、清单，也不是对无关决定的连环质询。
 
-- Write the reusable text as one unbroken paragraph of plain prose. Do not start a new line per sentence, per item, to list alternatives, or to fit a width; do not use bullet points, numbering, headings, or emphasis inside the block. Express enumeration inline within the sentence (for example "一是…；二是…"). A fenced block preserves line breaks literally, so any break shows up as a broken draft.
-- Only when the user explicitly asks for a multi-paragraph or sectioned document may the block contain paragraph breaks. Even then, never one line per sentence and never a list rendered as separate lines.
-- Write in first person by default when drafting text the user may reuse; change perspective when the audience or purpose calls for it.
-- Use the language the user intends for the draft. The explanation around it should follow the user's conversation language.
-- For explicitly invoked wording work, the standalone `txt` block is the required primary deliverable and comes first. For other wording requests, when the user needs a reusable passage, present it in a standalone `txt` code block and put only the draft inside it. Keep the surrounding explanation brief; do not repeat the full draft outside the block.
-- After presenting a draft, wait for review. Exactly two kinds of follow-up decide what happens next:
-  - **Correction or rejection** — the draft is not what they want, or they name what to change. Write the replacement draft: `txt` block first, single paragraph, no interview, no execution of the described task. When they only say it is wrong without saying how, infer the fix from the conversation and the earlier draft rather than asking, and keep the replacement ready to send.
-  - **Approval plus an instruction to proceed** ("按这个继续", "就按这个做，开始吧") — this is a task instruction, not wording work. Execute it directly using the approved wording. Do not emit another `txt` block, do not restate the wording, and do not ask for confirmation. The `wording-helper` prefix does not change this.
-- Approval with no instruction to proceed is not a third path and not authorization: acknowledge it and stop. The described task still waits for an explicit go-ahead.
+如果用户表示助手误解了意思或提前行动，直接承认，不辩护此前的假设。然后用更正内容和相关上下文重述原本要表达的意思。
 
-## Boundaries
+## 草稿格式与复查
 
-The result must remain the user's meaning. Improve clarity and persuasiveness only through better selection, ordering, and expression of information supported by the conversation. Never add a preference, requirement, fact, commitment, or conclusion just because it would make the wording sound more complete or professional.
+- 把可复用文字写成一个不间断的纯文字段落。不要逐句、逐项换行，不要为列出备选或适应宽度而换行；块内不用项目符号、编号、标题或强调标记。枚举写在句子内部（例如“一是……；二是……”）。围栏代码块会原样保留换行，任何换行都会显示为一份断裂的草稿。
+- 只有用户明确要求多段或分节文档时，块内才可以分段。即便如此，也不要逐句换行，也不要把列表拆成多行。
+- 可复用文字默认用第一人称；按受众或目的调整视角。
+- 使用用户希望草稿采用的语言；草稿周围的说明跟随对话语言。
+- 其他措辞请求需要可复用段落时，把它放在独立的 `txt` 代码块中，块内只放草稿。周围说明保持简短；不要在块外重复整份草稿。
+- 给出草稿后等待复查。只有两类后续决定下一步：
+  - **更正或拒绝**——这不是用户要的，或用户点名要改什么。写替换草稿：`txt` 块在前，单段，不访谈，不执行被描述的任务。用户只说不对、没说怎么改时，根据对话和上一份草稿推断修法，不要追问，并让替换稿随时可发。
+  - **批准并指示继续**（“按这个继续”“就按这个做，开始吧”）——这是任务指令，不是措辞工作。直接用已批准的措辞执行。不再输出 `txt` 块，不复述措辞，不询问确认。`wording-helper` 前缀不改变这一点。
+- 只批准、没有指示继续，不是第三种路径，也不构成授权：确认后停止。被描述的任务仍等待明确的许可。
 
-## Maintenance
+## 边界
 
-Use [comparison cases](references/cases.yaml) when evaluating changes to this skill. They describe expected behavior for review; they are not runtime instructions and should not be loaded for ordinary wording requests.
+结果必须仍是用户的意思。只能通过更好的选择、排序和表达来提升清晰度与说服力，且所用信息须由对话支持。绝不为了让措辞显得更完整或更专业，就添加偏好、要求、事实、承诺或结论。
+
+## 维护
+
+评估本 Skill 的改动时使用[对照用例](references/cases.yaml)。它们描述复查时应有的行为；不是运行时指令，普通措辞请求不应加载。

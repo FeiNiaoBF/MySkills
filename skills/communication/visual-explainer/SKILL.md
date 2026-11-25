@@ -1,121 +1,119 @@
 ---
 name: visual-explainer
 description: 仅在用户点名 visual-explainer 或要求独立 HTML 解释页时使用；产出单文件离线页面；不用于对话回答、设计预览或研究报告。
-license: MIT
 metadata:
-  author: Yeelight
-  version: "0.5.0"
+  version: "0.6.0"
 disable-model-invocation: true
 ---
 
 # Visual Explainer
 
-Produce one self-contained HTML page that carries a complete explanation. Decide the explanation before choosing a layout; the page exists to make its structure and relationships easy to follow.
+产出一份自包含的 HTML 页面，完整承载一段解释。先决定要解释什么，再选择版式；页面存在的目的是让解释的结构和关系容易跟上。
 
-## Invocation boundary
+## 触发边界
 
-- Start only when the user names `visual-explainer` or explicitly requests a standalone HTML explainer page.
-- Do not build a page because a question is long, comparative, technical, or hard to read in chat. Answer ordinary explanation requests in the conversation.
-- An explicit request authorizes building the page. Ask one focused question only when a missing choice would materially change the result; otherwise state a reasonable assumption and proceed.
-- If a page for this topic already exists, update it instead of creating a second file.
+- 只有用户点名 `visual-explainer`，或明确要求一份独立的 HTML 解释页时才启动。
+- 不要因为问题长、需要对比、技术性强或在聊天里难读，就主动建页面；普通解释请求在对话里回答。
+- 明确请求即授权建页。只有缺失的选择会实质改变结果时才问一个聚焦问题；否则说明合理假设后继续。
+- 同一主题已有页面时，更新它，不要新建第二份文件。
 
-## Frame the explanation
+## 动笔前定盘
 
-Before drafting, settle:
+起草前先确定：
 
-- The question the reader must be able to answer after reading.
-- The conclusion or mental model they need, not the topic label they used.
-- Prior knowledge visible in the request, and the smallest missing prerequisite.
-- What this page covers and what it deliberately leaves out.
+- 读者读完后必须能回答的问题。
+- 读者需要建立的结论或心智模型，而不是他们使用的主题标签。
+- 请求中已体现的先前知识，以及最小的缺失前置知识。
+- 本页覆盖什么，刻意省略什么。
 
-Do not infer expertise from unrelated context. When several readings are plausible, take the one the request supports; ask only when the wrong choice would change the explanation substantially.
+不要从无关上下文推断专业水平。多种解读都说得通时，取请求支持的那一种；只有选错会大幅改变解释时才提问。
 
-## Choose an explanation path
+## 选择解释路径
 
-Match the path to the shape of the question. Use one path; combine two only when neither alone answers the question.
+让路径匹配问题的形状。使用一条路径；仅当单独一条无法回答时才组合两条。
 
-| Path | Section order |
+| 路径 | 章节顺序 |
 | --- | --- |
-| Concept | core meaning → intuition → concrete example → where the intuition stops |
-| Process or system | purpose → parts → sequence and state changes → branches, failures, recovery |
-| Comparison or decision | decision → criteria → differences and trade-offs → recommendation and its conditions |
-| Claim or conclusion | conclusion → evidence or premises → reasoning → assumptions, uncertainty, limits |
-| Code or architecture | observable behavior → responsible components → control or data flow → effect of changing a component |
-| History or evolution | present state → turning points in time order → what changed → why it matters now |
+| 概念 | 核心含义 → 直觉 → 具体例子 → 直觉失效之处 |
+| 流程或系统 | 目的 → 组成 → 顺序与状态变化 → 分支、失败、恢复 |
+| 对比或决策 | 决策 → 判据 → 差异与取舍 → 建议及其条件 |
+| 论点或结论 | 结论 → 证据或前提 → 推理 → 假设、不确定性、局限 |
+| 代码或架构 | 可观察行为 → 负责的组件 → 控制流或数据流 → 改动某组件的影响 |
+| 历史或演变 | 当前状态 → 按时间排列的转折点 → 什么变了 → 为何现在重要 |
 
-Choose the shortest path that preserves the reasoning the reader needs.
+选择能保留读者所需推理的最短路径。
 
-## Draft the explanation
+## 起草解释
 
-1. Lead with the answer or central model, short enough to read before scrolling.
-2. Order sections so each uses only ideas already introduced; define a term where it first affects the reasoning.
-3. Give every section one explanatory job. Delete a section that only restates another in different words.
-4. Anchor abstractions in one concrete example that stays accurate and consistent across sections.
-5. Keep facts, examples, assumptions, and recommendations visibly distinct. Label illustrative values; never invent evidence, statistics, quotations, benchmarks, or sources.
-6. Preserve material caveats, failure conditions, uncertainty, and evidence limits instead of smoothing them out for a cleaner story.
-7. Reserve a visual for a relationship prose handles worse: order, comparison, containment, flow, or change over time.
+1. 先给答案或中心模型，短到不必滚动就能读完。
+2. 安排章节顺序，使每节只使用已经引入的概念；在术语首次影响推理处定义它。
+3. 每节只承担一项解释职责；删除只是换词重复别节的章节。
+4. 用一个具体例子锚定抽象，例子在各节保持一致且准确。
+5. 把事实、例子、假设和建议明显区分开；示例数值要标注；绝不编造证据、统计、引文、基准或来源。
+6. 保留实质限定、失败条件、不确定性和证据边界，不要为故事顺畅而抹平。
+7. 只在顺序、对比、包含、流转或随时间变化等文字更难表达的关系上使用可视化。
 
-Language: write the page in the language the user asked for, otherwise the language they are using. Set `lang` to the matching BCP 47 tag (`zh-CN`, `en`, `ja`) and use one language consistently outside quoted terms.
+语言：用用户要求的语言写页面，未指定则用其当前语言。`lang` 设为对应的 BCP 47 标签（`zh-CN`、`en`、`ja`），除引用术语外只使用一种语言。
 
-Length: no chapter quota and no padding. Typical pages need three to six chapters; a page that restates the chat answer at greater length has failed. Derive the reading time from the actual word or character count and keep it approximately honest.
+篇幅：不设章节配额，不作填充。通常三到六章；把聊天回答拉长重述的页面已经失败。阅读时长按实际字数或字符数推算，保持大致诚实。
 
-Author the full text before styling. Styling may arrange, emphasize, and validate content; it must not add claims, reorder causality, drop qualifications, or reinterpret an example.
+先把完整文字写好再做样式。样式可以安排、强调和验证内容，但不得增加论断、改变因果顺序、删去限定或重新解释例子。
 
-## Build the page
+## 构建页面
 
-Start from the bundled [HTML template](assets/explainer.html): copy it to the delivery location and edit the copy, never the asset.
+从随附的 [HTML 模板](assets/explainer.html) 开始：复制到交付位置并修改副本，绝不修改模板本身。
 
-The `{{...}}` strings are literal authoring markers. Replace every one — `lang`, `<title>`, labels, ARIA text, link targets, reading time — and delete the template's authoring comments. Search the finished file for `{{` before delivery.
+`{{...}}` 字符串是字面作者标记。逐项替换——`lang`、`<title>`、标签、ARIA 文本、链接目标、阅读时长——并删除模板中的作者注释。交付前在成品文件里搜索 `{{`。
 
-The template is a visual and accessibility baseline plus optional modules, not a content outline:
+模板是视觉与无障碍基线加可选模块，不是内容大纲：
 
-- Repeat, reorder, or delete chapters until each remaining section has one job.
-- Keep the ordered-sequence figure only for real order or causation. Adjust its items and `--process-columns` together, and keep a visible complete text equivalent. Replace it with the comparison table, prose, or a small inline SVG when another relationship is meant.
-- Use the comparison table for criteria and trade-offs. Keep its `<caption>` and header cells. On narrow screens, rows stack with their option labels; keep the wrapper for wider tables.
-- Remove the example, limits, or sources block when it carries no real content. Remove the reading-progress element and its script together, or keep both.
-- Keep ids unique, and keep chapter numbers, heading references, labels, and reading time consistent with the final sections.
-- Preserve the design tokens, wide desktop canvas, bounded prose width, narrow-screen reflow, visible focus, reduced-motion behavior, and print rules unless the task supplies a stronger requirement.
+- 重复、重排或删除章节，直到每个保留的章节只做一件事。
+- 只有真实的顺序或因果才保留有序步骤图。同时调整条目与 `--process-columns`，并保留可见的完整文字等价内容；若是其他关系，改为对比表、正文或小型内联 SVG。
+- 对比表用于判据与取舍。保留 `<caption>` 和表头单元格。窄屏下行按各自选项标签堆叠；保留外层容器以容纳较宽的表格。
+- 示例、局限或来源区块没有真实内容时删除。阅读进度元素与其脚本要么一起删除，要么一起保留。
+- id 保持唯一，并让章节编号、标题引用、标签和阅读时长与最终章节一致。
+- 除非任务给出更强的要求，保留设计令牌、宽桌面画布、受控正文行宽、窄屏回流、可见焦点、减少动效行为和打印规则。
 
-Delivery constraints:
+交付约束：
 
-- One `.html` file with all CSS and JavaScript inside; it must open from the filesystem with no build step and no network.
-- No CDN scripts, web fonts, remote images, or MathJax. Draw with HTML, CSS, and inline SVG; inline tiny assets as data URIs, and set formulas as HTML text or SVG paths instead of pulling a renderer.
-- JavaScript is optional and additive. Guard it so a deleted or renamed element cannot break the page, and keep every explanation readable with scripting disabled.
-- Save to the location the task implies: the folder the user named, the task's output folder, otherwise the workspace root. Use a descriptive kebab-case filename ending in `.html`, and never overwrite an unrelated existing file.
+- 单个 `.html` 文件，CSS 与 JavaScript 全部内联；必须能从文件系统直接打开，无需构建步骤，无需联网。
+- 不使用 CDN 脚本、网络字体、远程图片或 MathJax。用 HTML、CSS 和内联 SVG 绘制；微小素材内联为 data URI；公式用 HTML 文本或 SVG 路径表示，不要引入渲染器。
+- JavaScript 可选且只做增补。为元素被删除或改名的情况做保护；禁用脚本时解释仍须完整可读。
+- 保存到任务暗示的位置：用户指定的文件夹、任务的输出文件夹，否则工作区根目录。使用描述性的 kebab-case 文件名并以 `.html` 结尾，绝不覆盖无关的既有文件。
 
-## Visual and accessibility baseline
+## 视觉与无障碍基线
 
-- Semantic structure: `header`, `main`, `section`, `footer`; exactly one `h1`; no skipped heading level; text that still makes sense read top to bottom.
-- Contrast: at least 4.5:1 for body text and 3:1 for large text, meaningful borders, and focus rings. Recheck every token pair after a palette change; the bundled light palette already passes.
-- Never encode meaning in color, position, animation, or hover alone. Pair each state or category with a label, a pattern, or text.
-- Keyboard and zoom: every interaction reachable and visible by keyboard, focus never removed, layout usable at 200% zoom and at 320 px width without clipping or hiding content behind horizontal scroll (wide tables excepted, inside the labelled scroll region).
-- Motion: honor `prefers-reduced-motion`; no autoplaying or looping motion in an explanation.
-- Figures: every diagram and table has a caption or adjacent text equivalent, decorative shapes are `aria-hidden`, and no essential text is baked into a raster image.
+- 语义结构：`header`、`main`、`section`、`footer`；恰好一个 `h1`；不跳级；从上往下读仍然通顺。
+- 对比度：正文至少 4.5:1，大字、有意义的边框和焦点环至少 3:1。更换配色后逐一复查每个令牌组合；随附的浅色配色已通过。
+- 不要只用颜色、位置、动画或悬停编码含义；每个状态或类别同时配标签、图案或文字。
+- 键盘与缩放：每个交互都可用键盘到达并可见，焦点不被移除；在 200% 缩放和 320 px 宽度下，布局不被裁切，内容不被藏进横向滚动（宽表格除外，放在带标签的滚动区域内）。
+- 动效：遵循 `prefers-reduced-motion`；解释页不放自动播放或循环动效。
+- 图形：每张图和每个表都有标题或相邻的文字等价描述；装饰性图形设为 `aria-hidden`；不把必要文字烘焙进位图。
 
-## Keep the scope clear
+## 明确范围
 
 - 与 `make-sense`、`research-report`、`style-translator`、`ui-planner`、`project-guide` 的分工见 [routing.md](references/routing.md)。
-- Stay inside the requested question. A narrow question does not become a course, and the page does not prove the reader learned the material.
+- 停留在所问的问题内：窄问题不扩张成课程，页面也不证明读者已经学会。
 
-## Verify before delivery
+## 交付前验证
 
-Content:
+内容：
 
-- The page answers the requested question and states the conclusion before the supporting detail.
-- The section order follows the chosen path, each section has a distinct job, and no prerequisite appears after it is needed.
-- Examples, figures, tables, and prose agree; nothing claims more than the stated evidence; caveats and limits survive.
-- Deleting any decorative panel or repeated summary leaves no reasoning gap.
+- 页面回答了所问，且在支撑细节之前给出结论。
+- 章节顺序遵循所选路径，每节职责不同，前置知识不晚于使用位置出现。
+- 例子、图、表与正文一致；任何内容都不超出已有证据；限定与局限保留。
+- 删除任何装饰面板或重复总结后，推理链没有缺口。
 
-File:
+文件：
 
-- No unresolved `{{`, no template instructions, no leftover content from another topic.
-- No `http://` or `https://` outside the sources list, and no external `src`.
-- No duplicate `id` values and no second `h1`.
-- The file opens locally, stays readable with scripting disabled, and logs no console error with it enabled.
+- 没有未替换的 `{{`，没有模板说明，没有其他主题的残留内容。
+- 来源列表之外没有 `http://` 或 `https://`，没有外部 `src`。
+- 没有重复的 `id`，没有第二个 `h1`。
+- 文件可在本地打开，禁用脚本仍可读，启用脚本时控制台无错误。
 
-Rendering:
+渲染：
 
-- Open the finished file and inspect it at desktop width, at 320 px, at 200% zoom, and with keyboard-only navigation.
-- Check print preview, and check a reduced-motion setting when the page relies on motion.
+- 打开成品，在桌面宽度、320 px、200% 缩放和纯键盘导航下检查。
+- 查看打印预览；页面依赖动效时，检查减少动效设置。
 
-Report the file path and the explanation's structure in two or three sentences. Do not paste the whole page into chat unless asked.
+用两三句话报告文件路径和解释结构。除非用户要求，不把整页贴进对话。

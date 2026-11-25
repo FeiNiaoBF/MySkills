@@ -5,6 +5,10 @@ Read this file before delivering or revising an implementation plan. It is the a
 ## Format and scope
 
 - Deliver a Markdown plan with the six numbered level-two headings below, in that order. Keep headings, field labels, and table columns stable. Scale the content and number of slices to the task, including a single slice when appropriate; retain empty sections with an explicit `None` or `Not yet known` and its consequence.
+- Confirm the goal and near-term batch once. If the request already authorizes implementation, expand the first slice and continue without asking for the same permission again; re-confirm only when scope changes, the order changes materially, or an irreversible action is proposed.
+- State how many slices are known and a provisional estimate for the remainder, or say the total is unknown and why. Treat the total and batch as revisable after each slice; do not invent a number to fill the field.
+- Section 3 lists every currently justified slice and marks the near-term batch; later slices stay at coarse detail. Section 4 expands exactly one slice and includes a self-contained, copyable handoff prompt. The handoff prompt must not replace the plan or contradict it.
+- Including a handoff prompt does not authorize implementation. Hand it to an executor only after the user confirms the goal and batch and authorizes implementation, or after the same request already authorized it.
 - Use the user's language. Chinese and English labels are provided below; for another language, translate once and keep that vocabulary throughout revisions. Keep identifiers and project terminology unchanged.
 - Use this format for full plan deliveries and revisions. A narrow follow-up question or interim progress update can be answered directly; it does not require regenerating the plan.
 - An explicit user template or mandatory project format takes precedence. Map this contract's information into that format and state the mapping once; do not create a competing plan or silently change formats on later turns.
@@ -46,7 +50,9 @@ Replace placeholders with evidence or explicitly bounded proposals. Do not outpu
 
 - Goal: <observable outcome and why it matters>
 - Scope: <included work; explicit exclusions and constraints>
-- Recommendation: <next slice ID, why it comes first, and planning-only or authorized implementation scope>
+- Completion criteria: <what must be true for the goal to count as done>
+- Authorization: <planning only, or implementation authorized; whether the goal and near-term batch still need confirmation>
+- Recommendation: <next slice ID, why it comes first, and the near-term batch>
 
 ## 2. Current state and evidence
 
@@ -56,19 +62,24 @@ Replace placeholders with evidence or explicitly bounded proposals. Do not outpu
 
 ## 3. Implementation sequence
 
-| ID | Outcome | Dependencies | Why this order | Acceptance evidence | Status |
-| --- | --- | --- | --- | --- | --- |
-| S1 | <observable result> | <slice IDs or none> | <value, dependency, or risk> | <check and expected observation> | Planned |
+- Total: <known slice count plus a provisional estimate for the remainder, or unknown and why; state that this is revisable>
+- Near-term batch: <3–5 slice IDs, or fewer for a small goal; later slices stay coarse>
+
+| ID | Outcome | Dependencies | Why this order | Acceptance evidence | Batch | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| S1 | <observable result> | <slice IDs or none> | <value, dependency, or risk> | <check and expected observation> | Near-term | Planned |
 
 ## 4. Next slice
 
 - Slice: <one ID from section 3>
 - Behavior and limits: <expected behavior and what this slice excludes>
 - Prerequisites: <settled inputs and any blocking decision; or none>
+- Unknowns or blockers: <missing evidence or unresolved choice that could stop this slice; or none>
 - Affected areas: <verified paths, interfaces, data, or explicitly proposed locations>
 - Actions: <short ordered steps sufficient to start; defer unrelated design details>
 - Verification: <check or command, working directory when relevant, and expected observation; mark unverified commands as proposed>
 - Stop or replan when: <specific evidence that changes the approach or prevents completion; or no additional condition>
+- Handoff prompt: <self-contained copyable text; use a fenced text block and include goal, scope and non-goals, prerequisites, ordered steps, verified or proposed locations, verification and expected observation, unknowns or blockers, stop conditions, and what to report back; do not paste the whole roadmap>
 
 ## 5. Risks and open decisions
 
@@ -88,10 +99,10 @@ For Chinese plans use `# 实施计划：<项目或目标>` and these exact headi
 
 | English heading | Chinese heading | Chinese field labels, in order |
 | --- | --- | --- |
-| 1. Goal and recommendation | 1. 目标与建议 | 目标、范围、建议 |
+| 1. Goal and recommendation | 1. 目标与建议 | 目标、范围、完成标准、授权、建议 |
 | 2. Current state and evidence | 2. 现状与依据 | 已确认、假设、未知项 |
-| 3. Implementation sequence | 3. 实施顺序 | 表头：编号、可见结果、依赖、排序理由、验收证据、状态 |
-| 4. Next slice | 4. 下一切片 | 切片、行为与边界、前置条件、影响范围、执行步骤、验证方式、停止或重排条件 |
+| 3. Implementation sequence | 3. 实施顺序 | 总数、近期批次；表头：编号、可见结果、依赖、排序理由、验收证据、批次、状态 |
+| 4. Next slice | 4. 下一切片 | 切片、行为与边界、前置条件、未知项或阻塞、影响范围、执行步骤、验证方式、停止或重排条件、交接文本 |
 | 5. Risks and open decisions | 5. 风险与待决事项 | 每项写明风险或决策、确认状态、影响切片及应对方式；无则注明 |
 | 6. Delivery record | 6. 交付记录 | 已检查、本次产物、变更与原因、下一步行动 |
 
@@ -99,13 +110,14 @@ For Chinese plans use `# 实施计划：<项目或目标>` and these exact headi
 
 - Assign stable IDs (`S1`, `S2`, …). Row order expresses priority; IDs do not. Preserve IDs when reordering, add a new ID for new work, and retain cancelled rows with a reason when revising an existing plan. Dependencies must name existing IDs, be acyclic, and be satisfied before a dependent slice starts. Mark work as parallel only when shared contracts and resources permit it.
 - Use only these status labels: `Planned / 待实施`, `In progress / 进行中`, `Blocked / 受阻`, `Done / 已完成`, `Deferred / 暂缓`, `Cancelled / 已取消`. A proposal starts as Planned or Blocked; use Done only with observed completion evidence. A plan or test command written down is not execution evidence.
-- Section 3 contains an overview of every currently justified slice. Section 4 expands exactly the next actionable slice without repeating the whole roadmap. If all remaining work is blocked, name the nearest blocked slice and its smallest unblock action; keep independent work actionable. If the plan is complete, retain section 4 with `Slice: None — plan complete` (`切片：无，计划已完成`) and omit its other fields. This is the only completed-plan exception; do not invent another slice.
-- On revision, update dependent rows, the next slice, risks, and the delivery record together. Preserve the document location, heading language, and labels. Record the change and its reason; use Git or the existing issue history for older revisions instead of appending duplicate plans.
+- Section 3 contains the total, the near-term batch, and an overview of every currently justified slice. Mark the batch with `Near-term / 近期` or `Later / 后续`; a single-slice plan marks that slice `Near-term`. Do not hide a justified slice to keep the batch small, reduce detail instead. Section 4 expands exactly the next actionable slice and includes a self-contained handoff prompt without repeating the whole roadmap. If all remaining work is blocked, name the nearest blocked slice and its smallest unblock action; keep independent work actionable. If the plan is complete, retain section 4 with `Slice: None — plan complete` (`切片：无，计划已完成`) and omit its other fields. This is the only completed-plan exception; do not invent another slice.
+- The plan remains authoritative for goal, scope, and slice order. The handoff prompt restates only what the executor needs for the current slice and must be self-contained enough to execute without reading the conversation. If it conflicts with the plan, fix the plan or the prompt before handoff; the executor reports a conflict instead of guessing.
+- On revision, update dependent rows, the next slice, risks, and the delivery record together. After a slice is completed and verified, also update its status and re-check the near-term batch and remaining estimate. Preserve the document location, heading language, and labels. Record the change and its reason; use Git or the existing issue history for older revisions instead of appending duplicate plans.
 - Put additional material inside the relevant section: diagrams under sequence, interface details under the next slice, decision links under risks. Add no competing summary, roadmap, or top-level appendix by default. Fixed structure does not impose a stack-first sequence, a minimum number of stages, or mandatory project documents.
 
 ## Delivery check
 
-Before sending, compare the output to the template: all six headings in order; all fields and table columns present (except the completed-plan exception above); no unfilled placeholders; evidence distinguished from assumptions; stable IDs and valid dependencies; a startable next slice or explicit blocker; acceptance observations and honest status; accurate artifact and check claims. For a saved plan, check the file and then use the three-field receipt. Resolve format drift before delivery.
+Before sending, compare the output to the template: all six headings in order; all fields and table columns present (except the completed-plan exception above); no unfilled placeholders; evidence distinguished from assumptions; stable IDs and valid dependencies; known count and provisional remainder stated without invented precision; near-term batch marked and later slices still visible; one startable next slice or explicit blocker; acceptance observations and honest status; a self-contained handoff prompt that does not contradict the plan; accurate artifact and check claims. For a saved plan, check the file and then use the three-field receipt. Resolve format drift before delivery.
 
 Then read it as the intended reader: can they tell what happens next, why it comes first, and how to recognize completion without decoding jargon? Revise abstract claims and overloaded sentences using the writing rules above. Compare the revision with the evidence and draft to ensure no constraint, dependency, qualification, identifier, or acceptance condition was lost or invented. Do not print this editorial checklist in the delivered plan.
 

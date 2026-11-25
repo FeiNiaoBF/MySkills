@@ -11,8 +11,10 @@
 # - Exclusions: colloquial-but-actionable, existing-term-explanation,
 #   actionable-skill-creation, visual-direction-without-wording-request
 # - Uncertainty: essential-gap, preserve-uncertain-detail
+# - Vocabulary: vague-behavior-needs-a-name, explicit-term-list-with-verified-sources,
+#   expert-term-for-non-expert-audience
 # - Language and precedence: explicit-visual-wording-in-english
-version: "2.3.0"
+version: "2.4.0"
 cases:
   - id: explicit-idea-and-rephrase
     input:
@@ -183,6 +185,33 @@ cases:
     review:
       expect: "Explains the desired experience and writes a clear request in a standalone txt code block that leaves the device unspecified. Waits for the user's review."
       avoid: "Choosing an operating system, inventing a technical feature, or delaying the draft with unnecessary questions."
+
+  - id: vague-behavior-needs-a-name
+    input:
+      messages:
+        - role: user
+          content: "请用 wording-helper。我的 bot 有时把同一件事做两遍，有时又直接跳过，帮我写给开发者，但我不知道这叫什么。"
+    review:
+      expect: "The first substantive content is a standalone txt code block with a clear first-person request that uses the precise term (for example idempotency or exactly-once processing) and keeps the observed behavior. A short note after the block names the term and what it covers, without inventing a source or link. Waits for review."
+      avoid: "Only paraphrasing the behavior without naming it, dumping a glossary, citing an unopened project or paper, or turning the reply into a terminology lecture."
+
+  - id: explicit-term-list-with-verified-sources
+    input:
+      messages:
+        - role: user
+          content: "请用 wording-helper，给我 8 到 12 个专家会用来称呼“同一个任务被重复执行或漏执行”这种问题的词，每个都配一个真实项目或论文的链接，先不要改写。"
+    review:
+      expect: "Treats the request as analysis: no txt block. Gives a ranked list of 8 to 12 terms (fewer if fewer fit), each with a one-sentence meaning, the part of the description it names, what it lets the user ask for, and a real project, paper, or system; includes a link only after opening and confirming it, and cuts unconfirmed citations rather than guessing."
+      avoid: "Writing a draft block instead, padding the list with weak or duplicate terms, inventing links, or skipping link verification."
+
+  - id: expert-term-for-non-expert-audience
+    input:
+      messages:
+        - role: user
+          content: "请用 wording-helper 给客户写一段说明：同一个请求重发两次不能重复扣款，别用太技术的词。"
+    review:
+      expect: "Drafts client-facing copy in a standalone txt code block in plain language that keeps the no-double-charge requirement; the technical term may appear once with a plain gloss or only in the note after the block, not as unexplained jargon. Waits for review."
+      avoid: "Putting idempotency or similar jargon in the client copy without a plain gloss, or dropping the requirement to sound simpler."
 
   - id: user-corrects-premature-action
     input:

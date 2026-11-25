@@ -4,90 +4,76 @@ description: 用户给出模糊视觉偏好、参考或设计反馈，需要具�
 license: MIT
 metadata:
   author: Yeelight
-  version: "0.5.1"
+  version: "0.7.0"
   date_added: "2026-09-05"
 ---
 
 # Style Translator
 
-Translate the design a user has in mind into a concrete direction, a visible proposal, and usable specifications. Users need neither professional vocabulary nor a reference image. Reply in the user's language unless they request another language for the deliverable.
+把用户脑海中的设计意图翻译成明确的视觉方向、可视化的审查方案，以及可落地的平台规格。用户不需要懂专业设计黑话，也不需要提前准备参考图；除交付物要求其他语言外，用用户当前交流语言回复。
 
-## Scope and delivery
+## 触发与交付边界
 
-Focus on intended feeling, visual language, emphasis, typography, color, density, detail, and motion. Use layout and interaction choices where they support that direction; keep the design usable as well as visually coherent.
+- **核心关注**：聚焦氛围感受、视觉语言、视觉主次、字体排版、色彩、信息密度、细节处理与动效；仅在服务视觉方向时涉及布局与交互，同时保证可用性与视觉一致。
+- **项目设计的两项对应产物**：
+  1. **对话说明**：讲清推荐的设计方向，以及关键取舍为何契合用户意图；明确区分“用户硬性要求 / 已确认决定 / Agent 提案”，并汇总本轮修改与待定项。
+  2. **HTML 审查预览页**：展示拟议界面，支持点选区域查看设计理由与对应规格。基于内置 [HTML 模板](assets/design-preview.html) 按 [HTML 交付规范](references/html-preview.md) 生成，并与对话说明保持同步更新。
+- **保存与形式控制**：优先复用用户指定的输出目录与已有预览文件；若尚未确定保存路径，先询问存放位置，同时在对话中继续推进分析。用户要求“只讨论 / 只要纯文本 / 不生成文件 / 稍后再出预览 / 改用其他格式”时优先遵从；孤立的局部样式微调若现有预览或代码已够用，不另建新 HTML 文件；渲染环境不可用时如实说明。
+- **模板维护分支**：若任务是维护可复用模板本身，按参考文件中的“仅模板分支”执行，保留空项目插槽；若是具体项目设计，则在插槽中填入实际方案。
+- **授权红线**：审查预览既不改变项目的生产技术栈，也不证明应用运行行为；设计方向获批不代表自动授权生产代码开发、后端改动或部署上线（若同一任务已获实现授权，则按项目现有技术栈与检查继续推进，不重复索要同一授权）。保留既定项目决定与任务范围。
 
-For project design, provide two corresponding deliverables:
+## 工作原则
 
-- **Conversation:** explain the direction and why its important choices fit the user's intent. Distinguish requirements, confirmed decisions, and proposals; summarize revisions and remaining choices.
-- **HTML review preview:** show the proposed UI with selectable elements, design reasons, and relevant specifications. Start from the bundled [HTML template](assets/design-preview.html) using the [HTML delivery reference](references/html-preview.md); update the preview and explanation together.
+- **从意图出发，不堆砌图库**：先定预期外观、层级与行为；参考图用来拆解具体视觉特征，不用来压过用户明确偏好或拿一堆漂亮网站凑数。
+- **给有意义的取舍，不甩裸参数**：为每个方向命名，点出可辨认的视觉特征或参考来源，并说明它在实际使用中的后果。
+- **沿用已定选择**：用户已选定的方向直接复用；只有不同解读会实质改变结果时才问**一个**聚焦问题，不要逐个维度或逐个 Token 逼用户审批。
+- **无默认审美**：没有任何风格是默认选项，完全由对象、受众、内容与目标平台决定。
 
-Reuse the user-designated output folder and existing preview. If no destination is established, ask before saving and continue useful discussion meanwhile. Honor requests for discussion only, text only, no files, a later preview, or another format. Do not generate a new HTML artifact for an isolated styling fix when the existing preview or implementation already suffices. Disclose unavailable rendering.
+## 执行步骤
 
-Match the workflow to the requested outcome. For reusable-template maintenance, follow the reference's template-only branch and retain an empty project slot. For project design, fill that slot with the actual proposal.
+1. **读取上下文**：从对话与现有设计文档提取用户的氛围词、参考素材、受众、产品对象与限制；先确认目标技术栈再写平台具体数值。检查用户提供的视觉材料时，区分“实际观察到的特征”与“仅凭产品名猜测的印象”；参考材料无法查看时直说，不凭空编造细节。
+2. **识别关键维度**：仅在有帮助时查阅 [九维视觉词表](references/dimensions.md)。若关键歧义需要备选来定夺，给出 2～3 个自洽方向（每个含名称、具体视觉描述与一条实际后果）；否则直接推荐一个合理方向并做出预览。不要在给方案前逼用户先选风格名词或过一遍全部九个维度。
+3. **写出一句话设计定调（Design Read）**：用固定句式概括核心方向——
+   > 面向 `<受众>`，这个 `<产品对象>` 采用 `<视觉语言>`，以 `<色彩/材质处理>` 搭配 `<信息密度/动效/布局特征>`。
+   同时标明哪些是明确要求、已确认决定或待定提案；预览可用于验证未定选项，但渲染出来不等于用户已批准。若用户明确委托 Agent 拍板，则在授权范围内直接推荐并推进。
+4. **构建审查预览**：按 [HTML 交付规范](references/html-preview.md) 复制或更新模板，填入设计与四段式简报，把有意义的区块和元素关联到对应设计说明。使用贴近真实业务的示例内容，范围与请求相称；光写一段话或贴几张参考截图不算展示了设计方案。
+5. **根据反馈校准**：允许用户用日常名称或点选区块提意见；把“主标题再突出点”这类反馈精准转化为对应元素的字号、字重、对比度或间距调整。保留未受影响的已定决策与稳定元素名，同步更新预览与规格，简述改动并继续已授权修改，不重启发现或审批门禁。
+6. **验证与交付**：执行参考文件中的完成检查，交付打开链接或启动方式、相关设计说明及实际验证限制。方向确认且文档在任务范围内时，同步更新项目现有设计文档（无现成惯例时可建议 `DESIGN.md`，不另建冲突文档，也不把未确认提案记成定论）；已获开发授权时直接继续实现。
 
-A review preview does not change the production stack or prove application behavior. Design approval alone does not expand a design-only request into production implementation, backend work, or deployment. Continue implementation when already authorized, using the project's stack and checks. Preserve established project decisions and task scope.
+### 四段式简报（Brief）
 
-## Working principles
+按改动规模控制篇幅，说明关键参数如何体现预期感受；优先复用项目现有 Token，临时数值标为待定，并直接嵌在预览中展示，不另发一份互相打架的规格书：
 
-- Start with the user's intended appearance, hierarchy, and behavior. Use inspected references to clarify concrete traits, not to override explicit preferences or replace understanding with a gallery of attractive sites.
-- Give meaningful choices, not unexplained parameters. Name the direction, identify a reference or recognizable visual treatment, and explain its practical consequence.
-- Reuse a direction the user has already chosen. Ask at most one focused question when competing interpretations materially change the result; do not ask the user to approve every dimension or token.
-- No aesthetic is the default. The object, audience, content, and platform determine which directions fit.
+| 区块 | 必填内容 |
+| --- | --- |
+| Context（背景） | 受众、对象、用途、目标设备/终端、现有约束 |
+| Direction（方向） | 一句话设计定调，以及关键维度在目标平台上的具体选型 |
+| References（参考） | 用户提供或已检查的参考及采纳特征；纯演示或未核实对比需标明 |
+| Avoid（规避） | 针对本方向易踩的错配清单及原因 |
 
-## Workflow
+将 `Direction` 映射到实际目标平台：
 
-1. **Read the context.** Collect the user's mood words, references, audience, object, and constraints from the conversation and existing design documents. Identify the target stack before producing implementation-specific values. Inspect supplied visual material when available; distinguish observed traits from an unverified interpretation of a product name. If a reference cannot be inspected, say so rather than inventing its details.
-2. **Identify the relevant dimensions.** Consult the [nine-dimension vocabulary](references/dimensions.md) only where useful. When alternatives would help resolve a material ambiguity, offer two or three coherent directions, each with a name, a concrete visual description, and one consequence. Otherwise recommend a plausible direction and make it visible. Do not require the user to choose style names or work through all nine dimensions before seeing a proposal.
-3. **State the Design Read.** Use one sentence: “For <audience>, this <object> uses <visual language>, with <palette/material treatment> and <density/motion/layout character>.” Distinguish explicit requirements, confirmed decisions, and proposed choices. A preview can test an unsettled choice; rendering it does not make it approved. If the user delegates the choice, recommend and proceed within that authorization.
-4. **Build the review preview.** Follow the [HTML delivery reference](references/html-preview.md) to copy or update the template, fill the design and brief, and associate meaningful regions and elements with their explanations. Use realistic task content and keep the represented scope proportional to the request. A page of prose or reference screenshots alone does not show the proposed design.
-5. **Calibrate from feedback.** Let users refer to familiar element names or selected regions. Translate comments such as “主标题更突出” into changes to the selected element's size, weight, contrast, or spacing as appropriate. Preserve unaffected decisions and stable element names. Update the preview and its specifications together, explain the relevant change briefly, and continue authorized revisions without repeating discovery or approval gates.
-6. **Verify and hand off.** Apply the reference's completion checks and deliver the opening link or launch instructions, the relevant design explanation, and actual verification limits. Once the direction is confirmed, update the project's existing design document when documentation is in scope. If no convention exists, suggest `DESIGN.md`; do not create a competing document or record unconfirmed proposals as decisions. Continue already authorized implementation without asking for the same approval again.
+- **Web**：CSS 自定义属性或现有 Token（颜色、字体、间距、圆角、阴影层级、动效），包含必要的响应式与交互状态。
+- **Flutter / Material 3**：现有 `ThemeData`、`ColorScheme`、`TextTheme`、形状、组件主题与状态；使用逻辑像素与项目约束，不写 CSS 声明。
+- **TUI（终端界面）**：语义色彩角色、支持的调色板深度、字符单元格间距、密度、焦点/选中标记与边框字符。字体渲染由用户终端决定，不承诺应用自控字体、CSS 阴影或像素圆角；提供非颜色状态提示与不支持字形的降级字符。
 
-### Four-part brief
+保证文字易读、焦点与状态区分清晰，并尊重系统的“减少动效”偏好；不要把“视觉安静”等同于“低对比度文字”，也不要在未实测前宣称满足无障碍合规。
 
-Scale the brief to the requested change. Explain how important parameters express the intended feeling; reuse existing tokens where they fit and mark provisional choices. Keep it accessible within the preview rather than presenting a second competing specification.
+## 受阻与边界处理
 
-| Section | Required content |
-|---|---|
-| Context | Audience, object, purpose, target devices or terminals, existing constraints |
-| Direction | Design Read and concrete platform-specific choices for the dimensions that matter |
-| References | Supplied or inspected references and the traits being adopted; label illustrative or unverified comparisons |
-| Avoid | A short list of mismatches specific to this direction, with reasons |
+- **连续被拒两次时换底层逻辑**：若同一方向连续两次被否定，停止在原方向上微调换皮；先找出被拒的具体特征，切换底层维度再给方案。对看具体对比比听风格名词更敏感的用户，直接用设计系统控制项（色彩角色/种子色、形状圆角、字体层级、密度、动效）做具体对照。
+- **复用研究，不为局部调整做市场调研**：优先复用现有研究与项目预览；只有未决选择或版本敏感事实才调查同类产品与官方平台指导，不为局部调整启动调研。为每个候选说明证据；研究或渲染不可用时，给出清楚标注的文字对比并说明限制。
+- **原生预览与近似标注**：有原生 Flutter 预览、模拟器或终端截图时优先复用并在 HTML 审查面标注可点选区域；用独立 HTML 模型探索非 Web 界面外观时，必须标明“非 Web 目标的视觉近似”，它不验证原生布局、交互、终端能力或性能，规格仍保持目标平台原生写法。不为了生成预览而迁移项目。
+- **已有设计系统与默认规避**：接入 Material 3、Fluent、Carbon 等成熟系统时，映射到其原生 Token 与组件，不靠外部样式硬仿；若原则冲突，提炼一条具体产品级规则（如“品牌识别仅由强调色承担，背景容器保持无装饰”）并在确认后沉淀。通用避坑清单见 [默认避免的通用样式](references/avoid-generic.md)，内部校准见 [内部校准三轴](references/calibration.md)。
 
-Map Direction to the actual platform:
+## 参考导航与完成标准
 
-- **Web:** CSS custom properties or existing tokens for colors, type, spacing, shape, elevation, and motion; include applicable responsive behavior and interaction states.
-- **Flutter/Material 3:** existing `ThemeData`, `ColorScheme`, `TextTheme`, shape, component themes, and states; use logical pixels and the project's constraints rather than CSS declarations.
-- **TUI:** semantic color roles, supported palette depth, character-cell spacing, density, focus/selection markers, and border characters. Font rendering belongs to the user's terminal; do not promise app-controlled font families, CSS shadows, or pixel radii. Provide non-color state cues and a fallback for unsupported glyphs.
+按需读取对应分支参考，不要求每次通读全部文件：
 
-Keep text readable, preserve visible focus and state distinctions, and respect reduced-motion preferences. Do not equate visual quietness with low text contrast or claim accessibility compliance without checking the actual result.
+- [HTML 交付规范](references/html-preview.md)：创建、维护或修订 HTML 预览时必读（模板填充、元素注册、检查交互、存储与完成校验）。
+- [九维视觉词表](references/dimensions.md)：某个视觉维度未决时查阅候选术语与具体参数。
+- [水墨纸感色板](references/east-asian.md)：仅当用户参考或选定风格支持时可选，绝不作为默认兜底。
 
-## Internal calibration
+**无关任务分流**：纯措辞整理不走视觉设计流程；整理视觉偏好也不需要先把全站功能清单或后端架构敲定，只解决当前设计所需上下文即可。其他 Skill 可由用户选择配合，没有必需顺序或交接。
 
-见 [内部校准三轴](references/calibration.md)。
-
-## When labels are not helping
-
-If a direction is rejected twice, stop proposing cosmetic variants of it. Identify which traits were rejected and change the underlying approach. Users who judge examples more easily than style names should receive concrete comparisons using the design system's own controls: color roles or seed, shape, typography, density, and motion.
-
-Reuse existing research and project previews. Investigate comparable products and official platform guidance only for unresolved decisions or version-sensitive facts; do not launch market research for a local adjustment. State which evidence supports each candidate. If research or rendering is unavailable, offer clearly labeled textual comparisons and disclose the limitation.
-
-Reuse native Flutter previews, emulators, screenshots, or terminal captures when available, with selectable annotated regions in the HTML review surface. A standalone HTML mockup is also appropriate for exploring appearance; label it as an approximation for non-Web targets. It does not verify native layout, interaction, terminal capabilities, or performance. Keep implementation specifications native to the target platform and do not migrate the project just to produce a preview.
-
-With Material 3, Fluent, Carbon, or another established system, map the direction to its native tokens and components rather than imitating it with unrelated styling. If principles conflict, write a concrete product-level rule, such as “brand identity comes from the accent color; surfaces remain undecorated,” and use it consistently. Persist it only once agreed.
-
-## Avoid generic styling by default
-
-见 [默认避免的通用样式](references/avoid-generic.md)。
-
-## Reference navigation and boundaries
-
-Read local references only for the relevant branch:
-
-- [HTML delivery reference](references/html-preview.md): read when creating, maintaining, or revising the visual deliverable. Covers the bundled template, filling and element registration, inspection behavior, storage, and completion checks.
-- [Nine-dimension vocabulary](references/dimensions.md): candidate terminology and concrete parameters for an unresolved visual dimension.
-- [East Asian ink-and-paper palette](references/east-asian.md): an optional direction when the user's references or chosen style support it; never an automatic fallback.
-
-Wording-only requests need no visual-design workflow. Product feature selection, a complete page inventory, and production architecture are not prerequisites for translating a visual preference; resolve only the context needed for the requested design. For a precise local styling change, use the existing implementation or preview and preserve settled decisions. Other skills may complement this work when the user chooses them, without a required order or handoff.
-
-The deliverable is ready for review when users can see the proposed design, identify modules and specific elements, and describe a requested change by name. It must also give usable specifications for the target platform, preserve project constraints, and separate confirmed decisions from proposals. Report missing reference access, rendering, or validation; neither a working preview nor a complete brief establishes user approval or production readiness.
+**完成标准**：用户能直观看到拟议设计、认出模块与具体元素并能点名提修改意见；同时产出适配目标平台的可用规格、守住项目约束，并把“已确认决定”与“待定提案”分开。缺失参考访问、渲染或验证时如实报告；预览跑通或简报写完不等于用户已批准或可进生产。

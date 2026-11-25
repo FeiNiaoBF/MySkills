@@ -40,7 +40,7 @@
 
 | Skill | 使用场景 |
 | --- | --- |
-| [wording-helper](skills/communication/wording-helper/SKILL.md) | 把没说清的想法变成可直接使用的措辞 |
+| [wording-helper](skills/communication/wording-helper/SKILL.md) | 把没说清的想法变成可直接使用的措辞，缺词时先补词 |
 | [make-sense](skills/communication/make-sense/SKILL.md) | 解释卡住的术语、段落或推理 |
 | [visual-explainer](skills/communication/visual-explainer/SKILL.md) | 用户点名时生成单文件 HTML 解释页 |
 

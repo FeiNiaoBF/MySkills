@@ -4,93 +4,93 @@ description: 用户在设计新界面或大改版，需要选内容、组织模�
 license: MIT
 metadata:
   author: Yeelight
-  version: "0.9.0"
+  version: "0.10.0"
 ---
 
 # UI Planner
 
-Help users unfamiliar with frontend development decide what their interface needs, shape its design, and implement it when requested. The user owns goals and consequential choices; the agent organizes and implements the work. Communicate in the user's language using everyday names for interface parts.
+帮不熟悉前端的用户决定界面需要什么、塑造设计，并在被请求时实现。用户拥有目标和重大选择，Agent 负责组织和实施。用用户语言交流，界面部件用日常名称。
 
-## Scope and delivery
+## 范围与交付
 
-Focus on content, module responsibilities, layout relationships, interaction flows, states, and implementation. Reuse established visual direction and design-system decisions; a separate visual-style exploration is not a prerequisite.
+聚焦内容、模块职责、布局关系、交互流程、状态和实现。复用既定视觉方向和设计系统决定；单独做视觉风格探索不是前置条件。
 
-Match the workflow to the requested outcome. Discussion-only work stays in conversation; a reusable-template task follows the HTML reference without inventing product requirements; a project design uses steps 1–2 and 4; production implementation also uses step 3. Reuse completed steps when refining existing work. Design approval alone does not expand a design-only request into implementation; continue implementation when it is already authorized.
+工作流匹配请求结果：只讨论留在对话；可复用模板任务按 HTML 参考执行，不虚构产品需求；项目设计用步骤 1–2 和 4；生产实现再加步骤 3。改进现有工作时复用已完成的步骤。
 
-For a project design, provide three corresponding deliverables as the page takes shape:
+项目设计随页面成形提供三份交付物：
 
-- **Conversation:** explain the page's contents and their purposes, distinguish confirmed decisions from proposals, and summarize changes and remaining choices.
-- **HTML design draft:** save the project's UI and corresponding page explanations in the user-designated folder and keep them aligned with the discussion. Give each meaningful region a visible layout tag from the [layout pattern vocabulary](references/layout-patterns.md); the layout overview, region explanation, and implementation handoff repeat the same name. Read [HTML preview requirements](references/html-preview.md) when preparing or updating the draft; it defines the delivery structure and how to use the bundled [HTML template](assets/design-draft.html).
-- **Implementation handoff:** include a complete, copyable Agent implementation prompt inside the HTML draft. Derive it from the same evidence as the displayed design and keep confirmed decisions, recommendations, and open questions distinct. It tells an implementation Agent what to build without making the HTML preview the production stack.
+- **对话**：解释页面内容及用途，区分已确认决定与提案，概括改动和剩余选择。
+- **HTML 设计稿**：把项目 UI 和对应页面说明存到用户指定目录，并与讨论保持一致。每个有意义区域给出 [布局模式词汇](references/layout-patterns.md) 中可见的布局标签；布局总览、区域说明和实现交接重复同一名称。准备或更新设计稿时读 [HTML 预览要求](references/html-preview.md)；它规定交付结构和如何使用随附 [HTML 模板](assets/design-draft.html)。
+- **实现交接**：在 HTML 设计稿内放入完整、可复制的 Agent 实现提示词。它和展示的设计来自同一证据，区分已确认决定、建议和未决问题；告诉实现 Agent 要建什么，但不把 HTML 预览当生产技术栈。
 
-The HTML draft and implementation handoff together are the core file delivery for a project-design task. A text-only request may receive the same handoff in conversation instead. A request for discussion only, a local adjustment without a new draft, no files, or a later preview takes precedence; do not force a new HTML file merely because this Skill exists.
+HTML 设计稿与实现交接共同构成项目设计的核心文件交付。纯文字请求可在对话中给同样的交接。只讨论、不做新稿的局部调整、不建文件或稍后预览优先；不因为本 Skill 存在就强造 HTML。
 
-Reuse an already designated output folder. If none is established, ask for the destination before saving; continue useful discussion meanwhile.
+复用已指定的输出目录；没有时先问保存位置，同时继续有效讨论。
 
-An HTML draft is a design-and-handoff surface, not a change of production stack. For non-Web targets it is an approximation, not proof of native behavior, and its implementation prompt must name the actual target platform and stack. By default, finish the agreed design and implementation handoff without modifying the application. Only change production code when the user has authorized implementation; when that authorization already exists, do not ask for it again.
+HTML 设计稿是设计与交接界面，不改变生产技术栈。非 Web 目标下它是近似，不是原生行为证明，其实现提示词必须写明实际目标平台和技术栈。默认完成约定设计与实现交接，不修改应用；只有用户授权实现时才改生产代码；已有该授权时不再询问。
 
-## Working rules
+## 工作规则
 
-- Preserve the existing framework, components, toolchain, and design tokens. If no target stack is established, keep it as an open question in the handoff instead of choosing one silently; the HTML draft does not settle it.
-- **Name the arrangement, not the look:** use the [layout pattern vocabulary](references/layout-patterns.md) in step 2. The name describes how a region is arranged; visual style stays with the existing direction. When the user names one region, change only that region.
-- Keep handoff status explicit: confirmed decisions are requirements, Agent recommendations remain recommendations, and unresolved questions stay open. Do not place an unconfirmed proposal in the acceptance criteria or phrase it as mandatory.
-- Use platform-native concepts: semantic HTML and CSS tokens on Web; widget constraints, `ThemeData`, and `ColorScheme` in Flutter. Reuse existing research; consult official documentation when component behavior or version-sensitive facts remain uncertain.
-- **Ordinary delivery:** carry authorized work through implementation and checks without module-by-module approval. Pause only for consequential unresolved choices or scope changes.
-- **Guided delivery:** only when explicitly requested, use the module-map and module-preview checkpoints below. Explain one or two relevant concepts when useful; do not attach a lesson to every ordinary delivery.
-- Fix the smallest coherent scope that resolves feedback or a defect. A shared component or layout constraint may need adjustment; preserve unrelated confirmed work and check affected uses.
+- 保留现有框架、组件、工具链和设计令牌。目标技术栈未确定时，把它留作交接中的未决问题，不悄悄选择；HTML 设计稿不能定它。
+- **命名排布，不命名外观**：步骤 2 使用 [布局模式词汇](references/layout-patterns.md)。名称描述区域如何排布，视觉风格仍归既定方向。
+- 交接状态明确：已确认决定是要求，Agent 建议仍是建议，未决问题保持开放。未确认提案不得进入验收标准，也不得写成强制项。
+- 用平台原生概念：Web 用语义 HTML 和 CSS 令牌；Flutter 用 widget 约束、`ThemeData` 和 `ColorScheme`。复用现有研究；组件行为或版本敏感事实不确定时查官方文档。
+- **常规交付**：在授权范围内把工作推进到实现和检查，不逐模块批准。只在重大未决选择或范围变化时暂停。
+- **引导式交付**：仅在明确要求时使用下方模块图与模块预览检查点。有用时解释一两个相关概念；不要给每次常规交付都附加课程。
+- 修复能解决反馈或缺陷的最小连贯范围。共享组件或布局约束可能需要调整；保留无关的已确认工作，并检查受影响的用法。
 
-## Workflow
+## 工作流程
 
-### 1. Help the user choose content when needed
+### 1. 需要时帮用户选内容
 
-Read the request and existing project/design material first. Reuse known audience, purpose, platform, page scope, required content, and constraints.
+先读请求和现有项目/设计材料，复用已知读者、目的、平台、页面范围、必需内容和约束。
 
-If the user supplies only a product type or cannot name the UI they need, do not jump to layout, visual styling, or HTML generation:
+用户只给产品类型或说不清要什么界面时，不要跳到布局、视觉或 HTML：
 
-1. Explain a small set of likely basic areas in everyday language, including the problem each solves. Relate necessity to the user's use case; a common feature is not automatically required.
-2. Offer relevant optional areas and the situations where they help. State assumptions, and ask a focused question if missing context materially changes the options.
-3. Let the user select, remove, or add content. Resolve the content scope before designing it. If the user explicitly delegates these choices, state the chosen scope and assumptions and proceed.
+1. 用日常语言说明一小组可能的基础区域，以及各自解决的问题。按用户用例说明必要性；常见功能不等于必需。
+2. 给出相关可选区域及适用场景。写明假设；缺失上下文会实质改变选项时问一个聚焦问题。
+3. 让用户选择、删除或增加内容。先定内容范围再设计。用户明确委托这些选择时，说明选定范围和假设后推进。
 
 内容分层示例见 [content-examples.md](references/content-examples.md)。
 
-If the requested content and functions are already clear, skip this selection step. Do not restart discovery for a local change or turn a missing page parameter into a product requirements interview.
+内容与功能已清楚时跳过本步。不为局部改动重启发现，也不把缺失的页面参数变成需求访谈。
 
-**Ready to continue:** the content scope is selected or explicitly delegated, and consequential unknowns are resolved. Reversible details can use stated defaults.
+**可以继续**：内容范围已选定或明确委托，重大未知已解决。可逆细节可用写明的默认值。
 
-### 2. Organize the page and prepare its design draft
+### 2. 组织页面并准备设计稿
 
-Map the selected content into the actual interface structure: page regions, navigation, main content, side panels, overlays, and relevant states. A vertically stacked landing page is one possible structure, not the universal model. A feature does not necessarily require its own visible region, page, or code component.
+把选定内容映射到实际界面结构：页面区域、导航、主内容、侧栏、浮层和相关状态。纵向堆叠的落地页只是一种结构，不是通用模型。功能不一定需要自己的可见区域、页面或代码组件。
 
-Name each region's arrangement with the [layout pattern vocabulary](references/layout-patterns.md); it covers page, section, and collection levels. When the page-level shell is undecided, compare the bundled shell samples in the HTML template before naming regions. When the user has not named a pattern, offer two or three candidates with their tradeoffs; when the user names one region, change only that region. The same name goes on the region's canvas tag, the layout overview, its explanation, and the implementation handoff.
+用 [布局模式词汇](references/layout-patterns.md) 命名每个区域的排布，它覆盖页面、区块和集合层级。页面级外壳未定时，先比较 HTML 模板中的外壳样例再命名区域。用户未命名模式时，给两三个候选及取舍；用户点名一个区域时，只改该区域。同一名称用于区域画布标签、布局总览、该区域说明和实现交接。
 
-For multiple pages, state each page's responsibility and start with the user's priority. Use a compact module map when helpful: everyday name, layout pattern name, purpose, included elements, important interactions/states, layout constraints, and implementation priority. Reuse existing component boundaries where appropriate.
+多页面时说明每页职责，并从用户优先级开始。有用时给紧凑模块图：日常名称、布局模式名、目的、包含元素、重要交互/状态、布局约束、实现优先级。合适时复用现有组件边界。
 
-Give concrete, revisable layout defaults with target-platform units and behavior: width constraints, proportions, and adaptation to relevant windows or devices. Use the named pattern as the shared reference, then specify what it means here rather than restating the pattern. Do not fix every dimension before seeing the page. Apply the project's visual direction; ask about unresolved choices only when they materially affect the design.
+给出具体、可修订的布局默认值和目标平台单位与行为：宽度约束、比例、相关窗口或设备的适配。用命名模式作共同参照，再说明它在这里的含义，不重复模式本身。不要在看到页面前定死所有尺寸；应用项目视觉方向，只有未决选择会实质影响设计时才问。
 
-Create or update the HTML design draft, its matching conversational explanation, and the implementation handoff within the authorized scope, following the reference's filling instructions. Generate the prompt from the actual displayed design and project evidence. It must cover implementation scope, component responsibilities, layout and interaction, key states, target stack and platform constraints, non-goals, and acceptance criteria. Keep confirmed decisions, Agent recommendations, and open questions visibly distinct; an open question may constrain implementation but is not an accepted requirement. The template describes the delivery structure, not the product's features, layout, or production technology.
+在授权范围内创建或更新 HTML 设计稿、对应对话说明和实现交接，按参考的填充说明执行。提示词来自实际展示的设计和项目证据，覆盖实现范围、组件职责、布局与交互、关键状态、目标技术栈与平台约束、非目标和验收条件。已确认决定、Agent 建议和未决问题要明显区分；未决问题可约束实现，但不是已接受要求。模板描述交付结构，不是产品功能、布局或生产技术。
 
-**Checkpoint:** in guided delivery, obtain feedback and confirmation of the module map before implementation. In ordinary delivery, proceed from the agreed scope without introducing a new approval gate for every draft.
+**检查点**：仅引导式交付在实现前取得模块图反馈和确认。
 
-### 3. Implement and refine when authorized
+### 3. 获授权后实现与调整
 
-Implement the essential modules first, using the project's native components, tokens, and established preview workflow. The handoff prompt communicates the design but does not authorize code changes by itself. Check each meaningful change in a browser for Web, or through the project's app, emulator, or device workflow for native targets. Repair regressions introduced by the change.
+先实现关键模块，使用项目原生组件、令牌和既有预览流程。交接提示词传达设计，但本身不授权改代码。每个有意义的改动在浏览器（Web）或项目应用、模拟器、设备流程（原生）中检查；修复本次引入的回归。
 
-In guided delivery, show each completed module in page context, explain relevant choices, and wait for feedback before the next module. In ordinary delivery, continue through the agreed scope and present the complete page.
+引导式交付逐模块在页面上下文中展示、解释相关选择，等反馈后再做下一个；常规交付按约定范围完成整页。
 
-### 4. Refine, check, and deliver
+### 4. 调整、检查与交付
 
-Interpret feedback using everyday page/region names, quoted text, and surrounding context. Ask only when the intended target or change remains ambiguous. If feedback changes the content scope or structure, update the affected design and any existing module map. Keep the HTML draft and conversational explanation consistent with accepted changes; during implementation, disclose any difference between the draft and the actual application.
+用日常页面/区域名、引用文字和上下文理解反馈；目标或改动仍不明确时才问。反馈改变内容范围或结构时，更新受影响设计和现有模块图。HTML 设计稿与对话说明同已接受改动保持一致；实现期间披露设计稿与实际应用的差异。
 
-Record durable design decisions at direction changes or delivery milestones in existing project design documentation; use `DESIGN.md` if a new document is needed. Do not require a full design document for a one-off draft or log every spacing adjustment.
+在方向变化或交付里程碑，把持久设计决定记入现有项目设计文档；需要新文档时用 `DESIGN.md`。一次性草稿不要求完整设计文档，也不逐条记录每次间距调整。
 
-Check what applies to the agreed scope, fix issues introduced by this work, and repeat affected checks:
+按约定范围检查、修复本次引入的问题，并重复受影响的检查：
 
-- **Layout:** relevant viewport/device sizes, overflow, long titles, empty content, and module relationships. Inspect the rendered result; do not infer appearance solely from code.
-- **Interaction:** the agreed user flows and relevant loading, empty, error, and success states. Identify simulated data, disconnected actions, and missing persistence.
-- **Accessibility:** meaningful labels and image alternatives/semantics appropriate to the platform, keyboard navigation and visible focus where applicable, sufficient contrast, and usable touch/click targets.
-- **Consistency:** typography, spacing, and components follow project decisions. Check whether differences are intentional instead of treating every variation as a defect.
-- **HTML delivery:** apply the reference's shell, placeholder, and implementation-handoff checks. Confirm the prompt is easy to find and copy, covers the required handoff fields, matches the displayed UI and explanations, and does not turn recommendations or open questions into requirements. Distinguish demonstrated behavior in the draft from behavior checked in the actual application, and say explicitly when a non-Web interface is only represented in HTML.
+- **布局**：相关视口/设备尺寸、溢出、长标题、空内容、模块关系。检查渲染结果，不只从代码推断外观。
+- **交互**：约定的用户流程及相关加载、空、错误、成功状态。找出模拟数据、断开的行为和缺失的持久化。
+- **无障碍**：有意义的标签和适配平台的图片替代/语义，适用时键盘导航和可见焦点，足够对比度，可用的触摸/点击目标。
+- **一致性**：字体、间距和组件遵循项目决定。区分有意差异，不把每种变化都当缺陷。
+- **HTML 交付**：执行参考中的外壳、占位符和实现交接检查。确认提示词易找易复制、覆盖必需交接字段、与展示的 UI 和说明一致，且没把建议或未决问题变成要求。区分设计稿中演示的行为与实际应用中检查过的行为，并明确说明非 Web 界面只在 HTML 中表示。
 
-Deliver a clear link or path and opening/run instructions when files are part of the request, useful actions to try when interactions are present, and a concise account of what was delivered, checked, and still limited. Point out the implementation prompt and how to copy it. Report unavailable checks explicitly. Code inspection alone does not establish visual or interaction quality.
+文件属于请求时，给出清楚链接或路径及打开/运行说明；有交互时给出可尝试的操作；简要说明交付了什么、检查了什么、仍有什么限制。指出实现提示词及复制方式。明确报告无法执行的检查。只看代码不能确立视觉或交互质量。
 
-Implementation completion means the agreed scope and relevant checks are complete with gaps disclosed. User acceptance requires actual user feedback; do not invent acceptance or stop authorized ordinary delivery merely because feedback has not arrived.
+实现完成指约定范围和检查完成且缺口已披露。用户接受需要实际反馈；不虚构接受，也不因反馈未到就停止已授权的常规交付。

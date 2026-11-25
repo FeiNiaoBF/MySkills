@@ -4,7 +4,7 @@ description: 当用户需要为数学教学视频设计并实现讲解中途插�
 license: MIT
 metadata:
   author: Yeelight
-  version: "1.0.0"
+  version: "1.0.1"
 disable-model-invocation: true
 ---
 
@@ -46,7 +46,5 @@ disable-model-invocation: true
 - 场景选择与物理/视觉映射：见 [references/scene-patterns.md](references/scene-patterns.md)。
 
 ## 验证
-
-场景只有满足以下条件才可插入：在预览规格下渲染成功；承载结论的关键帧和运动序列在完整宽度下可读；数学主张通过运动或几何可见，而不是只靠标签。
 
 装配后的视频只有在原声连续性、流参数、总时长和插入点帧都验证通过后才算可交付。

@@ -1,37 +1,38 @@
 ---
 name: implementation-planner
-description: 仅在用户明确要求分阶段实施计划或点名本 skill 时使用；按依赖、不确定性与风险排出下一块可验证工作，交付固定格式计划；普通功能请求不触发。
+description: 仅在用户明确要求分阶段实施计划或点名本 skill 时使用；先定目标与近期批次，只展开下一片并给出可复制交接文本；普通功能请求不触发。
 license: MIT
 metadata:
   author: Yeelight
-  version: "0.2.1"
+  version: "0.4.0"
 disable-model-invocation: true
 ---
 
 # Implementation Planner
 
-Plan a sequence of small, verifiable software changes that serves the user's actual goal. Use software engineering judgment to improve robustness, readability, and ease of change; do not promise to eliminate future refactoring. Explain the recommendation in the user's language, preserving project terminology and code identifiers.
+把用户的真实软件目标拆成一连串小而可验证的改动切片。先确认目标和近期批次，只展开下一片，并给出可直接交给执行者的交接文本。用工程判断提升健壮性、可读性和可修改性，不承诺“以后再也不用重构”。用用户的语言解释，保留项目术语和代码标识符。
 
-## Activation and responsibility
+## 触发与职责边界
 
-Run only when the user invokes this skill or explicitly asks for staged project implementation planning. This skill owns priority decisions, their explanation, and the next development handoff. It does not automatically run for a scoped feature, a routine coding request, a documentation edit, or a technology question.
+- **严格显式触发**：仅当用户点名本 Skill，或明确要求分阶段的项目实施计划时运行。常规功能开发、普通改代码、文档编辑或技术问答不自动触发。
+- **规划不等于全量开发授权**：纯规划任务以计划和已获授权的文档结束。若同一请求已明确授权开发，给出目标与近期批次后，按第 5 步展开第一个有边界的切片，并按常规开发流程继续，不要求另用开发 Skill，也不重复索取同一许可。后续切片按用户授权范围和反馈推进，不把推测性路线图当成全量授权；对外发布和影响重大的不可逆变更按各自的审批规则处理。
+- **确认一次**：目标和近期批次只确认一次。范围变化、顺序大幅调整或出现不可逆操作时再确认；不要每展开一片就重新要许可。
 
-Planning alone ends with a plan and any authorized documentation. It does not authorize building an entire system. If the same request already authorizes development, present the relevant sequence and continue with the first bounded slice using the normal coding workflow; do not require a separate development skill or ask for the same permission again. Subsequent slices follow the user's authorized scope and feedback, rather than treating a speculative roadmap as blanket authorization. External publication and consequential irreversible changes follow their own approval rules.
+## 输出格式契约
 
-## Output contract
+交付或修订计划前，必须读取并遵循 [计划输出契约](references/output-format.md)，包括其写作规则和可读性检查。契约规定固定的六节结构、字段标签、切片 ID 与状态、总数与近期批次、修订规则、交接文本和落盘回执。第 3 节列出全部当前有依据的切片并标出近期批次；第 4 节只展开当前切片，并附一份自足、可复制的交接文本。首次套用格式或遇到边界情况时读 [完整样例](references/output-example.md)；样例的切片数量和技术栈只作演示，不是默认值。
 
-Before delivering or revising a plan, read and follow [Planning output contract](references/output-format.md), including its writing rules and readability check. It defines the fixed section order, field labels, stage IDs and statuses, revision rules, and saved-plan receipt. Keep the structure stable across tasks; vary the amount of detail and the implementation sequence. Read the [worked example](references/output-example.md) when applying the format for the first time or checking a borderline case. The example's stages and technology are illustrative, not defaults.
+## 规划步骤
 
-## Plan from evidence
+1. **定目标与授权。** 从项目说明、现有代码、文档和已确认的决定中提炼一个可验收的目标草案，写清范围、排除项和完成标准。请求已经说明目标时直接采用并继续；只有目标、完成标准或“纯规划/已授权实施”确实缺失或矛盾时才提问。
+2. **摸清依据。** 查看项目说明、当前状态与工作区、需求、代码、接口、测试和已有决定。区分已确认的行为与约束、观察、提案和未知项。新项目不要从“后端系统”这类说法推断出整套功能。只问那个缺失后会实质改变下一步的决定；与之无关的工作照常推进。尊重明确排除项和既有决定。
+3. **给出全量与近期批次。** 估算已知切片数和剩余范围；证据不足时写“未知”及原因，不编造总数。把全部当前有依据的切片列进第 3 节，标出近期批次（通常 3–5 个，小目标可更少），其余保持粗粒度。总数和批次都是暂估，每片完成后修订。
+4. **排序并设计切片。** 按具体依赖、值得先消除的不确定性、用户价值、可逆性和失败代价排序，写明下一步为何排最前、什么证据会改变顺序。不要把“技术栈 → 数据模型 → 数据库 → API”固化成通用顺序。若集成不确定性主导选择，先做能验证关键关系的最薄端到端生产切片；临时实验保持隔离并标明局限。每个切片写清职责、可观察结果、已知输入与消费方、有意义的约束和完成证据。优先清晰边界，每条规则只有一个权威定义；没有当下用例，不预造通用分层、未来功能、框架或抽象。影响不可逆或范围广的决定要在依赖它的工作前浮出水面；可逆细节等到需要时再定。
+5. **展开当前切片并交接。** 只展开下一片：行为与边界、前置条件、未知项或阻塞、影响范围（已核实或明确标为提议）、执行步骤、验证方式和停止或重排条件。随后写一份自足的交接文本，包含任务目标、范围与非目标、前置条件、执行步骤、涉及位置、验证方式与预期观察、未知项或阻塞、停止条件、完成后回报什么。计划对目标和顺序保持权威；交接文本必须与计划一致，执行者无法阅读对话时也能独立执行。交接文本不要复制整份路线图，也不构成实施授权；只在用户确认目标和批次并授权后交给执行者。保存计划时只回三字段回执，不重复全文。
+6. **完成后重排。** 切片完成并验证后，一起更新状态、依赖行、下一切片、风险和交付记录，再检查近期批次和剩余估算。只有观察到完成证据才标“已完成”；写下的计划或测试命令不算执行证据。计划可修订，但不表示每个拟议功能都已获批。
 
-1. **Inspect what exists.** Check project instructions, current state and worktree, goals, requirements, code, interfaces, tests, and existing decisions as relevant. Distinguish confirmed behavior and constraints from observations, proposals, and unknowns. For a new project, do not infer a complete feature set from a phrase such as “backend system.” Ask about the one missing decision that would materially change the next step; continue work independent of it. Respect explicit exclusions and earlier decisions.
-2. **Find the decision frontier.** Identify the smallest useful outcome and the choices that must precede it. Order work by concrete dependencies, uncertainty worth resolving, user value, reversibility, and failure cost. State why the next step comes first and what evidence could change the order. Do not hard-code “stack, data model, database, API” as a universal sequence. If integration uncertainty drives the choice, propose the thinnest end-to-end production slice that tests the critical relationship; keep temporary experiments isolated and identify their limits. For an empty repository, do not automatically make risk validation a prerequisite for all implementation. When the critical integration can be exercised through the product path, pair it with the smallest runnable skeleton. An unavailable real sample blocks only behavior that depends on it unless the uncertainty could invalidate the broader setup; continue useful, reversible work independent of it.
-3. **Keep the design changeable.** Give each proposed slice a coherent responsibility, observable outcome, known inputs and consumers, meaningful constraints, and completion evidence. Prefer clear boundaries and one authoritative definition for each rule; do not invent generic layers, future features, frameworks, or abstractions without a present use case. A slice may cross modules where needed to prove behavior. Surface irreversible or broad-impact decisions before dependent work; leave reversible detail until it matters.
-4. **Explain and record proportionately.** Present the proposed order, dependencies, reasons, assumptions, and first actionable slice using the output contract. Use an existing project plan or issue system for durable status when one is needed; otherwise add the smallest discoverable document justified by the task and agreed destination. Preserve one authoritative location per requirement or decision. Record an ADR only for a consequential choice whose alternatives, rationale, trade-offs, and consequences will matter later; an ADR can be proposed until actually confirmed. Do not turn each slice into an ADR or create empty Requirements, Architecture, and Spec files. For substantial document authoring, `project-docs` can supply writing guidance without being a prerequisite to this skill.
-5. **Hand off the next slice.** State the expected behavior and limits, prerequisites already settled, unresolved decisions that block only this slice, affected interfaces or data, and a suitable verification signal. Leave later slices at the detail the evidence supports; update their order after implementation reveals new facts. A plan is revisable, not an assertion that every proposed feature is approved.
+## 完成与验证
 
-## Completion and verification
+切片完成的条件是：约定的可观察行为与受影响契约已检查，实现保持易读，相关文档或计划状态反映结果。按风险选择验证：局部逻辑用聚焦单元测试；边界、持久化或失败路径需要时，补集成、契约、迁移或端到端检查。使用最小而有意义的检查，以及项目要求的门禁。测试只证明其覆盖的行为，不证明整体健壮性。未授权开发时，把这些检查写成完成标准，不声称已经运行。
 
-A planned slice is complete when its agreed observable behavior and affected contracts are checked, the implementation remains understandable, and the relevant documentation or plan status reflects the result. Choose verification by risk: focused unit tests for local logic; integration, contract, migration, or end-to-end checks when boundaries, persistence, or failure paths make them necessary. Use the smallest meaningful checks and project-required gates. Tests are evidence for the behavior they cover, not proof of overall robustness. When development is not authorized, specify these checks as completion criteria rather than claiming to have run them.
-
-Before finishing a planning task, apply the output contract's delivery check. Check that the first step can be started without invented requirements, dependencies and uncertainty are visible, important decision states are accurate, and the reader can tell which document (if any) is authoritative. Report what was inspected, which plan or records were actually created or updated, and what remains undecided. Do not claim code, tests, or integrations exist on the strength of a plan alone.
+结束规划任务前，执行输出契约的交付检查：确认目标和近期批次只需一次确认、第一步无需编造需求即可开始、全部已知切片可见、依赖与不确定性可见、交接文本自足且不与计划冲突、重要决定的状态准确、读者能看出哪份文档（如果有）是权威的。报告实际检查了什么、实际创建或更新了哪些计划或记录、还有哪些未定项。仅凭计划不能声称代码、测试或集成已经存在。

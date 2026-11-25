@@ -4,7 +4,7 @@ description: 仅在用户明确要求编写、审查或更新 UI 视觉语言、
 license: MIT
 metadata:
   author: Yeelight
-  version: "1.3.2"
+  version: "1.5.0"
   date_added: "2026-04-09"
   risk: low
 disable-model-invocation: true
@@ -12,51 +12,47 @@ disable-model-invocation: true
 
 # Design System
 
-Create and maintain UI design documentation that guides actual UI work: explain the intended look and feel, give applicable rules, and preserve the reasoning needed to apply them consistently. Write the document and conversation in the user's language unless the project specifies otherwise; preserve existing identifiers and any selected schema keys.
+编写并维护指导实际界面开发的 UI 设计文档：说清预期的视觉感受与外观规则，并保留能把这些规则稳定落地的设计理由。除项目另有约定外，文档与对话均使用用户当前交流语言，并保留既有标识符与选定 Schema 的键名。
 
-## Scope and invocation
+## 适用范围与调用边界
 
-Use this workflow when the user explicitly requests this skill or asks to author, review, or update a UI `DESIGN.md` or equivalent design-system document. A passing mention of a color, token, or component does not require a document.
+- **何时使用**：用户明确调用本 Skill，或要求编写、审查、更新 UI `DESIGN.md` 及同类设计系统文档时使用；顺带提一句颜色、Token 或组件，不需要起草整份文档。
+- **职责边界**：本 Skill 只管 **UI 视觉与组件规范文档**，不包揽所有带“design”字样的文档。项目需求、外部行为规格、内部技术设计、系统架构与架构决策记录（ADR）不在范围内；文件名是不是 `DESIGN.md` 不能单独决定任务类型，主要读者任务与内容才决定。若同一份文档需要兼顾两类内容，各自规则留在权威出处，本处只放简短摘要或链接，不整份抄录。
+- **能力与授权红线**：可直接基于已批视觉方向、实测界面、现有 Token 或既有设计指南整理文档，无需先调用别的 Skill。**纯文档任务不自动授权改前端代码、改外部设计工具或对外发布**（若同一请求已明确授权实现，则按项目技术栈与检查继续推进，不重复索要同一授权）。
 
-This skill owns UI visual and component documentation, not every document that uses “design” in its name. Project requirements, externally observable behavior specifications, internal technical design, system architecture, and ADRs are outside its scope. A file named `DESIGN.md` does not decide the task type: its primary reader task and content do. When one document needs both kinds of information, keep each rule in its authoritative source and use a short summary or link instead of copying the full specification.
+## 确定文档范围与格式
 
-It can turn an approved visual direction, inspected UI, existing tokens, or a supplied design guide into a document without requiring another skill first. A documentation task alone does not authorize UI implementation, external design-tool changes, or publication.
+- **按需定体量，不凑大纲**：先弄清谁会读这份规范、要支撑哪些反复出现的 UI 决策、现有文档/组件库/Token/Storybook 已覆盖了什么。补充一段说明意图、组件选型、例外与权威链接往往就够用；不要重复维护已有目录，也不要没有实际缺口就硬拆新文件；用户明确要独立文件时保持内容与任务相称。
+- **按约定选格式**：文件名与结构随项目惯例和交付要求定。只有在用户要求或目标工具需要时才用 Google 的 `DESIGN.md` 格式；单是文件名不要求该 Schema，普通项目规范可用简洁 Markdown，不必硬上 YAML Token 块或固定章节清单。
+- **如实说明约束力**：文档本身不会强制执行 UI 规则，也不保证 Agent 必然自动读取。说明它如何接入现有阅读/评审流程，以及哪些规则由组件或主题配置真正实现；没有实际集成时，不宣称自动加载、自动同步或自动校验。
 
-## Choose document scope and format
+## 执行步骤
 
-Establish who will use the guidance, which recurring UI decisions it should support, and what existing sources already cover. Reuse the project's design documents, component library, tokens, and Storybook where present. A short addition explaining intent, component selection, exceptions, and links to authoritative definitions may be sufficient; do not duplicate a maintained catalog or create a separate file without a useful gap to fill. Honor an explicit request for a standalone document while keeping its content proportional.
+1. **找准权威源头**：阅读相关项目约定，找到现有设计文档、Token 与组件惯例。沿用既有文件与命名方案，不另建打架的 `DESIGN.md`；新建时按项目约定路径或用户指定路径存放，只有落点明显含糊时才提问。若只是“审查”，只报问题不改写；用户要求在对话中给草稿或不落盘时按要求处理。
+2. **区分证据与决定**：分清哪些是用户硬性要求、已确认决定、代码/界面观察事实或待定提案。查看可用参考材料并记下可靠链接或项目路径。截图能辅助判断视觉印象，但不能直接证明精确字体、间距、状态或无障碍行为；若代码与文档打架，如实写出冲突，不悄悄把现状当成已定规则，也不擅自覆盖已批规则。
+3. **选最短有用的起草路径**：素材充足时直接起草全文或改受影响章节，不针对已定事项做逐节访谈。缺上下文且会影响设计规则时只问**一个**聚焦问题，其余独立部分继续推进并把未定项/提案标清楚；若用户委托 Agent 拿主意，在授权范围内给出连贯方案；只有在用户要求或存在关键依赖时才设分节确认点。
+4. **写清理由与适用规则**：说明受众、预期感受、视觉主次与关键规则背后的原因；只写相关的章节、组件、变体与状态，链接权威 Token 定义，只在对交付物有用时放机器可读值。选定 Google 格式时，动笔或大改结构前先读 [Google DESIGN.md 格式参考](references/design-md-format.md)。复用已有 Token 名与单位，不为了填清单编造色板、字阶、主题或组件库；临时方案标为“待定”，未定值不写进机器可读 Token 定义。
+5. **修订时保持多处一致**：改规则时把受影响的正文、Token 定义、参考说明与示例一起改；精确数值只在一个权威位置维护，别处引用；若生产代码里的 Token 仍是权威源，写明并以它为准对齐，不暗示拷贝值会自动同步。保留无关决定与自定义章节；遇未定冲突或迁移需求时标明，不擅自重命名 Token 或整篇洗稿。
+6. **核对并交付**：跑完下方「交付前核对」，给出文档链接或对话草稿，汇总改了哪些规则、还剩哪些未定决定、实际查了什么。未获批前可交付可供评审的草稿，但没有证据时不标成“已采纳”或“已稳定”。
 
-Choose the file name and structure from project conventions and the requested deliverable. Use Google's DESIGN.md format only when the user requests that format or a target tool requires it. The filename `DESIGN.md` alone does not require Google's schema. Ordinary project guidance can use concise Markdown without YAML tokens or a fixed section inventory.
+## 编写原则
 
-A document does not enforce UI rules or guarantee that an agent reads it. Explain where the guidance fits into the project's existing reading/review workflow and which rules are implemented by components or theme configuration. Do not claim automatic loading, synchronization, or enforcement without an actual integration.
+- **意图先于清单**：先写清具体视觉关系及它如何服务受众，光列形容词或 Token 值说不清规则何时适用；引用参考特征时写明出处，区分“观察到的特征”与“推测解读”。
+- **覆盖与项目需要相称**：按项目实际需要说明色彩角色与搭配、字阶层级、布局与间距、层次深度、形状与组件状态；扁平设计可用边框或色阶表达层级，不强求额外色板、阴影、圆角或多套主题。
+- **规则带上下文与理由**：写清什么该做、什么不该做，并附上原因或对比；避免空泛的绝对禁令与拍脑袋指标，保留正当例外并写明适用条件。
+- **无障碍靠要求与实测证据**：写明关键对比度搭配、焦点可见性、键盘操作、标签、错误状态与减少动效行为；把“期望标准”与“实测结果”分开，光有色值表或口头规范不等于通过 WCAG 检查，写清实测过的状态/主题与剩余待测项。
+- **忠于目标平台**：正文中保留平台原生单位与设计系统术语；若目标值不契合所选 Schema 或消费方，记录映射关系或限制，不私自硬转成 Web 数值。
 
-## Workflow
+## 交付前核对
 
-1. **Locate the source of truth.** Read relevant project guidance and find the existing design document, tokens, and component conventions. Reuse the established file and naming scheme; do not create a competing `DESIGN.md`. For a new document, use the project's documented location or the user's designated path. Ask only if the destination remains materially ambiguous. For review-only requests, report findings without rewriting; honor requests for a draft in conversation or no files.
-2. **Separate evidence from decisions.** Identify which choices are user requirements, confirmed decisions, implementation observations, or proposals. Read supplied references where available and record useful source links or project paths. A screenshot can support a visual interpretation, but does not establish exact fonts, spacing, states, or accessible behavior. If code and documentation disagree, describe the conflict; do not silently promote the current implementation or overwrite an approved rule.
-3. **Choose the shortest useful drafting path.** With sufficient material, draft the whole document or update the affected sections directly. Do not repeat a section-by-section interview for settled decisions. With missing context, ask one focused question when the answer materially changes the design rules; continue independent work and label remaining proposals or unknowns. If the user delegates design choices, propose a coherent direction within that scope. Use section-by-section checkpoints only when requested or needed to resolve a consequential dependency.
-4. **Write the rationale and applicable rules.** Explain audience, intended feeling, hierarchy, and the reasons behind important rules. Include only relevant sections, components, variants, and states. Link authoritative token definitions; include machine-readable values only when useful to the requested deliverable. When Google format is selected, read the [Google DESIGN.md format reference](references/design-md-format.md) before authoring or structurally revising it. Reuse established token names and units; do not invent a palette, type scale, theme, or component inventory to fill a checklist. Keep proposed values visibly provisional and unresolved values out of machine-readable token definitions.
-5. **Maintain consistency across revisions.** Update affected prose, token definitions, references, and examples together. Keep exact values in one authoritative place and refer to them elsewhere. If production tokens remain authoritative, identify them and reconcile the document against them; do not imply that a copied value is automatically synchronized. Preserve unrelated choices and custom sections. Mark unresolved conflicts and migration needs instead of silently renaming tokens or normalizing the entire file.
-6. **Verify and deliver.** Apply the completion checks below. Provide the document link or requested draft, summarize changed rules and unresolved decisions, and state what was checked. A reviewable draft can be delivered before approval; do not label it accepted or stable without evidence. Continue implementation when already authorized, using the project's stack and checks, rather than asking for the same permission again.
+- **范围与状态**：文档或审查覆盖了请求的视觉决策，复用既有惯例，且把“已确认规则 / 观察事实 / 提案 / 缺口”分开；不猜测作者、评审人、审批或验证状态。
+- **格式**：符合项目选定结构；选定 Google 格式时按参考核对，选定其他消费方时按其要求核对；机器可读块检查语法、重复定义与 Schema，保留合理扩展并写明消费方限制；缺少解析或校验工具时说明哪些是人工检查。
+- **Token（如包含）**：引用无循环、类型与单位匹配角色、颜色/引用字符串可正常解析；正文、示例与权威定义一致；核对相关主题与变体，不虚构未体现的状态。
+- **可用性**：读者能看清该怎么用、为什么、何时允许例外；组件说明把外观与状态/交互行为连起来；无障碍结论基于实际检查而非愿望。
+- **交付说明**：附上文件链接或所需评审/草稿，写明未定项与验证局限；文档通过检查不等于视觉已获批、生产已实现或无障碍全量审计通过。
 
-## Authoring principles
+## 参考导航
 
-- **Intent before a catalog.** Describe concrete visual relationships and how they serve the audience. A list of adjectives or token values alone cannot explain when a rule applies. Attribute inspected reference traits; distinguish them from a proposed interpretation.
-- **Proportional coverage.** Explain color roles and pairings, typography hierarchy, layout and spacing, depth, shapes, and relevant component states where the project needs them. Flat designs can define hierarchy through borders or tonal layers. Do not require extra palettes, shadows, rounded corners, or multiple themes.
-- **Rules with context.** Make do's and don'ts specific to this design, with a reason or a useful comparison. Avoid universal style bans and arbitrary quotas. Preserve intentional exceptions and state where they apply.
-- **Accessibility as requirements and evidence.** Record relevant contrast pairings, focus visibility, keyboard behavior, labels, error states, and reduced-motion behavior. Distinguish desired standards from measured checks; a color list or written guardrail does not prove WCAG conformance. Record the tested state/theme and any remaining checks.
-- **Platform fidelity.** Preserve native units and design-system terminology in the prose. If the target's values do not fit the selected schema or consumer, document the mapping or limitation rather than silently converting them into Web values.
+- [Google DESIGN.md 格式参考](references/design-md-format.md)：仅在编写或核查 Google 格式文档时读取（涵盖 YAML 摆放位置、Schema 边界、章节顺序、来源与校验）；普通项目设计文档无需读取。
 
-## Completion checks
-
-- **Scope and status:** the file or review covers the requested design decisions, reuses existing conventions, and distinguishes confirmed rules, observations, proposals, and gaps. No guessed author, reviewer, approval, or validation status appears as fact.
-- **Format:** follow the project's chosen structure. Apply the Google reference only when that format is selected; apply any other consumer's requirements only when relevant. For machine-readable blocks, check syntax, duplicate definitions, and the selected schema. Preserve intentional extensions and note consumer-specific limitations. If parsing or consumer tooling is unavailable, state which checks were manual.
-- **Tokens, when included:** references resolve without cycles, types and units fit their roles, and quoted colors/references parse as intended. Prose and examples agree with authoritative definitions. Check relevant themes and variants without claiming unrepresented states exist.
-- **Usability:** a reader can tell what to apply, why, and when an exception is allowed. Component guidance connects appearance to relevant states and behavior. Accessibility claims cite actual checks rather than aspirations.
-- **Delivery:** link the artifact or provide the requested review/draft, with unresolved choices and verification limits. Document validation is not visual approval, production implementation, or a full accessibility audit.
-
-## Reference navigation
-
-- [Google DESIGN.md format reference](references/design-md-format.md): optional format-specific guidance on YAML placement, schema boundaries, sections, sources, and validation. Read only when authoring or checking Google-format documents; ordinary project documentation does not require it.
-
-For Google-format work, the reference records the upstream alpha specification checked on its stated date. When a task requires a newer version or a particular importer, verify that target's requirements before claiming compatibility. If source access is unavailable, work from the recorded baseline and disclose the limitation.
+涉及 Google 格式时，该参考记录的是标注日期时的上游 alpha 规范；若任务要求更新版本或特定导入器，先核对目标要求再谈兼容，无法访问来源时按已记录基线工作并说明局限。

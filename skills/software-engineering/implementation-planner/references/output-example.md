@@ -1,8 +1,8 @@
 # Worked output example
 
-This is a synthetic planning example, not an inspection of this repository. Scenario facts supplied for the example: the user wants a local CSV expense summary CLI; the repository is empty; Python 3.11 and columns `date,category,amount` are confirmed; only planning is authorized; real bank exports are unavailable. The missing export blocks a future bank-specific adapter, not the core CLI. All proposed paths below belong to the hypothetical project.
+This is a synthetic planning example, not an inspection of this repository. Scenario facts supplied for the example: the user wants a local CSV expense summary CLI; the repository is empty; Python 3.11 and columns `date,category,amount` are confirmed; only planning is authorized; real bank exports are unavailable; the user also asked for an optional date-range filter and a machine-readable CSV summary. The missing export blocks a future bank-specific adapter, not the core CLI. All proposed paths below belong to the hypothetical project.
 
-The plan below follows [the output contract](output-format.md). Its two slices are an example, not a required stage count or technology choice.
+The plan below follows [the output contract](output-format.md). Its four known slices, provisional estimate, and near-term batch are illustrative, not a required stage count or technology choice.
 
 ---
 
@@ -11,27 +11,35 @@ The plan below follows [the output contract](output-format.md). Its two slices a
 ## 1. 目标与建议
 
 - 目标：用户运行本地命令后，能看到 CSV 中按分类汇总的支出；输入错误时能定位到问题行。
-- 范围：使用已约定的三列 CSV 和 Python 3.11；不含银行专用导入、图形界面、账户连接或自动上传。
-- 建议：先做 S1，让命令能读取 CSV 并输出分类总额；再做 S2，处理输入错误。本次只交付计划，尚未授权实现。
+- 范围：使用已约定的三列 CSV 和 Python 3.11；包含可选的日期范围过滤和 `category,total` 汇总输出；不含银行专用导入、图形界面、账户连接或自动上传。
+- 完成标准：约定格式的样例能完成分类汇总；缺列或金额无效时命令报告问题行并以非零状态退出；日期过滤和汇总输出在各自切片验收后可用。
+- 授权：仅规划；目标和近期批次待用户确认，尚未授权实现。
+- 建议：先做 S1，让命令能读取 CSV 并输出分类总额；S2、S3 是近期批次，S4 暂留粗粒度。
 
 ## 2. 现状与依据
 
-- 已确认：任务输入明确仓库为空、使用 Python 3.11，字段为 `date,category,amount`。
+- 已确认：任务输入明确仓库为空、使用 Python 3.11，字段为 `date,category,amount`；用户要求日期过滤和机器可读汇总输出。
 - 假设：金额使用十进制表示，单个文件内币种一致；若需多币种，必须先调整输入约定，不能直接相加。
-- 未知项：未提供真实银行导出文件。这不阻塞 S1、S2 的约定格式实现；银行格式适配不在本次范围内。
+- 未知项：未提供真实银行导出文件。这不阻塞 S1–S4 的约定格式实现；银行格式适配不在本次范围内。日期过滤的边界含义和汇总输出的列顺序尚未确认，分别影响 S3、S4。
 
 ## 3. 实施顺序
 
-| 编号 | 可见结果 | 依赖 | 排序理由 | 验收证据 | 状态 |
-| --- | --- | --- | --- | --- | --- |
-| S1 | 从约定 CSV 输出按分类汇总的金额 | 无 | 先让用户能运行命令并得到汇总结果 | 两条 food 记录 12.30、7.70 汇总为 20.00，transport 3.00 单独输出 | 待实施 |
-| S2 | 缺列或金额无效时，报告问题行并以非零状态退出，不输出误导性汇总 | S1 | 使用 S1 的文件读取代码，增加输入检查 | 缺少 amount 列或金额无效时返回非零状态；S1 样例仍通过 | 待实施 |
+- 总数：已知 4 个；日期过滤的边界或币种处理若需要扩展，可能再增加 1–2 个，尚未确认，暂不计入；总数会随实施修订。
+- 近期批次：S1、S2、S3；S4 暂留粗粒度。
+
+| 编号 | 可见结果 | 依赖 | 排序理由 | 验收证据 | 批次 | 状态 |
+| --- | --- | --- | --- | --- | --- | --- |
+| S1 | 从约定 CSV 输出按分类汇总的金额 | 无 | 先让用户能运行命令并得到汇总结果，是后续切片的共同基础 | 两条 food 记录 12.30、7.70 汇总为 20.00，transport 3.00 单独输出 | 近期 | 待实施 |
+| S2 | 缺列或金额无效时，报告问题行并以非零状态退出，不输出误导性汇总 | S1 | 使用 S1 的文件读取代码，先保护已有汇总结果 | 缺少 amount 列或金额无效时返回非零状态；S1 样例仍通过 | 近期 | 待实施 |
+| S3 | 可选 `--from`、`--to` 日期过滤，只汇总范围内的记录 | S1 | 复用 S1 的读取和汇总逻辑；日期语义未定，先做最小可选过滤 | 边界日期包含或排除符合确认后的约定；无匹配记录时输出空汇总 | 近期 | 待实施 |
+| S4 | 输出 `category,total` 的 CSV 汇总，默认人类可读输出不变 | S1、S2 | 复用已验证的汇总和错误处理；机器可读输出是复用需求，不阻塞核心验证 | 同一输入下 CSV 汇总与人类可读总额一致；错误输入仍非零退出 | 后续 | 待实施 |
 
 ## 4. 下一切片
 
 - 切片：S1。这里的“切片”指一块可单独开发和验证的工作。
-- 行为与边界：程序接收一个文件路径，按 category 汇总 amount，并按固定顺序输出。本次只验收符合约定的输入；真实银行导出格式尚未验证。
-- 前置条件：已约定运行语言和字段；没有阻塞 S1 的未决事项。
+- 行为与边界：程序接收一个文件路径，按 category 汇总 amount，并按固定顺序输出。本次只验收符合约定的三列输入和单币种文件。
+- 前置条件：已约定运行语言、三列字段和十进制金额；没有阻塞 S1 的未决事项。
+- 未知项或阻塞：真实银行导出未提供，不影响约定格式；多币种未确认，若样例出现多币种，先调整输入约定。
 - 影响范围：拟新增 `expense_summary.py`，让用户从命令行运行；该文件尚不存在。临时 CSV 样例放系统临时目录。
 - 执行步骤：
   1. 让命令接受一个 CSV 文件路径。
@@ -39,15 +47,32 @@ The plan below follows [the output contract](output-format.md). Its two slices a
   3. 用三条固定记录检查分类、总额和输出顺序。把实际运行方式写入项目说明；若没有说明文件，则在实现范围内补充最小使用说明。
 - 验证方式：拟在项目根目录执行 `python3 expense_summary.py <sample.csv>`；样例含 food 的 12.30、7.70 和 transport 的 3.00，预期退出码为 0，food 汇总为 20.00，transport 汇总为 3.00。命令尚未执行，程序尚未创建。
 - 停止或重排条件：若输入包含多币种却没有币种列，先调整输入约定，再合并金额。缺少真实银行样本不影响当前约定格式的开发。
+- 交接文本：以下内容只在用户确认目标和批次并授权实施后交给执行者；计划本身不构成实施授权。
+
+```text
+任务：实现本地 CSV 支出汇总命令的 S1。
+目标：读取约定三列 CSV，按 category 汇总 amount，按固定顺序输出分类总额。
+范围与非目标：只处理 date,category,amount 三列和单个文件；不含银行专用格式、日期过滤、错误恢复和 CSV 汇总输出。
+前置：Python 3.11；金额用十进制；样例含 food 的 12.30、7.70 和 transport 的 3.00。
+执行步骤：1. 接受一个 CSV 路径参数；2. 用标准库读取并用十进制累加；3. 按分类名固定顺序输出总额；4. 写最小使用说明。
+涉及位置：拟新增 expense_summary.py，尚不存在；样例放系统临时目录，不提交。
+验证：在项目根目录运行 python3 expense_summary.py <sample.csv>，预期退出码 0，food 20.00，transport 3.00；命令尚未执行。
+未知或阻塞：多币种未确认；若样例出现多币种，停止并报告，不自行合并。
+停止条件：需要改变输入列、引入第三方依赖或处理多币种时，先报告再继续。
+完成后回报：改了哪些文件、实际运行的命令和输出、未覆盖的边界；不要声称未运行的验证已通过。
+冲突处理：若本交接文本与用户确认的目标或计划冲突，先报告，不自行扩大范围。
+```
 
 ## 5. 风险与待决事项
 
 - 尚未确认一个文件是否只含一种币种；这决定了 S1 能否直接相加。若用户需要处理多币种，先修改输入约定，再调整受影响工作的顺序。多币种支持尚未确认。
+- 日期过滤的边界含义，例如起止日期是否包含、缺失日期如何处理，尚未确认；影响 S3，开发前需要用户定一次。
+- 汇总输出的列顺序和金额格式尚未确认；影响 S4，可在 S1–S3 完成后再定，不阻塞近期批次。
 - 银行专用格式尚未确认，且不在范围内；以后需要适配时，先取得一个脱敏样本，再决定是否新增切片。
 
 ## 6. 交付记录
 
 - 已检查：仅使用本示例提供的任务事实；未检查实际项目文件，未执行命令或测试。
 - 本次产物：对话中的实施计划；未创建项目代码、计划文件或架构决策记录（ADR）。
-- 变更与原因：初版计划。先实现符合约定的输入，再处理输入错误，两步分别验证。
-- 下一步行动：若用户随后授权开发，从 S1 开始；不需要等待真实银行导出样本。
+- 变更与原因：初版计划。先实现符合约定的输入，再处理输入错误和日期过滤，最后增加可复用的 CSV 输出。
+- 下一步行动：用户确认目标和近期批次后，从 S1 开始；不需要等待真实银行导出样本。确认前不要实施。

@@ -4,7 +4,7 @@ description: 用户要用递进项目学会一项技术、而不只是读概念�
 license: MIT
 metadata:
   author: Yeelight
-  version: "1.1.0"
+  version: "1.1.1"
 disable-model-invocation: true
 ---
 
@@ -18,7 +18,7 @@ Confirm the learning workspace before creating files; the current directory may 
 
 Inspect the workspace before deciding the next action.
 
-- **New track:** read [workspace layout](references/workspace-layout.md), [mission format](references/MISSION-FORMAT.md), [track format](references/TRACK-FORMAT.md), and [resources format](references/RESOURCES-FORMAT.md). Establish a north-star project, practical constraints, and one bounded diagnostic task before choosing the first projects.
+- **New track:** read [workspace layout](references/workspace-layout.md), [mission format](references/MISSION-FORMAT.md), [track format](references/TRACK-FORMAT.md), [glossary format](references/GLOSSARY-FORMAT.md), and [resources format](references/RESOURCES-FORMAT.md). Establish a north-star project, practical constraints, and one bounded diagnostic task before choosing the first projects.
 - **Continue a track:** read `MISSION.md`, `ROADMAP.md`, `STATE.md`, `GLOSSARY.md` when present, and the most recent relevant learning record. Use [roadmap format](references/ROADMAP-FORMAT.md), [state format](references/STATE-FORMAT.md), and [learning record format](references/LEARNING-RECORD-FORMAT.md) when creating or revising those files. Resume with the smallest unfinished, verifiable task.
 - **Run a micro-project or review a submission:** read [project loop](references/project-loop.md), [project brief format](references/PROJECT-BRIEF-FORMAT.md), and [evidence format](references/EVIDENCE-FORMAT.md). Use their brief, feedback, evidence, and reflection loop.
 - **Create or revise a domain route:** read [track format](references/TRACK-FORMAT.md) and follow its source and project-selection rules. Base claims and version-sensitive choices on current primary sources; record the source, version, and why it matters in `RESOURCES.md`.
@@ -56,4 +56,4 @@ Treat a project as complete only when it has all applicable evidence:
 
 Run available checks rather than assuming they pass. Capture the evidence under `evidence/` using [evidence format](references/EVIDENCE-FORMAT.md), update `ROADMAP.md`, add terms to `GLOSSARY.md` only after the learner can use them correctly, create a learning record for non-obvious lessons, and leave `STATE.md` with the current capability, unresolved issue, next smallest task, and scheduled transfer check.
 
-Use HTML only when visual, interactive, or print-friendly material improves recall: conceptual diagrams, simulators, debugging flows, and reference cards. Follow [HTML lesson format](references/LESSON-FORMAT.md). Keep runnable projects, briefs, state, and evidence in code or Markdown files.
+Follow [HTML lesson format](references/LESSON-FORMAT.md) for HTML lessons and reference cards. Keep runnable projects, briefs, state, and evidence in code or Markdown files.

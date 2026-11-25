@@ -5,7 +5,7 @@ license: MIT
 disable-model-invocation: true
 metadata:
   author: Yeelight
-  version: "2.5.0"
+  version: "2.5.1"
 ---
 
 # Research Report
@@ -38,3 +38,5 @@ For a quick fact, a single-article explanation, ordinary code review, or request
 
 - Use host retrieval tools; if unavailable, report that research is blocked rather than substituting model memory.
 - Report what was actually searched, inspected, and verified. Structural validation is not proof of truth or competent retrieval.
+
+Maintainer-only design records: [ADR 0001](references/adr/0001-evidence-contract.md), [ADR 0002](references/adr/0002-phased-report-envelope.md), [ADR 0003](references/adr/0003-reader-first-report.md).

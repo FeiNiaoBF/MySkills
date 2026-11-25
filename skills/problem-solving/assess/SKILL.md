@@ -4,7 +4,7 @@ description: 用户要求评估、审阅或判断一个已指名对象是否适�
 license: MIT
 metadata:
   author: Yeelight
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Assess
@@ -77,9 +77,9 @@ Stop once further checking is unlikely to change the verdict or priority. If a c
 
 ## 5. Write the brief
 
-Use the Deliverable template. Lead with the verdict, then give only what the reader needs to judge it: purpose and criteria, key findings in priority order, non-findings and sensitivity, gaps and falsifiers, one recommendation and one next action.
+Use the Deliverable template; give only what the reader needs to judge it: purpose and criteria, key findings in priority order, non-findings and sensitivity, gaps and falsifiers, one recommendation and one next action.
 
-Recommend **accept**, **repair**, **replace**, or **investigate further**. Do not apply the repair. If the user also authorized implementation, finish the assessment first, then follow the normal implementation workflow for only the authorized changes.
+Recommend **accept**, **repair**, **replace**, or **investigate further**. If the user also authorized implementation, finish the assessment first, then follow the normal implementation workflow for only the authorized changes.
 
 Use ordinary Markdown. For a small target, use short prose. Use a findings table when there are 3+ findings. Create a file only when the user requests a file deliverable.
 

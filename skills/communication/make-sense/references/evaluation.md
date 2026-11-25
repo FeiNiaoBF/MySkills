@@ -1,6 +1,6 @@
 # make-sense evaluation protocol and records
 
-This document contains a text-response smoke comparison protocol and version-specific records, not a learning-outcome study or a test of host skill discovery. The current runtime is [SKILL.md](../SKILL.md), version 1.3.0; no independent behavioral evaluation of that version is recorded here. Results for earlier versions do not establish its behavior. [shortened.md](shortened.md) is the frozen 2026-09-26 candidate, retained only to interpret the historical comparison.
+This document contains a text-response smoke comparison protocol and version-specific records, not a learning-outcome study or a test of host skill discovery. The current runtime is [SKILL.md](../SKILL.md), version 1.4.0; no independent behavioral evaluation of that version is recorded here. Results for earlier versions do not establish its behavior. [shortened.md](shortened.md) is the frozen 2026-09-26 candidate, retained only to interpret the historical comparison.
 
 ## Contents
 
