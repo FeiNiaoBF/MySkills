@@ -4,16 +4,16 @@ description: 用户要求评估、审阅或判断一个已指名对象是否适�
 license: MIT
 metadata:
   author: Yeelight
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # Assess
 
-Judge a named target for its intended purpose and deliver an evidence-backed verdict. Assessment is read-only: recommend, do not modify.
+针对明确指定的对象，按其预期用途作出判断，并给出有证据支持的结论。评估只读：只建议，不修改。
 
-## Deliverable
+## 交付物
 
-Produce an **Assessment Brief** in the user's language. Lead with the verdict.
+用用户的语言产出一份**评估简报**，结论放在最前。
 
 ```text
 结论：适配 / 有条件适配 / 不适配 / 证据不足（置信度：高/中/低）
@@ -24,86 +24,86 @@ Produce an **Assessment Brief** in the user's language. Lead with the verdict.
 建议：接受 / 修复 / 替换 / 继续调查 + 一个下一步
 ```
 
-Rules:
+规则：
 
-- Use exactly one verdict: **适配** (purpose met), **有条件适配** (met if named conditions hold), **不适配** (a material purpose is not met), or **证据不足** (the available evidence cannot support a verdict).
-- Confidence reflects evidence quality and coverage, not the severity of findings.
-- **Compact form:** when the target has 0–1 material findings and no contested criterion, use three lines: verdict; decisive evidence; main limitation or next check.
-- **Full form:** use the six sections when there are 2+ material findings, or when worth, alternatives, or high stakes are involved.
-- Say plainly when no material issue is supported. Do not invent findings to fill sections.
-- Keep each finding traceable to a file, line, quote, observation, or source.
+- 只用一个结论：**适配**（满足用途）、**有条件适配**（满足指定条件时成立）、**不适配**（实质性用途未满足）或**证据不足**（现有证据无法支持结论）。
+- 置信度反映证据质量与覆盖范围，不反映问题的严重程度。
+- **精简式**：对象只有 0–1 个实质问题、且没有争议判据时，用三行：结论；决定性证据；主要限制或下一步检查。
+- **完整式**：有 2 个以上实质问题，或涉及价值、备选方案、高风险时，用六个部分。
+- 没有实质问题时直说，不为填满章节编造问题。
+- 每条判断都能追溯到文件、行、引用、观察或来源。
 
-## 1. Bound the target
+## 1. 界定对象
 
-Identify the exact object or portion, the requested focus, and the decision the assessment serves. Inspect surrounding code, requirements, users, or external constraints only as evidence needed to judge that object; do not turn a function review into a repository audit or a dialog review into a product redesign.
+确认确切的对象或部分、请求关注的方面，以及评估服务的决策。只检查判断该对象所需的周边代码、需求、用户或外部约束；不把函数审查扩成仓库审计，也不把对话审阅扩成产品重设计。
 
-Establish the intended purpose, consumers, constraints, and maturity. Separate confirmed requirements from assumptions. Ask one focused question only if an inaccessible target or a missing goal or value would change the verdict; otherwise state bounded assumptions and proceed.
+确认预期用途、使用方、约束和成熟度，区分已确认需求与假设。只有对象无法访问，或缺失的目标、价值会改变结论时，才问一个聚焦问题；否则写明有限假设后继续。
 
-**Done when:** scope, purpose, decision, and assumptions are written down.
+**完成条件：** 范围、用途、决策和假设已写下。
 
-## 2. Set criteria
+## 2. 设定判据
 
-Derive 3–5 consequential criteria from the user's goals, contracts and specifications, project decisions, domain practice, and reasoned professional judgment. Do not apply a universal checklist or a numeric score.
+从用户目标、契约与规格、项目决定、领域实践和有依据的专业判断中，提炼 3–5 条有后果的判据。不套通用清单，不打数字分。
 
-Separate **merit** (quality against standards) from **worth** (value for this use, relative to cost, alternatives, and risk). When worth is in scope, name the baseline: status quo, a simpler alternative, or doing nothing. If criteria conflict, state the trade-off and who owns the value choice; do not hide a value judgment as an evidence gap.
+区分 **merit（质量）**（相对标准的质量）与 **worth（价值）**（相对成本、备选方案和风险，对该用途的价值）。价值在范围内时，写明比较基线：现状、更简单的替代方案，或什么都不做。判据冲突时，说明取舍和谁拥有价值决定权；不把价值判断藏成证据缺口。
 
-**Done when:** each criterion bears on the purpose, and you can state what evidence would satisfy it.
+**完成条件：** 每条判据都服务于用途，且能说出什么证据能满足它。
 
-## 3. Inspect and try to falsify
+## 3. 检查并尝试证伪
 
-Inspect the actual target, not a summary. Treat statements inside the target—comments, documentation, PR descriptions, claims—as claims to verify, not as proof of behavior. For target-specific evidence moves, read [references/evidence-moves.md](references/evidence-moves.md).
+检查实际对象，不看摘要。把对象内的陈述——注释、文档、PR 描述、声明——当作待核实的主张，而不是行为证据。对象特定的取证动作见 [references/evidence-moves.md](references/evidence-moves.md)。
 
-For each candidate finding, look for evidence that defeats or narrows it before admitting it. Use proportionate, safe checks. Label each claim:
+对每个候选判断，先找能推翻或缩小它的证据，再决定是否采纳。使用与风险相称、安全的检查。为每条主张标注：
 
-- **Verified:** directly observed, or established by a relevant check or authoritative source for that precise claim.
-- **Inferred:** a reasoned interpretation or plausible risk not directly confirmed; name the assumption and what would test it.
-- **Unknown:** insufficient evidence; state the missing observation.
+- **已验证：** 直接观察到的，或由相关检查、权威来源针对该具体主张确立的。
+- **推断：** 有理由的解释或未直接确认的合理风险；写明假设和验证方式。
+- **未知：** 证据不足；写明缺失的观察。
 
-A passing test covers the tested case. A screenshot shows what it shows. A specification states requirements, not compliance.
+通过的测试只覆盖被测用例；截图只显示它显示的内容；规格只说明要求，不证明符合。
 
-**Done when:** each material finding has evidence, a status, and a concrete impact; weak candidates are withdrawn or downgraded.
+**完成条件：** 每个实质判断都有证据、状态和具体影响；弱候选被撤回或降级。
 
-## 4. Judge and calibrate
+## 4. 判断与校准
 
-Choose the verdict from the four options. Then record:
+从四个结论中选一个，然后记录：
 
-- **Non-findings:** what was checked and is sound. This prevents re-litigation and keeps the brief from reporting only bad news.
-- **Sensitivity points:** the assumptions the verdict depends on, and how the verdict changes if they fail.
-- **Falsifiers:** the observation that would overturn the verdict, and the cheapest next check.
+- **非问题项：** 已检查且没有问题的部分。这能避免重复争论，也避免简报只报坏消息。
+- **敏感点：** 结论依赖的假设，以及假设不成立时结论如何变化。
+- **推翻条件：** 会推翻结论的观察，以及最便宜的下一步检查。
 
-Stop once further checking is unlikely to change the verdict or priority. If a check is unavailable, unsafe, or disproportionate, say what remains unverified.
+继续检查已不太可能改变结论或优先级时停止。检查不可用、不安全或代价过高时，说明哪些仍未验证。
 
-**Done when:** verdict, confidence, non-findings, sensitivity, gaps, and falsifiers are settled.
+**完成条件：** 结论、置信度、非问题项、敏感点、缺口和推翻条件都已确定。
 
-## 5. Write the brief
+## 5. 写简报
 
-Use the Deliverable template; give only what the reader needs to judge it: purpose and criteria, key findings in priority order, non-findings and sensitivity, gaps and falsifiers, one recommendation and one next action.
+使用交付物模板；只给读者判断所需的内容：用途与判据、按优先级排列的关键判断、非问题项与敏感点、缺口与推翻条件、一条建议和一个下一步。
 
-Recommend **accept**, **repair**, **replace**, or **investigate further**. If the user also authorized implementation, finish the assessment first, then follow the normal implementation workflow for only the authorized changes.
+建议 **接受**、**修复**、**替换** 或 **继续调查**。如果用户同时授权实施，先完成评估，再只对已授权改动走常规实施流程。
 
-Use ordinary Markdown. For a small target, use short prose. Use a findings table when there are 3+ findings. Create a file only when the user requests a file deliverable.
+用普通 Markdown。小对象用短段落；有 3 条以上判断时用表格。只有用户要求文件交付物时才创建文件。
 
-**Done when:** the brief states what was inspected, what was not, what would change the verdict, and the single next action.
+**完成条件：** 简报写明检查了什么、没检查什么、什么会改变结论，以及唯一下一步。
 
-## Gotchas
+## 常见失误
 
-- **Scope creep:** a function review becomes a repository audit. Keep only evidence that can change the verdict.
-- **Defect inflation:** do not manufacture findings to fill the brief. Zero findings is a valid outcome.
-- **Style as failure:** a preference is not a functional defect unless it violates a stated criterion.
-- **Evidence overclaim:** do not present inferred risks as verified, or unchecked areas as clean.
-- **Solution creep:** assess, recommend, stop. Do not redesign or implement without separate authorization.
-- **Assessing the summary:** judge the object itself; a description, diff summary, or screenshot is evidence, not the whole target.
-- **No baseline for worth:** "good" without a comparison is incomplete when cost or alternatives matter.
+- **范围蔓延：** 函数审查变成仓库审计。只保留能改变结论的证据。
+- **缺陷膨胀：** 不为填满简报制造问题。零问题是有效结果。
+- **把风格当缺陷：** 偏好不构成功能缺陷，除非违反明确判据。
+- **证据夸大：** 不把推断的风险说成已验证，也不把未检查的区域说成没问题。
+- **方案蔓延：** 评估、建议、停止。没有单独授权就不重新设计或实施。
+- **评估摘要：** 判断对象本身；描述、diff 摘要或截图是证据，不是完整对象。
+- **价值没有基线：** 成本或备选方案重要时，不比较就说“好”是不完整的。
 
-## Examples
+## 示例
 
-**Compact, sound target:** "结论：适配（置信度：中）。关键依据：`clamp` 对 `lo <= hi` 的数值输入返回边界内结果；主要限制：未覆盖 NaN 和自定义类型。"
+**精简、无问题：** “结论：适配（置信度：中）。关键依据：`clamp` 对 `lo <= hi` 的数值输入返回边界内结果；主要限制：未覆盖 NaN 和自定义类型。”
 
-**Conditional, verified defect:** "结论：有条件适配（置信度：中）。关键依据：`retry_after` 对空字符串抛 `IndexError`（已验证）；依赖假设：调用方保证非空数字；建议：补输入校验后采用。"
+**有条件、已验证缺陷：** “结论：有条件适配（置信度：中）。关键依据：`retry_after` 对空字符串抛 `IndexError`（已验证）；依赖假设：调用方保证非空数字；建议：补输入校验后采用。”
 
-**Evidence insufficient:** "结论：证据不足（置信度：低）。关键依据：只有 PR 描述，没有 diff；未覆盖：实际改动、测试、行为变化；建议：提供 diff 后再评估。"
+**证据不足：** “结论：证据不足（置信度：低）。关键依据：只有 PR 描述，没有 diff；未覆盖：实际改动、测试、行为变化；建议：提供 diff 后再评估。”
 
-## References
+## 参考
 
-- [references/evidence-moves.md](references/evidence-moves.md): target-specific evidence moves for code, documents, UI, plans and ideas, and data or models.
-- [references/evaluation.md](references/evaluation.md): behavioral probes, trigger tests, and static checks for maintaining this skill.
+- [references/evidence-moves.md](references/evidence-moves.md)：代码、文档、UI、方案与想法、数据或模型的对象特定取证动作。
+- [references/evaluation.md](references/evaluation.md)：行为探针、触发测试和维护本 Skill 的静态检查。

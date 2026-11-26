@@ -4,116 +4,116 @@ description: 问题本身不清楚、有争议或框架可疑时使用；先判�
 license: MIT
 metadata:
   author: Yeelight
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Problem Analysis
 
-The problem comes first. Do not begin with a preferred method, theory, or solution. Work out what kind of problem this is, whose problem it is, what answer would count, and what would change the decision. Then choose how to inquire.
+问题优先。不要从偏好的方法、理论或方案开始。先弄清这是哪类问题、是谁的问题、什么样的答案才算数，以及什么会改变决策；再选择如何探究。
 
-## Route first
+## 先分流
 
-Ask three questions before analyzing:
+分析前先问三个问题：
 
-1. **Is there a decision or a question?** If the user wants comfort, a fact, a rewording, or execution, respond or route.
-2. **What blocks the answer?** Knowledge, values, authority, or framing; the blocker determines the method.
-3. **Would any available check change the answer?** If not, answer, recommend, or stop.
+1. **这是一个决策还是一个提问？** 用户想要安慰、事实、改写还是执行？直接回应或转交相应流程。
+2. **什么卡住了答案？** 知识、价值、权限还是框架；卡点决定方法。
+3. **现有检查会改变答案吗？** 不会就直接回答、建议或停止。
 
-Use only when the direction is open and one of these holds: the user cannot say what is wrong; several problems are tangled; the facts are uncertain or the values are contested; the proposed solution may be solving the wrong problem; the user asks what to do and the answer is not obvious.
+仅在方向开放且符合以下之一时使用：用户说不清哪里不对；多个问题缠在一起；事实不确定或价值有争议；拟议方案可能在解决错误的问题；用户问该怎么办而答案并不显然。
 
-If the user explicitly invokes this Skill for a clear task, do not manufacture uncertainty. Route factual lookups, rewording, assessment, bug diagnosis, and scoped implementation normally; use them as bounded evidence only for a larger decision.
+用户明确点名本 Skill 处理清晰任务时，不要制造不确定性。事实查询、改写、评估、Bug 诊断和范围内实现按常规处理；只有服务于更大的决策时，才把它们当作有限证据。
 
-## Operating stance
+## 基本立场
 
-- **Framing is part of the answer.** Personal, organizational, market, and structural frames imply different evidence and remedies.
-- **One recommendation, not a menu.** Say what you recommend, why, and what would change it.
-- **No action is an option.** Status quo, waiting, or a small probe may be right.
+- **框架是答案的一部分。** 个人、组织、市场和结构框架对应不同的证据与解法。
+- **给一个建议，不给菜单。** 说明建议什么、为什么，以及什么会改变它。
+- **不作为也是选项。** 维持现状、等待或做一个小探针都可能是对的。
 
-## Work the problem
+## 推进问题
 
-Moves, not stages; reframe as evidence arrives.
+这些是动作，不是阶段；证据到了就重新框定。
 
-### 1. Reconstruct the problem from context
+### 1. 从上下文重建问题
 
-Inspect the conversation, the project or environment, and the people affected before asking. Write a working statement:
+先检查对话、项目或环境以及受影响的人，再提问。写一句工作陈述：
 
-> You are trying to **the outcome**, because **the reason**, and the blocker is **the uncertainty or conflict**. The decision is **what must be chosen**, and an answer would count if **the criterion**.
+> 你想达成 **结果**，因为 **原因**，卡点是 **不确定性或冲突**。要决定的是 **必须选什么**，答案算数当且仅当 **判据**。
 
-Separate observation, goal, constraint, interpretation, and unknown. If the stated problem and the evidence point to different problems, say so. Ask one focused question only if a missing choice would change the analysis; otherwise state the assumption.
+区分观察、目标、约束、解释和未知。如果陈述的问题与证据指向不同问题，说出来。只有缺失的选择会改变分析时才问一个聚焦问题；否则写明假设。
 
-### 2. Classify the question and the problem structure
+### 2. 分类问题与结构
 
-Name the kind of answer needed: describe, explain, predict, evaluate, decide, design, interpret, or negotiate. Then locate the problem on two axes:
+先命名需要的答案类型：描述、解释、预测、评价、决策、设计、解读或谈判。再用两个轴定位问题：
 
-| | Values clear enough to act | Values ambiguous or contested |
+| | 价值足够清楚，可以行动 | 价值模糊或有争议 |
 |---|---|---|
-| **Knowledge sufficient** | **Structured:** best means to a given end; optimization, cost-benefit, diagnosis. | **Value-ambiguous:** evidence will not settle what matters; deliberation, ethics, negotiation. |
-| **Knowledge uncertain** | **Knowledge-uncertain:** causes, mechanisms, or effects; comparison, process tracing, experiments, models. | **Wicked:** facts and values contested; structure the problem, compare frames, safe-to-fail probes. |
+| **知识充分** | **结构化（Structured）：** 给定目标下的最佳手段；优化、成本收益、诊断。 | **价值不明（Value-ambiguous）：** 证据无法决定什么重要；审议、伦理、谈判。 |
+| **知识不确定** | **知识不确定（Knowledge-uncertain）：** 原因、机制或效果；比较、过程追踪、实验、模型。 | **棘手（Wicked）：** 事实与价值都有争议；结构化问题、比较框架、可失败探针。 |
 
-Record the scale: individual or collective; reversible or irreversible; immediate or long-horizon; one decision-maker or many. For a "should" question, separate the empirical part (what is likely to happen) from the normative part (what matters, to whom, and who decides).
+记录尺度：个体还是集体；可逆还是不可逆；即时还是长期；一个决策者还是多个。对“应不应该”类问题，分开经验部分（可能发生什么）与规范部分（什么重要、对谁重要、谁来决定）。
 
-If uncertain, treat it as unstructured and start with framing plus the cheapest discriminating check. Revise it as evidence arrives; do not use the typology as a label.
+不确定时，按非结构化处理，从框架和最便宜的区分性检查开始。证据到了就修订；不要把类型学当标签。
 
-### 3. Surface the problem representation and alternative frames
+### 3. 呈现问题表征与替代框架
 
-Ask who defines the problem and for whom; what is included or excluded; what cause and solution are assumed; what level it is posed at; whose values and interests the frame serves; and what theory of change it implies.
+问：谁定义问题、为谁定义；包含和排除了什么；预设了什么原因和解法；问题放在什么层级；框架服务于谁的价值和利益；它隐含什么变革理论。
 
-Generate one serious alternative for consequential decisions; vary the causal locus, level, time horizon, or actor, and state what it predicts. Choose by evidence and decision relevance; keep the runner-up and its winning condition. Do not reframe a defensible frame; the test is whether the alternative changes the recommendation.
+有后果的决策至少生成一个严肃的替代框架：改变因果位置、层级、时间跨度或行动者，并说明它预测什么。按证据和决策相关性选择；保留次优方案及其胜出条件。不要重新框定一个站得住的框架；检验标准是替代框架是否会改变建议。
 
-### 4. Choose the inquiry mode and theory
+### 4. 选择探究方式与理论
 
-Start from **What would count as an answer?** and **What observation would discriminate between the live possibilities?** Then choose the smallest method set that can produce that observation.
+从 **什么才算答案？** 和 **什么观察能区分仍存活的可能？** 出发，再选能产生该观察的最小方法组合。
 
-- Choose by answer type: causal questions need comparison, process tracing, experiments, or controls; predictive questions need base rates, scenarios, or models; interpretive questions need interviews, ethnography, or documents; value conflicts need deliberation or negotiation, not more data.
-- Theory must do real work: predict something, explain a mechanism, or expose an assumption. Say what it hides. If two theories fit, use the more discriminating prediction and name the evidence that would favor the other.
-- Skip any method that cannot change the recommendation.
+- 按答案类型选：因果问题需要比较、过程追踪、实验或对照；预测问题需要基率、情景或模型；解释性问题需要访谈、民族志或文档；价值冲突需要审议或谈判，而不是更多数据。
+- 理论必须做实事：预测什么、解释机制或暴露假设。说明它遮蔽了什么。两个理论都成立时，用区分度更高的预测，并写明什么证据会支持另一个。
+- 跳过任何不能改变建议的方法。
 
-For the full method map and theory-selection detail, see [references/method-map.md](references/method-map.md).
+完整方法地图和理论选择细节见 [references/method-map.md](references/method-map.md)。
 
-### 5. Design the evidence check
+### 5. 设计证据检查
 
-Identify the **decisive uncertainty**: the one that, if resolved, would change the recommendation. Use the least costly, safest, most discriminating check: existing material before new data, existing data before new collection, a small reversible probe before a large commitment. Look for disconfirming evidence, not just support.
+找出 **决定性不确定性**：解决后会改变建议的那一个。用成本最低、最安全、区分度最高的检查：先查已有材料再取新数据，先查已有数据再收集新数据，先做小的可逆探针再做大承诺。找反证，不只是找支持。
 
-For value conflicts, evidence can clarify consequences and constraints but cannot decide the value. Name the legitimate decision-maker or process.
+价值冲突中，证据能澄清后果和约束，但不能决定价值。指明正当的决策者或流程。
 
-State what the check establishes and what it does not. One case, one sample, or one success is not general proof.
+说明检查确立了什么、没有确立什么。一个案例、一个样本或一次成功都不是普遍证明。
 
-### 6. Recommend a course of action
+### 6. 建议行动
 
-Compare only viable options: act now; take the smallest reversible step; gather one more piece of evidence; maintain the status quo or wait for a trigger.
+只比较可行选项：现在行动；走最小的可逆一步；再取一份证据；维持现状或等待触发条件。
 
-Recommend one. Give the finding that supports it, the key assumption and main risk, cost and reversibility, who is affected, what would reverse it, and the first step and checkpoint.
+只推荐一个。给出支持它的发现、关键假设和主要风险、成本与可逆性、受影响的人、什么会推翻它，以及第一步和检查点。
 
-If evidence is insufficient, give a conditional recommendation and name the smallest check that would settle it. If the honest answer is "this is a value choice, not an evidence question", say so and name who must decide. Do not present a guess as a verdict.
+证据不足时给有条件建议，并写明能定案的最小检查。如果诚实的答案是“这是价值选择，不是证据问题”，就直说，并指明谁必须决定。不要把猜测当结论。
 
-If the user has authorized action, carry out the next step within that scope; otherwise stop at the recommendation.
+用户已授权行动时，在授权范围内执行下一步；否则停在建议。
 
-## Boundaries
+## 边界
 
-- **Description is not explanation, and explanation is not a solution.** Naming a problem, critiquing a proposal, or "going meta" is not a recommendation.
-- **More analysis is not always progress.** If further inquiry cannot change the action, stop. Inaction is also a choice.
-- **Method is not a finding; theory is not evidence.** A framework has not established the conclusion.
-- **Do not assume shared values or facts.** Contested values need a decision process, not a cleverer analysis.
-- **Do not promise a definitive solution to a wicked problem.** Offer a frame, a direction, a safe-to-fail probe, and a review trigger.
-- **Urgent or safety-critical situations:** contain the harm and involve the responsible authority or expert first. **Personal crisis:** respond to the person first.
+- **描述不是解释，解释不是解法。** 命名问题、批评方案或“上升一层”都不是建议。
+- **更多分析不总是进展。** 进一步探究无法改变行动时就停。不作为也是选择。
+- **方法不是发现；理论不是证据。** 框架没有确立结论。
+- **不假设共享价值或事实。** 有争议的价值需要决策流程，而不是更聪明的分析。
+- **不要承诺彻底解决棘手问题。** 给出框架、方向、可失败探针和复访触发条件。
+- **紧急或安全关键情况：** 先控制伤害，并让负责的权威或专家介入。**个人危机：** 先回应人。
 
-## Completion conditions
+## 完成条件
 
-Stop when you can state all of the following, or explicitly say which is missing and why:
+能说出以下全部内容时才停，或明确说明缺哪项及原因：
 
-1. The problem statement and the decision it serves.
-2. The question type and structure, with supporting evidence.
-3. The chosen frame, an alternative, and why it wins.
-4. The method and theory, fit, and limits.
-5. The decisive evidence or check, with status.
-6. A recommendation with alternatives, assumptions, reversal conditions, first step, checkpoint, and residual uncertainty.
+1. 问题陈述及它服务的决策。
+2. 问题类型与结构，附支持证据。
+3. 所选框架、一个替代框架，以及前者为何胜出。
+4. 方法与理论、适配性和局限。
+5. 决定性证据或检查，及其状态。
+6. 建议，含备选方案、假设、推翻条件、第一步、检查点和剩余不确定性。
 
-An explicit "we cannot decide yet because X is a value choice or Y is missing" is a valid completion. A polished answer to the wrong question is not.
+明确说“因为 X 是价值选择或 Y 缺失，现在无法决定”也是有效完成。对错误问题的漂亮回答不是。
 
-## Response
+## 回复
 
-Lead with your read of the problem and your recommendation. Then give only what the user needs to judge it: type and frame, why this approach, decisive evidence, alternatives and conditions, and next step. Mark claims as verified, inferred, or unknown when it matters.
+先说你对问题的判断和建议。然后只给用户判断所需的内容：类型与框架、为何用这个方法、决定性证据、备选方案与条件、下一步。必要时把主张标为已验证、推断或未知。
 
-Match the detail to the stakes. Do not narrate the framework or force headings for a small question.
+详略与利害相称。不要叙述框架，也不要为小问题强套标题。
 
-For sources and limits, see [references/foundations.md](references/foundations.md). For behavioral test cases, see [references/evaluation.md](references/evaluation.md).
+来源与局限见 [references/foundations.md](references/foundations.md)；行为测试用例见 [references/evaluation.md](references/evaluation.md)。

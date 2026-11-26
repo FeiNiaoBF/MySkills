@@ -4,54 +4,37 @@ description: 用户报告软件缺陷、报错、回归或异常行为并要诊�
 license: MIT
 metadata:
   author: Yeelight
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Bugfix
 
-The goal is the root cause gone, the smallest complete change, and regression evidence for the original failure. Do not stop at a theory or hide the symptom.
+目标是根因消失、改动最小且完整，并为原始故障提供回归证据。不要停在理论，也不要掩盖症状。
 
-## Workflow
+## 工作流
 
-1. **Establish the failure**
-   - Read the reported behavior, expected behavior, reproduction steps, logs,
-     stack traces, and error messages.
-   - Inspect the relevant implementation, configuration, tests, and call paths.
-     Trace how the triggering input or state reaches the failure.
-   - Reproduce the issue when practical. If it cannot be reproduced, continue
-     with code and evidence-based investigation; state what remains uncertain.
+1. **确认故障**
+   - 阅读报告的行为、预期行为、复现步骤、日志、堆栈和错误信息。
+   - 检查相关实现、配置、测试和调用路径，追踪触发输入或状态如何到达故障点。
+   - 条件允许时复现问题。无法复现时，继续基于代码和证据调查，并说明仍不确定的部分。
 
-2. **Identify the root cause and scope**
-   - Separate the immediate trigger from the underlying defect. Tie conclusions
-     to observed evidence and keep hypotheses distinct from confirmed facts.
-   - Check callers, shared state, data formats, neighboring paths, and error
-     handling to determine which features and inputs may be affected.
-   - Consider the proposed change's behavior and regression risks. Where relevant,
-     inspect boundary conditions, validation, authorization, resource lifecycle,
-     concurrency, and failure paths.
+2. **定位根因与影响范围**
+   - 区分直接触发点与底层缺陷。结论要能对应到观察到的证据，假设与已确认事实分开。
+   - 检查调用方、共享状态、数据格式、相邻路径和错误处理，确定可能受影响的功能与输入。
+   - 考虑拟议改动的行为和回归风险。相关时检查边界条件、校验、授权、资源生命周期、并发和失败路径。
 
-3. **Choose a small, complete fix**
-   - Prefer the narrowest change that removes the root cause, not a workaround
-     that only hides one example or an unrelated refactor.
-   - Preserve existing interfaces and behavior unless changing them is necessary
-     to fix the cause; explain any necessary behavior change.
-   - If multiple fixes are viable, compare correctness, impact, and regression
-     risk, then use the best-supported option.
+3. **选择小而完整的修复**
+   - 优先选能消除根因的最窄改动，而不是只掩盖一个例子的绕过方案或无关重构。
+   - 除非修复根因必须，否则保留现有接口和行为；必要的行为变化要说明。
+   - 多个修复都可行时，比较正确性、影响和回归风险，选证据最充分的一个。
 
-4. **Implement and verify**
-   - Make the fix and add or update regression coverage for the original failure
-     and relevant edge cases.
-   - Verify the original failure path and adjacent behavior; choose test scope by regression risk.
-   - Review the diff for unrelated changes.
-   - If verification fails, investigate and continue fixing. If a check cannot
-     run, state why. Report only checks actually performed and their observed
-     results; never imply unrun checks passed.
+4. **实施并验证**
+   - 完成修复，并为原始故障和相关边界情况新增或更新回归覆盖。
+   - 验证原始故障路径和相邻行为；按回归风险选择测试范围。
+   - 检查 diff 是否有无关改动。
+   - 验证失败就继续排查和修复。检查无法运行时说明原因。只报告实际执行过的检查及其观察结果，绝不暗示未运行的检查已通过。
 
-5. **Explain the outcome**
-   - Briefly tell the user why the bug occurred, what changed, and what was
-     verified and observed.
-   - Call out material remaining uncertainty or uncovered risk. Give practical
-     prevention advice tied to the cause, such as a specific validation,
-     regression test, or monitoring signal.
-   - Keep theory in service of the repair; do not let a long explanation replace
-     the fix.
+5. **说明结果**
+   - 简要告诉用户故障为何发生、改了什么、验证了什么、观察到了什么。
+   - 指出仍存在的重要不确定性或未覆盖风险。给出与根因相关的实用预防建议，例如具体校验、回归测试或监控信号。
+   - 理论服务于修复；不要让长篇解释替代修复。
